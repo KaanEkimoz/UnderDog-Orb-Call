@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6982812147933622148}
+      - m_Target: {fileID: 1183125826}
         m_TargetAssemblyTypeName: OrbController, Assembly-CSharp
         m_MethodName: AddOrb
         m_Mode: 1
@@ -897,6 +897,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1044715117}
   m_CullTransparentMesh: 1
+--- !u!1 &1183125825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1183125827}
+  - component: {fileID: 1183125826}
+  m_Layer: 0
+  m_Name: OrbController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1183125826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183125825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b78279520a9134aabf8d6ccd680a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orbPrefab: {fileID: 8886230964089384064, guid: 6fb39a6dedc47b749b8b8b0140313001, type: 3}
+  maxOrbCount: 10
+  ellipseXRadius: 0.5
+  ellipseYRadius: 0.75
+  orbMovementSpeed: 15
+  orbFollowDelay: 0.3
+  rotationSpeed: 5
+  ellipseCenterTransform: {fileID: 878954946}
+  swayRange: 0.2
+  swaySpeed: 2
+  distanceThreshold: 0.05
+--- !u!4 &1183125827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183125825}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.38302216, y: -0.48209083, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1610086195
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,7 +1138,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6982812147933622148}
+      - m_Target: {fileID: 1183125826}
         m_TargetAssemblyTypeName: OrbController, Assembly-CSharp
         m_MethodName: RemoveOrb
         m_Mode: 1
@@ -2866,7 +2921,6 @@ GameObject:
   - component: {fileID: 4416926083347132232}
   - component: {fileID: 5885216829670671795}
   - component: {fileID: 135756641613574975}
-  - component: {fileID: 6982812147933622148}
   m_Layer: 8
   m_Name: PlayerArmature
   m_TagString: Player
@@ -3189,7 +3243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8886230964089384064, guid: 6fb39a6dedc47b749b8b8b0140313001, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3809,25 +3863,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6982812147933622148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416926083347132227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5b78279520a9134aabf8d6ccd680a70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orbPrefab: {fileID: 8886230964089384064, guid: 6fb39a6dedc47b749b8b8b0140313001, type: 3}
-  ellipseCenterTransform: {fileID: 878954946}
-  verticalRadius: 0.75
-  horizontalRadius: 0.5
-  orbMovementSpeed: 5
-  orbFollowDelay: 0.3
-  playerTransform: {fileID: 3893294199639930361}
 --- !u!4 &6983258930626336602
 Transform:
   m_ObjectHideFlags: 0
@@ -4866,6 +4901,7 @@ SceneRoots:
   - {fileID: 8944336656349189700}
   - {fileID: 2070925443028286827}
   - {fileID: 3893294199639930361}
+  - {fileID: 1183125827}
   - {fileID: 4923694882418442559}
   - {fileID: 746329221}
   - {fileID: 1979352518}
