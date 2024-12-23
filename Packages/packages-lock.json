@@ -1,5 +1,33 @@
 {
   "dependencies": {
+    "com.absence.attributes": {
+      "version": "https://www.github.com/b1lodHand/absent-attributes.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "82dd755843359203cc084f110226fea9ead7479b"
+    },
+    "com.absence.editor": {
+      "version": "https://www.github.com/b1lodHand/absent-editor.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9b929609d762d10cc433dd359037e174c9a7e859"
+    },
+    "com.absence.utilities": {
+      "version": "https://www.github.com/b1lodHand/absent-utilities.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "7e75a82d32f99d9ce5b50821c8537c853c207e48"
+    },
+    "com.absence.variablesystem": {
+      "version": "https://www.github.com/b1lodHand/absent-variables.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6b67f5d047bf5f1e92a909191a87d8008acfee09"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.5",
       "depth": 0,
