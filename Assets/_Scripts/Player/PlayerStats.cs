@@ -24,13 +24,37 @@ namespace com.game.player
 
         [Header("Stats")]
 
-        [SerializeField] private Float m_exampleStat1;
-        [SerializeField] private Float m_exampleStat2;
+        [SerializeField] private Float m_health;
+        [SerializeField] private Float m_armor;
+        [SerializeField] private Float m_walkSpeed;
+        [SerializeField] private Float m_lifeSteal;
+        [SerializeField] private Float m_luck;
+        [SerializeField] private Float m_gathering;
+        [SerializeField] private Float m_damage;
+        [SerializeField] private Float m_attackSpeed;
+        [SerializeField] private Float m_criticalHits;
+        [SerializeField] private Float m_range;
+        [SerializeField] private Float m_knockback;
+        [SerializeField] private Float m_penetration;
+        [SerializeField] private Float m_crowdControl;
+        [SerializeField] private Float m_lightStrength;
 
         Dictionary<PlayerStatType, Float> p_defaultEntries => new()
         {
-            { PlayerStatType.Example1, m_exampleStat1 },
-            { PlayerStatType.Example2, m_exampleStat2 },
+            { PlayerStatType.Health, m_health },
+            { PlayerStatType.Armor, m_armor },
+            { PlayerStatType.WalkSpeed, m_walkSpeed },
+            { PlayerStatType.LifeSteal, m_lifeSteal },
+            { PlayerStatType.Luck, m_luck },
+            { PlayerStatType.Gathering, m_gathering },
+            { PlayerStatType.Damage, m_damage },
+            { PlayerStatType.AttackSpeed, m_attackSpeed },
+            { PlayerStatType.CriticalHits, m_criticalHits },
+            { PlayerStatType.Range, m_range },
+            { PlayerStatType.Knockback, m_knockback },
+            { PlayerStatType.Penetration, m_penetration },
+            { PlayerStatType.CrowdControl, m_crowdControl },
+            { PlayerStatType.LightStrength, m_lightStrength },
         };
 
         Dictionary<PlayerStatType, Float> m_variableObjectEntries;
@@ -51,8 +75,20 @@ namespace com.game.player
         /// <param name="profile">The profile provided.</param>
         public void Initialize(PlayerCharacterProfile profile)
         {
-            m_exampleStat1 = new("Example1", profile.DefaultStat1);
-            m_exampleStat2 = new("Example2", profile.DefaultStat2);
+            m_health = new("Health", profile.DefaultStat2);
+            m_armor = new("Armor", profile.DefaultStat2);
+            m_walkSpeed = new("Walk Speed", profile.DefaultStat2);
+            m_lifeSteal = new("Life Steal", profile.DefaultStat2);
+            m_luck = new("Luck", profile.DefaultStat2);
+            m_gathering = new("Gathering", profile.DefaultStat2);
+            m_damage = new("Damage", profile.DefaultStat2);
+            m_attackSpeed = new("Attack Speed", profile.DefaultStat2);
+            m_criticalHits = new("Crit", profile.DefaultStat2);
+            m_range = new("Range", profile.DefaultStat2);
+            m_knockback = new("Knockback", profile.DefaultStat2);
+            m_penetration = new("Penetration", profile.DefaultStat2);
+            m_crowdControl = new("CC", profile.DefaultStat2);
+            m_lightStrength = new("Light Strength", profile.DefaultStat2);
 
             m_variableObjectEntries = p_defaultEntries;
 
@@ -92,7 +128,7 @@ namespace com.game.player
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
 
-            float realPercentage = (percentage / 100f);
+            float realPercentage = 1f + (percentage / 100f);
             FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
