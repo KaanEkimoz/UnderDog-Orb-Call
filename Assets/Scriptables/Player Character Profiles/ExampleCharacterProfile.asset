@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultStat1: 15
   DefaultStat2: 25
+  Mod:
+    TargetStatType: 0
+    ModificationType: 0
+    m_incrementalValue: 0
+    m_percentageValue: 0

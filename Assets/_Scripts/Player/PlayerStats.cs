@@ -4,6 +4,8 @@ using com.game.player.scriptables;
 using com.game.statsystem;
 using UnityEngine;
 using com.absence.variablesystem.internals;
+using System.Collections.Generic;
+using com.absence.attributes;
 
 namespace com.game.player
 {
@@ -12,16 +14,57 @@ namespace com.game.player
     /// </summary>
     public class PlayerStats : MonoBehaviour
     {
-        [SerializeField] private bool m_debugMode = false;
-        [SerializeField] private PlayerCharacterProfile m_defaultCharacterProfile;
+        [Header("Utilities")]
 
-        [SerializeField] private Float m_exampleStat1;
-        [SerializeField] private Float m_exampleStat2;
+        [SerializeField, Tooltip("If enabled, this component with initialize itself, and also some additional console messages will take place.")] 
+        private bool m_debugMode = false;
+
+        [SerializeField, ShowIf(nameof(m_debugMode)), Required, Tooltip("Profile provided for the self-initialization process.")] 
+        private PlayerCharacterProfile m_defaultCharacterProfile;
+
+        [Header("Stats")]
+
+        [SerializeField] private Float m_health;
+        [SerializeField] private Float m_armor;
+        [SerializeField] private Float m_walkSpeed;
+        [SerializeField] private Float m_lifeSteal;
+        [SerializeField] private Float m_luck;
+        [SerializeField] private Float m_gathering;
+        [SerializeField] private Float m_damage;
+        [SerializeField] private Float m_attackSpeed;
+        [SerializeField] private Float m_criticalHits;
+        [SerializeField] private Float m_range;
+        [SerializeField] private Float m_knockback;
+        [SerializeField] private Float m_penetration;
+        [SerializeField] private Float m_crowdControl;
+        [SerializeField] private Float m_lightStrength;
+
+        Dictionary<PlayerStatType, Float> p_defaultEntries => new()
+        {
+            { PlayerStatType.Health, m_health },
+            { PlayerStatType.Armor, m_armor },
+            { PlayerStatType.WalkSpeed, m_walkSpeed },
+            { PlayerStatType.LifeSteal, m_lifeSteal },
+            { PlayerStatType.Luck, m_luck },
+            { PlayerStatType.Gathering, m_gathering },
+            { PlayerStatType.Damage, m_damage },
+            { PlayerStatType.AttackSpeed, m_attackSpeed },
+            { PlayerStatType.CriticalHits, m_criticalHits },
+            { PlayerStatType.Range, m_range },
+            { PlayerStatType.Knockback, m_knockback },
+            { PlayerStatType.Penetration, m_penetration },
+            { PlayerStatType.CrowdControl, m_crowdControl },
+            { PlayerStatType.LightStrength, m_lightStrength },
+        };
+
+        Dictionary<PlayerStatType, Float> m_variableObjectEntries;
 
         private void Awake()
         {
             if (m_debugMode) Initialize(m_defaultCharacterProfile);
         }
+
+        #region Public API
 
         /// <summary>
         /// Use to initialize this component with a profile. This operation will clear any
@@ -32,8 +75,22 @@ namespace com.game.player
         /// <param name="profile">The profile provided.</param>
         public void Initialize(PlayerCharacterProfile profile)
         {
-            m_exampleStat1 = new("Example1", profile.DefaultStat1);
-            m_exampleStat2 = new("Example2", profile.DefaultStat2);
+            m_health = new("Health", profile.DefaultStat2);
+            m_armor = new("Armor", profile.DefaultStat2);
+            m_walkSpeed = new("Walk Speed", profile.DefaultStat2);
+            m_lifeSteal = new("Life Steal", profile.DefaultStat2);
+            m_luck = new("Luck", profile.DefaultStat2);
+            m_gathering = new("Gathering", profile.DefaultStat2);
+            m_damage = new("Damage", profile.DefaultStat2);
+            m_attackSpeed = new("Attack Speed", profile.DefaultStat2);
+            m_criticalHits = new("Crit", profile.DefaultStat2);
+            m_range = new("Range", profile.DefaultStat2);
+            m_knockback = new("Knockback", profile.DefaultStat2);
+            m_penetration = new("Penetration", profile.DefaultStat2);
+            m_crowdControl = new("CC", profile.DefaultStat2);
+            m_lightStrength = new("Light Strength", profile.DefaultStat2);
+
+            m_variableObjectEntries = p_defaultEntries;
 
             Debug.Log("PlayerStats successfully initialized!");
         }
@@ -71,7 +128,7 @@ namespace com.game.player
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
 
-            float realPercentage = (percentage / 100f);
+            float realPercentage = 1f + (percentage / 100f);
             FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
@@ -107,18 +164,17 @@ namespace com.game.player
         /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
         public Float GetDesiredStatVariable(PlayerStatType targetStat)
         {
-            switch (targetStat)
+            if (!m_variableObjectEntries.TryGetValue(targetStat, out Float value))
             {
-                case PlayerStatType.Example1:
-                    return m_exampleStat1;
-                case PlayerStatType.Example2:
-                    return m_exampleStat2;
-                default:
-                    Debug.LogError("An error occurred determining a stat's desired variable." +
-                        "It's entry may be forgotten.");
-                    return null;
+                Debug.LogError("An error occurred determining a stat's desired variable. " +
+                    "It's entry may not exist.");
+
+                return null;
             }
+
+            return value;    
         }
+
         /// <summary>
         /// Use to check-n-get a corresponding variable object of a player stat.
         /// </summary>
@@ -132,5 +188,7 @@ namespace com.game.player
             if (desiredStatVariable != null) return true;
             else return false;
         }
+
+        #endregion
     }
 }

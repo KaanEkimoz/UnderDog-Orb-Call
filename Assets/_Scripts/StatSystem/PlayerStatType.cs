@@ -8,7 +8,19 @@
     /// </summary>
     public enum PlayerStatType
     {
-        Example1 = 0,
-        Example2 = 1,
+        Health,
+        Armor,
+        WalkSpeed,
+        LifeSteal,
+        Luck,
+        Gathering,
+        Damage,
+        AttackSpeed,
+        CriticalHits,
+        Range,
+        Knockback,
+        Penetration,
+        CrowdControl,
+        LightStrength,
     }
 }

@@ -1,3 +1,4 @@
+using com.game.statsystem;
 using UnityEngine;
 
 namespace com.game.player.scriptables
@@ -7,5 +8,7 @@ namespace com.game.player.scriptables
     {
         public float DefaultStat1;
         public float DefaultStat2;
+
+        public PlayerStatModification Mod;
     }
 }
