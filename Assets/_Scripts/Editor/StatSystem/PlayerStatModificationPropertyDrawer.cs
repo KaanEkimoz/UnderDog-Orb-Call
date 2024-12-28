@@ -6,69 +6,63 @@ namespace com.game.statsystem.editor
     [CustomPropertyDrawer(typeof(PlayerStatModification))]
     public class PlayerStatModificationPropertyDrawer : PropertyDrawer
     {
-        private const float MOD_TYPE_ICON_MAX_WIDTH = 30f;
+        private const float MOD_TYPE_ICON_WIDTH = 30f;
+        private const float HORIZONTAL_SPACING = 4f;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             bool isArrayElement = property.propertyPath.Contains("Array");
-            float height = isArrayElement ? 2 : 3;
+            int height = isArrayElement ? 2 : 3;
 
-            return EditorGUIUtility.singleLineHeight * height;
+            return StatManipulatorEditorHelpers.CalculateHeight(isArrayElement, height);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            SerializedProperty statTypeProp = property.FindPropertyRelative("TargetStatType");
             SerializedProperty incrementalValueProp = property.FindPropertyRelative("m_incrementalValue");
             SerializedProperty percentageValueProp = property.FindPropertyRelative("m_percentageValue");
             SerializedProperty modTypeProp = property.FindPropertyRelative("ModificationType");
 
             property.serializedObject.Update();
-            bool isArrayElement = property.propertyPath.Contains("Array");
-            PlayerStatType statType = (PlayerStatType)statTypeProp.enumValueIndex;
+
             float incrementalValue = incrementalValueProp.floatValue;
             float percentageValue = percentageValueProp.floatValue;
             StatModificationType modType = (StatModificationType)modTypeProp.enumValueIndex;
 
             GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);
 
-            if (!isArrayElement)
-            {
-                GUIStyle boxStyle = new GUIStyle("window");
-                boxStyle.richText = true;
+            Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Modification ({actualLabel})",
+                out PlayerStatType statType);
 
-                GUILayout.BeginVertical($"Player Stat Modification ({actualLabel})", boxStyle);
-            }
+            actualPosition.height = EditorGUIUtility.singleLineHeight;
 
-            EditorGUI.BeginChangeCheck();
+            float width = actualPosition.width - HORIZONTAL_SPACING;
+            float enumWidth = MOD_TYPE_ICON_WIDTH;
+            float fieldWidth = width - MOD_TYPE_ICON_WIDTH;
 
-            statType = (PlayerStatType)EditorGUILayout.EnumPopup(statType);
-
-            EditorGUILayout.BeginHorizontal();
+            actualPosition.width = fieldWidth;
 
             if (modType == StatModificationType.Incremental) 
-                incrementalValue = EditorGUILayout.FloatField("Value", incrementalValue);
+                incrementalValue = EditorGUI.FloatField(actualPosition, "Value", incrementalValue);
 
             else if (modType == StatModificationType.Percentage) 
-                percentageValue = EditorGUILayout.FloatField("Percentage", percentageValue);
+                percentageValue = EditorGUI.FloatField(actualPosition, "Percentage", percentageValue);
 
             else 
-                EditorGUILayout.LabelField("Modification type not defined.");
+                EditorGUI.LabelField(actualPosition, "Modification type not defined.");
 
-            modType = (StatModificationType)EditorGUILayout.EnumPopup(modType,
-                GUILayout.MaxWidth(MOD_TYPE_ICON_MAX_WIDTH));
+            actualPosition.x += fieldWidth + HORIZONTAL_SPACING;
+            actualPosition.width = enumWidth;
 
-            EditorGUILayout.EndHorizontal();
+            modType = (StatModificationType)EditorGUI.EnumPopup(actualPosition, modType);
 
-            if (!isArrayElement) GUILayout.EndVertical();
-
-            if (EditorGUI.EndChangeCheck())
+            if (StatManipulatorEditorHelpers.EndManipulator(property))
             {
                 UnityEngine.Object target = property.serializedObject.targetObject;
 
                 Undo.RecordObject(target, "Player Stat Modification Object (Editor)");
 
-                statTypeProp.enumValueIndex = (int)statType;
+                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statType);
                 incrementalValueProp.floatValue = incrementalValue;
                 percentageValueProp.floatValue = percentageValue;
                 modTypeProp.enumValueIndex = (int)modType;

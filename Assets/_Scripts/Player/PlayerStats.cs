@@ -4,8 +4,8 @@ using com.game.player.scriptables;
 using com.game.statsystem;
 using UnityEngine;
 using com.absence.variablesystem.internals;
-using System.Collections.Generic;
 using com.absence.attributes;
+using com.game.statsystem.extensions;
 
 namespace com.game.player
 {
@@ -19,80 +19,54 @@ namespace com.game.player
         [SerializeField, Tooltip("If enabled, this component with initialize itself, and also some additional console messages will take place.")] 
         private bool m_debugMode = false;
 
-        [SerializeField, ShowIf(nameof(m_debugMode)), Required, Tooltip("Profile provided for the self-initialization process.")] 
+        [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")] 
+        private PlayerDefaultStats m_defaultStats;
+
+        [SerializeField, ShowIf(nameof(m_debugMode)), Required, Tooltip("Profile provided for the self-initialization process.")]
         private PlayerCharacterProfile m_defaultCharacterProfile;
 
         [Header("Stats")]
+        [SerializeField, Readonly] private PlayerStatHolder m_statHolder;
 
-        [SerializeField] private Float m_health;
-        [SerializeField] private Float m_armor;
-        [SerializeField] private Float m_walkSpeed;
-        [SerializeField] private Float m_lifeSteal;
-        [SerializeField] private Float m_luck;
-        [SerializeField] private Float m_gathering;
-        [SerializeField] private Float m_damage;
-        [SerializeField] private Float m_attackSpeed;
-        [SerializeField] private Float m_criticalHits;
-        [SerializeField] private Float m_range;
-        [SerializeField] private Float m_knockback;
-        [SerializeField] private Float m_penetration;
-        [SerializeField] private Float m_crowdControl;
-        [SerializeField] private Float m_lightStrength;
-
-        Dictionary<PlayerStatType, Float> p_defaultEntries => new()
-        {
-            { PlayerStatType.Health, m_health },
-            { PlayerStatType.Armor, m_armor },
-            { PlayerStatType.WalkSpeed, m_walkSpeed },
-            { PlayerStatType.LifeSteal, m_lifeSteal },
-            { PlayerStatType.Luck, m_luck },
-            { PlayerStatType.Gathering, m_gathering },
-            { PlayerStatType.Damage, m_damage },
-            { PlayerStatType.AttackSpeed, m_attackSpeed },
-            { PlayerStatType.CriticalHits, m_criticalHits },
-            { PlayerStatType.Range, m_range },
-            { PlayerStatType.Knockback, m_knockback },
-            { PlayerStatType.Penetration, m_penetration },
-            { PlayerStatType.CrowdControl, m_crowdControl },
-            { PlayerStatType.LightStrength, m_lightStrength },
-        };
-
-        Dictionary<PlayerStatType, Float> m_variableObjectEntries;
+        public PlayerStatHolder StatHolder => m_statHolder;
 
         private void Awake()
         {
-            if (m_debugMode) Initialize(m_defaultCharacterProfile);
+            Initialize(m_defaultStats);
+            if (m_debugMode) ApplyCharacterProfile(m_defaultCharacterProfile);
         }
 
         #region Public API
 
         /// <summary>
-        /// Use to initialize this component with a profile. This operation will clear any
-        /// mutations made to any stats and re-create every variable object with the
-        /// default value received from the profile provided. 
-        /// It won't set your mutation object references to null (if you have any), tho.
+        /// Use to initialize this component with default values for each stat.
         /// </summary>
-        /// <param name="profile">The profile provided.</param>
-        public void Initialize(PlayerCharacterProfile profile)
+        /// <param name="defaultValues">The default values provided.</param>
+        public void Initialize(PlayerDefaultStats defaultValues)
         {
-            m_health = new("Health", profile.DefaultStat2);
-            m_armor = new("Armor", profile.DefaultStat2);
-            m_walkSpeed = new("Walk Speed", profile.DefaultStat2);
-            m_lifeSteal = new("Life Steal", profile.DefaultStat2);
-            m_luck = new("Luck", profile.DefaultStat2);
-            m_gathering = new("Gathering", profile.DefaultStat2);
-            m_damage = new("Damage", profile.DefaultStat2);
-            m_attackSpeed = new("Attack Speed", profile.DefaultStat2);
-            m_criticalHits = new("Crit", profile.DefaultStat2);
-            m_range = new("Range", profile.DefaultStat2);
-            m_knockback = new("Knockback", profile.DefaultStat2);
-            m_penetration = new("Penetration", profile.DefaultStat2);
-            m_crowdControl = new("CC", profile.DefaultStat2);
-            m_lightStrength = new("Light Strength", profile.DefaultStat2);
-
-            m_variableObjectEntries = p_defaultEntries;
+            m_statHolder = PlayerStatHolder.Create(defaultValues);
 
             Debug.Log("PlayerStats successfully initialized!");
+        }
+
+        /// <summary>
+        /// Use to apply a character profile to the player stats.
+        /// </summary>
+        /// <param name="profile">The character profile provided.</param>
+        public void ApplyCharacterProfile(PlayerCharacterProfile profile)
+        {
+            m_statHolder.ApplyCharacterProfile(profile);
+        }
+
+        /// <summary>
+        /// Use to add a custom-logic modification to a stat of Player.
+        /// </summary>
+        /// <param name="targetStat">Which stat to apply the modification.</param>
+        /// <param name="mutationObject">Mutation object created</param>
+        /// <returns>Returns the mutation object passed as an argument.</returns>
+        public Mutation<float> ModifyCustom(PlayerStatType targetStat, Mutation<float> mutationObject)
+        {
+            return StatHolder.ModifyCustom(targetStat, mutationObject);
         }
 
         /// <summary>
@@ -107,13 +81,39 @@ namespace com.game.player
         /// </returns>
         public FloatAdditionMutation ModifyIncremental(PlayerStatType targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
-
-            FloatAdditionMutation mutationObject = new(amount, affectionMethod);
-
-            desiredStatVariable.Mutate(mutationObject);
-            return mutationObject;
+            return StatHolder.ModifyIncremental(targetStat, amount, affectionMethod);
         }
+
+        /// <summary>
+        /// Use to modify a stat variable with a <see cref="PlayerStatModification"/>.
+        /// </summary>
+        /// <param name="mod">The modification object.</param>
+        /// <returns>Returns the mutation object created from this operation.</returns>
+        public Mutation<float> ModifyWith(PlayerStatModification mod)
+        {
+            return StatHolder.ModifyWith(mod);
+        }
+
+        /// <summary>
+        /// Use to cap a stat variable with a <see cref="PlayerStatCap"/>.
+        /// </summary>
+        /// <param name="cap">The modification object.</param>
+        /// <returns>Returns the mutation object created from this operation.</returns>
+        public FloatCapMutation CapWith(PlayerStatCap cap)
+        {
+            return StatHolder.CapWith(cap);
+        }
+
+        /// <summary>
+        /// Use to override a stat variable with a <see cref="PlayerStatOverride"/>.
+        /// </summary>
+        /// <param name="ovr">The modification object.</param>
+        /// <returns>Returns the new value of the stat variable.</returns>
+        public float OverrideWith(PlayerStatOverride ovr)
+        {
+            return StatHolder.OverrideWith(ovr);
+        }
+
         /// <summary>
         /// Use to add a percentage based modification (eg. +25%, -100%) to a stat of Player.
         /// </summary>
@@ -126,13 +126,7 @@ namespace com.game.player
         /// </returns>
         public FloatMultiplicationMutation ModifyPercentage(PlayerStatType targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
-
-            float realPercentage = 1f + (percentage / 100f);
-            FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
-
-            desiredStatVariable.Mutate(mutationObject);
-            return mutationObject;
+            return StatHolder.ModifyPercentage(targetStat, percentage, affectionMethod);
         }
 
         /// <summary>
@@ -164,15 +158,7 @@ namespace com.game.player
         /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
         public Float GetDesiredStatVariable(PlayerStatType targetStat)
         {
-            if (!m_variableObjectEntries.TryGetValue(targetStat, out Float value))
-            {
-                Debug.LogError("An error occurred determining a stat's desired variable. " +
-                    "It's entry may not exist.");
-
-                return null;
-            }
-
-            return value;    
+            return StatHolder.GetDesiredStatVariable(targetStat);   
         }
 
         /// <summary>
@@ -184,9 +170,18 @@ namespace com.game.player
         /// <returns>Returns true if the checking operation succeeds. False otherwise.</returns>
         public bool TryGetDesiredStatVariable(PlayerStatType targetStat, out Float desiredStatVariable)
         {
-            desiredStatVariable = GetDesiredStatVariable(targetStat);
-            if (desiredStatVariable != null) return true;
-            else return false;
+            bool success = StatHolder.TryGetDesiredStatVariable(targetStat, out desiredStatVariable);
+            return success;
+        }
+
+        /// <summary>
+        /// Use to get the current value of a stat.
+        /// </summary>
+        /// <param name="targetStat">The stat to get value of.</param>
+        /// <returns>Returns the value of the target stat.</returns>
+        public float GetStat(PlayerStatType targetStat)
+        {
+            return GetDesiredStatVariable(targetStat).Value;
         }
 
         #endregion
