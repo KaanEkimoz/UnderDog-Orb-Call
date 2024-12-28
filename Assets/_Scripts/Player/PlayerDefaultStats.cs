@@ -1,7 +1,7 @@
 using com.absence.attributes;
 using UnityEngine;
 
-namespace com.game.statsystem
+namespace com.game.player.scriptables
 {
     [CreateAssetMenu(fileName = "New PlayerDefaultStats", menuName = "Game/Player Default Stats", order = int.MinValue)]
     public class PlayerDefaultStats : ScriptableObject
