@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace com.game.statsystem
 {
-    [CreateAssetMenu(fileName = "New PlayerDefaultStats", menuName = "Game/Player Default Stats")]
+    [CreateAssetMenu(fileName = "New PlayerDefaultStats", menuName = "Game/Player Default Stats", order = int.MinValue)]
     public class PlayerDefaultStats : ScriptableObject
     {
         [Header1("Default Stats for Player")]

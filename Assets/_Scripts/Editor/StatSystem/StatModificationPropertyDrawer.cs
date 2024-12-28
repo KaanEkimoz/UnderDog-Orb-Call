@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace com.game.statsystem.editor
 {
-    [CustomPropertyDrawer(typeof(PlayerStatModification))]
-    public class PlayerStatModificationPropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(StatModification), true)]
+    public class StatModificationPropertyDrawer : PropertyDrawer
     {
         private const float MOD_TYPE_ICON_WIDTH = 30f;
         private const float HORIZONTAL_SPACING = 4f;
@@ -24,6 +24,7 @@ namespace com.game.statsystem.editor
             SerializedProperty modTypeProp = property.FindPropertyRelative("ModificationType");
 
             property.serializedObject.Update();
+            StatModification mod = property.boxedValue as StatModification;
 
             float incrementalValue = incrementalValueProp.floatValue;
             float percentageValue = percentageValueProp.floatValue;
@@ -31,8 +32,8 @@ namespace com.game.statsystem.editor
 
             GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);
 
-            Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Modification ({actualLabel})",
-                out PlayerStatType statType);
+            Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Modification ({actualLabel})"
+                , mod.GetEnumType(), out int statTypeIndex);
 
             actualPosition.height = EditorGUIUtility.singleLineHeight;
 
@@ -62,7 +63,7 @@ namespace com.game.statsystem.editor
 
                 Undo.RecordObject(target, "Player Stat Modification Object (Editor)");
 
-                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statType);
+                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statTypeIndex);
                 incrementalValueProp.floatValue = incrementalValue;
                 percentageValueProp.floatValue = percentageValue;
                 modTypeProp.enumValueIndex = (int)modType;

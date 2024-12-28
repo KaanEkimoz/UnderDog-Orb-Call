@@ -1,11 +1,11 @@
+using System;
 using UnityEngine;
 
 namespace com.game.statsystem
 {
     [System.Serializable]
-    public class PlayerStatModification
+    public abstract class StatModification
     {
-        public PlayerStatType TargetStatType;
         public StatModificationType ModificationType;
 
         [SerializeField] private float m_incrementalValue;
@@ -22,6 +22,19 @@ namespace com.game.statsystem
                     _ => -1f,
                 };
             }
+        }
+
+        public abstract Type GetEnumType();
+    }
+
+    [System.Serializable]
+    public abstract class StatModification<T> : StatModification where T : System.Enum
+    {
+        public T TargetStatType;
+
+        public override Type GetEnumType()
+        {
+            return typeof(T);
         }
     }
 }

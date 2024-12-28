@@ -1,0 +1,19 @@
+using com.game.statsystem;
+
+namespace com.game.player
+{
+    [System.Serializable]
+    public sealed class PlayerStatModification : StatModification<PlayerStatType>
+    {
+    }
+
+    [System.Serializable]
+    public sealed class PlayerStatOverride : StatOverride<PlayerStatType>
+    {
+    }
+
+    [System.Serializable]
+    public sealed class PlayerStatCap : StatCap<PlayerStatType>
+    {
+    }
+}

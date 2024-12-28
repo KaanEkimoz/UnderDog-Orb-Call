@@ -1,4 +1,5 @@
 using com.absence.editor.gui;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace com.game.statsystem.editor
                 return lines + VERTICAL_MARGIN_FOR_ARRAY_ELEMENT;
         }
 
-        public static Rect BeginManipulator(Rect position, SerializedProperty property, string label, out PlayerStatType targetStat)
+        public static Rect BeginManipulator(Rect position, SerializedProperty property, string label, Type enumType, out int statTypeIndex)
         {
             bool isArrayElement = property.propertyPath.Contains("Array");
             float originalY = position.y;
@@ -54,13 +55,14 @@ namespace com.game.statsystem.editor
             float originalHeight = position.height;
 
             SerializedProperty statTypeProp = property.FindPropertyRelative("TargetStatType");
-            PlayerStatType statType = (PlayerStatType)statTypeProp.enumValueIndex;
 
             EditorGUI.BeginChangeCheck();
 
             position.height = EditorGUIUtility.singleLineHeight;
-            if (!isArrayElement) targetStat = (PlayerStatType)EditorGUI.EnumPopup(position, statType);
-            else targetStat = (PlayerStatType)EditorGUI.EnumPopup(position, "Target Stat", statType);
+            if (!isArrayElement) EditorGUI.PropertyField(position, statTypeProp, true);
+            else EditorGUI.PropertyField(position, statTypeProp, new GUIContent("Target Stat"), true);
+
+            statTypeIndex = statTypeProp.enumValueIndex;
 
             position.y += EditorGUIUtility.singleLineHeight;
             position.y += EditorGUIUtility.standardVerticalSpacing;
@@ -75,10 +77,10 @@ namespace com.game.statsystem.editor
             return position;
         }
 
-        public static void ApplyManipulatorChanges(SerializedProperty property, PlayerStatType targetStat)
+        public static void ApplyManipulatorChanges(SerializedProperty property, int targetStat)
         {
             SerializedProperty statTypeProp = property.FindPropertyRelative("TargetStatType");
-            statTypeProp.enumValueIndex = (int)targetStat;
+            statTypeProp.enumValueIndex = targetStat;
         }
 
         public static bool EndManipulator(SerializedProperty property)

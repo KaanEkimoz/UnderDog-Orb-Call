@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace com.game.statsystem.editor
 {
-    [CustomPropertyDrawer(typeof(PlayerStatCap))]
-    public class PlayerStatCapPropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(StatCap), true)]
+    public class StatCapPropertyDrawer : PropertyDrawer
     {
         private const float TOGGLE_WIDTH = 20f;
         private const float HORIZONTAL_SPACING = 4f;
@@ -25,6 +25,7 @@ namespace com.game.statsystem.editor
             SerializedProperty maxValueProp = property.FindPropertyRelative("MaxValue");
 
             property.serializedObject.Update();
+            StatCap cap = property.boxedValue as StatCap;
 
             float minValue = minValueProp.floatValue;
             float maxValue = maxValueProp.floatValue;
@@ -33,8 +34,8 @@ namespace com.game.statsystem.editor
 
             GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);
 
-            Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Cap ({actualLabel})",
-                out PlayerStatType statType);
+            Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Cap ({actualLabel})"
+                , cap.GetEnumType(), out int statTypeIndex);
 
             actualPosition.height = EditorGUIUtility.singleLineHeight;
 
@@ -78,7 +79,7 @@ namespace com.game.statsystem.editor
 
                 Undo.RecordObject(target, "Player Stat Cap Object (Editor)");
 
-                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statType);
+                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statTypeIndex);
                 capLowProp.boolValue = capLow;
                 capHighProp.boolValue = capHigh;
                 minValueProp.floatValue = minValue;

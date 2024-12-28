@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace com.game.statsystem.editor
 {
-    [CustomPropertyDrawer(typeof(PlayerStatOverride))]
-    public class PlayerStatOverridePropertyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(StatOverride), true)]
+    public class StatOverridePropertyDrawer : PropertyDrawer
     {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -19,13 +19,14 @@ namespace com.game.statsystem.editor
             SerializedProperty valueProp = property.FindPropertyRelative("NewValue");
 
             property.serializedObject.Update();
+            StatOverride ovr = property.boxedValue as StatOverride;
 
             float value = valueProp.floatValue;
 
             GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);
 
             Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Override ({actualLabel})"
-                , out PlayerStatType statType);
+                , ovr.GetEnumType(), out int statTypeIndex);
 
             actualPosition.height = EditorGUIUtility.singleLineHeight;
 
@@ -38,7 +39,7 @@ namespace com.game.statsystem.editor
 
                 Undo.RecordObject(target, "Player Stat Override Object (Editor)");
 
-                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statType);
+                StatManipulatorEditorHelpers.ApplyManipulatorChanges(property, statTypeIndex);
                 valueProp.floatValue = value;
 
                 property.serializedObject.ApplyModifiedProperties();
