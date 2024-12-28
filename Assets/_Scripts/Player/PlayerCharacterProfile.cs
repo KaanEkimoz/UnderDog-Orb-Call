@@ -1,5 +1,5 @@
 using com.absence.attributes;
-using com.game.statsystem;
+using com.game.player.statsystemextensions;
 using System.Collections.Generic;
 using UnityEngine;
 

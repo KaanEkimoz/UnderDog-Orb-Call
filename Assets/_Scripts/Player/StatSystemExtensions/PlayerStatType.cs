@@ -1,4 +1,4 @@
-﻿namespace com.game.player
+﻿namespace com.game.player.statsystemextensions
 {
     /// <summary>
     /// The enum that holds entries of player stat - variable object pairs. I know

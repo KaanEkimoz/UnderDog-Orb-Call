@@ -1,6 +1,6 @@
 using com.game.statsystem;
 
-namespace com.game.player
+namespace com.game.player.statsystemextensions
 {
     [System.Serializable]
     public sealed class PlayerStatModification : StatModification<PlayerStatType>

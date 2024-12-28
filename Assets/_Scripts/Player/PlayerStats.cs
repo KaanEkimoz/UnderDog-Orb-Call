@@ -2,6 +2,7 @@ using com.game.player.scriptables;
 using com.game.statsystem;
 using UnityEngine;
 using com.absence.attributes;
+using com.game.player.statsystemextensions;
 
 namespace com.game.player
 {

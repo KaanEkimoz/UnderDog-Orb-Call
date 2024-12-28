@@ -1,7 +1,7 @@
 using com.absence.attributes;
 using UnityEngine;
 
-namespace com.game.orbsystem
+namespace com.game.orbsystem.statsystemextensions
 {
     public class OrbStats : MonoBehaviour
     {

@@ -4,7 +4,7 @@ using com.game.statsystem;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace com.game.player
+namespace com.game.player.statsystemextensions
 {
     [System.Serializable]
     public sealed class PlayerStatHolder : StatHolder<PlayerStatType>

@@ -1,6 +1,6 @@
 using com.absence.attributes;
-using com.game.orbsystem;
-using com.game.player;
+using com.game.orbsystem.statsystemextensions;
+using com.game.player.statsystemextensions;
 using System.Collections.Generic;
 using UnityEngine;
 

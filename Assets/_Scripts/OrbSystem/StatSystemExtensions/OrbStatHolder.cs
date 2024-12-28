@@ -2,7 +2,7 @@ using com.absence.variablesystem.builtin;
 using com.game.statsystem;
 using System.Collections.Generic;
 
-namespace com.game.orbsystem
+namespace com.game.orbsystem.statsystemextensions
 {
     [System.Serializable]
     public class OrbStatHolder : StatHolder<OrbStatType>

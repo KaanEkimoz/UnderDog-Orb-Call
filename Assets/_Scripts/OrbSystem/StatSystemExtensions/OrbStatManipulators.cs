@@ -1,6 +1,6 @@
 using com.game.statsystem;
 
-namespace com.game.orbsystem
+namespace com.game.orbsystem.statsystemextensions
 {
     [System.Serializable]
     public sealed class OrbStatModification : StatModification<OrbStatType>
