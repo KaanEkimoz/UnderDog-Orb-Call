@@ -18,3 +18,4 @@ MonoBehaviour:
   OrbStatOverrides: []
   OrbStatModifications: []
   OrbStatCaps: []
+  m_notReadyYet: 0

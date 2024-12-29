@@ -2,6 +2,7 @@ using com.absence.variablesystem.builtin;
 using com.absence.variablesystem.internals;
 using com.absence.variablesystem.mutations.internals;
 using com.game.statsystem.extensions;
+using com.game.statsystem.presetobjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -162,9 +163,9 @@ namespace com.game.statsystem
         /// </summary>
         /// <param name="mod">The modification object.</param>
         /// <returns>Returns the mutation object created from this operation.</returns>
-        public virtual StatModifier ModifyWith(StatModification<T> mod)
+        public virtual ModifierObject ModifyWith(StatModification<T> mod)
         {
-            StatModifier result = null;
+            ModifierObject result = null;
 
             if (mod.ModificationType == StatModificationType.Incremental)
             {
@@ -187,7 +188,7 @@ namespace com.game.statsystem
         /// </summary>
         /// <param name="cap">The modification object.</param>
         /// <returns>Returns the mutation object created from this operation.</returns>
-        public virtual StatModifier CapWith(StatCap<T> cap)
+        public virtual ModifierObject CapWith(StatCap<T> cap)
         {
             FloatCapMutation result = new FloatCapMutation()
             {
@@ -199,7 +200,7 @@ namespace com.game.statsystem
 
             ModifyCustom(cap.TargetStatType, result);
 
-            return new StatModifier(result);
+            return new ModifierObject(result);
         }
 
         /// <summary>
@@ -237,12 +238,12 @@ namespace com.game.statsystem
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="mutationObject">Mutation object created</param>
         /// <returns>Returns the mutation object passed as an argument.</returns>
-        public virtual StatModifier ModifyCustom(T targetStat, Mutation<float> mutationObject)
+        public virtual ModifierObject ModifyCustom(T targetStat, Mutation<float> mutationObject)
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
 
             desiredStatVariable.Mutate(mutationObject);
-            return new StatModifier(mutationObject);
+            return new ModifierObject(mutationObject);
         }
 
         /// <summary>
@@ -255,14 +256,14 @@ namespace com.game.statsystem
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
-        public virtual StatModifier ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
+        public virtual ModifierObject ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
 
             FloatAdditionMutation mutationObject = new(amount, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
-            return new StatModifier(mutationObject);
+            return new ModifierObject(mutationObject);
         }
 
         /// <summary>
@@ -275,7 +276,7 @@ namespace com.game.statsystem
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
-        public virtual StatModifier ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
+        public virtual ModifierObject ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (StatSystemSettings.PERCENTAGE_MODS_ON_TOP) affectionMethod = AffectionMethod.Overall;
 
@@ -285,7 +286,7 @@ namespace com.game.statsystem
             FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
-            return new StatModifier(mutationObject);
+            return new ModifierObject(mutationObject);
         }
 
         /// <summary>
@@ -312,10 +313,44 @@ namespace com.game.statsystem
 
         #endregion
 
+        #region Raw
+
+        /// <summary>
+        /// Use to get a stat's object reference.
+        /// </summary>
+        /// <param name="targetStat">Target stat.</param>
+        /// <returns>Returns the StatObject wrapper instance of the targeted stat.</returns>
+        public virtual StatObject GetStatObject(T targetStat)
+        {
+            Float variable = GetDesiredStatVariable(targetStat);
+            if (variable == null) return null;
+
+            return new StatObject(variable);
+        }
+
+        /// <summary>
+        /// Use to try getting a stat's object reference.
+        /// </summary>
+        /// <param name="targetStat">Target stat.</param>
+        /// <param name="statObject">Found StatObject instance. Null if the function itself returns false.</param>
+        /// <returns>Returns true if the targeted stat exists, false otherwise.</returns>
+        public virtual bool TryGetStatObject(T targetStat, out StatObject statObject)
+        {
+            statObject = null;
+
+            Float variable = GetDesiredStatVariable(targetStat);
+            if (variable == null) return false;
+
+            statObject = new StatObject(variable);
+            return true;
+        }
+
+        #endregion
+
         #region Vulnerable API
 
         /// <summary>
-        /// Use to get the corresponding variable object of a stat.
+        /// <b>[VULNERABLE]</b> Use to get the corresponding variable object of a stat.
         /// </summary>
         /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
         /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
@@ -333,7 +368,7 @@ namespace com.game.statsystem
         }
 
         /// <summary>
-        /// Use to check-n-get a corresponding variable object of a stat.
+        /// <b>[VULNERABLE]</b> Use to check-n-get a corresponding variable object of a stat.
         /// </summary>
         /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
         /// <param name="desiredStatVariable">The variable object received from the getting operation. 

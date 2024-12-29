@@ -1,6 +1,6 @@
 using System;
 
-namespace com.game.statsystem
+namespace com.game.statsystem.presetobjects
 {
     [System.Serializable]
     public abstract class StatCap

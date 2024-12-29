@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace com.game.statsystem
+namespace com.game.statsystem.presetobjects
 {
     [System.Serializable]
     public abstract class StatModification

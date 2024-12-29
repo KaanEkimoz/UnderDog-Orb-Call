@@ -4,7 +4,7 @@ using UnityEngine;
 namespace com.game.statsystem
 {
     [System.Serializable]
-    public class StatModifier
+    public class ModifierObject
     {
         [SerializeField] private Mutation<float> m_mutationObject;
 
@@ -21,9 +21,18 @@ namespace com.game.statsystem
             }
         }
 
-        public StatModifier(Mutation<float> mutationObject)
+        public ModifierObject(Mutation<float> mutationObject)
         {
             m_mutationObject = mutationObject;
+        }
+
+        /// <summary>
+        /// <b>[VULNERABLE]</b> Use to get the mutation object of this modifier object.
+        /// </summary>
+        /// <returns>Returns the mutation object.</returns>
+        public Mutation<float> GetMutationObject() 
+        {
+            return m_mutationObject;
         }
     }
 }

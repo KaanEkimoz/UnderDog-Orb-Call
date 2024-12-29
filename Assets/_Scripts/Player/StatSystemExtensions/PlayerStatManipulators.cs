@@ -1,4 +1,4 @@
-using com.game.statsystem;
+using com.game.statsystem.presetobjects;
 
 namespace com.game.player.statsystemextensions
 {
