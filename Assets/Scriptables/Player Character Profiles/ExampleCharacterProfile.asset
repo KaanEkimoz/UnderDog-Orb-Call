@@ -13,10 +13,18 @@ MonoBehaviour:
   m_Name: ExampleCharacterProfile
   m_EditorClassIdentifier: 
   OrbCount: 0
-  Overrides: []
+  Overrides:
+  - NewValue: 0
+    TargetStatType: 0
   Modifications:
   - ModificationType: 1
     m_incrementalValue: 0
     m_percentageValue: 100
     TargetStatType: 9
-  Caps: []
+  Caps:
+  - CapLow: 0
+    CapHigh: 0
+    MinValue: 0
+    MaxValue: 0
+    TargetStatType: 0
+  m_notReadyYet: 0

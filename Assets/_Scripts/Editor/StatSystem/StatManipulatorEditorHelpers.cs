@@ -39,7 +39,13 @@ namespace com.game.statsystem.editor
                 GUIStyle boxStyle = new GUIStyle("window");
                 boxStyle.richText = true;
 
-                GUI.Box(position, label, boxStyle);
+                GUIContent labelContent = new GUIContent()
+                {
+                    text = label,
+                    tooltip = property.tooltip,
+                };
+
+                GUI.Box(position, labelContent, boxStyle);
                 position.y += EditorGUIUtility.singleLineHeight;
 
                 position.width -= HORIZONTAL_PADDING;
@@ -56,11 +62,17 @@ namespace com.game.statsystem.editor
 
             SerializedProperty statTypeProp = property.FindPropertyRelative("TargetStatType");
 
+            GUIContent statTypeLabel = new GUIContent()
+            {
+                text = "Target Stat",
+                tooltip = statTypeProp.tooltip,
+            };
+
             EditorGUI.BeginChangeCheck();
 
             position.height = EditorGUIUtility.singleLineHeight;
             if (!isArrayElement) EditorGUI.PropertyField(position, statTypeProp, true);
-            else EditorGUI.PropertyField(position, statTypeProp, new GUIContent("Target Stat"), true);
+            else EditorGUI.PropertyField(position, statTypeProp, statTypeLabel, true);
 
             statTypeIndex = statTypeProp.enumValueIndex;
 

@@ -35,6 +35,30 @@ namespace com.game.statsystem.editor
 
             GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);
 
+            GUIContent minFieldLabel = new GUIContent()
+            {
+                text = "Min",
+                tooltip = minValueProp.tooltip,
+            };
+
+            GUIContent maxFieldLabel = new GUIContent()
+            {
+                text = "Max",
+                tooltip = maxValueProp.tooltip,
+            };
+
+            GUIContent capLowLabel = new GUIContent()
+            {
+                text = "",
+                tooltip = capLowProp.tooltip,
+            };
+
+            GUIContent capHighLabel = new GUIContent()
+            {
+                text = "",
+                tooltip = capHighProp.tooltip,
+            };
+
             Rect actualPosition = StatManipulatorEditorHelpers.BeginManipulator(position, property, $"Player Stat Cap ({actualLabel})"
                 , cap.GetEnumType(), out int statTypeIndex);
 
@@ -48,13 +72,13 @@ namespace com.game.statsystem.editor
 
             actualPosition.width = toggleWidth;
 
-            capLow = EditorGUI.ToggleLeft(actualPosition, "", capLow);
+            capLow = EditorGUI.ToggleLeft(actualPosition, capLowLabel, capLow);
             actualPosition.x += toggleWidth + HORIZONTAL_SPACING;
 
             actualPosition.width = fieldWidth;
 
             if (!capLow) GUI.enabled = false;
-            minValue = EditorGUI.FloatField(actualPosition, "Min", minValue);
+            minValue = EditorGUI.FloatField(actualPosition, minFieldLabel, minValue);
             if (!capLow) GUI.enabled = true;
 
             actualPosition.y += EditorGUIUtility.singleLineHeight;
@@ -63,13 +87,13 @@ namespace com.game.statsystem.editor
 
             actualPosition.width = toggleWidth;
 
-            capHigh = EditorGUI.ToggleLeft(actualPosition, "", capHigh);
+            capHigh = EditorGUI.ToggleLeft(actualPosition, capHighLabel, capHigh);
             actualPosition.x += toggleWidth + HORIZONTAL_SPACING;
 
             actualPosition.width = fieldWidth;
 
             if (!capHigh) GUI.enabled = false;
-            maxValue = EditorGUI.FloatField(actualPosition, "Max", maxValue);
+            maxValue = EditorGUI.FloatField(actualPosition, maxFieldLabel, maxValue);
             if (!capHigh) GUI.enabled = true;
 
             if (minValue > maxValue) minValue = maxValue;

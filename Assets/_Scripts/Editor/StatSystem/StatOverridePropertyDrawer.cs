@@ -31,7 +31,13 @@ namespace com.game.statsystem.editor
 
             actualPosition.height = EditorGUIUtility.singleLineHeight;
 
-            value = EditorGUI.FloatField(actualPosition, "New Value", value);
+            GUIContent valueFieldLabel = new GUIContent()
+            {
+                text = "New Value",
+                tooltip = valueProp.tooltip,
+            };
+
+            value = EditorGUI.FloatField(actualPosition, valueFieldLabel, value);
             actualPosition.y += EditorGUIUtility.singleLineHeight;
 
             if (StatManipulatorEditorHelpers.EndManipulator(property))

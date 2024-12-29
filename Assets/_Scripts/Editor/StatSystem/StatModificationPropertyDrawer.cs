@@ -44,11 +44,23 @@ namespace com.game.statsystem.editor
 
             actualPosition.width = fieldWidth;
 
+            GUIContent valueFieldLabel = new GUIContent()
+            {
+                text = "Value",
+                tooltip = incrementalValueProp.tooltip,
+            };
+
+            GUIContent percentageFieldLabel = new GUIContent()
+            {
+                text = "Percentage",
+                tooltip = percentageValueProp.tooltip,
+            };
+
             if (modType == StatModificationType.Incremental) 
-                incrementalValue = EditorGUI.FloatField(actualPosition, "Value", incrementalValue);
+                incrementalValue = EditorGUI.FloatField(actualPosition, valueFieldLabel, incrementalValue);
 
             else if (modType == StatModificationType.Percentage) 
-                percentageValue = EditorGUI.FloatField(actualPosition, "Percentage", percentageValue);
+                percentageValue = EditorGUI.FloatField(actualPosition, percentageFieldLabel, percentageValue);
 
             else 
                 EditorGUI.LabelField(actualPosition, "Modification type not defined.");

@@ -8,8 +8,11 @@ namespace com.game.statsystem.presetobjects
     {
         public StatModificationType ModificationType;
 
-        [SerializeField] private float m_incrementalValue;
-        [SerializeField] private float m_percentageValue;
+        [SerializeField, Tooltip("The amount of incremention (eg. +5, -2).")] 
+        private float m_incrementalValue;
+
+        [SerializeField, Tooltip("The percentage of incremention (eg. +20%, -25%).")] 
+        private float m_percentageValue;
 
         public float Value
         {
@@ -30,6 +33,7 @@ namespace com.game.statsystem.presetobjects
     [System.Serializable]
     public abstract class StatModification<T> : StatModification where T : System.Enum
     {
+        [Tooltip("Target stat.")]
         public T TargetStatType;
 
         public override Type GetEnumType()
