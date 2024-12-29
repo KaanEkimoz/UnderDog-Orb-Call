@@ -21,6 +21,12 @@ namespace com.game.statsystem
 
         protected abstract Dictionary<T, Float> GenerateDefaultEntries();
 
+        /*
+         Public API
+         */
+
+        #region Helpers
+
         /// <summary>
         /// Use to perform an action for every stat variable paired with an enum value.
         /// </summary>
@@ -38,6 +44,10 @@ namespace com.game.statsystem
         {
             m_variableObjectEntries.ToList().ForEach(kvp => action?.Invoke(kvp.Key, kvp.Value));
         }
+
+        #endregion
+
+        #region Utilities
 
         /// <summary>
         /// Use to refresh the value of every stat via removing and re-applying every
@@ -90,6 +100,10 @@ namespace com.game.statsystem
             return true;
         }
 
+        #endregion
+
+        #region Basic Operations
+
         /// <summary>
         /// Use to increment a stat variable WITHOUT creating a modifier.
         /// </summary>
@@ -139,14 +153,18 @@ namespace com.game.statsystem
             return true;
         }
 
+        #endregion
+
+        #region Modifiers with Editor Presets
+
         /// <summary>
         /// Use to modify a stat variable with a <see cref="StatModification"/>.
         /// </summary>
         /// <param name="mod">The modification object.</param>
         /// <returns>Returns the mutation object created from this operation.</returns>
-        public virtual Mutation<float> ModifyWith(StatModification<T> mod)
+        public virtual StatModifier ModifyWith(StatModification<T> mod)
         {
-            Mutation<float> result = null;
+            StatModifier result = null;
 
             if (mod.ModificationType == StatModificationType.Incremental)
             {
@@ -169,7 +187,7 @@ namespace com.game.statsystem
         /// </summary>
         /// <param name="cap">The modification object.</param>
         /// <returns>Returns the mutation object created from this operation.</returns>
-        public virtual FloatCapMutation CapWith(StatCap<T> cap)
+        public virtual StatModifier CapWith(StatCap<T> cap)
         {
             FloatCapMutation result = new FloatCapMutation()
             {
@@ -181,7 +199,7 @@ namespace com.game.statsystem
 
             ModifyCustom(cap.TargetStatType, result);
 
-            return result;
+            return new StatModifier(result);
         }
 
         /// <summary>
@@ -209,18 +227,22 @@ namespace com.game.statsystem
             return targetVariable.Value;
         }
 
+        #endregion
+
+        #region Modifiers with Values
+
         /// <summary>
         /// Use to add a custom-logic modification to a stat.
         /// </summary>
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="mutationObject">Mutation object created</param>
         /// <returns>Returns the mutation object passed as an argument.</returns>
-        public virtual Mutation<float> ModifyCustom(T targetStat, Mutation<float> mutationObject)
+        public virtual StatModifier ModifyCustom(T targetStat, Mutation<float> mutationObject)
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
 
             desiredStatVariable.Mutate(mutationObject);
-            return mutationObject;
+            return new StatModifier(mutationObject);
         }
 
         /// <summary>
@@ -233,14 +255,14 @@ namespace com.game.statsystem
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
-        public virtual FloatAdditionMutation ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
+        public virtual StatModifier ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
 
             FloatAdditionMutation mutationObject = new(amount, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
-            return mutationObject;
+            return new StatModifier(mutationObject);
         }
 
         /// <summary>
@@ -253,7 +275,7 @@ namespace com.game.statsystem
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
-        public virtual FloatMultiplicationMutation ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
+        public virtual StatModifier ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (StatSystemSettings.PERCENTAGE_MODS_ON_TOP) affectionMethod = AffectionMethod.Overall;
 
@@ -263,7 +285,7 @@ namespace com.game.statsystem
             FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
-            return mutationObject;
+            return new StatModifier(mutationObject);
         }
 
         /// <summary>
@@ -287,6 +309,10 @@ namespace com.game.statsystem
                     "Mutation object used may be invalid.");
             }
         }
+
+        #endregion
+
+        #region Vulnerable API
 
         /// <summary>
         /// Use to get the corresponding variable object of a stat.
@@ -319,5 +345,7 @@ namespace com.game.statsystem
             if (desiredStatVariable != null) return true;
             else return false;
         }
+
+        #endregion
     }
 }
