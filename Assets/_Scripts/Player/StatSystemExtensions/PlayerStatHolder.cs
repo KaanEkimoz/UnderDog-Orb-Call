@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace com.game.player.statsystemextensions
 {
+    /// <summary>
+    /// An example use case of <see cref="StatHolder{T}"/>.
+    /// </summary>
     [System.Serializable]
     public sealed class PlayerStatHolder : StatHolder<PlayerStatType>
     {
@@ -24,24 +27,24 @@ namespace com.game.player.statsystemextensions
         [SerializeField] private Float m_crowdControl = new();
         [SerializeField] private Float m_lightStrength = new();
 
-        protected override Dictionary<PlayerStatType, Float> GenerateDefaultEntries()
+        protected override Dictionary<PlayerStatType, StatObject> GenerateDefaultEntries()
         {
-            return new Dictionary<PlayerStatType, Float>()
+            return new Dictionary<PlayerStatType, StatObject>()
             {
-                { PlayerStatType.Health, m_health },
-                { PlayerStatType.Armor, m_armor },
-                { PlayerStatType.WalkSpeed, m_walkSpeed },
-                { PlayerStatType.LifeSteal, m_lifeSteal },
-                { PlayerStatType.Luck, m_luck },
-                { PlayerStatType.Gathering, m_gathering },
-                { PlayerStatType.Damage, m_damage },
-                { PlayerStatType.AttackSpeed, m_attackSpeed },
-                { PlayerStatType.CriticalHits, m_criticalHits },
-                { PlayerStatType.Range, m_range },
-                { PlayerStatType.Knockback, m_knockback },
-                { PlayerStatType.Penetration, m_penetration },
-                { PlayerStatType.CrowdControl, m_crowdControl },
-                { PlayerStatType.LightStrength, m_lightStrength },
+                { PlayerStatType.Health, new(m_health) },
+                { PlayerStatType.Armor, new(m_armor) },
+                { PlayerStatType.WalkSpeed, new(m_walkSpeed) },
+                { PlayerStatType.LifeSteal, new(m_lifeSteal) },
+                { PlayerStatType.Luck, new(m_luck) },
+                { PlayerStatType.Gathering, new(m_gathering) },
+                { PlayerStatType.Damage, new(m_damage) },
+                { PlayerStatType.AttackSpeed, new(m_attackSpeed) },
+                { PlayerStatType.CriticalHits, new(m_criticalHits) },
+                { PlayerStatType.Range, new(m_range) },
+                { PlayerStatType.Knockback, new(m_knockback) },
+                { PlayerStatType.Penetration, new(m_penetration) },
+                { PlayerStatType.CrowdControl, new(m_crowdControl) },
+                { PlayerStatType.LightStrength, new(m_lightStrength) },
             };
         }
 

@@ -1,5 +1,4 @@
 using com.game.player.scriptables;
-using com.game.statsystem;
 using UnityEngine;
 using com.absence.attributes;
 using com.game.player.statsystemextensions;
@@ -62,7 +61,7 @@ namespace com.game.player
         /// <returns>Returns the value of the target stat.</returns>
         public float GetStat(PlayerStatType targetStat)
         {
-            return m_statHolder.GetDesiredStatVariable(targetStat).Value;
+            return m_statHolder.GetStatObject(targetStat).Value;
         }
 
         #endregion

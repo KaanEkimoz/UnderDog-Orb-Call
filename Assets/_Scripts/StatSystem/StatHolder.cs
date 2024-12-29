@@ -10,17 +10,21 @@ using UnityEngine;
 
 namespace com.game.statsystem
 {
+    /// <summary>
+    /// The class responsible for anything related to stats.
+    /// </summary>
+    /// <typeparam name="T">The enum to use while selecting stats.</typeparam>
     [System.Serializable]
     public abstract class StatHolder<T> where T : Enum
     {
-        protected Dictionary<T, Float> m_variableObjectEntries;
+        protected Dictionary<T, StatObject> m_variableObjectEntries;
 
         protected StatHolder()
         {
             m_variableObjectEntries = GenerateDefaultEntries();
         }
 
-        protected abstract Dictionary<T, Float> GenerateDefaultEntries();
+        protected abstract Dictionary<T, StatObject> GenerateDefaultEntries();
 
         /*
          Public API
@@ -32,7 +36,7 @@ namespace com.game.statsystem
         /// Use to perform an action for every stat variable paired with an enum value.
         /// </summary>
         /// <param name="action">Action to perform.</param>
-        public virtual void ForAllStats(Action<Float> action)
+        public virtual void ForAllStats(Action<StatObject> action)
         {
             m_variableObjectEntries.Values.ToList().ForEach(action);
         }
@@ -41,7 +45,7 @@ namespace com.game.statsystem
         /// Use to perform an action for every key-value pair of enums and stat variables.
         /// </summary>
         /// <param name="action">Action to perform.</param>
-        public virtual void ForAllStatEntries(Action<T, Float> action)
+        public virtual void ForAllStatEntries(Action<T, StatObject> action)
         {
             m_variableObjectEntries.ToList().ForEach(kvp => action?.Invoke(kvp.Key, kvp.Value));
         }
@@ -58,7 +62,7 @@ namespace com.game.statsystem
         {
             ForAllStats(stat =>
             {
-                stat.Refresh();
+                stat.GetVariableObject().Refresh();
             });
         }
 
@@ -69,7 +73,7 @@ namespace com.game.statsystem
         {
             ForAllStats(stat =>
             {
-                stat.ClearMutations();
+                stat.GetVariableObject().ClearMutations();
             });
 
             RefreshAll();
@@ -156,13 +160,13 @@ namespace com.game.statsystem
 
         #endregion
 
-        #region Modifiers with Editor Presets
+        #region Modifiers with Preset Objects
 
         /// <summary>
         /// Use to modify a stat variable with a <see cref="StatModification"/>.
         /// </summary>
         /// <param name="mod">The modification object.</param>
-        /// <returns>Returns the mutation object created from this operation.</returns>
+        /// <returns>Returns the modifier object created from this operation.</returns>
         public virtual ModifierObject ModifyWith(StatModification<T> mod)
         {
             ModifierObject result = null;
@@ -187,7 +191,7 @@ namespace com.game.statsystem
         /// Use to cap a stat variable with a <see cref="StatCap"/>.
         /// </summary>
         /// <param name="cap">The modification object.</param>
-        /// <returns>Returns the mutation object created from this operation.</returns>
+        /// <returns>Returns the modifier object created from this operation.</returns>
         public virtual ModifierObject CapWith(StatCap<T> cap)
         {
             FloatCapMutation result = new FloatCapMutation()
@@ -210,21 +214,21 @@ namespace com.game.statsystem
         /// <returns>Returns the new value of the stat variable.</returns>
         public virtual float OverrideWith(StatOverride<T> ovr)
         {
-            Float targetVariable = GetDesiredStatVariable(ovr.TargetStatType);
+            StatObject targetVariable = GetStatObject(ovr.TargetStatType);
             bool clear = StatSystemSettings.OVERRIDES_CLEAR_MUTATIONS;
             float newValue = ovr.NewValue;
 
             if (clear)
             {
-                targetVariable.ClearMutations();
-                targetVariable.Value = newValue;
+                ClearModifiersOf(ovr.TargetStatType);
+                targetVariable.GetVariableObject().Set(newValue);
                 return newValue;
             }
 
             bool root = StatSystemSettings.OVERRIDES_AFFECT_FROM_ROOT;
             SetType setType = root ? SetType.Raw : SetType.Baked;
 
-            targetVariable.Set(newValue, setType);
+            targetVariable.GetVariableObject().Set(newValue, setType);
             return targetVariable.Value;
         }
 
@@ -237,7 +241,7 @@ namespace com.game.statsystem
         /// </summary>
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="mutationObject">Mutation object created</param>
-        /// <returns>Returns the mutation object passed as an argument.</returns>
+        /// <returns>Returns the modifier object passed as an argument.</returns>
         public virtual ModifierObject ModifyCustom(T targetStat, Mutation<float> mutationObject)
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
@@ -252,7 +256,7 @@ namespace com.game.statsystem
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="amount">Amount of modification.</param>
         /// <returns>
-        /// Returns the mutation applied to desired stat's variable object. You can
+        /// Returns the modifier applied to desired stat. You can
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
@@ -272,7 +276,7 @@ namespace com.game.statsystem
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="percentage">Amount of modification. (in the following form: <i>percentage</i>%).</param>
         /// <returns>
-        /// Returns the mutation applied to desired stat's variable object. You can
+        /// Returns the modifier applied to desired stat. You can
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
@@ -293,7 +297,7 @@ namespace com.game.statsystem
         /// Use to de-modify a stat.
         /// </summary>
         /// <param name="targetStat">Which stat to de-modify.</param>
-        /// <param name="mutationObject">The mutation object created when
+        /// <param name="mutationObject">The modifier object created when
         /// the modification took place.</param>
         public void Demodify(T targetStat, Mutation<float> mutationObject)
         {
@@ -356,7 +360,7 @@ namespace com.game.statsystem
         /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
         public virtual Float GetDesiredStatVariable(T targetStat)
         {
-            if (!m_variableObjectEntries.TryGetValue(targetStat, out Float value))
+            if (!m_variableObjectEntries.TryGetValue(targetStat, out StatObject value))
             {
                 Debug.LogError("An error occurred determining a stat's desired variable. " +
                     "It's entry may not exist.");
@@ -364,7 +368,7 @@ namespace com.game.statsystem
                 return null;
             }
 
-            return value;
+            return value.GetVariableObject();
         }
 
         /// <summary>

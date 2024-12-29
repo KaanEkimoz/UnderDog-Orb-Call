@@ -3,11 +3,17 @@ using UnityEngine;
 
 namespace com.game.statsystem
 {
+    /// <summary>
+    /// A reference to a stat modifier.
+    /// </summary>
     [System.Serializable]
     public class ModifierObject
     {
         [SerializeField] private Mutation<float> m_mutationObject;
 
+        /// <summary>
+        /// Current value of the modifier this reference points to.
+        /// </summary>
         public float Value
         {
             get
@@ -21,6 +27,10 @@ namespace com.game.statsystem
             }
         }
 
+        /// <summary>
+        /// <b>[VULNERABLE]</b> Use to create a modifier object with a <see cref="Mutation{T}"/>.
+        /// </summary>
+        /// <param name="mutationObject">The mutation object of this stat.</param>
         public ModifierObject(Mutation<float> mutationObject)
         {
             m_mutationObject = mutationObject;

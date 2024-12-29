@@ -4,12 +4,15 @@ using System.Collections.Generic;
 
 namespace com.game.orbsystem.statsystemextensions
 {
+    /// <summary>
+    /// Another example use case of <see cref="StatHolder{T}"/>.
+    /// </summary>
     [System.Serializable]
     public class OrbStatHolder : StatHolder<OrbStatType>
     {
-        protected override Dictionary<OrbStatType, Float> GenerateDefaultEntries()
+        protected override Dictionary<OrbStatType, StatObject> GenerateDefaultEntries()
         {
-            return new Dictionary<OrbStatType, Float>()
+            return new Dictionary<OrbStatType, StatObject>()
             {
 
             };

@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "82dd755843359203cc084f110226fea9ead7479b"
     },
+    "com.absence.consolesystem": {
+      "version": "https://www.github.com/b1lodHand/absent-console.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0c64611aab35d174a0ec61563d361e5568b454ac"
+    },
     "com.absence.editor": {
       "version": "https://www.github.com/b1lodHand/absent-editor.git",
       "depth": 0,

@@ -21,5 +21,9 @@ namespace com.game.player.scriptables
         public List<PlayerStatOverride> Overrides = new();
         public List<PlayerStatModification> Modifications = new();
         public List<PlayerStatCap> Caps = new();
+
+        [Space]
+        [Header3("Custom Actions")]
+        [SerializeField] private float m_notReadyYet;
     }
 }
