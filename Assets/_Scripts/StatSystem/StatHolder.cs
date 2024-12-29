@@ -237,7 +237,7 @@ namespace com.game.statsystem
         #region Modifiers with Values
 
         /// <summary>
-        /// Use to add a custom-logic modification to a stat.
+        /// <b>[VULNERABLE]</b> Use to add a custom-logic modification to a stat.
         /// </summary>
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="mutationObject">Mutation object created</param>
@@ -297,15 +297,15 @@ namespace com.game.statsystem
         /// Use to de-modify a stat.
         /// </summary>
         /// <param name="targetStat">Which stat to de-modify.</param>
-        /// <param name="mutationObject">The modifier object created when
+        /// <param name="modifierObject">The modifier object created when
         /// the modification took place.</param>
-        public void Demodify(T targetStat, Mutation<float> mutationObject)
+        public void Demodify(T targetStat, ModifierObject modifierObject)
         {
             if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return;
 
             try
             {
-                desiredStatVariable.Immutate(mutationObject);
+                desiredStatVariable.Immutate(modifierObject.GetMutationObject());
             }
 
             catch
