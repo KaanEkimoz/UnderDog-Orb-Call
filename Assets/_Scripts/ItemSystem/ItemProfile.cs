@@ -1,32 +1,38 @@
 using com.absence.attributes;
-using com.game.orbsystem.statsystemextensions;
-using com.game.player.statsystemextensions;
+using com.game.itemsystem.ui;
+using com.game.utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.game.itemsystem.scriptables
 {
-    [CreateAssetMenu(fileName = "New ItemProfile", menuName = "Game/Item Profile", order = int.MinValue)]
-    public class ItemProfile : ScriptableObject
+    public abstract class ItemProfile : ScriptableObject
     {
         [Header1("Item Profile")]
 
-        [Space]
-        [Header3("Effects on Player Stats")]
+        [Space, Header3("Information")]
 
-        public List<PlayerStatOverride> PlayerStatOverrides;
-        public List<PlayerStatModification> PlayerStatModifications;
-        public List<PlayerStatCap> PlayerStatCaps;
+        [SerializeField, SpriteField, Tooltip("Icon of this item that will be displayed in the UI.")] 
+        protected Sprite m_icon;
 
-        [Space]
-        [Header3("Effects on Orb Stats")]
+        [SerializeField, Tooltip("Name of this item that will be displayed in the UI.")] 
+        protected string m_displayName;
 
-        public List<OrbStatOverride> OrbStatOverrides;
-        public List<OrbStatModification> OrbStatModifications;
-        public List<OrbStatCap> OrbStatCaps;
+        [SerializeField, Multiline, Tooltip("Description of this item. It <b>MUST NOT</b> contain the stat modification log of the item.")] 
+        protected string m_description;
 
-        [Space]
-        [Header3("Custom Actions")]
-        [SerializeField] private float m_notReadyYet;
+        [Space, Header3("Utilities")]
+
+        public List<ItemCustomAction> CustomActions = new();
+
+        public ItemUIData GenerateUIData()
+        {
+            return new ItemUIData()
+            {
+                Icon = m_icon,
+                DisplayName = m_displayName,
+                Description = m_description,
+            };
+        }
     }
 }
