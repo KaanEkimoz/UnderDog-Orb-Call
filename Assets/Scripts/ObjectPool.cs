@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class ObjectPool : MonoBehaviour
 {
     [Serializable]
@@ -24,20 +22,18 @@ public class ObjectPool : MonoBehaviour
             for (int i = 0; i <  pools[j].poolSize; i++)
             {
                 GameObject obj = Instantiate( pools[j].objectPrefab);
+                obj.transform.SetParent(transform);
                 obj.SetActive(false);
             
                 pools[j].pooledObjects.Enqueue(obj);
             }
         }
     }
-
     public GameObject GetPooledObject(int objectType)
     {
         if (objectType >= pools.Length)
-        {
             return null;
-        }
-        
+
         GameObject obj =  pools[objectType].pooledObjects.Dequeue();
         
         obj.SetActive(true);

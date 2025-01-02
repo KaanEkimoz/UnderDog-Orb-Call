@@ -907,6 +907,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1183125827}
   - component: {fileID: 1183125826}
+  - component: {fileID: 1183125828}
   m_Layer: 0
   m_Name: OrbController
   m_TagString: Untagged
@@ -926,17 +927,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b78279520a9134aabf8d6ccd680a70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orbPrefab: {fileID: 8886230964089384064, guid: 6fb39a6dedc47b749b8b8b0140313001, type: 3}
   maxOrbCount: 10
+  ellipseCenterTransform: {fileID: 878954946}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
-  orbMovementSpeed: 15
-  orbFollowDelay: 0.3
-  rotationSpeed: 5
-  ellipseCenterTransform: {fileID: 878954946}
-  swayRange: 0.2
-  swaySpeed: 2
-  distanceThreshold: 0.05
+  ellipseMovementSpeed: 5
+  ellipseRotationSpeed: 5
 --- !u!4 &1183125827
 Transform:
   m_ObjectHideFlags: 0
@@ -952,6 +948,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1183125828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183125825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf597b150ca24d46b9b01462e4bcda0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - objectPrefab: {fileID: 8886230964089384064, guid: 6fb39a6dedc47b749b8b8b0140313001, type: 3}
+    poolSize: 20
 --- !u!1 &1610086195
 GameObject:
   m_ObjectHideFlags: 0
@@ -3245,7 +3256,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
