@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: New Orb Item
   m_EditorClassIdentifier: 
   Guid: 7674fb6c-f065-4926-b600-4cce5fa02f74
-  CustomId: 
   Icon: {fileID: 0}
   DisplayName: 
   Description: 

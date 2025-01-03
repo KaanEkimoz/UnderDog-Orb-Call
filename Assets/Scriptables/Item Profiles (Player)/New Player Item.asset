@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: New Player Item
   m_EditorClassIdentifier: 
   Guid: dd7f39af-0e33-42eb-bbfb-c6a824c97716
-  CustomId: 
   Icon: {fileID: 0}
   DisplayName: 
   Description: 
