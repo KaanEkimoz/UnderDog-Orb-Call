@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace com.game.statsystem
+namespace com.game.statsystem.presetobjects
 {
     public enum StatModificationType
     {

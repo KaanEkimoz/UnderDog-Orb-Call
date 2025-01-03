@@ -12,10 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee024cf36b2d65489845bbbcc3906e5, type: 3}
   m_Name: ExampleCharacterProfile
   m_EditorClassIdentifier: 
-  DefaultStat1: 15
-  DefaultStat2: 25
-  Mod:
+  OrbCount: 0
+  Overrides:
+  - NewValue: 0
     TargetStatType: 0
-    ModificationType: 0
+  Modifications:
+  - ModificationType: 1
     m_incrementalValue: 0
-    m_percentageValue: 0
+    m_percentageValue: 100
+    TargetStatType: 9
+  Caps:
+  - CapLow: 0
+    CapHigh: 0
+    MinValue: 0
+    MaxValue: 0
+    TargetStatType: 0
+  m_notReadyYet: 0
