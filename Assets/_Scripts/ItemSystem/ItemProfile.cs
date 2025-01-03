@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace com.game.itemsystem.scriptables
 {
+    /// <summary>
+    /// The abstract scriptable object used for holding built-in data of an item.
+    /// </summary>
     public abstract class ItemProfile : ScriptableObject
     {
         [Header1("Item Profile")]

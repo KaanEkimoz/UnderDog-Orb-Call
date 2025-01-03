@@ -1,8 +1,12 @@
 ﻿using com.absence.attributes;
+using com.game.itemsystem.gamedependent;
 using UnityEngine;
 
 namespace com.game.itemsystem
 {
+    /// <summary>
+    /// The reference type used for holding the data of a custom action held by an item.
+    /// </summary>
     [System.Serializable]
     public class ItemCustomAction
     {
