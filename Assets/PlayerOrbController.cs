@@ -1,13 +1,16 @@
+using StarterAssets;
 using System.Collections.Generic;
 using UnityEngine;
 public class OrbController : MonoBehaviour
 {
     [Header("Maximum Orb")]
     [Range(5, 15)][SerializeField] private int maxOrbCount = 10;
+    [Range(0, 10)][SerializeField] private int orbCountAtStart;
+    
     [Space]
     [Header("Fire Orb")]
     [SerializeField] private Transform firePointTransform;
-    private GameObject orbToFire;
+    private Orb orbToFire;
     [Space]
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
@@ -19,7 +22,10 @@ public class OrbController : MonoBehaviour
     [SerializeField] private float ellipseRotationSpeed = 5f;
 
     private ObjectPool objectPool;
-    private List<GameObject> orbs = new();
+    private List<Orb> orbs = new();
+
+
+    [SerializeField] private StarterAssetsInputs input;
 
     private void Start()
     {
@@ -27,7 +33,23 @@ public class OrbController : MonoBehaviour
     }
     private void Update()
     {
+        if(input.attack)
+        {
+            FireOrb();
+        }
+            
         UpdateEllipsePos();
+    }
+
+    private void FireOrb()
+    {
+        if (orbToFire != null)
+            return;
+
+        int lastIndex = orbs.Count - 1;
+        orbToFire = orbs[lastIndex];
+        orbToFire.isIdleOnEllipse = false;
+        orbToFire.SetNewDestination(firePointTransform.position);
     }
     private void UpdateEllipsePos()
     {
@@ -39,8 +61,11 @@ public class OrbController : MonoBehaviour
     }
     public void AddOrb()
     {
-        GameObject newOrb = objectPool.GetPooledObject(0);
+        Orb newOrb = objectPool.GetPooledObject(0).GetComponent<Orb>();
+        newOrb.transform.position = ellipseCenterTransform.position;
+
         orbs.Add(newOrb);
+        newOrb.isIdleOnEllipse = true;
         UpdateOrbInitialPositions();
     }
     public void RemoveOrb()
@@ -48,8 +73,9 @@ public class OrbController : MonoBehaviour
         if (orbs.Count > 0)
         {
             int lastIndex = orbs.Count - 1;
-            GameObject orbToRemove = orbs[lastIndex];
-            orbToRemove.SetActive(false);
+            Orb orbToRemove = orbs[lastIndex];
+            //orbToRemove.DisableOrb();
+            //orbToRemove.SetActive(false);
             orbs.RemoveAt(lastIndex);
             UpdateOrbInitialPositions();
         }
@@ -60,7 +86,7 @@ public class OrbController : MonoBehaviour
         {
             float angle = i * CalculateAngleBetweenOrbs() * Mathf.Deg2Rad;
             Vector3 targetPosition = new Vector3(Mathf.Cos(angle) * ellipseXRadius, Mathf.Sin(angle) * ellipseYRadius, 0f);
-            orbs[i].GetComponent<Orb>().posOnEllipse = targetPosition;
+            orbs[i].currentTargetPos = targetPosition;
         }
     }
     private float CalculateAngleBetweenOrbs()

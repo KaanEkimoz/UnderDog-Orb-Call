@@ -928,11 +928,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxOrbCount: 10
+  orbCountAtStart: 0
+  firePointTransform: {fileID: 1886567772}
   ellipseCenterTransform: {fileID: 878954946}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
   ellipseMovementSpeed: 5
   ellipseRotationSpeed: 5
+  input: {fileID: 135756641613574975}
 --- !u!4 &1183125827
 Transform:
   m_ObjectHideFlags: 0
@@ -1596,6 +1599,7 @@ MonoBehaviour:
   look: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  attack: 0
   analogMovement: 0
   cursorLocked: 0
   cursorInputForLook: 1
@@ -3102,7 +3106,7 @@ MonoBehaviour:
     m_ActionId: e4ce1614-c754-48c1-9103-33130441661f
     m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}

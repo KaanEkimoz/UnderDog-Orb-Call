@@ -4,7 +4,7 @@ public class Orb : MonoBehaviour
     [Header("Orb Movement")]
     [SerializeField] private float movementSpeed = 5f; // Speed at which orbs follow the player
     [Header("Orb Positions")]
-    [HideInInspector] public Vector3 posOnEllipse;
+    [HideInInspector] public Vector3 currentTargetPos;
     [Space]
     [Header("Orb Sway")]
     [SerializeField] private float swayRange = 0.1f;
@@ -20,43 +20,49 @@ public class Orb : MonoBehaviour
     [SerializeField] private float maxDistance = 2f;
     */
     //Flags
-    [HideInInspector] public bool hasReachedEllipsePos = false;
+    [HideInInspector] public bool hasReachedTargetPos = false;
+    [HideInInspector] public bool isIdleOnEllipse = false;
     private bool isSwaying = false;
     private bool isThrowing = false;
 
     private void OnEnable()
     {
         swayOffset = Random.Range(0f, Mathf.PI * 2);
-        hasReachedEllipsePos = false;
+        hasReachedTargetPos = false;
     }
     private void Update()
     {
-        if (hasReachedEllipsePos)
+        if (hasReachedTargetPos && isIdleOnEllipse)
             Sway();
-        else
-            MoveEllipsePos();
+        else if(!hasReachedTargetPos)
+            MoveTargetPos();
     }
-    private void OnDisable()
+    public void DisableOrb()
     {
-        
+        gameObject.SetActive(false);
     }
     private void Throw()
     {
 
     }
-    private void MoveEllipsePos()
+    public void SetNewDestination(Vector3 newPos)
+    {
+        currentTargetPos = newPos;
+        hasReachedTargetPos = false;
+    }
+    private void MoveTargetPos()
     {
         // Move towards target position
-        Vector3 targetPosition = posOnEllipse;
-        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, Time.deltaTime * movementSpeed);
+        Vector3 posToMove = currentTargetPos;
+        transform.localPosition = Vector3.Lerp(transform.localPosition, posToMove, Time.deltaTime * movementSpeed);
 
         // Check if the orb has reached the target
-        if (Vector3.Distance(transform.localPosition, targetPosition) < distanceThreshold)
-            hasReachedEllipsePos = true;
+        if (Vector3.Distance(transform.localPosition, posToMove) < distanceThreshold)
+            hasReachedTargetPos = true;
     }
     private void Sway()
     {
-        Vector3 basePosition = posOnEllipse;
+        Vector3 basePosition = currentTargetPos;
         float sway = Mathf.Sin(Time.time * swaySpeed + swayOffset) * swayRange;
         Vector3 swayPosition = new Vector3(basePosition.x, basePosition.y + sway, basePosition.z);
 
