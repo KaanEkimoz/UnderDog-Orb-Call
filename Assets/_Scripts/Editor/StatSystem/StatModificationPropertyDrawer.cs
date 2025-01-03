@@ -24,7 +24,6 @@ namespace com.game.statsystem.editor
             SerializedProperty percentageValueProp = property.FindPropertyRelative("m_percentageValue");
             SerializedProperty modTypeProp = property.FindPropertyRelative("ModificationType");
 
-            property.serializedObject.Update();
             StatModification mod = property.boxedValue as StatModification;
 
             float incrementalValue = incrementalValueProp.floatValue;

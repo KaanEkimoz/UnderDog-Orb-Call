@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace com.game.itemsystem.ui
+namespace com.game.ui.gamedependent.datatypes
 {
     [System.Serializable]
     public class ItemUIData

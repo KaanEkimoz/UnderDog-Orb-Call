@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe543c3788e85049bbb2bfc8ab3b032, type: 3}
   m_Name: New Orb Item
   m_EditorClassIdentifier: 
-  m_icon: {fileID: 0}
-  m_displayName: 
-  m_description: 
+  Guid: 7674fb6c-f065-4926-b600-4cce5fa02f74
+  CustomId: 
+  Icon: {fileID: 0}
+  DisplayName: 
+  Description: 
   CustomActions: []
   m_orbStatOverrides: []
   m_orbStatModifications: []

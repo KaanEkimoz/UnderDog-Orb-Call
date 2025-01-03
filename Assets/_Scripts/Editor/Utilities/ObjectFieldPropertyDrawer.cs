@@ -17,8 +17,6 @@ namespace com.game.utilities.editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            property.serializedObject.Update();
-
             Object value = property.objectReferenceValue;
 
             GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);

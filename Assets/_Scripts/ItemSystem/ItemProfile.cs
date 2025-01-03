@@ -1,5 +1,4 @@
 using com.absence.attributes;
-using com.game.itemsystem.ui;
 using com.game.utilities;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,29 +9,21 @@ namespace com.game.itemsystem.scriptables
     {
         [Header1("Item Profile")]
 
+        [Readonly]
+        public string Guid = System.Guid.NewGuid().ToString();
+
         [Space, Header3("Information")]
 
-        [SerializeField, SpriteField, Tooltip("Icon of this item that will be displayed in the UI.")] 
-        protected Sprite m_icon;
+        [SpriteField, Tooltip("Icon of this item that will be displayed in the UI.")] 
+        public Sprite Icon;
 
-        [SerializeField, Tooltip("Name of this item that will be displayed in the UI.")] 
-        protected string m_displayName;
+        [Tooltip("Name of this item that will be displayed in the UI.")] 
+        public string DisplayName;
 
-        [SerializeField, Multiline, Tooltip("Description of this item. It <b>MUST NOT</b> contain the stat modification log of the item.")] 
-        protected string m_description;
+        [Multiline, Tooltip("Description of this item. It <b>MUST NOT</b> contain the stat modification log of the item.")] 
+        public string Description;
 
-        [Space, Header3("Utilities")]
-
+        [Space, Header3("Custom")]
         public List<ItemCustomAction> CustomActions = new();
-
-        public ItemUIData GenerateUIData()
-        {
-            return new ItemUIData()
-            {
-                Icon = m_icon,
-                DisplayName = m_displayName,
-                Description = m_description,
-            };
-        }
     }
 }

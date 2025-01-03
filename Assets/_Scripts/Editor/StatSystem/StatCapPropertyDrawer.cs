@@ -25,7 +25,6 @@ namespace com.game.statsystem.editor
             SerializedProperty minValueProp = property.FindPropertyRelative("MinValue");
             SerializedProperty maxValueProp = property.FindPropertyRelative("MaxValue");
 
-            property.serializedObject.Update();
             StatCap cap = property.boxedValue as StatCap;
 
             float minValue = minValueProp.floatValue;

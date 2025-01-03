@@ -19,7 +19,6 @@ namespace com.game.statsystem.editor
         {
             SerializedProperty valueProp = property.FindPropertyRelative("NewValue");
 
-            property.serializedObject.Update();
             StatOverride ovr = property.boxedValue as StatOverride;
 
             float value = valueProp.floatValue;
