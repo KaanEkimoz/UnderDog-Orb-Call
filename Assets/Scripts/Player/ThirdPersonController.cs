@@ -185,9 +185,7 @@ namespace StarterAssets
 
             // update animator if using character
             if (_hasAnimator)
-            {
                 _animator.SetBool(_animIDGrounded, Grounded);
-            }
         }
 
         private void CameraRotation()

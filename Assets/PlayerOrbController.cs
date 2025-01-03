@@ -1,114 +1,97 @@
+using StarterAssets;
 using System.Collections.Generic;
 using UnityEngine;
 public class OrbController : MonoBehaviour
 {
-    [Header("Orb")]
-    [SerializeField] private GameObject orbPrefab;
+    [Header("Maximum Orb")]
+    [Range(5, 15)][SerializeField] private int maxOrbCount = 10;
+    [Range(0, 10)][SerializeField] private int orbCountAtStart;
+    
     [Space]
-    [Header("Orb Spawn")]
-    [Range(5, 15)] [SerializeField] private int maxOrbCount = 10;
+    [Header("Fire Orb")]
+    [SerializeField] private Transform firePointTransform;
+    private Orb orbToFire;
+    [Space]
+    [Header("Ellipse Creation")]
+    [SerializeField] private Transform ellipseCenterTransform;
     [SerializeField] private float ellipseXRadius = 0.5f;
     [SerializeField] private float ellipseYRadius = 0.75f;
     [Space]
-    [Header("Orb Movement")]
-    [SerializeField] private float orbMovementSpeed = 5f; // Speed at which orbs follow the player
-    [SerializeField] private float orbFollowDelay = 0.3f;
-    [SerializeField] private float rotationSpeed = 5f; // Delay for the orbs to follow the player
-    [SerializeField] private Transform ellipseCenterTransform;
-    [Space]
-    [Header("Orb Sway")]
-    [SerializeField] private float swayRange = 0.1f;
-    [SerializeField] private float swaySpeed = 2f;
-    [SerializeField] private float distanceThreshold = 0.05f;
-    [Space]
+    [Header("Ellipse Movement")]
+    [SerializeField] private float ellipseMovementSpeed = 5f;
+    [SerializeField] private float ellipseRotationSpeed = 5f;
 
-    private List<GameObject> orbs = new();
-    private List<Vector3> orbInitialPositions = new();
-    private List<float> swayOffsets = new();
-    private List<bool> hasReachedTarget = new();
+    private ObjectPool objectPool;
+    private List<Orb> orbs = new();
 
+
+    [SerializeField] private StarterAssetsInputs input;
+
+    private void Start()
+    {
+        objectPool = GetComponent<ObjectPool>();
+    }
     private void Update()
     {
-        UpdateOrbPositions();
-        UpdateOrbParentPosition();
+        if(input.attack)
+        {
+            FireOrb();
+        }
+            
+        UpdateEllipsePos();
+    }
 
-    }
-    private void LateUpdate()
+    private void FireOrb()
     {
-        
+        if (orbToFire != null)
+            return;
+
+        int lastIndex = orbs.Count - 1;
+        orbToFire = orbs[lastIndex];
+        orbToFire.isIdleOnEllipse = false;
+        orbToFire.SetNewDestination(firePointTransform.position);
     }
-    private void UpdateOrbParentPosition()
+    private void UpdateEllipsePos()
     {
         Vector3 targetPosition = ellipseCenterTransform.position;
         Quaternion targetRotation = ellipseCenterTransform.rotation;
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * orbMovementSpeed);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * ellipseMovementSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * ellipseRotationSpeed);
     }
     public void AddOrb()
     {
-        GameObject newOrb = CreateOrb();
-        newOrb.transform.SetParent(transform);
+        Orb newOrb = objectPool.GetPooledObject(0).GetComponent<Orb>();
+        newOrb.transform.position = ellipseCenterTransform.position;
+
         orbs.Add(newOrb);
-        swayOffsets.Add(Random.Range(0f, Mathf.PI * 2)); // Assign a random phase for sway
-        hasReachedTarget.Add(false);
+        newOrb.isIdleOnEllipse = true;
         UpdateOrbInitialPositions();
-    }
-    private GameObject CreateOrb()
-    {
-        return Instantiate(orbPrefab, ellipseCenterTransform.position, Quaternion.identity);
     }
     public void RemoveOrb()
     {
         if (orbs.Count > 0)
         {
             int lastIndex = orbs.Count - 1;
-            GameObject orbToRemove = orbs[lastIndex];
+            Orb orbToRemove = orbs[lastIndex];
+            //orbToRemove.DisableOrb();
+            //orbToRemove.SetActive(false);
             orbs.RemoveAt(lastIndex);
-            swayOffsets.RemoveAt(lastIndex);
-            hasReachedTarget.RemoveAt(lastIndex);
-            Destroy(orbToRemove);
             UpdateOrbInitialPositions();
         }
     }
     private void UpdateOrbInitialPositions()
     {
-        orbInitialPositions.Clear();
-
-        float angleStep = 360f / Mathf.Max(1, orbs.Count); //Angle Between Orbs
-
         for (int i = 0; i < orbs.Count; i++)
         {
-            float angle = i * angleStep * Mathf.Deg2Rad;
+            float angle = i * CalculateAngleBetweenOrbs() * Mathf.Deg2Rad;
             Vector3 targetPosition = new Vector3(Mathf.Cos(angle) * ellipseXRadius, Mathf.Sin(angle) * ellipseYRadius, 0f);
-            orbInitialPositions.Add(targetPosition);
+            orbs[i].currentTargetPos = targetPosition;
         }
     }
-    private void UpdateOrbPositions()
+    private float CalculateAngleBetweenOrbs()
     {
-        for (int i = 0; i < orbs.Count; i++)
-        {
-            if (!hasReachedTarget[i])
-            {
-                // Move towards target position
-                Vector3 targetPosition = orbInitialPositions[i];
-                orbs[i].transform.localPosition = Vector3.Lerp(orbs[i].transform.localPosition, targetPosition, Time.deltaTime * orbMovementSpeed);
-
-                // Check if the orb has reached the target
-                if (Vector3.Distance(orbs[i].transform.localPosition, targetPosition) < distanceThreshold)
-                {
-                    hasReachedTarget[i] = true; // Mark as reached
-                }
-            }
-            else
-            {
-                // Perform sway movement
-                Vector3 basePosition = orbInitialPositions[i];
-                float sway = Mathf.Sin(Time.time * swaySpeed + swayOffsets[i]) * swayRange;
-                Vector3 swayPosition = new Vector3(basePosition.x, basePosition.y + sway, basePosition.z);
-
-                orbs[i].transform.localPosition = Vector3.Lerp(orbs[i].transform.localPosition, swayPosition, Time.deltaTime * orbMovementSpeed);
-            }
-        }
+        float angleStep = 360f / Mathf.Max(1, orbs.Count);
+        return angleStep;
     }
 }
