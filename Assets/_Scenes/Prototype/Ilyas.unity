@@ -579,6 +579,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_playerStats: {fileID: 1466164266}
+  m_modification:
+    ModificationType: 1
+    m_incrementalValue: 0
+    m_percentageValue: 200
+    TargetStatType: 7
+  m_cap:
+    CapLow: 0
+    CapHigh: 1
+    MinValue: 0
+    MaxValue: 10
+    TargetStatType: 7
+  m_override:
+    NewValue: 0
+    TargetStatType: 7
 --- !u!4 &1313113833
 Transform:
   m_ObjectHideFlags: 0

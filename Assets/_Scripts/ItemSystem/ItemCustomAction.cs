@@ -16,6 +16,6 @@ namespace com.game.itemsystem
         public string Description;
 
         [ShowIf(nameof(ActionType), ItemActionType.SpawnItemBehaviour)]
-        public GameObject ItemBehaviour;
+        public ItemBehaviour ItemBehaviour;
     }
 }
