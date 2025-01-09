@@ -5,6 +5,7 @@ public class Orb : MonoBehaviour
     [SerializeField] private float movementSpeed = 5f; // Speed at which orbs follow the player
     [Header("Orb Positions")]
     [HideInInspector] public Vector3 currentTargetPos;
+    [HideInInspector] public Transform currentFollowTransform;
     [Space]
     [Header("Orb Sway")]
     [SerializeField] private float swayRange = 0.1f;
@@ -12,7 +13,6 @@ public class Orb : MonoBehaviour
     [SerializeField] private float swaySpeed = 2f;
     [SerializeField] private float distanceThreshold = 0.05f;
     [Space]
-
     /*
     [Header("Orb Throw")]
     [SerializeField] Transform throwPoint;
@@ -32,10 +32,7 @@ public class Orb : MonoBehaviour
     }
     private void Update()
     {
-        if (hasReachedTargetPos && isIdleOnEllipse)
-            Sway();
-        else if(!hasReachedTargetPos)
-            MoveTargetPos();
+        MoveTargetPos();
     }
     public void DisableOrb()
     {
@@ -47,18 +44,23 @@ public class Orb : MonoBehaviour
     }
     public void SetNewDestination(Vector3 newPos)
     {
+        currentFollowTransform = null;
         currentTargetPos = newPos;
         hasReachedTargetPos = false;
+    }
+    public void SetNewFollowTransform(Transform trans)
+    {
+        currentFollowTransform = trans;
     }
     private void MoveTargetPos()
     {
         // Move towards target position
         Vector3 posToMove = currentTargetPos;
-        transform.localPosition = Vector3.Lerp(transform.localPosition, posToMove, Time.deltaTime * movementSpeed);
+        transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed);
 
         // Check if the orb has reached the target
-        if (Vector3.Distance(transform.localPosition, posToMove) < distanceThreshold)
-            hasReachedTargetPos = true;
+        //if (Vector3.Distance(transform.position, posToMove) < distanceThreshold)
+          //  hasReachedTargetPos = true;
     }
     private void Sway()
     {

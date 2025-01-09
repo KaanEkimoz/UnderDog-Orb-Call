@@ -1,84 +1,144 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
-#endif
 
 namespace StarterAssets
 {
-	public class StarterAssetsInputs : MonoBehaviour
+    public class StarterAssetsInputs : MonoBehaviour
 	{
-		[Header("Character Input Values")]
-		public Vector2 move;
-		public Vector2 look;
-		public bool jump;
-		public bool sprint;
-		public bool attack;
+        /*#region Singleton
+        public static StarterAssetsInputs Instance { get; private set; }
+        private void Awake()
+        {
+            Instance = this;
+        }
+        #endregion */
+        public bool JumpButtonPressed { get { return IsJumpButtonPressedThisFrame(); } }
+        public bool JumpButtonHeld { get { return _jumpButtonHeld; } }
+        public bool DashButtonPressed { get { return IsDashButtonPressedThisFrame(); } }
+        public bool AttackButtonPressed { get { return IsAttackButtonPressedThisFrame(); } }
+        public bool AttackButtonReleased { get { return IsAttackButtonReleasedThisFrame(); } }
+        public bool AttackButtonHeld { get { return _attackButtonHeld; } }
+        public bool SprintButtonHeld { get { return _sprintButtonHeld; } }
+        public Vector2 MovementInput { get { return _moveInput; } }
+        public Vector2 MouseInput { get { return _mouseInput; } }
 
-		[Header("Movement Settings")]
+        //Movement
+        private Vector2 _moveInput;
+        private Vector2 _mouseInput;
+
+        //Jump
+        private bool _jumpButtonHeld;
+        private bool _jumpButtonPressedThisFrame;
+
+        //Sprint
+        private bool _sprintButtonHeld;
+
+        //Dash
+        private bool _isDashButtonPressedThisFrame;
+
+        //Attack
+        private bool _attackButtonPressedThisFrame;
+		private bool _attackButtonReleasedThisFrame;
+        private bool _attackButtonHeld;
+
+        [Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
-
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
-		{
-			MoveInput(value.Get<Vector2>());
-		}
-
-		public void OnLook(InputValue value)
-		{
-			if(cursorInputForLook)
-                LookInput(value.Get<Vector2>());
-        }
-
-		public void OnJump(InputValue value)
-		{
-			JumpInput(value.isPressed);
-		}
-
-		public void OnSprint(InputValue value)
-		{
-			SprintInput(value.isPressed);
-		}
-
-		public void OnAttack(InputValue value)
+        
+        private bool IsAttackButtonPressedThisFrame()
         {
-            attack = value.isPressed;
+            if (_attackButtonPressedThisFrame)
+            {
+                _attackButtonPressedThisFrame = false;
+                return true;
+            }
+            return false;
         }
-#endif
-
-
-        public void MoveInput(Vector2 newMoveDirection)
-		{
-			move = newMoveDirection;
-		} 
-
-		public void LookInput(Vector2 newLookDirection)
-		{
-			look = newLookDirection;
-		}
-
-		public void JumpInput(bool newJumpState)
-		{
-			jump = newJumpState;
-		}
-
-		public void SprintInput(bool newSprintState)
-		{
-			sprint = newSprintState;
-		}
-
-		private void OnApplicationFocus(bool hasFocus)
+        private bool IsAttackButtonReleasedThisFrame()
+        {
+            if (_attackButtonReleasedThisFrame)
+            {
+                _attackButtonReleasedThisFrame = false;
+                return true;
+            }
+            return false;
+        }
+        private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
 		}
-
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
-	}
-	
+        private bool IsDashButtonPressedThisFrame()
+        {
+            if (_isDashButtonPressedThisFrame)
+            {
+                _isDashButtonPressedThisFrame = false;
+                return true;
+            }
+            return false;
+        }
+        private bool IsJumpButtonPressedThisFrame()
+        {
+            if (_jumpButtonPressedThisFrame)
+            {
+                _jumpButtonPressedThisFrame = false;
+                return true;
+            }
+            return false;
+        }
+
+        #region Input Functions
+        public void OnMovement(InputAction.CallbackContext context)
+        {
+            _moveInput = context.ReadValue<Vector2>();
+        }
+        public void OnLook(InputAction.CallbackContext context)
+        {
+            _mouseInput = context.ReadValue<Vector2>();
+        }
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                _jumpButtonPressedThisFrame = true;
+                _jumpButtonHeld = true;
+            }
+            else if (context.canceled)
+                _jumpButtonHeld = false;
+        }
+        public void OnSprint(InputAction.CallbackContext context)
+        {
+            if (context.started)
+                _sprintButtonHeld = true;
+            else if (context.canceled)
+                _sprintButtonHeld = false;
+        }
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Started)
+                _isDashButtonPressedThisFrame = true;
+        }
+        public void OnAttack(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Started)
+            {
+                _attackButtonHeld = true;
+                _attackButtonPressedThisFrame = true;
+            }
+            else if (context.phase == InputActionPhase.Canceled)
+            {
+                _attackButtonHeld = false;
+                _attackButtonReleasedThisFrame = true;
+            }
+        }
+
+    }
+    #endregion
+
 }
