@@ -8,7 +8,10 @@ namespace com.game.testing
     public class StatTester : MonoBehaviour
     {
         [SerializeField] private PlayerStats m_playerStats;
+
         [SerializeField] private ItemProfile m_itemProfile;
+
+        [SerializeField] private PlayerStatModification m_mod;
 
         private void OnGUI()
         {
@@ -16,8 +19,8 @@ namespace com.game.testing
             {
                 GUILayout.Label($"{key}: {value.Value}");
             });
-        }
 
-        //m_itemProfile
+
+        }
     }
 }
