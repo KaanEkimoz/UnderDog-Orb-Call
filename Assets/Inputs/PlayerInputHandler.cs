@@ -12,9 +12,8 @@ namespace StarterAssets
             Instance = this;
         }
         #endregion 
-        public bool JumpButtonPressed { get { return IsJumpButtonPressedThisFrame(); } }
-        public bool JumpButtonHeld { get { return _jumpButtonHeld; } }
         public bool DashButtonPressed { get { return IsDashButtonPressedThisFrame(); } }
+        public bool DashButtonHeld { get { return _dashButtonHeld; } }
         public bool AttackButtonPressed { get { return IsAttackButtonPressedThisFrame(); } }
         public bool AttackButtonReleased { get { return IsAttackButtonReleasedThisFrame(); } }
         public bool AttackButtonHeld { get { return _attackButtonHeld; } }
@@ -28,14 +27,11 @@ namespace StarterAssets
         private Vector2 _mouseInput;
 
         //Jump
-        private bool _jumpButtonHeld;
-        private bool _jumpButtonPressedThisFrame;
+        private bool _dashButtonHeld;
+        private bool _dashButtonPressedThisFrame;
 
         //Sprint
         private bool _sprintButtonHeld;
-
-        //Dash
-        private bool _isDashButtonPressedThisFrame;
 
         //Attack
         private bool _attackButtonPressedThisFrame;
@@ -79,31 +75,22 @@ namespace StarterAssets
             }
             return false;
         }
-        private void OnApplicationFocus(bool hasFocus)
-		{
-			SetCursorState(cursorLocked);
-		}
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
         private bool IsDashButtonPressedThisFrame()
         {
-            if (_isDashButtonPressedThisFrame)
+            if (_dashButtonPressedThisFrame)
             {
-                _isDashButtonPressedThisFrame = false;
+                _dashButtonPressedThisFrame = false;
                 return true;
             }
             return false;
         }
-        private bool IsJumpButtonPressedThisFrame()
+        private void OnApplicationFocus(bool hasFocus)
         {
-            if (_jumpButtonPressedThisFrame)
-            {
-                _jumpButtonPressedThisFrame = false;
-                return true;
-            }
-            return false;
+            SetCursorState(cursorLocked);
         }
 
         #region Input Functions
@@ -115,15 +102,15 @@ namespace StarterAssets
         {
             _mouseInput = context.ReadValue<Vector2>();
         }
-        public void OnJump(InputAction.CallbackContext context)
+        public void OnDash(InputAction.CallbackContext context)
         {
             if (context.started)
             {
-                _jumpButtonPressedThisFrame = true;
-                _jumpButtonHeld = true;
+                _dashButtonPressedThisFrame = true;
+                _dashButtonHeld = true;
             }
             else if (context.canceled)
-                _jumpButtonHeld = false;
+                _dashButtonHeld = false;
         }
         public void OnSprint(InputAction.CallbackContext context)
         {
@@ -131,11 +118,6 @@ namespace StarterAssets
                 _sprintButtonHeld = true;
             else if (context.canceled)
                 _sprintButtonHeld = false;
-        }
-        public void OnDash(InputAction.CallbackContext context)
-        {
-            if (context.phase == InputActionPhase.Started)
-                _isDashButtonPressedThisFrame = true;
         }
         public void OnAttack(InputAction.CallbackContext context)
         {

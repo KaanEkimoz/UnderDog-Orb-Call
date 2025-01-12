@@ -14,12 +14,17 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
-        [Header("Player")]
+        [Header("PLAYER MOVEMENT")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
+
+        [Tooltip("Dash speed of the character in m/s")]
+        public float DashSpeed = 10.0f;
+        public float DashDuration = 0.5f;
+        public float DashCooldown = 1.5f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -86,6 +91,10 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+
+        //dash
+        private float _dashTimer = 0;
+        private float _dashDurationTimer = 0;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -156,8 +165,9 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
 
-            JumpAndGravity();
-            GroundedCheck();
+            //JumpAndGravity();
+            //GroundedCheck();
+            Dash();
             Move();
         }
 
@@ -187,30 +197,6 @@ namespace StarterAssets
             if (_hasAnimator)
                 _animator.SetBool(_animIDGrounded, Grounded);
         }
-
-        /*
-        private void CameraRotation()
-        {
-            // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-            {
-                //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
-            }
-
-            // clamp our rotations so our values are limited 360 degrees
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-            // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
-        }
-        */
-
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
@@ -265,6 +251,10 @@ namespace StarterAssets
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
+            if(_dashDurationTimer > 0)
+                _speed = DashSpeed;
+
+
             // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -274,6 +264,17 @@ namespace StarterAssets
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
+        }
+        private void Dash()
+        {
+            _dashTimer -= Time.deltaTime;
+            _dashDurationTimer -= Time.deltaTime;
+            
+            if (PlayerInputHandler.Instance.DashButtonPressed && _dashTimer <= 0)
+            {
+                _dashDurationTimer = DashDuration;
+                _dashTimer = DashCooldown;
             }
         }
         private void JumpAndGravity()
@@ -297,7 +298,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.JumpButtonPressed && _jumpTimeoutDelta <= 0.0f)
+                if (_input.DashButtonPressed && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -375,7 +376,6 @@ namespace StarterAssets
                 }
             }
         }
-
         private void OnLand(AnimationEvent animationEvent)
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
