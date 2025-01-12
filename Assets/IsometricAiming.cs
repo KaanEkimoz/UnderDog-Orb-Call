@@ -3,55 +3,55 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class IsometricAiming : MonoBehaviour
 {
+    [Header("Ground Detection")]
     [SerializeField] private LayerMask groundMask;
     private Camera mainCamera;
-    public Vector3 hitPoint;
-
-    private bool isAiming = false;
-
-    public StarterAssetsInputs input;
+    public Vector3 HitPoint { get; private set; }
 
     private void Start()
     {
         mainCamera = Camera.main;
-        input = GetComponent<StarterAssetsInputs>();
     }
+
     private void Update()
     {
-        if (input.AttackButtonHeld)
-            Aim();
+        HandleAiming();
     }
-    private void Aim()
+
+    private void HandleAiming()
     {
-        var (success, position) = GetMousePosition();
-        if (success)
-        {
-            // Calculate the direction
-            var direction = position - transform.position;
+        if (!PlayerInputHandler.Instance.AttackButtonHeld) return;
 
-            // You might want to delete this line.
-            // Ignore the height difference.
-            direction.y = 0;
-
-            // Make the transform look in the direction.
-            transform.forward = direction;
-        }
+        if (TryGetMouseWorldPosition(out var targetPosition))
+            AimAtTarget(targetPosition);
     }
 
-    private (bool success, Vector3 position) GetMousePosition()
+    private bool TryGetMouseWorldPosition(out Vector3 position)
     {
         var ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
         if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
         {
-            hitPoint = hitInfo.point;
-            return (success: true, position: hitInfo.point);
-        }        
-        else
-            return (success: false, position: Vector3.zero);
+            position = hitInfo.point;
+            HitPoint = hitInfo.point;
+            return true;
+        }
+
+        position = Vector3.zero;
+        return false;
     }
+    private void AimAtTarget(Vector3 targetPosition)
+    {
+        var direction = targetPosition - transform.position;
+        direction.y = 0; // Yükseklik farkýný yok say
+        transform.forward = direction;
+    }
+
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(hitPoint, 1f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(HitPoint, 0.5f);
     }
+
+#endif
 }

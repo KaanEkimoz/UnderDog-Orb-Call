@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7025423010329630760}
   - component: {fileID: 390401128302963712}
   - component: {fileID: 7423161256905524677}
+  - component: {fileID: 4581226788505073321}
   - component: {fileID: 3939961923203656775}
   - component: {fileID: -8593687116418555536}
   m_Layer: 6
@@ -88,6 +89,33 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &4581226788505073321
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8886230964089384064}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!135 &3939961923203656775
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -122,9 +150,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
-  posOnEllipse: {x: 0, y: 0, z: 0}
+  distanceThreshold: 0.05
   swayRange: 0.1
   swayOffset: 0
   swaySpeed: 2
-  distanceThreshold: 0.05
-  hasReachedEllipsePos: 0
+  hasReachedTargetPos: 0
+  isSwaying: 0
+  isSticked: 0
+  isThrowing: 0
+  isReturning: 0
