@@ -1,7 +1,9 @@
 using com.absence.attributes;
 using com.game.itemsystem.scriptables;
 using com.game.orbsystem.statsystemextensions;
+using com.game.statsystem;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace com.game.orbsystem.itemsystemextensions
@@ -14,5 +16,30 @@ namespace com.game.orbsystem.itemsystemextensions
         [SerializeField] private List<OrbStatOverride> m_orbStatOverrides;
         [SerializeField] private List<OrbStatModification> m_orbStatModifications;
         [SerializeField] private List<OrbStatCap> m_orbStatCaps;
+
+        public override string GenerateStatDescription(bool richText)
+        {
+            StringBuilder sb = new();
+
+            m_orbStatOverrides.ForEach(ovr =>
+            {
+                sb.Append(StatSystemHelpers.Text.GenerateDescription(ovr, richText));
+                sb.Append("\n");
+            });
+
+            m_orbStatModifications.ForEach(mod =>
+            {
+                sb.Append(StatSystemHelpers.Text.GenerateDescription(mod, richText));
+                sb.Append("\n");
+            });
+
+            m_orbStatCaps.ForEach(cap =>
+            {
+                sb.Append(StatSystemHelpers.Text.GenerateDescription(cap, richText));
+                sb.Append("\n");
+            });
+
+            return sb.ToString();
+        }
     }
 }

@@ -95,7 +95,7 @@ namespace com.game.statsystem.editor
             maxValue = EditorGUI.FloatField(actualPosition, maxFieldLabel, maxValue);
             if (!capHigh) GUI.enabled = true;
 
-            if (minValue > maxValue) minValue = maxValue;
+            if (capHigh && capLow && minValue > maxValue) minValue = maxValue;
 
             if (StatManipulatorEditorHelpers.EndManipulator(property))
             {

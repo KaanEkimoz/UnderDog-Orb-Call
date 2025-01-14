@@ -1,3 +1,4 @@
+using com.absence.attributes;
 using com.absence.utilities;
 using com.absence.variablesystem.builtin;
 using com.absence.variablesystem.internals;
@@ -18,6 +19,7 @@ namespace com.game.statsystem
     [System.Serializable]
     public abstract class StatHolder<T> where T : Enum
     {
+        [HelpBox("You need to start the game to see any data.", HelpBoxType.Info)]
         [SerializeField] private List<FloatVariable> m_stats;
         [SerializeField] private Dictionary<T, FloatVariable> m_entries;
         [SerializeField] List<T> m_enumValues;
@@ -52,7 +54,8 @@ namespace com.game.statsystem
 
         private void SetDefaultValues(DefaultStats<T> defaultValues)
         {
-            if (defaultValues.Length != m_enumValues.Count) throw new Exception("There is a mismatch between the length DefaultStats and corresponding enum values. Please go and refresh the targeted DefaultStats ScriptableObject in the editor.");
+            if (defaultValues.Length != m_enumValues.Count) 
+                throw new Exception("There is a mismatch between the length DefaultStats and corresponding enum values. Please go and refresh the targeted DefaultStats ScriptableObject in the editor.");
 
             foreach (T enumValue in m_enumValues)
             {

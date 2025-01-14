@@ -20,6 +20,8 @@ namespace com.game.itemsystem
             OnDispatch();
         }
 
+        public abstract object[] GetDescriptionArguments();
+
         protected void Dispose()
         {
             Destroy(gameObject);

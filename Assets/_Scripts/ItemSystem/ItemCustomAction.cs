@@ -1,6 +1,5 @@
 ﻿using com.absence.attributes;
 using com.game.itemsystem.gamedependent;
-using UnityEngine;
 
 namespace com.game.itemsystem
 {
@@ -14,6 +13,9 @@ namespace com.game.itemsystem
 
         [HideIf(nameof(ActionType), ItemActionType.None)]
         public string Description;
+
+        //[HideIf(nameof(ActionType), ItemActionType.None)]
+        //public string DescriptionForRichText;
 
         [ShowIf(nameof(ActionType), ItemActionType.SpawnItemBehaviour)]
         public ItemBehaviour ItemBehaviour;

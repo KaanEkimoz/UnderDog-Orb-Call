@@ -1,6 +1,8 @@
 using com.absence.attributes;
 using com.game.utilities;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace com.game.itemsystem.scriptables
@@ -28,5 +30,39 @@ namespace com.game.itemsystem.scriptables
 
         [Space, Header3("Custom")]
         public List<ItemCustomAction> CustomActions = new();
+
+        [Button("Generate Description")]
+        protected void PrintFullDescription()
+        {
+            Debug.Log(GenerateFullDescription(true));
+        }
+
+        public string GenerateFullDescription(bool richText)
+        {
+            string trimmedRawDesc = Description.Trim();
+
+            StringBuilder sb = new(trimmedRawDesc);
+            if (!string.IsNullOrWhiteSpace(trimmedRawDesc)) sb.Append("\n\n");
+
+            sb.Append(GenerateCustomActionDescription(richText));
+            sb.Append(GenerateStatDescription(richText));
+
+            return sb.ToString();
+        }
+
+        public string GenerateCustomActionDescription(bool richText)
+        {
+            StringBuilder sb = new();
+
+            CustomActions.ForEach(act =>
+            {
+                sb.Append(ItemSystemHelpers.Text.GenerateActionDescription(act, richText));
+                sb.Append("\n");
+            });
+
+            return sb.ToString();
+        }
+
+        public abstract string GenerateStatDescription(bool richText);
     }
 }
