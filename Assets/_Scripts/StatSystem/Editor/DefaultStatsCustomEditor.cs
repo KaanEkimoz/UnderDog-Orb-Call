@@ -24,7 +24,10 @@ namespace com.game.statsystem.editor
 
             if (!initalized)
             {
-                EditorGUILayout.HelpBox("This DefaultStats object is not initialized yet. Hit Refresh to initialize it.", MessageType.Warning);
+                EditorGUILayout.HelpBox("This DefaultStats object is not initialized yet. " +
+                    "Hit Refresh to initialize it.", 
+                    MessageType.Warning);
+
                 DrawRefreshButton();
                 return;
             }
@@ -35,6 +38,15 @@ namespace com.game.statsystem.editor
             List<string> enumNames = Enum.GetNames(enumType).ToList();
 
             absentGUILayout.Header1($"Default Stats for {defaultStats.GetTitle()}");
+
+            if (statCount <= 0f)
+            {
+                EditorGUILayout.HelpBox($"The enum type of this object ({enumType.Name}) is empty.", 
+                    MessageType.Info);
+
+                DrawRefreshButton();
+                return;
+            }
 
             if (statCount != enumNames.Count) error = true;
 
