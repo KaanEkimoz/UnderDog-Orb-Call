@@ -17,7 +17,7 @@
         Range,
         Knockback,
         Penetration,
-        CrowdControl,
         LightStrength,
+        CrowdControl,
     }
 }

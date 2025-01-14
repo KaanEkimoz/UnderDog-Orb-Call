@@ -1,3 +1,4 @@
+using com.absence.utilities;
 using com.game.itemsystem.scriptables;
 using com.game.player;
 using com.game.player.statsystemextensions;
@@ -17,10 +18,8 @@ namespace com.game.testing
         {
             m_playerStats.StatHolder.ForAllStatEntries((key, value) =>
             {
-                GUILayout.Label($"{key}: {value.Value}");
+                GUILayout.Label($"{Helpers.SplitCamelCase(key.ToString(), " ")}: {value}");
             });
-
-
         }
     }
 }

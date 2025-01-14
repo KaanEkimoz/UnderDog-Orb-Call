@@ -633,62 +633,8 @@ MonoBehaviour:
   m_defaultStats: {fileID: 11400000, guid: c6300bd449340e943a53c7ff5a0afbb2, type: 2}
   m_defaultCharacterProfile: {fileID: 11400000, guid: 18605d277d059214dbf4c14527ea8adb, type: 2}
   m_statHolder:
-    m_health:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_armor:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_walkSpeed:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_lifeSteal:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_luck:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_gathering:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_damage:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_attackSpeed:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_criticalHits:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_range:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_knockback:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_penetration:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_crowdControl:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
-    m_lightStrength:
-      m_name: 
-      m_value: 0
-      m_bypassEvents: 0
+    m_stats: []
+    m_enumValues: 
 --- !u!4 &1466164267
 Transform:
   m_ObjectHideFlags: 0

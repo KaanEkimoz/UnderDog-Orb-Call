@@ -12,10 +12,10 @@ namespace com.game.player
     {
         [Header("Utilities")]
 
-        [SerializeField, Tooltip("If enabled, this component with initialize itself, and also some additional console messages will take place.")] 
+        [SerializeField, Tooltip("If enabled, this component with initialize itself, and also some additional console messages will take place.")]
         private bool m_debugMode = false;
 
-        [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")] 
+        [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")]
         private PlayerDefaultStats m_defaultStats;
 
         [SerializeField, ShowIf(nameof(m_debugMode)), Required, Tooltip("Profile provided for the self-initialization process.")]
@@ -40,9 +40,8 @@ namespace com.game.player
         /// <param name="defaultValues">The default values provided.</param>
         public void Initialize(PlayerDefaultStats defaultValues)
         {
-            m_statHolder = PlayerStatHolder.Create(defaultValues);
-
-            Debug.Log("PlayerStats successfully initialized!");
+            m_statHolder = new PlayerStatHolder(defaultValues);
+            Debug.Log("PlayerStats initialized.");
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace com.game.player
         /// <returns>Returns the value of the target stat.</returns>
         public float GetStat(PlayerStatType targetStat)
         {
-            return m_statHolder.GetStatObject(targetStat).Value;
+            return m_statHolder.GetStat(targetStat);
         }
 
         #endregion
