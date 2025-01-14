@@ -18,8 +18,8 @@ namespace com.game.statsystem
     [System.Serializable]
     public abstract class StatHolder<T> where T : Enum
     {
-        [SerializeField] private List<Float> m_stats;
-        [SerializeField] private Dictionary<T, Float> m_entries;
+        [SerializeField] private List<FloatVariable> m_stats;
+        [SerializeField] private Dictionary<T, FloatVariable> m_entries;
         [SerializeField] List<T> m_enumValues;
 
         public StatHolder()
@@ -43,7 +43,7 @@ namespace com.game.statsystem
             {
                 m_enumValues.Add(enumValue);
 
-                Float variable = CreateStatVariable(enumValue);
+                FloatVariable variable = CreateStatVariable(enumValue);
 
                 m_stats.Add(variable);
                 m_entries.Add(enumValue, variable);
@@ -57,14 +57,14 @@ namespace com.game.statsystem
             foreach (T enumValue in m_enumValues)
             {
                 if (defaultValues.TryGetDefaultValue(enumValue, out float value)) 
-                    m_entries[enumValue].Value = value;
+                    m_entries[enumValue].SetUnderlyingValueWithoutCallbacks(value);
             }
         }
-        private Float CreateStatVariable(T targetStat)
+        private FloatVariable CreateStatVariable(T targetStat)
         {
             string rawLabel = Enum.GetName(typeof(T), targetStat);
 
-            return new Float(Helpers.SplitCamelCase(rawLabel, " "), 0f);
+            return new FloatVariable(Helpers.SplitCamelCase(rawLabel, " "), 0f);
         }
 
         /*
@@ -80,11 +80,11 @@ namespace com.game.statsystem
         /// <param name="amount">Amount of incrementation.</param>
         /// <param name="setType">Selection of the 'set' logic.</param>
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        protected virtual bool BasicIncrement(T targetStat, float amount, SetType setType = SetType.Baked)
+        protected virtual bool BasicIncrement(T targetStat, float amount)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
-            desiredStatVariable.Add(amount, setType);
+            desiredStatVariable.UnderlyingValue += amount;
             return true;
         }
 
@@ -95,11 +95,11 @@ namespace com.game.statsystem
         /// <param name="multiplier">Amount of multiplication.</param>
         /// <param name="setType">Selection of the 'set' logic.</param>
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        protected virtual bool BasicMultiply(T targetStat, float multiplier, SetType setType = SetType.Baked)
+        protected virtual bool BasicMultiply(T targetStat, float multiplier)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
-            desiredStatVariable.Multiply(multiplier, setType);
+            desiredStatVariable.UnderlyingValue *= multiplier;
             return true;
         }
 
@@ -113,12 +113,12 @@ namespace com.game.statsystem
         /// target variable of this process will all get cleared before overriding
         /// the variable value itself.</param>
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        protected virtual bool BasicOverride(T targetStat, float newValue, SetType setType = SetType.Baked, bool clearMutations = true)
+        protected virtual bool BasicOverride(T targetStat, float newValue, bool clearMutations = true)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
             if (clearMutations) ClearModifiersOf(targetStat);
-            desiredStatVariable.Set(newValue, setType);
+            desiredStatVariable.UnderlyingValue = newValue;
             return true;
         }
 
@@ -131,9 +131,9 @@ namespace com.game.statsystem
         /// </summary>
         /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
         /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
-        private Float GetDesiredStatVariable(T targetStat)
+        private FloatVariable GetDesiredStatVariable(T targetStat)
         {
-            if (!m_entries.TryGetValue(targetStat, out Float value))
+            if (!m_entries.TryGetValue(targetStat, out FloatVariable value))
             {
                 Debug.LogError("An error occurred determining a stat's desired variable. " +
                     "It's entry may not exist.");
@@ -151,7 +151,7 @@ namespace com.game.statsystem
         /// <param name="desiredStatVariable">The variable object received from the getting operation. 
         /// Null if the checking operation fails.</param>
         /// <returns>Returns true if the checking operation succeeds. False otherwise.</returns>
-        private bool TryGetDesiredStatVariable(T targetStat, out Float desiredStatVariable)
+        private bool TryGetDesiredStatVariable(T targetStat, out FloatVariable desiredStatVariable)
         {
             desiredStatVariable = GetDesiredStatVariable(targetStat);
             if (desiredStatVariable != null) return true;
@@ -186,7 +186,7 @@ namespace com.game.statsystem
         {
             value = 0f;
 
-            if (!TryGetDesiredStatVariable(targetStat, out Float targetVariable))
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable targetVariable))
                 return false;
 
             value = targetVariable.Value;
@@ -243,7 +243,7 @@ namespace com.game.statsystem
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
         public virtual bool Refresh(T targetStat)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
             desiredStatVariable.Refresh();
             return true;
@@ -256,7 +256,7 @@ namespace com.game.statsystem
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
         public virtual bool ClearModifiersOf(T targetStat)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
             desiredStatVariable.ClearMutations();
             return true;
@@ -318,23 +318,15 @@ namespace com.game.statsystem
         /// <returns>Returns the new value of the stat variable.</returns>
         public virtual float OverrideWith(StatOverride<T> ovr)
         {
-            if (!TryGetDesiredStatVariable(ovr.TargetStatType, out Float targetVariable))
+            if (!TryGetDesiredStatVariable(ovr.TargetStatType, out FloatVariable targetVariable))
                 throw new Exception("Invalid enum value.");
 
             bool clear = StatSystemSettings.OVERRIDES_CLEAR_MUTATIONS;
             float newValue = ovr.NewValue;
 
-            if (clear)
-            {
-                ClearModifiersOf(ovr.TargetStatType);
-                targetVariable.Set(newValue);
-                return newValue;
-            }
+            if (clear) ClearModifiersOf(ovr.TargetStatType);
 
-            bool root = StatSystemSettings.OVERRIDES_AFFECT_FROM_ROOT;
-            SetType setType = root ? SetType.Raw : SetType.Baked;
-
-            targetVariable.Set(newValue, setType);
+            targetVariable.UnderlyingValue = newValue;
             return targetVariable.Value;
         }
 
@@ -350,7 +342,7 @@ namespace com.game.statsystem
         /// <returns>Returns the modifier object passed as an argument.</returns>
         public virtual ModifierObject<T> ModifyCustom(T targetStat, Mutation<float> mutationObject)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             desiredStatVariable.Mutate(mutationObject);
             return new ModifierObject<T>(targetStat, mutationObject);
@@ -368,7 +360,7 @@ namespace com.game.statsystem
         /// </returns>
         public virtual ModifierObject<T> ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             FloatAdditionMutation mutationObject = new(amount, affectionMethod);
 
@@ -390,7 +382,7 @@ namespace com.game.statsystem
         {
             if (StatSystemSettings.PERCENTAGE_MODS_ON_TOP) affectionMethod = AffectionMethod.Overall;
 
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             float realPercentage = 1f + (percentage / 100f);
             FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
@@ -407,7 +399,7 @@ namespace com.game.statsystem
         /// the modification took place.</param>
         public void Demodify(ModifierObject<T> modifierObject)
         {
-            if (!TryGetDesiredStatVariable(modifierObject.GetTargetStat(), out Float targetVariable))
+            if (!TryGetDesiredStatVariable(modifierObject.GetTargetStat(), out FloatVariable targetVariable))
                 throw new Exception("Invalid enum value.");
 
             try
