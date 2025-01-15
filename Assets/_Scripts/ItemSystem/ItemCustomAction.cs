@@ -11,12 +11,6 @@ namespace com.game.itemsystem
     {
         public ItemActionType ActionType = ItemActionType.None;
 
-        [HideIf(nameof(ActionType), ItemActionType.None)]
-        public string Description;
-
-        //[HideIf(nameof(ActionType), ItemActionType.None)]
-        //public string DescriptionForRichText;
-
         [ShowIf(nameof(ActionType), ItemActionType.SpawnItemBehaviour)]
         public ItemBehaviour ItemBehaviour;
     }

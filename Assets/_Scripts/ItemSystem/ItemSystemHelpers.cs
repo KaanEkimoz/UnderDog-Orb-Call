@@ -6,16 +6,17 @@ namespace com.game.itemsystem
     {
         public static class Text
         {
-            public static string GenerateActionDescription(ItemCustomAction action, bool richText)
+            public static string GenerateDescription(ItemCustomAction action, bool richText)
             {
-                object[] args = ItemActionCorrelator.GetArgs(action);
-
-                //string targetDesc = richText ? action.DescriptionForRichText : action.Description;
-                string targetDesc = action.Description;
-
-                if (args == null) return targetDesc + " (args null)";
-
-                return string.Format(targetDesc, args);
+                switch (action.ActionType)
+                {
+                    case ItemActionType.None:
+                        return null;
+                    case ItemActionType.SpawnItemBehaviour:
+                        return action.ItemBehaviour.GenerateDescription(richText);
+                    default:
+                        return null;
+                }
             }
         }
     }

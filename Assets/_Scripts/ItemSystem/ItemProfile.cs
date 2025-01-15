@@ -56,7 +56,7 @@ namespace com.game.itemsystem.scriptables
 
             CustomActions.ForEach(act =>
             {
-                sb.Append(ItemSystemHelpers.Text.GenerateActionDescription(act, richText));
+                sb.Append(ItemSystemHelpers.Text.GenerateDescription(act, richText));
                 sb.Append("\n");
             });
 

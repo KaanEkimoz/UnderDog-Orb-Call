@@ -15,17 +15,6 @@ namespace com.game.itemsystem.gamedependent
             { ItemActionType.SpawnItemBehaviour, SpawnItemBehaviour },
         };
 
-        public static Dictionary<ItemActionType, Func<ItemCustomAction, object[]>> Arguments = new()
-        {
-            { ItemActionType.None, null },
-            { ItemActionType.SpawnItemBehaviour, SpawnItemBehaviour_Args },
-        };
-
-        public static object[] GetArgs(ItemCustomAction action)
-        {
-            return Arguments[action.ActionType]?.Invoke(action);
-        }
-
         public static Action<ItemObject, ItemCustomAction> GetAction(ItemActionType actionType)
         {
             return Data[actionType];
@@ -40,12 +29,6 @@ namespace com.game.itemsystem.gamedependent
         {
             ItemBehaviour bhv = GameObject.Instantiate(action.ItemBehaviour);
             bhv.Initialize(context);
-        }
-
-        private static object[] SpawnItemBehaviour_Args(ItemCustomAction action)
-        {
-            if (action.ItemBehaviour == null) return null;
-            return action.ItemBehaviour.GetDescriptionArguments();
         }
     }
 }

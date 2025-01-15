@@ -20,7 +20,7 @@ namespace com.game.itemsystem
             OnDispatch();
         }
 
-        public abstract object[] GetDescriptionArguments();
+        public abstract string GenerateDescription(bool richText);
 
         protected void Dispose()
         {
