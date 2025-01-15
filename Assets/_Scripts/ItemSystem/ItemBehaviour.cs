@@ -9,7 +9,7 @@ namespace com.game.itemsystem
     /// </summary>
     public abstract class ItemBehaviour : MonoBehaviour
     {
-        [SerializeField] private ItemObject m_instance;
+        [HideInInspector, SerializeField] private ItemObject m_instance;
 
         public void Initialize(ItemObject instance)
         {

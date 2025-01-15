@@ -18,9 +18,8 @@ MonoBehaviour:
   Description: This is an example raw desc.
   CustomActions:
   - ActionType: 1
-    Description: '{s}{a}{m} {t} for every {c} enemies killed in a wave.'
-    DescriptionForRichText: '{s}{a}{m} {t} for every {c} enemies killed in a wave.'
-    ItemBehaviour: {fileID: 0}
+    Description: '{0}{1}{2} {3} for every {4} enemies killed in a wave.'
+    ItemBehaviour: {fileID: 5413943036052786957, guid: a5df528c5b7446b438ed06048db5cdd6, type: 3}
   m_playerStatOverrides:
   - NewValue: 15
     TargetStatType: 4

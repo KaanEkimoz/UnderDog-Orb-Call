@@ -37,6 +37,8 @@ namespace com.game.statsystem
 
                 if (richText) sb.Append("</b>");
 
+                sb.Append(".");
+
                 return sb.ToString();
             }
 
@@ -66,8 +68,8 @@ namespace com.game.statsystem
                 if (cap.CapLow)
                 {
                     sb.Append($"Caps {GetDisplayName(cap.TargetStatType, richText)} ");
-                    if (richText) sb.Append($"at <b>min</b> of <b>{cap.MinValue}</b>");
-                    else sb.Append($"at min of {cap.MinValue}");
+                    if (richText) sb.Append($"at <b>min</b> of <b>{cap.MinValue}</b>.");
+                    else sb.Append($"at min of {cap.MinValue}.");
 
                     if (cap.CapHigh) sb.Append("\n");
                 }
@@ -75,8 +77,8 @@ namespace com.game.statsystem
                 if (cap.CapHigh)
                 {
                     sb.Append($"Caps {GetDisplayName(cap.TargetStatType, richText)} ");
-                    if (richText) sb.Append($"at <b>max</b> of <b>{cap.MaxValue}</b>");
-                    else sb.Append($"at max of {cap.MaxValue}");
+                    if (richText) sb.Append($"at <b>max</b> of <b>{cap.MaxValue}</b>.");
+                    else sb.Append($"at max of {cap.MaxValue}.");
                 }
 
                 return sb.ToString();
