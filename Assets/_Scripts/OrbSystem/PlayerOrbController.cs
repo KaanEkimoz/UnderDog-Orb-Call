@@ -96,7 +96,8 @@ public class OrbController : MonoBehaviour
             return;
 
         isAiming = false;
-        orbToThrow.SetNewDestination(firePointTransform.position + (firePointTransform.forward * 20f));
+        orbToThrow.Throw(firePointTransform.forward * 20f);
+        //orbToThrow.SetNewDestination(firePointTransform.position + (firePointTransform.forward * 20f));
         orbsThrowed.Add(orbToThrow);
         orbToThrow = null;
     }

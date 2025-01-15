@@ -28,18 +28,26 @@ public class Orb : MonoBehaviour
     [SerializeField] private bool isReturning = false;
 
      private Transform startParent;
+    private Rigidbody rb;
+    [SerializeField] private SphereCollider sphereCollider;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        sphereCollider = GetComponent<SphereCollider>();
         swayOffset = Random.Range(0f, Mathf.PI * 2);
         startParent = transform.parent;
     }
     private void Update()
     {
-        if(!isSticked)
+        if(!isSticked && !isThrowing)
             MoveTargetPos();
         if(isReturning && hasReachedTargetPos)
+        {
             isReturning = false;
+            sphereCollider.isTrigger = false;
+        }
+            
     }
     public void Disable()
     {
@@ -47,13 +55,24 @@ public class Orb : MonoBehaviour
     }
     public void Return()
     {
-        isReturning = true;
+        sphereCollider.isTrigger = true;
+        rb.isKinematic = true;
         isSticked = false;
+        isReturning = true;
+        
+        isThrowing = false;
+        
         ResetParent();
     }
     public void ResetParent()
     {
         transform.SetParent(startParent);
+    }
+    public void Throw(Vector3 force)
+    {
+        rb.isKinematic = false;
+        isThrowing = true;
+        rb.AddForce(force,ForceMode.Impulse);
     }
     public void SetNewDestination(Vector3 newPos)
     {
@@ -77,8 +96,14 @@ public class Orb : MonoBehaviour
             return;
 
         isSticked = true;
+        rb.isKinematic = true;
         transform.position = collision.contacts[0].point;
         transform.SetParent(collision.transform);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+            Debug.Log("Enemy Hit");
     }
     private void Sway()
     {

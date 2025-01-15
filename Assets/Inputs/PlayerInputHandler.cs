@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace StarterAssets
-{
+
     public class PlayerInputHandler : MonoBehaviour
 	{
         #region Singleton
@@ -138,8 +137,5 @@ namespace StarterAssets
                 _blockButtonPressedThisFrame = true;
 
         }
-
-    }
-    #endregion
-
+        #endregion  
 }
