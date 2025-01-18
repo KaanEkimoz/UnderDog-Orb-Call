@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-
 [RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
 public class ThirdPersonController : MonoBehaviour
 {
@@ -12,9 +11,9 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private float sprintSpeed = 5.335f;
     [Header("Dash")]
     [Tooltip("Dash speed of the character in m/s")]
-    [SerializeField] private float dashSpeed = 10.0f;
+    [SerializeField] private float dashSpeed = 25.0f;
     [Tooltip("Dash duration of the character in seconds")]
-    [SerializeField] private float dashDurationInSeconds = 0.5f;
+    [SerializeField] private float dashDurationInSeconds = 0.2f;
     [SerializeField] private float dashCooldownInSeconds = 1.5f;
     [Header("Rotation")]
     [Tooltip("How fast the character turns to face movement direction")]
@@ -24,7 +23,6 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("Acceleration and deceleration")]
     [SerializeField] private float speedChangeRate = 10.0f;
     [Header("Audio Clips")]
-    [SerializeField] private AudioClip landingAudioClip;
     [SerializeField] private AudioClip[] footstepAudioClips;
     [Range(0, 1)][SerializeField] private float footstepAudioVolume = 0.5f;
 
@@ -44,31 +42,20 @@ public class ThirdPersonController : MonoBehaviour
     private int _animIDMotionSpeed;
 
     //components
-    private PlayerInput _playerInput;
     private Animator _animator;
     private CharacterController _controller;
     private PlayerInputHandler _input;
     private GameObject _mainCamera;
-
-    private bool IsCurrentDeviceMouse
-    {
-        get
-        {
-            return _playerInput.currentControlScheme == "KeyboardMouse";
-        }
-    }
     private void Awake()
     {
         if (_mainCamera == null)
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
-
     private void Start()
     {
         _hasAnimator = TryGetComponent(out _animator);
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputHandler>();
-        _playerInput = GetComponent<PlayerInput>();
         AssignAnimationIDs();
     }
     private void Update()
@@ -149,9 +136,6 @@ public class ThirdPersonController : MonoBehaviour
     {
         return Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
     }
-
-    
-
     private void MovePlayer(Vector3 targetDirection)
     {
         _controller.Move(targetDirection.normalized * (_currentHorizontalSpeed * Time.deltaTime) +
@@ -206,13 +190,6 @@ public class ThirdPersonController : MonoBehaviour
                 var index = Random.Range(0, footstepAudioClips.Length);
                 AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_controller.center), footstepAudioVolume);
             }
-        }
-    }
-    private void OnLand(AnimationEvent animationEvent)
-    {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            AudioSource.PlayClipAtPoint(landingAudioClip, transform.TransformPoint(_controller.center), footstepAudioVolume);
         }
     }
     #endregion

@@ -1,16 +1,15 @@
-using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class IsometricAiming : MonoBehaviour
 {
-    [Header("Ground Detection")]
-    [SerializeField] private LayerMask groundMask;
-    private Camera mainCamera;
+    [Header("Cursor Detection")]
+    [SerializeField] private LayerMask cursorDetectMask;
+    private Camera _mainCamera;
     public Vector3 HitPoint { get; private set; }
 
     private void Start()
     {
-        mainCamera = Camera.main;
+        _mainCamera = Camera.main;
     }
 
     private void Update()
@@ -28,8 +27,8 @@ public class IsometricAiming : MonoBehaviour
 
     private bool TryGetMouseWorldPosition(out Vector3 position)
     {
-        var ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, groundMask))
+        var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, cursorDetectMask))
         {
             position = hitInfo.point;
             HitPoint = hitInfo.point;
@@ -42,7 +41,7 @@ public class IsometricAiming : MonoBehaviour
     private void AimAtTarget(Vector3 targetPosition)
     {
         var direction = targetPosition - transform.position;
-        direction.y = 0; // Yükseklik farkýný yok say
+        direction.y = 0; // Keep the direction on the XZ plane
         transform.forward = direction;
     }
 
@@ -52,6 +51,5 @@ public class IsometricAiming : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(HitPoint, 0.5f);
     }
-
 #endif
 }

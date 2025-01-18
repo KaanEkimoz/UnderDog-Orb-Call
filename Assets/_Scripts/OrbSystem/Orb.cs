@@ -11,7 +11,6 @@ public class Orb : MonoBehaviour
     [SerializeField] private float swayRange = 0.1f;
     [SerializeField] private float swayOffset;
     [SerializeField] private float swaySpeed = 2f;
-    
     [Space]
     /*
     [Header("Orb Throw")]
@@ -47,7 +46,6 @@ public class Orb : MonoBehaviour
             isReturning = false;
             sphereCollider.isTrigger = false;
         }
-            
     }
     public void Disable()
     {

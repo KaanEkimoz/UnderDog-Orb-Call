@@ -439,7 +439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &724108590
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1050,7 +1050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1003042356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2122,6 +2122,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExplosiveEnemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1415160704175932166, guid: b87d779f6f84f1f4c8dddbc54d3a4219, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2595118713565171926, guid: b87d779f6f84f1f4c8dddbc54d3a4219, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.81549996
@@ -2194,6 +2198,10 @@ PrefabInstance:
     - target: {fileID: 1415160704175932166, guid: b87d779f6f84f1f4c8dddbc54d3a4219, type: 3}
       propertyPath: m_Name
       value: ExplosiveEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1415160704175932166, guid: b87d779f6f84f1f4c8dddbc54d3a4219, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1415160704175932166, guid: b87d779f6f84f1f4c8dddbc54d3a4219, type: 3}
       propertyPath: m_TagString
@@ -3775,13 +3783,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 2
   sprintSpeed: 5.335
-  dashSpeed: 10
-  dashDurationInSeconds: 0.5
-  dashCooldownInSeconds: 1.5
-  RotationSmoothTime: 0.12
-  SpeedChangeRate: 10
-  LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
-  FootstepAudioClips:
+  dashSpeed: 20
+  dashDurationInSeconds: 0.2
+  dashCooldownInSeconds: 1
+  rotationSmoothTime: 0.12
+  speedChangeRate: 10
+  footstepAudioClips:
   - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
   - {fileID: 8300000, guid: 85016e0f2b01da248b9663dd49a161b0, type: 3}
   - {fileID: 8300000, guid: 186de84b3207156479abe98f4958fed0, type: 3}
@@ -3792,22 +3799,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 67c8b33e424ccdc4486edf538ab91c5a, type: 3}
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
-  FootstepAudioVolume: 0.3
-  JumpHeight: 1.2
-  Gravity: -15
-  JumpTimeout: 0.3
-  FallTimeout: 0.15
-  Grounded: 1
-  GroundedOffset: -0.14
-  GroundedRadius: 0.28
-  GroundLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  CinemachineCameraTarget: {fileID: 8338988565591873048}
-  TopClamp: 70
-  BottomClamp: -30
-  CameraAngleOverride: 0
-  LockCameraPosition: 0
+  footstepAudioVolume: 0.5
 --- !u!143 &4416926083347132233
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4740,7 +4732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32b534b0157976940973d2c15c6e4b7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundMask:
+  cursorDetectMask:
     serializedVersion: 2
     m_Bits: 1
 --- !u!4 &6983258930626336602
