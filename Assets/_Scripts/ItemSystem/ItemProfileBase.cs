@@ -1,7 +1,6 @@
 using com.absence.attributes;
 using com.game.utilities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace com.game.itemsystem.scriptables
     /// <summary>
     /// The abstract scriptable object used for holding built-in data of an item.
     /// </summary>
-    public abstract class ItemProfile : ScriptableObject
+    public abstract class ItemProfileBase : ScriptableObject
     {
         [Header1("Item Profile")]
 
@@ -34,35 +33,9 @@ namespace com.game.itemsystem.scriptables
         [Button("Generate Description")]
         protected void PrintFullDescription()
         {
-            Debug.Log(GenerateFullDescription(true));
+            Debug.Log(ItemSystemHelpers.Text.GenerateDescription(this, true));
         }
 
-        public string GenerateFullDescription(bool richText)
-        {
-            string trimmedRawDesc = Description.Trim();
-
-            StringBuilder sb = new(trimmedRawDesc);
-            if (!string.IsNullOrWhiteSpace(trimmedRawDesc)) sb.Append("\n\n");
-
-            sb.Append(GenerateCustomActionDescription(richText));
-            sb.Append(GenerateStatDescription(richText));
-
-            return sb.ToString();
-        }
-
-        public string GenerateCustomActionDescription(bool richText)
-        {
-            StringBuilder sb = new();
-
-            CustomActions.ForEach(act =>
-            {
-                sb.Append(ItemSystemHelpers.Text.GenerateDescription(act, richText));
-                sb.Append("\n");
-            });
-
-            return sb.ToString();
-        }
-
-        public abstract string GenerateStatDescription(bool richText);
+        public abstract string GenerateFurtherDescription(ItemObject context, bool richText);
     }
 }

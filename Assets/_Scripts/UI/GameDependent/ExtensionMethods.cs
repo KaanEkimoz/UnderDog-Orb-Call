@@ -5,7 +5,7 @@ namespace com.game.ui.gamedependent.internals
 {
     public static class ExtensionMethods
     {
-        public static ItemUIData GenerateUIData(this ItemProfile itemSO)
+        public static ItemUIData GenerateUIData(this ItemProfileBase itemSO)
         {
             return new ItemUIData()
             {

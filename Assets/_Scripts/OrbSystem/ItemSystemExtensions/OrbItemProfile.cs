@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.game.itemsystem;
 using com.game.itemsystem.scriptables;
 using com.game.orbsystem.statsystemextensions;
 using com.game.statsystem;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace com.game.orbsystem.itemsystemextensions
 {
     [CreateAssetMenu(fileName = "New Orb Item", menuName = "Game/Item System/ Orb Item Profile", order = int.MinValue)]
-    public class OrbItemProfile : ItemProfile
+    public class OrbItemProfile : ItemProfileBase
     {
         [Space, Header3("Effects on Orb Stats")]
 
@@ -17,7 +18,7 @@ namespace com.game.orbsystem.itemsystemextensions
         [SerializeField] private List<OrbStatModification> m_orbStatModifications;
         [SerializeField] private List<OrbStatCap> m_orbStatCaps;
 
-        public override string GenerateStatDescription(bool richText)
+        public override string GenerateFurtherDescription(ItemObject context, bool richText)
         {
             StringBuilder sb = new();
 

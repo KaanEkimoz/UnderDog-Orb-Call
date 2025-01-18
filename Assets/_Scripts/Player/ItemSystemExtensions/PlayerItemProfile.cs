@@ -1,5 +1,5 @@
 using com.absence.attributes;
-using com.absence.utilities;
+using com.game.itemsystem;
 using com.game.itemsystem.scriptables;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
@@ -10,7 +10,7 @@ using UnityEngine;
 namespace com.game.player.itemsystemextensions
 {
     [CreateAssetMenu(fileName = "New Player Item", menuName = "Game/Item System/ Player Item Profile", order = int.MinValue)]
-    public class PlayerItemProfile : ItemProfile
+    public class PlayerItemProfile : ItemProfileBase
     {
         [Space, Header3("Effects on Player Stats")]
 
@@ -18,7 +18,11 @@ namespace com.game.player.itemsystemextensions
         [SerializeField] private List<PlayerStatModification> m_playerStatModifications;
         [SerializeField] private List<PlayerStatCap> m_playerStatCaps;
 
-        public override string GenerateStatDescription(bool richText)
+        public List<PlayerStatOverride> StatOverrides => m_playerStatOverrides;
+        public List<PlayerStatModification> StatModifications => m_playerStatModifications;
+        public List<PlayerStatCap> StatCaps => m_playerStatCaps;
+
+        public override string GenerateFurtherDescription(ItemObject context, bool richText)
         {
             StringBuilder sb = new();
 

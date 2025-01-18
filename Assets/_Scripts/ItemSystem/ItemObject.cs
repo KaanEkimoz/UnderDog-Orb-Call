@@ -1,5 +1,4 @@
 using com.game.itemsystem.scriptables;
-using com.game.statsystem.presetobjects;
 using System;
 using System.Collections.Generic;
 
@@ -11,19 +10,12 @@ namespace com.game.itemsystem
     [System.Serializable]
     public class ItemObject : IDisposable
     {
-        public ItemProfile Profile;
+        public ItemProfileBase Profile;
         public Dictionary<string, object> CustomData = new();
 
         public event Action OnDispose = null;
 
-        public void Dispose()
-        {
-            Profile = null;
-            CustomData = null;
-            OnDispose?.Invoke();
-        }
-
-        public static ItemObject Create(ItemProfile profile)
+        public static ItemObject Create(ItemProfileBase profile)
         {
             return new ItemObject()
             {
@@ -43,6 +35,13 @@ namespace com.game.itemsystem
             //};
 
             return null;
+        }
+
+        public void Dispose()
+        {
+            Profile = null;
+            CustomData = null;
+            OnDispose?.Invoke();
         }
     }
 }

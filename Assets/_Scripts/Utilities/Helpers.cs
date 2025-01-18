@@ -18,7 +18,7 @@ namespace com.game.utilities
 
             public static string Colorize(string input, string colorHexcode)
             {
-                return CoverXML(input, $"color:{colorHexcode}", "/color");
+                return CoverXML(input, $"color={colorHexcode}", "/color");
             }
 
             public static string CoverXML(string input, string xmlStart, string xmlEnd)

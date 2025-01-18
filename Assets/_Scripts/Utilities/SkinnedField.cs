@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace com.game.utilities
 {
@@ -21,5 +20,6 @@ namespace com.game.utilities
         public override Type GetRealType() => typeof(T2); 
 
         public abstract T2 FetchRealValue(T1 newSkinnedValue);
+        public abstract T1 RefreshSkinnedValue(T2 realValue);
     }
 }

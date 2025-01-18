@@ -7,8 +7,8 @@ namespace com.game.itemsystem
 {
     public static class ItemDatabase
     {
-        private static Dictionary<string, ItemProfile> s_entries;
-        public static Dictionary<string, ItemProfile> Entries => s_entries;
+        private static Dictionary<string, ItemProfileBase> s_entries;
+        public static Dictionary<string, ItemProfileBase> Entries => s_entries;
 
         public static async void InitializeAsync()
         {
@@ -19,7 +19,7 @@ namespace com.game.itemsystem
             */
         }
 
-        public static ItemProfile GetItem(string guid)
+        public static ItemProfileBase GetItem(string guid)
         {
             return null;
 
@@ -28,7 +28,7 @@ namespace com.game.itemsystem
             */
         }
 
-        public static bool TryGetItem(string guid, out ItemProfile result)
+        public static bool TryGetItem(string guid, out ItemProfileBase result)
         {
             result = null;
             return false;

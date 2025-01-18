@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using com.game.itemsystem.gamedependent;
 
 namespace com.game.itemsystem
 {
@@ -9,36 +9,38 @@ namespace com.game.itemsystem
     /// </summary>
     public abstract class ItemBehaviour : MonoBehaviour
     {
-        [HideInInspector, SerializeField] private ItemObject m_instance;
+        public static readonly string CustomDataKey = "behaviour";
+
+        protected ItemObject m_instance = null;
 
         public void Initialize(ItemObject instance)
         {
             m_instance = instance;
+            m_instance.CustomData.Add(ItemBehaviour.CustomDataKey, this);
 
             m_instance.OnDispose += Dispose;
 
-            OnDispatch();
+            Spawn();
         }
 
-        public abstract string GenerateDescription(bool richText);
+        public abstract string GenerateActionDescription(bool richText);
+        public virtual string GenerateDataDescription(bool richText)
+        {
+            return null;
+        }
+
+        public abstract void Spawn();
+        public abstract void Despawn();
 
         protected void Dispose()
         {
             Destroy(gameObject);
-            OnDispose();
+            Despawn();
         }
 
         private void OnDestroy()
         {
             m_instance.OnDispose -= Dispose;
-        }
-
-        public virtual void OnDispatch()
-        {
-        }
-
-        public virtual void OnDispose()
-        {
         }
     }
 }

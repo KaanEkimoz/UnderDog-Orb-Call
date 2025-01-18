@@ -19,7 +19,8 @@
 
 //            GUIContent actualLabel = EditorGUI.BeginProperty(position, label, property);
 
-//            EditorGUI.ObjectField(position, label, );
+//            EditorGUI.ObjectField(position, label, fieldObject.,  fieldObject.GetSkinnedType(),
+//                fieldObject.AllowSceneObjects);
 
 //            EditorGUI.EndProperty();
 //        }

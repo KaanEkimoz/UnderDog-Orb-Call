@@ -269,6 +269,21 @@ namespace com.game.statsystem
 
         #region Modifiers with Preset Objects
 
+        //public virtual ModifierObject<T> ApplyPreset(StatModification<T> mod)
+        //{
+        //    return ModifyWith(mod);
+        //}
+
+        //public virtual ModifierObject<T> ApplyPreset(StatCap<T> cap)
+        //{
+        //    return CapWith(cap);
+        //}
+
+        //public virtual float ApplyPreset(StatOverride<T> ovr)
+        //{
+        //    return OverrideWith(ovr);
+        //}
+
         /// <summary>
         /// Use to modify a stat variable with a <see cref="StatModification"/>.
         /// </summary>
@@ -388,7 +403,7 @@ namespace com.game.statsystem
             if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             float realPercentage = 1f + (percentage / 100f);
-            FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
+            FloatPercentageMutation mutationObject = new(percentage, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
             return new ModifierObject<T>(targetStat, mutationObject);

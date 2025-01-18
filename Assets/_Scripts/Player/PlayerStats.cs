@@ -2,6 +2,8 @@ using com.game.player.scriptables;
 using UnityEngine;
 using com.absence.attributes;
 using com.game.player.statsystemextensions;
+using System.Collections.Generic;
+using System;
 
 namespace com.game.player
 {
@@ -24,7 +26,10 @@ namespace com.game.player
         [Header("Stats")]
         [SerializeField, Readonly] private PlayerStatHolder m_statHolder;
 
+        Dictionary<PlayerStatType, float> m_defaultValues;
+
         public PlayerStatHolder StatHolder => m_statHolder;
+        public Dictionary<PlayerStatType, float> DefaultValues => m_defaultValues;
 
         private void Awake()
         {
@@ -51,16 +56,11 @@ namespace com.game.player
         public void ApplyCharacterProfile(PlayerCharacterProfile profile)
         {
             m_statHolder.ApplyCharacterProfile(profile);
-        }
-
-        /// <summary>
-        /// Use to get the current value of a stat.
-        /// </summary>
-        /// <param name="targetStat">The stat to get value of.</param>
-        /// <returns>Returns the value of the target stat.</returns>
-        public float GetStat(PlayerStatType targetStat)
-        {
-            return m_statHolder.GetStat(targetStat);
+            m_defaultValues = new();
+            foreach(PlayerStatType enumValue in Enum.GetValues(typeof(PlayerStatType)))
+            {
+                m_defaultValues.Add(enumValue, m_statHolder.GetStat(enumValue));
+            }
         }
 
         #endregion

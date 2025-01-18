@@ -1,6 +1,9 @@
 using com.game.itemsystem;
+using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
+using com.game.testing;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -11,7 +14,12 @@ namespace com.game.generics.itembehaviours
         [SerializeField, Min(1)] private int m_amountOfEnemies = 1;
         [SerializeField] private PlayerStatModification m_modification = new();
 
-        public override string GenerateDescription(bool richText)
+        int m_kills;
+        List<ModifierObject<PlayerStatType>> m_modifiers = new();
+
+        PlayerStatHolder m_statHolder;
+
+        public override string GenerateActionDescription(bool richText)
         {
             float value = m_modification.Value;
 
@@ -44,6 +52,40 @@ namespace com.game.generics.itembehaviours
             sb.Append(" enemies killed in a wave.");
 
             return sb.ToString();
+        }
+
+        public override string GenerateDataDescription(bool richText)
+        {
+            StringBuilder sb = new();
+            sb.Append(" stats gained: ");
+            sb.Append(m_kills * m_modification.Value);
+
+            if (!richText) return sb.ToString();
+            else return com.game.utilities.Helpers.Text.Italic(sb.ToString());
+        }
+
+        public override void Spawn()
+        {
+            TestEventChannel.OnEnemyKilled += OnEnemyKilled;
+
+            m_kills = 0;
+            m_statHolder = Player.Instance.Hub.Stats.StatHolder;
+        }
+
+        private void OnEnemyKilled()
+        {
+            m_kills++;
+            m_modifiers.Add(m_statHolder.ModifyWith(m_modification));
+        }
+
+        public override void Despawn()
+        {
+            TestEventChannel.OnEnemyKilled -= OnEnemyKilled;
+
+            m_modifiers.ForEach(modifier =>
+            {
+                m_statHolder.Demodify(modifier);
+            });
         }
     }
 }
