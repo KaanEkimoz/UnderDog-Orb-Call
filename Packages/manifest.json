@@ -5,6 +5,7 @@
     "com.absence.editor": "https://www.github.com/b1lodHand/absent-editor.git",
     "com.absence.utilities": "https://www.github.com/b1lodHand/absent-utilities.git",
     "com.absence.variablesystem": "https://www.github.com/b1lodHand/absent-variables.git",
+    "com.unity.addressables": "2.2.2",
     "com.unity.ai.navigation": "2.0.5",
     "com.unity.burst": "1.8.18",
     "com.unity.cinemachine": "3.1.2",

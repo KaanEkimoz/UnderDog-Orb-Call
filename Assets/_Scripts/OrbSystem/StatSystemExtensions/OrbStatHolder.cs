@@ -1,6 +1,4 @@
-using com.absence.variablesystem.builtin;
 using com.game.statsystem;
-using System.Collections.Generic;
 
 namespace com.game.orbsystem.statsystemextensions
 {
@@ -10,21 +8,8 @@ namespace com.game.orbsystem.statsystemextensions
     [System.Serializable]
     public class OrbStatHolder : StatHolder<OrbStatType>
     {
-        protected override Dictionary<OrbStatType, StatObject> GenerateDefaultEntries()
+        public OrbStatHolder(DefaultStats<OrbStatType> defaultValues) : base(defaultValues)
         {
-            return new Dictionary<OrbStatType, StatObject>()
-            {
-
-            };
-        }
-
-        public static OrbStatHolder Create() 
-        {
-            OrbStatHolder holder = new OrbStatHolder();
-
-            // any logic here.
-
-            return holder;
         }
     }
 }

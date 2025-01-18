@@ -1,3 +1,5 @@
+using com.absence.attributes;
+using com.absence.utilities;
 using com.absence.variablesystem.builtin;
 using com.absence.variablesystem.internals;
 using com.absence.variablesystem.mutations.internals;
@@ -17,95 +19,60 @@ namespace com.game.statsystem
     [System.Serializable]
     public abstract class StatHolder<T> where T : Enum
     {
-        protected Dictionary<T, StatObject> m_variableObjectEntries;
+        [HelpBox("You need to start the game to see any data.", HelpBoxType.Info)]
+        [SerializeField] private List<FloatVariable> m_stats;
+        [SerializeField] private Dictionary<T, FloatVariable> m_entries;
+        [SerializeField] List<T> m_enumValues;
 
-        protected StatHolder()
+        public StatHolder()
         {
-            m_variableObjectEntries = GenerateDefaultEntries();
+            Initialize();
         }
 
-        protected abstract Dictionary<T, StatObject> GenerateDefaultEntries();
+        public StatHolder(DefaultStats<T> defaultValues)
+        {
+            Initialize();
+            SetDefaultValues(defaultValues);
+        }
+
+        protected virtual void Initialize()
+        {
+            m_enumValues = new();
+            m_stats = new();
+            m_entries = new();
+
+            foreach (T enumValue in Enum.GetValues(typeof(T)))
+            {
+                m_enumValues.Add(enumValue);
+
+                FloatVariable variable = CreateStatVariable(enumValue);
+
+                m_stats.Add(variable);
+                m_entries.Add(enumValue, variable);
+            }
+        }
+
+        private void SetDefaultValues(DefaultStats<T> defaultValues)
+        {
+            if (defaultValues.Length != m_enumValues.Count) 
+                throw new Exception("There is a mismatch between the length DefaultStats and corresponding enum values. Please go and refresh the targeted DefaultStats ScriptableObject in the editor.");
+
+            foreach (T enumValue in m_enumValues)
+            {
+                if (defaultValues.TryGetDefaultValue(enumValue, out float value)) 
+                    m_entries[enumValue].SetUnderlyingValueWithoutCallbacks(value);
+            }
+        }
+        private FloatVariable CreateStatVariable(T targetStat)
+        {
+            string rawLabel = Enum.GetName(typeof(T), targetStat);
+
+            return new FloatVariable(Helpers.SplitCamelCase(rawLabel, " "), 0f);
+        }
 
         /*
-         Public API
+         Old API
          */
-
-        #region Helpers
-
-        /// <summary>
-        /// Use to perform an action for every stat variable paired with an enum value.
-        /// </summary>
-        /// <param name="action">Action to perform.</param>
-        public virtual void ForAllStats(Action<StatObject> action)
-        {
-            m_variableObjectEntries.Values.ToList().ForEach(action);
-        }
-
-        /// <summary>
-        /// Use to perform an action for every key-value pair of enums and stat variables.
-        /// </summary>
-        /// <param name="action">Action to perform.</param>
-        public virtual void ForAllStatEntries(Action<T, StatObject> action)
-        {
-            m_variableObjectEntries.ToList().ForEach(kvp => action?.Invoke(kvp.Key, kvp.Value));
-        }
-
-        #endregion
-
-        #region Utilities
-
-        /// <summary>
-        /// Use to refresh the value of every stat via removing and re-applying every
-        /// modificataion on them.
-        /// </summary>
-        public virtual void RefreshAll()
-        {
-            ForAllStats(stat =>
-            {
-                stat.GetVariableObject().Refresh();
-            });
-        }
-
-        /// <summary>
-        /// Use to remove all of the modifiers from all of the stats.
-        /// </summary>
-        public virtual void ClearAllModifiers()
-        {
-            ForAllStats(stat =>
-            {
-                stat.GetVariableObject().ClearMutations();
-            });
-
-            RefreshAll();
-        }
-
-        /// <summary>
-        /// Use to refresh a single stat variable.
-        /// </summary>
-        /// <param name="targetStat">The stat variable to refresh.</param>
-        /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        public virtual bool Refresh(T targetStat)
-        {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
-
-            desiredStatVariable.Refresh();
-            return true;
-        }
-
-        /// <summary>
-        /// Use to clear modifiers applied to a single stat variable.
-        /// </summary>
-        /// <param name="targetStat">The stat to clear modifiers of.</param>
-        /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        public virtual bool ClearModifiersOf(T targetStat)
-        {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
-
-            desiredStatVariable.ClearMutations();
-            return true;
-        }
-
-        #endregion
 
         #region Basic Operations
 
@@ -116,11 +83,11 @@ namespace com.game.statsystem
         /// <param name="amount">Amount of incrementation.</param>
         /// <param name="setType">Selection of the 'set' logic.</param>
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        public virtual bool BasicIncrement(T targetStat, float amount, SetType setType = SetType.Baked)
+        protected virtual bool BasicIncrement(T targetStat, float amount)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
-            desiredStatVariable.Add(amount, setType);
+            desiredStatVariable.UnderlyingValue += amount;
             return true;
         }
 
@@ -131,11 +98,11 @@ namespace com.game.statsystem
         /// <param name="multiplier">Amount of multiplication.</param>
         /// <param name="setType">Selection of the 'set' logic.</param>
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        public virtual bool BasicMultiply(T targetStat, float multiplier, SetType setType = SetType.Baked)
+        protected virtual bool BasicMultiply(T targetStat, float multiplier)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
-            desiredStatVariable.Multiply(multiplier, setType);
+            desiredStatVariable.UnderlyingValue *= multiplier;
             return true;
         }
 
@@ -149,12 +116,152 @@ namespace com.game.statsystem
         /// target variable of this process will all get cleared before overriding
         /// the variable value itself.</param>
         /// <returns>Returns false if something goes wrong, true otherwise.</returns>
-        public virtual bool BasicOverride(T targetStat, float newValue, SetType setType = SetType.Baked, bool clearMutations = true)
+        protected virtual bool BasicOverride(T targetStat, float newValue, bool clearMutations = true)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return false;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
 
             if (clearMutations) ClearModifiersOf(targetStat);
-            desiredStatVariable.Set(newValue, setType);
+            desiredStatVariable.UnderlyingValue = newValue;
+            return true;
+        }
+
+        #endregion
+
+        #region Vulnerable API
+
+        /// <summary>
+        /// <b>[VULNERABLE]</b> Use to get the corresponding variable object of a stat.
+        /// </summary>
+        /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
+        /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
+        private FloatVariable GetDesiredStatVariable(T targetStat)
+        {
+            if (!m_entries.TryGetValue(targetStat, out FloatVariable value))
+            {
+                Debug.LogError("An error occurred determining a stat's desired variable. " +
+                    "It's entry may not exist.");
+
+                return null;
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// <b>[VULNERABLE]</b> Use to check-n-get a corresponding variable object of a stat.
+        /// </summary>
+        /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
+        /// <param name="desiredStatVariable">The variable object received from the getting operation. 
+        /// Null if the checking operation fails.</param>
+        /// <returns>Returns true if the checking operation succeeds. False otherwise.</returns>
+        private bool TryGetDesiredStatVariable(T targetStat, out FloatVariable desiredStatVariable)
+        {
+            desiredStatVariable = GetDesiredStatVariable(targetStat);
+            if (desiredStatVariable != null) return true;
+            else return false;
+        }
+
+        #endregion
+
+        /*
+         Public API
+         */
+
+        #region Base
+
+        /// <summary>
+        /// Use to get the current value of a stat.
+        /// </summary>
+        /// <param name="targetStat">Target stat.</param>
+        /// <returns>Returns the current value.</returns>
+        public float GetStat(T targetStat)
+        {
+            return GetDesiredStatVariable(targetStat).Value;
+        }
+
+        /// <summary>
+        /// Use to try 'n get the current value of a stat.
+        /// </summary>
+        /// <param name="targetStat">Target stat.</param>
+        /// <param name="value">Gives 0f if the function returns false, gives the current value of the target stat otherwise.</param>
+        /// <returns>Returns false if something went wrong, true otherwise.</returns>
+        public bool TryGetStat(T targetStat, out float value)
+        {
+            value = 0f;
+
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable targetVariable))
+                return false;
+
+            value = targetVariable.Value;
+            return true;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Use to perform an action for every stat value.
+        /// </summary>
+        /// <param name="action">Action to perform.</param>
+        public virtual void ForAllStatValues(Action<float> action)
+        {
+            m_stats.ConvertAll(stat => stat.Value).ForEach(action);
+        }
+
+        /// <summary>
+        /// Use to perform an action for every stat value with its corresponding enum value.
+        /// </summary>
+        /// <param name="action">Action to perform.</param>
+        public virtual void ForAllStatEntries(Action<T, float> action)
+        {
+            m_entries.ToList().ForEach(kvp => action?.Invoke(kvp.Key, kvp.Value.Value));
+        }
+
+        #endregion
+
+        #region Utilities
+
+        /// <summary>
+        /// Use to refresh the value of every stat via removing and re-applying every
+        /// modificataion on them.
+        /// </summary>
+        public virtual void RefreshAll()
+        {
+            m_stats.ForEach(stat => stat.Refresh());
+        }
+
+        /// <summary>
+        /// Use to remove all of the modifiers from all of the stats.
+        /// </summary>
+        public virtual void ClearAllModifiers()
+        {
+            m_stats.ForEach(stat => stat.ClearMutations());
+        }
+
+        /// <summary>
+        /// Use to refresh a single stat variable.
+        /// </summary>
+        /// <param name="targetStat">The stat variable to refresh.</param>
+        /// <returns>Returns false if something goes wrong, true otherwise.</returns>
+        public virtual bool Refresh(T targetStat)
+        {
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
+
+            desiredStatVariable.Refresh();
+            return true;
+        }
+
+        /// <summary>
+        /// Use to clear modifiers applied to a single stat variable.
+        /// </summary>
+        /// <param name="targetStat">The stat to clear modifiers of.</param>
+        /// <returns>Returns false if something goes wrong, true otherwise.</returns>
+        public virtual bool ClearModifiersOf(T targetStat)
+        {
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
+
+            desiredStatVariable.ClearMutations();
             return true;
         }
 
@@ -162,14 +269,29 @@ namespace com.game.statsystem
 
         #region Modifiers with Preset Objects
 
+        //public virtual ModifierObject<T> ApplyPreset(StatModification<T> mod)
+        //{
+        //    return ModifyWith(mod);
+        //}
+
+        //public virtual ModifierObject<T> ApplyPreset(StatCap<T> cap)
+        //{
+        //    return CapWith(cap);
+        //}
+
+        //public virtual float ApplyPreset(StatOverride<T> ovr)
+        //{
+        //    return OverrideWith(ovr);
+        //}
+
         /// <summary>
         /// Use to modify a stat variable with a <see cref="StatModification"/>.
         /// </summary>
         /// <param name="mod">The modification object.</param>
         /// <returns>Returns the modifier object created from this operation.</returns>
-        public virtual ModifierObject ModifyWith(StatModification<T> mod)
+        public virtual ModifierObject<T> ModifyWith(StatModification<T> mod)
         {
-            ModifierObject result = null;
+            ModifierObject<T> result = null;
 
             if (mod.ModificationType == StatModificationType.Incremental)
             {
@@ -192,7 +314,7 @@ namespace com.game.statsystem
         /// </summary>
         /// <param name="cap">The modification object.</param>
         /// <returns>Returns the modifier object created from this operation.</returns>
-        public virtual ModifierObject CapWith(StatCap<T> cap)
+        public virtual ModifierObject<T> CapWith(StatCap<T> cap)
         {
             FloatCapMutation result = new FloatCapMutation()
             {
@@ -204,7 +326,7 @@ namespace com.game.statsystem
 
             ModifyCustom(cap.TargetStatType, result);
 
-            return new ModifierObject(result);
+            return new ModifierObject<T>(cap.TargetStatType, result);
         }
 
         /// <summary>
@@ -214,21 +336,15 @@ namespace com.game.statsystem
         /// <returns>Returns the new value of the stat variable.</returns>
         public virtual float OverrideWith(StatOverride<T> ovr)
         {
-            StatObject targetVariable = GetStatObject(ovr.TargetStatType);
+            if (!TryGetDesiredStatVariable(ovr.TargetStatType, out FloatVariable targetVariable))
+                throw new Exception("Invalid enum value.");
+
             bool clear = StatSystemSettings.OVERRIDES_CLEAR_MUTATIONS;
             float newValue = ovr.NewValue;
 
-            if (clear)
-            {
-                ClearModifiersOf(ovr.TargetStatType);
-                targetVariable.GetVariableObject().Set(newValue);
-                return newValue;
-            }
+            if (clear) ClearModifiersOf(ovr.TargetStatType);
 
-            bool root = StatSystemSettings.OVERRIDES_AFFECT_FROM_ROOT;
-            SetType setType = root ? SetType.Raw : SetType.Baked;
-
-            targetVariable.GetVariableObject().Set(newValue, setType);
+            targetVariable.UnderlyingValue = newValue;
             return targetVariable.Value;
         }
 
@@ -242,12 +358,12 @@ namespace com.game.statsystem
         /// <param name="targetStat">Which stat to apply the modification.</param>
         /// <param name="mutationObject">Mutation object created</param>
         /// <returns>Returns the modifier object passed as an argument.</returns>
-        public virtual ModifierObject ModifyCustom(T targetStat, Mutation<float> mutationObject)
+        public virtual ModifierObject<T> ModifyCustom(T targetStat, Mutation<float> mutationObject)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             desiredStatVariable.Mutate(mutationObject);
-            return new ModifierObject(mutationObject);
+            return new ModifierObject<T>(targetStat, mutationObject);
         }
 
         /// <summary>
@@ -260,14 +376,14 @@ namespace com.game.statsystem
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
-        public virtual ModifierObject ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
+        public virtual ModifierObject<T> ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             FloatAdditionMutation mutationObject = new(amount, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
-            return new ModifierObject(mutationObject);
+            return new ModifierObject<T>(targetStat, mutationObject);
         }
 
         /// <summary>
@@ -280,17 +396,17 @@ namespace com.game.statsystem
         /// remove this modification from the desired stat via the 
         /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
         /// </returns>
-        public virtual ModifierObject ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
+        public virtual ModifierObject<T> ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (StatSystemSettings.PERCENTAGE_MODS_ON_TOP) affectionMethod = AffectionMethod.Overall;
 
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return null;
+            if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
 
             float realPercentage = 1f + (percentage / 100f);
-            FloatMultiplicationMutation mutationObject = new(realPercentage, affectionMethod);
+            FloatPercentageMutation mutationObject = new(percentage, affectionMethod);
 
             desiredStatVariable.Mutate(mutationObject);
-            return new ModifierObject(mutationObject);
+            return new ModifierObject<T>(targetStat, mutationObject);
         }
 
         /// <summary>
@@ -299,13 +415,14 @@ namespace com.game.statsystem
         /// <param name="targetStat">Which stat to de-modify.</param>
         /// <param name="modifierObject">The modifier object created when
         /// the modification took place.</param>
-        public void Demodify(T targetStat, ModifierObject modifierObject)
+        public void Demodify(ModifierObject<T> modifierObject)
         {
-            if (!TryGetDesiredStatVariable(targetStat, out Float desiredStatVariable)) return;
+            if (!TryGetDesiredStatVariable(modifierObject.GetTargetStat(), out FloatVariable targetVariable))
+                throw new Exception("Invalid enum value.");
 
             try
             {
-                desiredStatVariable.Immutate(modifierObject.GetMutationObject());
+                targetVariable.Immutate(modifierObject.GetMutationObject());
             }
 
             catch
@@ -313,76 +430,6 @@ namespace com.game.statsystem
                 Debug.LogError("An error occurred while trying to demodify a stat. An " +
                     "Mutation object used may be invalid.");
             }
-        }
-
-        #endregion
-
-        #region Raw
-
-        /// <summary>
-        /// Use to get a stat's object reference.
-        /// </summary>
-        /// <param name="targetStat">Target stat.</param>
-        /// <returns>Returns the StatObject wrapper instance of the targeted stat.</returns>
-        public virtual StatObject GetStatObject(T targetStat)
-        {
-            Float variable = GetDesiredStatVariable(targetStat);
-            if (variable == null) return null;
-
-            return new StatObject(variable);
-        }
-
-        /// <summary>
-        /// Use to try getting a stat's object reference.
-        /// </summary>
-        /// <param name="targetStat">Target stat.</param>
-        /// <param name="statObject">Found StatObject instance. Null if the function itself returns false.</param>
-        /// <returns>Returns true if the targeted stat exists, false otherwise.</returns>
-        public virtual bool TryGetStatObject(T targetStat, out StatObject statObject)
-        {
-            statObject = null;
-
-            Float variable = GetDesiredStatVariable(targetStat);
-            if (variable == null) return false;
-
-            statObject = new StatObject(variable);
-            return true;
-        }
-
-        #endregion
-
-        #region Vulnerable API
-
-        /// <summary>
-        /// <b>[VULNERABLE]</b> Use to get the corresponding variable object of a stat.
-        /// </summary>
-        /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
-        /// <returns>Returns the desired variable if the enumeration entry is valid. Returns null otherwise.</returns>
-        public virtual Float GetDesiredStatVariable(T targetStat)
-        {
-            if (!m_variableObjectEntries.TryGetValue(targetStat, out StatObject value))
-            {
-                Debug.LogError("An error occurred determining a stat's desired variable. " +
-                    "It's entry may not exist.");
-
-                return null;
-            }
-
-            return value.GetVariableObject();
-        }
-
-        /// <summary>
-        /// <b>[VULNERABLE]</b> Use to check-n-get a corresponding variable object of a stat.
-        /// </summary>
-        /// <param name="targetStat">The target enumeration value corresponds to a variable object.</param>
-        /// <param name="desiredStatVariable">The variable object received from the getting operation. 
-        /// Null if the checking operation fails.</param>
-        /// <returns>Returns true if the checking operation succeeds. False otherwise.</returns>
-        public virtual bool TryGetDesiredStatVariable(T targetStat, out Float desiredStatVariable)
-        {
-            desiredStatVariable = GetDesiredStatVariable(targetStat);
-            if (desiredStatVariable != null) return true;
-            else return false;
         }
 
         #endregion

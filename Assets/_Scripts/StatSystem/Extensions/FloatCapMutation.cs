@@ -11,39 +11,30 @@ namespace com.game.statsystem.extensions
         public float MinValue;
         public float MaxValue;
 
-        private float m_latestOriginalValue;
-
         protected override int m_order => 2;
 
         public FloatCapMutation() : base(0f, AffectionMethod.Overall)
         {
         }
 
-        public override void OnApply(ref float targetValue)
+        public override float Apply(float initialValue)
         {
-            m_latestOriginalValue = targetValue;
-
-            if (CapLow && targetValue < MinValue)
+            if (CapLow && initialValue < MinValue)
             {
-                targetValue = MinValue;
+                return MinValue;
             }
 
-            if (CapHigh && targetValue > MaxValue) 
+            if (CapHigh && initialValue > MaxValue) 
             { 
-                targetValue = MaxValue;
+                return MaxValue;
             }
-        }
 
-        public override void OnRevert(ref float targetValue)
-        {
-            targetValue = m_latestOriginalValue;
+            return initialValue;
         }
 
         public override void OnAdd(Variable<float> variable)
         {
             base.OnAdd(variable);
-
-            m_latestOriginalValue = variable.Value;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace com.game.orbsystem.statsystemextensions
 {
     public class OrbStats : MonoBehaviour
     {
-        [Header("Stats")]
-        [SerializeField, Readonly] private OrbStatHolder m_statHolder;
+        //[Header("Stats")]
+        //[SerializeField, Readonly] private OrbStatHolder m_statHolder;
     }
 }

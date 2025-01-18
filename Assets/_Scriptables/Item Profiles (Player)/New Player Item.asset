@@ -14,9 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Guid: dd7f39af-0e33-42eb-bbfb-c6a824c97716
   Icon: {fileID: 0}
-  DisplayName: 
-  Description: 
-  CustomActions: []
-  m_playerStatOverrides: []
-  m_playerStatModifications: []
-  m_playerStatCaps: []
+  DisplayName: Example Item 1
+  Description: This is an example item.
+  CustomActions:
+  - ActionType: 1
+    ItemBehaviour: {fileID: 5413943036052786957, guid: a5df528c5b7446b438ed06048db5cdd6, type: 3}
+  m_playerStatOverrides:
+  - NewValue: 15
+    TargetStatType: 4
+  m_playerStatModifications:
+  - ModificationType: 0
+    m_incrementalValue: 6
+    m_percentageValue: 200
+    TargetStatType: 6
+  - ModificationType: 1
+    m_incrementalValue: 0
+    m_percentageValue: 100
+    TargetStatType: 8
+  m_playerStatCaps:
+  - CapLow: 1
+    CapHigh: 1
+    MinValue: 0
+    MaxValue: 100
+    TargetStatType: 0

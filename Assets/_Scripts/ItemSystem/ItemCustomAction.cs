@@ -1,6 +1,5 @@
 ﻿using com.absence.attributes;
 using com.game.itemsystem.gamedependent;
-using UnityEngine;
 
 namespace com.game.itemsystem
 {
@@ -12,10 +11,7 @@ namespace com.game.itemsystem
     {
         public ItemActionType ActionType = ItemActionType.None;
 
-        [HideIf(nameof(ActionType), ItemActionType.None)]
-        public string Description;
-
         [ShowIf(nameof(ActionType), ItemActionType.SpawnItemBehaviour)]
-        public GameObject ItemBehaviour;
+        public ItemBehaviour ItemBehaviour;
     }
 }

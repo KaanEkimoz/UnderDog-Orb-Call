@@ -27,7 +27,8 @@ namespace com.game.itemsystem.gamedependent
 
         private static void SpawnItemBehaviour(ItemObject context, ItemCustomAction action)
         {
-            GameObject.Instantiate(action.ItemBehaviour);
+            ItemBehaviour bhv = GameObject.Instantiate(action.ItemBehaviour);
+            bhv.Initialize(context);
         }
     }
 }
