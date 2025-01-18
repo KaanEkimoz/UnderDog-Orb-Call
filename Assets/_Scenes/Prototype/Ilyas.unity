@@ -485,6 +485,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718416fd39ef1514f891d915b465e6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_defaultStats: {fileID: 11400000, guid: 8f2c4f0c5f0e5ca4ebf9c85fa7c23861, type: 2}
+  m_statHolder:
+    m_stats: []
+    m_enumValues: 
 --- !u!4 &569917240
 Transform:
   m_ObjectHideFlags: 0
@@ -547,6 +551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b427c699b2523947896633edf7b3aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_characterProfile: {fileID: 0}
   m_componentHub: {fileID: 1348651857}
 --- !u!1 &832575517
 GameObject:
@@ -626,8 +631,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4c100343212fa4aacb87ca0faef996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_playerStats: {fileID: 1466164266}
-  m_playerInventory: {fileID: 1408994422}
+  m_orbCountAffectionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.7232372
+      value: 0.47654146
+      inSlope: 0.16854951
+      outSlope: 0.16854951
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.16757518
+    - serializedVersion: 3
+      time: 6.2343593
+      value: 0.82222134
+      inSlope: 0.21417356
+      outSlope: 0.21417356
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.7170316
+      outWeight: 0.8157916
+    - serializedVersion: 3
+      time: 7
+      value: 1
+      inSlope: 0.14285715
+      outSlope: 0.14285715
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_onOrbAdd:
+    m_PersistentCalls:
+      m_Calls: []
+  m_onOrbRemove:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1313113833
 Transform:
   m_ObjectHideFlags: 0
@@ -654,7 +705,7 @@ GameObject:
   - component: {fileID: 1348651856}
   - component: {fileID: 1348651857}
   m_Layer: 0
-  m_Name: PlayerComponentHub
+  m_Name: Hub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -700,7 +751,7 @@ GameObject:
   - component: {fileID: 1408994421}
   - component: {fileID: 1408994422}
   m_Layer: 0
-  m_Name: PlayerInventory
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -746,8 +797,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1466164267}
   - component: {fileID: 1466164266}
+  - component: {fileID: 1466164268}
   m_Layer: 0
-  m_Name: PlayerStats
+  m_Name: Stats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -786,6 +838,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 764043491}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466164268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466164265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbdfec382437034c9631d4bc6e8ebb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &17327322066884086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1572,7 +1636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5155f899250fd4fbfb1bd2e232c953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_profile: {fileID: 11400000, guid: dc83b24399490424bb118323771b50c0, type: 2}
+  m_profile: {fileID: 11400000, guid: 515705b813f7d43459d1425dd2198949, type: 2}
   m_panel: {fileID: 7575736088943358399}
   m_inputField: {fileID: 7578305879457027376}
   m_logText: {fileID: 7689138799834045018}

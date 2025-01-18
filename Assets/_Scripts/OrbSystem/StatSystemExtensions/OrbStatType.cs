@@ -5,6 +5,7 @@ namespace com.game.orbsystem.statsystemextensions
     /// </summary>
     public enum OrbStatType
     {
-        
+        Damage,
+        Speed,
     }
 }

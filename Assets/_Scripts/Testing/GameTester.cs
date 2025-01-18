@@ -1,9 +1,13 @@
-using com.absence.utilities;
+using com.absence.attributes;
+using com.game.enemysystem.statsystemextensions;
+using com.game.orbsystem.statsystemextensions;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace com.game.testing
 {
@@ -12,7 +16,7 @@ namespace com.game.testing
 #if UNITY_EDITOR
         private static readonly bool s_performanceMode = false;
 
-        private static readonly float s_totalButtonAreaWidth = 150f;
+        private static readonly float s_totalButtonAreaWidth = 170f;
 
         private static readonly float s_initialAdditionButtonAmount = 1f;
         private static readonly float s_initialPercentageButtonAmount = 15f;
@@ -21,6 +25,11 @@ namespace com.game.testing
 
         private static readonly float s_maxPercentageButtonAmount = 50f;
         private static readonly float s_maxAdditionButtonAmount = 10f;
+
+        [SerializeField] private AnimationCurve m_orbCountAffectionCurve;
+
+        [SerializeField] private UnityEvent m_onOrbAdd;
+        [SerializeField] private UnityEvent m_onOrbRemove;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
@@ -42,29 +51,38 @@ namespace com.game.testing
             m_percentageButtonWidth = s_totalButtonAreaWidth * 3 / 5 / 2;
             m_additionButtonAmount = s_initialAdditionButtonAmount;
             m_percentageButtonAmount = s_initialPercentageButtonAmount;
+
+            m_orbCountAffectionCurve = AnimationCurve.Linear(0f, 0f, (float)Player.Instance.CharacterProfile.OrbCount, 1f);
         }
 
         private void OnGUI()
         {
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal("Test Panel", "window");
 
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Stats");
             TestStatGUI();
+            GUILayout.EndVertical();
 
             GUILayout.Space(20);
 
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Items");
             m_playerInventory.OnTestGUI();
+            GUILayout.EndVertical();
 
             GUILayout.Space(20);
 
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Utilities");
             TestUtilityGUI();
+            GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
         }
 
         public void TestStatGUI()
         {
-            GUILayout.BeginHorizontal();
-
             GUILayout.BeginVertical();
 
             m_playerStats.StatHolder.ForAllStatEntries((key, value) =>
@@ -119,8 +137,6 @@ namespace com.game.testing
                 s_minButtonAmount, s_maxPercentageButtonAmount));
 
             GUILayout.EndVertical();
-
-            GUILayout.EndHorizontal();
         }
 
         public void TestUtilityGUI()
@@ -130,6 +146,16 @@ namespace com.game.testing
             if (GUILayout.Button("Kill enemy"))
             {
                 TestEventChannel.ReceiveEnemyKill();
+            }
+
+            if (GUILayout.Button("Add Orb"))
+            {
+                m_onOrbAdd?.Invoke();
+            }
+
+            if (GUILayout.Button("Remove Orb"))
+            {
+                m_onOrbRemove?.Invoke();
             }
 
             GUILayout.EndVertical();

@@ -1,4 +1,3 @@
-using com.game.itemsystem.gamedependent;
 using com.game.itemsystem.scriptables;
 using System.Text;
 

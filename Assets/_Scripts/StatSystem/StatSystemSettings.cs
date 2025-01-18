@@ -12,5 +12,12 @@ namespace com.game.statsystem
         /// If true, <see cref="PlayerStatOverride"/>s clear mutations when applied.
         /// </summary>
         public const bool OVERRIDES_CLEAR_MUTATIONS = true;
+
+        /// <summary>
+        /// If true, when a cap added to or removed from a stat, both an overall cap and an
+        /// in order cap will be added to the stat. This way, any modifiers during or before
+        /// the cap added will be uneffective even when the cap is removed.
+        /// </summary>
+        public const bool CAPS_WIPE_OUT_MOD_HISTORY = true;
     }
 }

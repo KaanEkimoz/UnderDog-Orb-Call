@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee024cf36b2d65489845bbbcc3906e5, type: 3}
   m_Name: ExampleCharacterProfile
   m_EditorClassIdentifier: 
-  OrbCount: 0
+  OrbCount: 7
   Overrides:
   - NewValue: 0
     TargetStatType: 0

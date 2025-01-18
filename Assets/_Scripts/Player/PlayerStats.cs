@@ -4,13 +4,14 @@ using com.absence.attributes;
 using com.game.player.statsystemextensions;
 using System.Collections.Generic;
 using System;
+using com.game.statsystem;
 
 namespace com.game.player
 {
     /// <summary>
     /// The PlayerComponent responsible for managing anything related to player stats.
     /// </summary>
-    public class PlayerStats : MonoBehaviour
+    public class PlayerStats : MonoBehaviour, IStatProvider<PlayerStatHolder, PlayerStatType>
     {
         [Header("Utilities")]
 
@@ -57,12 +58,20 @@ namespace com.game.player
         {
             m_statHolder.ApplyCharacterProfile(profile);
             m_defaultValues = new();
-            foreach(PlayerStatType enumValue in Enum.GetValues(typeof(PlayerStatType)))
+
+            FillDefaultValues();
+
+            Player.Instance.CharacterProfile = profile;
+        }
+
+        #endregion
+
+        void FillDefaultValues()
+        {
+            foreach (PlayerStatType enumValue in Enum.GetValues(typeof(PlayerStatType)))
             {
                 m_defaultValues.Add(enumValue, m_statHolder.GetStat(enumValue));
             }
         }
-
-        #endregion
     }
 }

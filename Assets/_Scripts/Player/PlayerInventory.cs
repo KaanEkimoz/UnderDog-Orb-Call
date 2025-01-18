@@ -86,8 +86,6 @@ namespace com.game.player
 #if UNITY_EDITOR
         public void OnTestGUI()
         {
-            GUILayout.BeginVertical();
-
             GUILayout.BeginHorizontal();
 
             GUILayout.BeginVertical("box");
@@ -135,8 +133,6 @@ namespace com.game.player
             GUILayout.EndHorizontal();
 
             GUILayout.Label(m_labelText);
-
-            GUILayout.EndVertical();
         }
 #endif
     }

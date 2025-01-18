@@ -44,8 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e5e75659a1c9445847e8accece74d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_instance:
-    Profile: {fileID: 0}
   m_amountOfEnemies: 15
   m_modification:
     ModificationType: 1
