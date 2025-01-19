@@ -9,7 +9,7 @@ namespace com.game.statsystem
         public const bool PERCENTAGE_MODS_ON_TOP = false;    
 
         /// <summary>
-        /// If true, <see cref="PlayerStatOverride"/>s clear mutations when applied.
+        /// If true, overrides will clear mutations when applied.
         /// </summary>
         public const bool OVERRIDES_CLEAR_MUTATIONS = true;
 

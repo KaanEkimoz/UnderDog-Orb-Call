@@ -6,7 +6,7 @@ namespace com.game.orbsystem.statsystemextensions
     /// Another example use case of <see cref="StatHolder{T}"/>.
     /// </summary>
     [System.Serializable]
-    public class OrbStatHolder : StatHolder<OrbStatType>
+    public sealed class OrbStatHolder : StatHolder<OrbStatType>
     {
         public OrbStatHolder(DefaultStats<OrbStatType> defaultValues) : base(defaultValues)
         {

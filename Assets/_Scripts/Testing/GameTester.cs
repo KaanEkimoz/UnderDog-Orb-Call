@@ -1,13 +1,10 @@
-using com.absence.attributes;
-using com.game.enemysystem.statsystemextensions;
-using com.game.orbsystem.statsystemextensions;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
-using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace com.game.testing
 {
@@ -16,20 +13,18 @@ namespace com.game.testing
 #if UNITY_EDITOR
         private static readonly bool s_performanceMode = false;
 
-        private static readonly float s_totalButtonAreaWidth = 170f;
+        const float k_totalStatAreaWidth = 200f;
+        const float k_totalButtonAreaWidth = 170f;
 
-        private static readonly float s_initialAdditionButtonAmount = 1f;
-        private static readonly float s_initialPercentageButtonAmount = 15f;
+        const float k_initialAdditionButtonAmount = 1f;
+        const float k_initialPercentageButtonAmount = 15f;
 
-        private static readonly float s_minButtonAmount = 1f;
+        const float k_minButtonAmount = 1f;
 
-        private static readonly float s_maxPercentageButtonAmount = 50f;
-        private static readonly float s_maxAdditionButtonAmount = 10f;
+        const float k_maxPercentageButtonAmount = 50f;
+        const float k_maxAdditionButtonAmount = 10f;
 
-        [SerializeField] private AnimationCurve m_orbCountAffectionCurve;
-
-        [SerializeField] private UnityEvent m_onOrbAdd;
-        [SerializeField] private UnityEvent m_onOrbRemove;
+        const float k_utilityPanelWidth = 100f;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
@@ -42,17 +37,42 @@ namespace com.game.testing
         float m_additionButtonAmount;
         float m_percentageButtonAmount;
 
+        int m_enemiesKilled;
+
         private void Start()
         {
+            m_enemiesKilled = 0;
+
             m_playerStats = Player.Instance.Hub.Stats;
             m_playerInventory = Player.Instance.Hub.Inventory;
 
-            m_additionButtonWidth = s_totalButtonAreaWidth * 2 / 5 / 2;
-            m_percentageButtonWidth = s_totalButtonAreaWidth * 3 / 5 / 2;
-            m_additionButtonAmount = s_initialAdditionButtonAmount;
-            m_percentageButtonAmount = s_initialPercentageButtonAmount;
+            m_additionButtonWidth = k_totalButtonAreaWidth * 2 / 5 / 2;
+            m_percentageButtonWidth = k_totalButtonAreaWidth * 3 / 5 / 2;
 
-            m_orbCountAffectionCurve = AnimationCurve.Linear(0f, 0f, (float)Player.Instance.CharacterProfile.OrbCount, 1f);
+            m_additionButtonAmount = k_initialAdditionButtonAmount;
+            m_percentageButtonAmount = k_initialPercentageButtonAmount;
+        }
+
+        private void OnDestroy()
+        {
+            PlayerStatPipelineComponentBase rawComponent = m_playerStats.Pipeline.Query.
+                FirstOrDefault(comp => comp is PlayerStatPipelineOrbCountEffect);
+
+            bool exists = rawComponent != null;
+
+            if (!exists) return;
+
+            PlayerStatPipelineOrbCountEffect orbCountEffect =
+                rawComponent as PlayerStatPipelineOrbCountEffect;
+
+            StringBuilder sb = new("THESE WERE THE GRAPH DATA IF YOU'VE FORGOTTEN TO CHECK BEFORE QUITTING:\n\n");
+
+            sb.Append($"Amplitude: {orbCountEffect.Amplitude}\n");
+            sb.Append($"Shift: {orbCountEffect.Shift}\n");
+            sb.Append($"General Coefficient: {orbCountEffect.GeneralCoefficient}\n");
+            sb.Append($"Curve Type: {orbCountEffect.CurveType}\n");
+
+            Debug.LogWarning(sb.ToString());
         }
 
         private void OnGUI()
@@ -64,18 +84,19 @@ namespace com.game.testing
             TestStatGUI();
             GUILayout.EndVertical();
 
-            GUILayout.Space(20);
-
             GUILayout.BeginVertical("box");
             GUILayout.Label("Items");
             m_playerInventory.OnTestGUI();
             GUILayout.EndVertical();
 
-            GUILayout.Space(20);
-
             GUILayout.BeginVertical("box");
             GUILayout.Label("Utilities");
             TestUtilityGUI();
+            GUILayout.EndVertical();
+
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Player Stat Pipeline");
+            m_playerStats.Pipeline.OnTestGUI();
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
@@ -85,21 +106,33 @@ namespace com.game.testing
         {
             GUILayout.BeginVertical();
 
-            m_playerStats.StatHolder.ForAllStatEntries((key, value) =>
+            m_playerStats.Manipulator.ForAllStatEntries((key, value) =>
             {
                 GUILayout.BeginHorizontal();
 
                 //float defaultValue = m_playerStats.DefaultValues[key];
                 //float diff = value - defaultValue;
                 float diff = value;
+                float refinedValue = m_playerStats.GetStat(key);
+
+                float refinedDiff = refinedValue;
                 string colorName;
 
                 if (diff > 0f) colorName = "green";
                 else if (diff == 0f) colorName = "white";
                 else colorName = "red";
 
+                string valueLabel = utilities.Helpers.Text.Colorize(value.ToString("0"), colorName);
+
+                if (refinedDiff > 0f) colorName = "green";
+                else if (refinedDiff == 0f) colorName = "white";
+                else colorName = "red";
+
+                string refinedValueLabel = utilities.Helpers.Text.Colorize($" ({refinedValue.ToString("0.00")})", colorName);
+
                 GUILayout.Label(utilities.Helpers.Text.Bold($"{StatSystemHelpers.Text.GetDisplayName(key, true)}: " +
-                    $"{utilities.Helpers.Text.Colorize(value.ToString("0.00"), colorName)}"));
+                    valueLabel +
+                    refinedValueLabel ), GUILayout.Width(k_totalStatAreaWidth));
 
                 if (GUILayout.Button($"-{m_additionButtonAmount}", GUILayout.Width(m_additionButtonWidth)))
                 {
@@ -128,35 +161,30 @@ namespace com.game.testing
 
             GUILayout.BeginVertical();
 
+            GUILayout.Label("Settings");
+
             GUILayout.Label("Addition amount: ");
             m_additionButtonAmount = Mathf.Ceil(GUILayout.HorizontalSlider(m_additionButtonAmount,
-                s_minButtonAmount, s_maxAdditionButtonAmount));
+                k_minButtonAmount, k_maxAdditionButtonAmount));
 
             GUILayout.Label("Percentage amount: ");
             m_percentageButtonAmount = Mathf.Ceil(GUILayout.HorizontalSlider(m_percentageButtonAmount,
-                s_minButtonAmount, s_maxPercentageButtonAmount));
+                k_minButtonAmount, k_maxPercentageButtonAmount));     
 
             GUILayout.EndVertical();
         }
 
         public void TestUtilityGUI()
         {
-            GUILayout.BeginVertical();
+            GUILayout.BeginVertical(GUILayout.Width(k_utilityPanelWidth));
 
             if (GUILayout.Button("Kill enemy"))
             {
                 TestEventChannel.ReceiveEnemyKill();
+                m_enemiesKilled++;
             }
 
-            if (GUILayout.Button("Add Orb"))
-            {
-                m_onOrbAdd?.Invoke();
-            }
-
-            if (GUILayout.Button("Remove Orb"))
-            {
-                m_onOrbRemove?.Invoke();
-            }
+            GUILayout.Label($"Enemies Killed: {m_enemiesKilled}");
 
             GUILayout.EndVertical();
         }
@@ -169,25 +197,25 @@ namespace com.game.testing
                     percentage ? m_percentageDict : m_additionalDict;
 
                 float amount =
-                    percentage ? m_playerStats.StatHolder.GetStat(key) * amountToAdd / 100f : amountToAdd;
+                    percentage ? m_playerStats.GetStat(key) * amountToAdd / 100f : amountToAdd;
 
                 if (!m_targetDict.ContainsKey(key))
                 {
-                    if (!percentage) m_targetDict.Add(key, m_playerStats.StatHolder.ModifyIncremental(key, amountToAdd));
-                    else m_targetDict.Add(key, m_playerStats.StatHolder.ModifyPercentage(key, amountToAdd));
+                    if (!percentage) m_targetDict.Add(key, m_playerStats.Manipulator.ModifyIncremental(key, amountToAdd));
+                    else m_targetDict.Add(key, m_playerStats.Manipulator.ModifyPercentage(key, amountToAdd));
                 }
 
                 else
                 {
                     m_targetDict[key].Value += amount;
-                    m_playerStats.StatHolder.Refresh(key);
+                    m_playerStats.Manipulator.Refresh(key);
                 }
             }
 
             else
             {
-                if (!percentage) m_playerStats.StatHolder.ModifyIncremental(key, amountToAdd);
-                else m_playerStats.StatHolder.ModifyPercentage(key, amountToAdd);
+                if (!percentage) m_playerStats.Manipulator.ModifyIncremental(key, amountToAdd);
+                else m_playerStats.Manipulator.ModifyPercentage(key, amountToAdd);
             }
         }
 #endif

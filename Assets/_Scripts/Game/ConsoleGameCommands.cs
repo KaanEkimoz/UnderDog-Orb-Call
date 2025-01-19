@@ -3,7 +3,7 @@ using com.absence.consolesystem.internals;
 using com.game.player;
 using com.game.player.statsystemextensions;
 
-namespace com.game.utilities
+namespace com.game
 {
     public static class ConsoleGameCommands
     {
@@ -12,7 +12,7 @@ namespace com.game.utilities
         {
             if (!System.Enum.TryParse(typeof(PlayerStatType), statName, true, out object statTypeAsObject))
             {
-                Console.LogError($"Player has no stat named: '{statName}'.");
+                ConsoleWindow.Sender.LogError($"Player has no stat named: '{statName}'.");
                 return;
             }
 
@@ -23,7 +23,7 @@ namespace com.game.utilities
 
             };
 
-            Player.Instance.Hub.Stats.StatHolder.OverrideWith(ovr);
+            Player.Instance.Hub.Stats.Manipulator.OverrideWith(ovr);
         }
 
         [Command]
@@ -37,7 +37,7 @@ namespace com.game.utilities
                     NewValue = 10f,
                 };
 
-                Player.Instance.Hub.Stats.StatHolder.OverrideWith(ovr);
+                Player.Instance.Hub.Stats.Manipulator.OverrideWith(ovr);
             }
         }
     }

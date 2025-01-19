@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace com.game.orbsystem.statsystemextensions
 {
-    public class OrbStats : MonoBehaviour, IStatProvider<OrbStatHolder, OrbStatType>
+    public class OrbStats : MonoBehaviour, IStats<OrbStatType>
     {
         [Header("Utilities")]
 
@@ -18,7 +18,7 @@ namespace com.game.orbsystem.statsystemextensions
 
         Dictionary<OrbStatType, float> m_defaultValues;
 
-        public OrbStatHolder StatHolder => m_statHolder;
+        public IStatManipulator<OrbStatType> Manipulator => m_statHolder;
         public Dictionary<OrbStatType, float> DefaultValues => m_defaultValues;
 
         private void Awake()
@@ -46,10 +46,17 @@ namespace com.game.orbsystem.statsystemextensions
 
         void FillDefaultValues()
         {
+            m_defaultValues = new();
+
             foreach (OrbStatType enumValue in Enum.GetValues(typeof(OrbStatType)))
             {
                 m_defaultValues.Add(enumValue, m_statHolder.GetStat(enumValue));
             }
+        }
+
+        public float GetStat(OrbStatType targetStat)
+        {
+            return m_statHolder.GetStat(targetStat);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace com.game.statsystem
     /// </summary>
     /// <typeparam name="T">The enum to use while selecting stats.</typeparam>
     [System.Serializable]
-    public abstract class StatHolder<T> where T : Enum
+    public abstract class StatHolder<T> : IStatManipulator<T>, IStatHolder<T> where T : Enum
     {
         [HelpBox("You need to start the game to see any data.", HelpBoxType.Info)]
         [SerializeField] private List<FloatVariable> m_stats;
@@ -169,22 +169,10 @@ namespace com.game.statsystem
 
         #region Base
 
-        /// <summary>
-        /// Use to get the current value of a stat.
-        /// </summary>
-        /// <param name="targetStat">Target stat.</param>
-        /// <returns>Returns the current value.</returns>
         public float GetStat(T targetStat)
         {
             return GetDesiredStatVariable(targetStat).Value;
         }
-
-        /// <summary>
-        /// Use to try 'n get the current value of a stat.
-        /// </summary>
-        /// <param name="targetStat">Target stat.</param>
-        /// <param name="value">Gives 0f if the function returns false, gives the current value of the target stat otherwise.</param>
-        /// <returns>Returns false if something went wrong, true otherwise.</returns>
         public bool TryGetStat(T targetStat, out float value)
         {
             value = 0f;
@@ -200,19 +188,10 @@ namespace com.game.statsystem
 
         #region Helpers
 
-        /// <summary>
-        /// Use to perform an action for every stat value.
-        /// </summary>
-        /// <param name="action">Action to perform.</param>
         public virtual void ForAllStatValues(Action<float> action)
         {
             m_stats.ConvertAll(stat => stat.Value).ForEach(action);
         }
-
-        /// <summary>
-        /// Use to perform an action for every stat value with its corresponding enum value.
-        /// </summary>
-        /// <param name="action">Action to perform.</param>
         public virtual void ForAllStatEntries(Action<T, float> action)
         {
             m_entries.ToList().ForEach(kvp => action?.Invoke(kvp.Key, kvp.Value.Value));
@@ -222,28 +201,14 @@ namespace com.game.statsystem
 
         #region Utilities
 
-        /// <summary>
-        /// Use to refresh the value of every stat via removing and re-applying every
-        /// modificataion on them.
-        /// </summary>
         public virtual void RefreshAll()
         {
             m_stats.ForEach(stat => stat.Refresh());
         }
-
-        /// <summary>
-        /// Use to remove all of the modifiers from all of the stats.
-        /// </summary>
         public virtual void ClearAllModifiers()
         {
             m_stats.ForEach(stat => stat.ClearMutations());
         }
-
-        /// <summary>
-        /// Use to refresh a single stat variable.
-        /// </summary>
-        /// <param name="targetStat">The stat variable to refresh.</param>
-        /// <returns>Returns false if something goes wrong, true otherwise.</returns>
         public virtual bool Refresh(T targetStat)
         {
             if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
@@ -251,12 +216,6 @@ namespace com.game.statsystem
             desiredStatVariable.Refresh();
             return true;
         }
-
-        /// <summary>
-        /// Use to clear modifiers applied to a single stat variable.
-        /// </summary>
-        /// <param name="targetStat">The stat to clear modifiers of.</param>
-        /// <returns>Returns false if something goes wrong, true otherwise.</returns>
         public virtual bool ClearModifiersOf(T targetStat)
         {
             if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return false;
@@ -284,11 +243,6 @@ namespace com.game.statsystem
         //    return OverrideWith(ovr);
         //}
 
-        /// <summary>
-        /// Use to modify a stat variable with a <see cref="StatModification"/>.
-        /// </summary>
-        /// <param name="mod">The modification object.</param>
-        /// <returns>Returns the modifier object created from this operation.</returns>
         public virtual ModifierObject<T> ModifyWith(StatModification<T> mod)
         {
             ModifierObject<T> result = null;
@@ -308,12 +262,6 @@ namespace com.game.statsystem
 
             return result;
         }
-
-        /// <summary>
-        /// Use to cap a stat variable with a <see cref="StatCap"/>.
-        /// </summary>
-        /// <param name="cap">The modification object.</param>
-        /// <returns>Returns the modifier object created from this operation.</returns>
         public virtual ModifierObject<T> CapWith(StatCap<T> cap)
         {
             FloatCapMutation result = new FloatCapMutation()
@@ -328,12 +276,6 @@ namespace com.game.statsystem
 
             return new ModifierObject<T>(cap.TargetStatType, result);
         }
-
-        /// <summary>
-        /// Use to override a stat variable with a <see cref="StatOverride"/>.
-        /// </summary>
-        /// <param name="ovr">The modification object.</param>
-        /// <returns>Returns the new value of the stat variable.</returns>
         public virtual float OverrideWith(StatOverride<T> ovr)
         {
             if (!TryGetDesiredStatVariable(ovr.TargetStatType, out FloatVariable targetVariable))
@@ -352,12 +294,6 @@ namespace com.game.statsystem
 
         #region Modifiers with Values
 
-        /// <summary>
-        /// <b>[VULNERABLE]</b> Use to add a custom-logic modification to a stat.
-        /// </summary>
-        /// <param name="targetStat">Which stat to apply the modification.</param>
-        /// <param name="mutationObject">Mutation object created</param>
-        /// <returns>Returns the modifier object passed as an argument.</returns>
         public virtual ModifierObject<T> ModifyCustom(T targetStat, Mutation<float> mutationObject)
         {
             if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
@@ -365,17 +301,6 @@ namespace com.game.statsystem
             desiredStatVariable.Mutate(mutationObject);
             return new ModifierObject<T>(targetStat, mutationObject);
         }
-
-        /// <summary>
-        /// Use to add an incremental modification (eg. +5, -2) to a stat.
-        /// </summary>
-        /// <param name="targetStat">Which stat to apply the modification.</param>
-        /// <param name="amount">Amount of modification.</param>
-        /// <returns>
-        /// Returns the modifier applied to desired stat. You can
-        /// remove this modification from the desired stat via the 
-        /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
-        /// </returns>
         public virtual ModifierObject<T> ModifyIncremental(T targetStat, float amount, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (!TryGetDesiredStatVariable(targetStat, out FloatVariable desiredStatVariable)) return null;
@@ -385,17 +310,6 @@ namespace com.game.statsystem
             desiredStatVariable.Mutate(mutationObject);
             return new ModifierObject<T>(targetStat, mutationObject);
         }
-
-        /// <summary>
-        /// Use to add a percentage based modification (eg. +25%, -100%) to a stat.
-        /// </summary>
-        /// <param name="targetStat">Which stat to apply the modification.</param>
-        /// <param name="percentage">Amount of modification. (in the following form: <i>percentage</i>%).</param>
-        /// <returns>
-        /// Returns the modifier applied to desired stat. You can
-        /// remove this modification from the desired stat via the 
-        /// <see cref="Demodify(PlayerStatType, Mutation{float})"/> function.
-        /// </returns>
         public virtual ModifierObject<T> ModifyPercentage(T targetStat, float percentage, AffectionMethod affectionMethod = AffectionMethod.InOrder)
         {
             if (StatSystemSettings.PERCENTAGE_MODS_ON_TOP) affectionMethod = AffectionMethod.Overall;
@@ -408,13 +322,6 @@ namespace com.game.statsystem
             desiredStatVariable.Mutate(mutationObject);
             return new ModifierObject<T>(targetStat, mutationObject);
         }
-
-        /// <summary>
-        /// Use to de-modify a stat.
-        /// </summary>
-        /// <param name="targetStat">Which stat to de-modify.</param>
-        /// <param name="modifierObject">The modifier object created when
-        /// the modification took place.</param>
         public void Demodify(ModifierObject<T> modifierObject)
         {
             if (!TryGetDesiredStatVariable(modifierObject.GetTargetStat(), out FloatVariable targetVariable))

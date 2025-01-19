@@ -52,17 +52,17 @@ namespace com.game.player
 
             profile.StatModifications.ForEach(mod =>
             {
-                m_modifiers.Add(m_stats.StatHolder.ModifyWith(mod));
+                m_modifiers.Add(m_stats.Manipulator.ModifyWith(mod));
             });
 
             profile.StatCaps.ForEach(cap =>
             {
-                m_modifiers.Add(m_stats.StatHolder.CapWith(cap));
+                m_modifiers.Add(m_stats.Manipulator.CapWith(cap));
             });
 
             profile.StatOverrides.ForEach(ovr =>
             {
-                m_stats.StatHolder.OverrideWith(ovr);
+                m_stats.Manipulator.OverrideWith(ovr);
             });
 
             m_itemModifierEntries.Add(targetItem, m_modifiers);
@@ -75,7 +75,7 @@ namespace com.game.player
 
             modifiers.ForEach(mod =>
             {
-                m_stats.StatHolder.Demodify(mod);
+                m_stats.Manipulator.Demodify(mod);
             });
 
             // simply can not revert overrides, so...
@@ -84,9 +84,11 @@ namespace com.game.player
         }
 
 #if UNITY_EDITOR
+        const float k_totalGUIWidth = 340f;
+
         public void OnTestGUI()
         {
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal(GUILayout.Width(k_totalGUIWidth));
 
             GUILayout.BeginVertical("box");
 

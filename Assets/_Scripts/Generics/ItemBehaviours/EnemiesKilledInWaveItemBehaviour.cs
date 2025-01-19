@@ -18,7 +18,7 @@ namespace com.game.generics.itembehaviours
         int m_steps;
         List<ModifierObject<PlayerStatType>> m_modifiers = new();
 
-        PlayerStatHolder m_statHolder;
+        IStatManipulator<PlayerStatType> m_manipulator;
 
         public override string GenerateActionDescription(bool richText)
         {
@@ -74,7 +74,7 @@ namespace com.game.generics.itembehaviours
             TestEventChannel.OnEnemyKilled += OnEnemyKilled;
 
             m_kills = 0;
-            m_statHolder = Player.Instance.Hub.Stats.StatHolder;
+            m_manipulator = Player.Instance.Hub.Stats.Manipulator;
         }
 
         private void OnEnemyKilled()
@@ -88,7 +88,7 @@ namespace com.game.generics.itembehaviours
             m_kills = 0;
             m_steps++;
 
-            m_modifiers.Add(m_statHolder.ModifyWith(m_modification));
+            m_modifiers.Add(m_manipulator.ModifyWith(m_modification));
         }
 
         public override void Despawn()
@@ -97,7 +97,7 @@ namespace com.game.generics.itembehaviours
 
             m_modifiers.ForEach(modifier =>
             {
-                m_statHolder.Demodify(modifier);
+                m_manipulator.Demodify(modifier);
             });
         }
     }

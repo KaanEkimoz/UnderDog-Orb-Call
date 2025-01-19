@@ -19,5 +19,8 @@
         Penetration,
         LightStrength,
         CrowdControl,
+        OrbThrowSpeed,
+        OrbRecallSpeed,
+        Light,
     }
 }

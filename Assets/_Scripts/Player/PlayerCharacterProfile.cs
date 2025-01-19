@@ -13,7 +13,7 @@ namespace com.game.player.scriptables
         [Space]
         [Header3("Initial")]
 
-        public uint OrbCount;
+        [Min(1)] public int OrbCount;
 
         [Space]
         [Header3("Stat-Based")]
