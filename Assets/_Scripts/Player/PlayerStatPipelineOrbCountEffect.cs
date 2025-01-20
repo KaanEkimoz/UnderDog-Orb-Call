@@ -51,7 +51,6 @@ namespace com.game.player
                 Evaluate(i);
             }
 #endif
-            Evaluate(m_orbHandler.OrbsInHand);
         }
 
         protected override float Process_Internal(PlayerStatType statType, float statCoefficient, float rawValue)

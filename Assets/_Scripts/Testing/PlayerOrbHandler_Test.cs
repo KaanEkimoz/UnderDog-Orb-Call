@@ -17,7 +17,7 @@ namespace com.game.testing
 
         PlayerCharacterProfile m_characterProfile;
 
-        private void Start()
+        private void Awake()
         {
             m_characterProfile = Player.Instance.CharacterProfile;
             m_maxOrbsInHand = m_characterProfile.OrbCount;

@@ -5,14 +5,14 @@ using com.game.player.statsystemextensions;
 using System.Collections.Generic;
 using System;
 using com.game.statsystem;
-using com.game.generics.interfaces;
 
 namespace com.game.player
 {
     /// <summary>
     /// The PlayerComponent responsible for managing anything related to player stats.
     /// </summary>
-    public class PlayerStats : MonoBehaviour, IStats<PlayerStatType>, IEntityStatProvider
+    [DefaultExecutionOrder(-10)]
+    public class PlayerStats : MonoBehaviour, IStats<PlayerStatType>
     {
         [Header("Utilities")]
 
@@ -37,12 +37,6 @@ namespace com.game.player
 
         public PlayerStatPipeline Pipeline => m_statPipeline;
         public Dictionary<PlayerStatType, float> DefaultValues => m_defaultValues;
-
-        #region Entity Stat Properties
-        public float Health => GetStat(PlayerStatType.Health);
-        public float Armor => GetStat(PlayerStatType.Armor);
-        public float Damage => GetStat(PlayerStatType.Damage);
-        #endregion
 
         private void Awake()
         {

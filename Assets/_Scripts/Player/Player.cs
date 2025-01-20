@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace com.game.player
 {
+    [DefaultExecutionOrder(-100)]
     public class Player : Singleton<Player>
     {
         [SerializeField, Readonly] private PlayerCharacterProfile m_characterProfile;

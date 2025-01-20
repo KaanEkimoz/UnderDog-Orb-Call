@@ -1,4 +1,4 @@
-namespace com.game.generics.interfaces
+namespace com.game.entitysystem
 {
     public interface IEntityStatProvider
     {

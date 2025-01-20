@@ -1,12 +1,11 @@
 using com.absence.attributes;
 using com.game.enemysystem.statsystemextensions;
-using com.game.generics.interfaces;
 using com.game.statsystem;
 using UnityEngine;
 
 namespace com.game.enemysystem
 {
-    public class EnemyStats : MonoBehaviour, IStats<EnemyStatType>, IEntityStatProvider
+    public class EnemyStats : MonoBehaviour, IStats<EnemyStatType>
     {
         [Header("Utilities")]
 
@@ -17,12 +16,6 @@ namespace com.game.enemysystem
         [SerializeField, Readonly] private EnemyStatHolder m_statHolder;
 
         public IStatManipulator<EnemyStatType> Manipulator => m_statHolder;
-
-        #region Entity Stat Properties
-        public float Health => GetStat(EnemyStatType.Health);
-        public float Armor => GetStat(EnemyStatType.Armor);
-        public float Damage => GetStat(EnemyStatType.Damage);
-        #endregion
 
         private void Awake()
         {
