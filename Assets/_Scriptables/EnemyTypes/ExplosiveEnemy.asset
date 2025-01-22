@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d09fbe22b9abb4c8974f4745872104, type: 3}
   m_Name: ExplosiveEnemy
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 3
   angularSpeed: 120
   acceleration: 8
   stoppingDistance: 1.5
