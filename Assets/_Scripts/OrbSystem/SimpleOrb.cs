@@ -31,11 +31,6 @@ public class SimpleOrb : MonoBehaviour
     private Rigidbody _rigidBody;
     private SphereCollider _sphereCollider;
 
-    private void Zenject()
-    {
-
-    }
-
     private void Start()
     {
         isOnEllipse = true;
@@ -119,7 +114,7 @@ public class SimpleOrb : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent(out IDamageable damageable))
-            damageable.TakeDamage(orbStats.StatHolder.GetStat(OrbStatType.Damage));
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
 
         if (!isReturning)
         {
@@ -134,7 +129,7 @@ public class SimpleOrb : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            damageable.TakeDamage(orbStats.StatHolder.GetStat(OrbStatType.Damage));
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
         }
     }
     private void Sway()

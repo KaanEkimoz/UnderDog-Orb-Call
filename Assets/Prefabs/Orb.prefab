@@ -154,7 +154,8 @@ MonoBehaviour:
   swayRange: 0.1
   swayOffset: 0
   swaySpeed: 2
-  orbStats: {fileID: 0}
+  orbStats: {fileID: 6960696444875857668}
+  isOnEllipse: 0
   isSwaying: 0
   isSticked: 0
   isThrowing: 0
@@ -171,7 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718416fd39ef1514f891d915b465e6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debugMode: 0
   m_defaultStats: {fileID: 11400000, guid: 8f2c4f0c5f0e5ca4ebf9c85fa7c23861, type: 2}
   m_statHolder:
     m_stats: []

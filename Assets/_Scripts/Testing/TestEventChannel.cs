@@ -5,8 +5,6 @@ namespace com.game.testing
 {
     public static class TestEventChannel
     {
-#if UNITY_EDITOR
-
         public static event Action OnEnemyKilled;
         public static void ReceiveEnemyKill() => OnEnemyKilled?.Invoke();
 
@@ -15,6 +13,5 @@ namespace com.game.testing
         {
             OnEnemyKilled = null;
         }
-#endif
     }
 }

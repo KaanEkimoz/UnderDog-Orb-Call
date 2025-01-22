@@ -10,7 +10,6 @@ namespace com.game.testing
 {
     public class GameTester : MonoBehaviour
     {
-#if UNITY_EDITOR
         private static readonly bool s_performanceMode = false;
 
         const float k_totalStatAreaWidth = 200f;
@@ -77,7 +76,7 @@ namespace com.game.testing
 
         private void OnGUI()
         {
-            GUILayout.BeginHorizontal("Test Panel", "window");
+            GUILayout.BeginHorizontal();
 
             GUILayout.BeginVertical("box");
             GUILayout.Label("Stats");
@@ -178,11 +177,13 @@ namespace com.game.testing
         {
             GUILayout.BeginVertical(GUILayout.Width(k_utilityPanelWidth));
 
+            GUI.enabled = false;
             if (GUILayout.Button("Kill enemy"))
             {
                 TestEventChannel.ReceiveEnemyKill();
                 m_enemiesKilled++;
             }
+            GUI.enabled = true;
 
             GUILayout.Label($"Enemies Killed: {m_enemiesKilled}");
 
@@ -218,6 +219,5 @@ namespace com.game.testing
                 else m_playerStats.Manipulator.ModifyPercentage(key, amountToAdd);
             }
         }
-#endif
     }
 }

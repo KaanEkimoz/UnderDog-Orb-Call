@@ -13,11 +13,12 @@ namespace com.game
         private void Start()
         {
             _playerStats = GetComponent<PlayerStats>();
-            _health = _playerStats.StatHolder.GetStat(PlayerStatType.Health);
+            _health = _playerStats.GetStat(PlayerStatType.Health);
+
+            Debug.Log("Player Health: " + _health);
         }
         public void TakeDamage(float damage)
         {
-            if (!IsAlive) return;
 
             _health -= damage;
 
@@ -29,7 +30,6 @@ namespace com.game
         }
         public void Die()
         {
-            if (!IsAlive) return;
             Destroy(gameObject);
         }
     }

@@ -2,6 +2,7 @@ using com.game.player.statsystemextensions;
 using com.game.player;
 using UnityEngine;
 using Zenject;
+using com.game.testing;
 
 namespace com.game
 {
@@ -15,6 +16,10 @@ namespace com.game
         {
             _health = 20;
         }
+        private void Update()
+        {
+            Debug.Log("Enemy Health: " + _health);
+        }
         public void TakeDamage(float damage)
         {
             _health -= damage;
@@ -27,6 +32,7 @@ namespace com.game
         }
         public void Die()
         {
+            TestEventChannel.ReceiveEnemyKill();
             Destroy(gameObject);
         }
     }

@@ -1,3 +1,4 @@
+using com.game.player;
 using System.Collections.Generic;
 using UnityEngine;
 public class OrbController : MonoBehaviour
@@ -22,7 +23,6 @@ public class OrbController : MonoBehaviour
     [SerializeField] private PlayerInputHandler input;
     [SerializeField] private ObjectPool objectPool;
 
-
     private List<SimpleOrb> orbsOnEllipse = new();
 
     //Orb Throw
@@ -35,7 +35,9 @@ public class OrbController : MonoBehaviour
 
     private void Start()
     {
-        if(objectPool == null)
+        orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
+
+        if (objectPool == null)
             objectPool = GameObject.FindAnyObjectByType<ObjectPool>();
 
         if(input == null)
@@ -69,6 +71,7 @@ public class OrbController : MonoBehaviour
     private void CallOrb(SimpleOrb orb)
     {
         orb.Return();
+        Player.Instance.Hub.OrbHandler.AddOrb();
         AddOrbToList(orb);
     }
     private void CreateOrbsAtStart()
@@ -99,6 +102,7 @@ public class OrbController : MonoBehaviour
         //orbToThrow.SetNewDestination(firePointTransform.position + (firePointTransform.forward * 20f));
         orbsThrowed.Add(orbToThrow);
         orbToThrow = null;
+        Player.Instance.Hub.OrbHandler.RemoveOrb();
     }
     
     private void UpdateEllipsePos()
@@ -115,6 +119,8 @@ public class OrbController : MonoBehaviour
         newOrb.transform.position = ellipseCenterTransform.position;
 
         orbsOnEllipse.Add(newOrb);
+        Player.Instance.Hub.OrbHandler.AddOrb();
+
         UpdateOrbEllipsePositions();
     }
     public void AddOrbToList(SimpleOrb orb)

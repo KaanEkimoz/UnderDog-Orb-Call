@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maximumOrbCount: 10
-  orbCountAtStart: 6
+  orbCountAtStart: 5
   firePointTransform: {fileID: 0}
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5

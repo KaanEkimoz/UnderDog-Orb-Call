@@ -1,6 +1,9 @@
+using com.game.enemysystem.statsystemextensions;
+using com.game;
 using System;
 using System.Collections;
 using UnityEngine;
+using com.game.testing;
 
 public class ExploderEnemy : Enemy
 {
@@ -64,10 +67,12 @@ public class ExploderEnemy : Enemy
         {
             if (objectWithinRadius.CompareTag("Player")) //player tagli biri varsa
             {
-                //HASAR VER 
+                //HASAR VER
+                if (target.gameObject.TryGetComponent(out IDamageable damageable))
+                    damageable.TakeDamage(newEnemyStats.GetStat(EnemyStatType.Damage));
             }
         }
-        
+        TestEventChannel.ReceiveEnemyKill();
         Destroy(gameObject);
     }
 

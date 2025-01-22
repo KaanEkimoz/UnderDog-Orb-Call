@@ -21,7 +21,7 @@ namespace com.game.testing
         {
             m_characterProfile = Player.Instance.CharacterProfile;
             m_maxOrbsInHand = m_characterProfile.OrbCount;
-            m_orbsInHand = 0;
+            m_orbsInHand = m_maxOrbsInHand;
         }
 
         public void AddOrb()

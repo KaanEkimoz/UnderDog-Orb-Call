@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 3833071481733924819}
   - component: {fileID: 499462253952226114}
   - component: {fileID: 5095704278801328434}
+  - component: {fileID: -2758663310200919992}
+  - component: {fileID: 1597358280258413786}
   m_Layer: 8
   m_Name: ExplosiveEnemy
   m_TagString: Enemy
@@ -126,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
+  newEnemyStats: {fileID: 1597358280258413786}
   explosionDamage: 30
   preperationTime: 1.5
   explosionRadius: 5
@@ -154,6 +157,31 @@ NavMeshAgent:
   m_BaseOffset: 0.99999994
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-2758663310200919992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415160704175932166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 305c8a926fd4dab46a2d82c072bd88e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1597358280258413786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415160704175932166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8031472e45489e44c93327a3ef8520e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_defaultStats: {fileID: 11400000, guid: 133b9ae2728a65f4cae5e8e7997119ed, type: 2}
 --- !u!1 &8276937745736403641
 GameObject:
   m_ObjectHideFlags: 0

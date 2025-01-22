@@ -29,12 +29,10 @@ namespace com.game.player
             return value;
         }
 
-#if UNITY_EDITOR
         public void OnTestGUI()
         {
             m_pipelineComponentList.ForEach(comp => comp.OnTestGUI());
         }
-#endif
 
         [Button("Refresh Pipeline Component List")]
         void Refresh()

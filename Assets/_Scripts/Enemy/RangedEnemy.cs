@@ -1,3 +1,4 @@
+using com.game.enemysystem.statsystemextensions;
 using System.Collections;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ public class RangedEnemy : Enemy
         Vector3 targetCenter = target.transform.position + new Vector3(0, target.GetComponent<Collider>().bounds.extents.y, 0); //playerin boyunun yarisi
         Vector3 shootingDirection = (targetCenter - transform.position).normalized; //projectile yonu
         GameObject projectile = Instantiate(projectilePrebfab, transform.position, Quaternion.identity); //projectile'i instantiate et
+        projectile.GetComponent<EnemyProjectile>().Damage = newEnemyStats.GetStat(EnemyStatType.Damage); //projectile'a hasar ver
         projectile.GetComponent<Rigidbody>().linearVelocity = shootingDirection*projectileSpeed; //projectile'a hiz ver
 
         StartCoroutine(EnableCooldown()); //saldiri cooldownunu baslat      
