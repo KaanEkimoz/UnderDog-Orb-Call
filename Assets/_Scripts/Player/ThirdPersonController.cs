@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
-[RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
+using Zenject;
+[RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler))]
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("Walk")]
     [Tooltip("Move speed of the character in m/s")]
     [SerializeField] private float walkSpeed = 2.0f;
+    [Header("Slow Walk")]
+    [Tooltip("Slow walk speed of the character in m/s")]
+    [SerializeField] private float slowWalkSpeed = 0.6f;
     [Header("Sprint")]
     [Tooltip("Sprint speed of the character in m/s")]
     [SerializeField] private float sprintSpeed = 5.335f;
     [Header("Dash")]
     [Tooltip("Dash speed of the character in m/s")]
-    [SerializeField] private float dashSpeed = 25.0f;
+    [SerializeField] private float dashSpeed = 30.0f;
     [Tooltip("Dash duration of the character in seconds")]
-    [SerializeField] private float dashDurationInSeconds = 0.2f;
+    [SerializeField] private float dashDurationInSeconds = 0.21f;
     [SerializeField] private float dashCooldownInSeconds = 1.5f;
     [Header("Rotation")]
     [Tooltip("How fast the character turns to face movement direction")]
@@ -29,7 +32,6 @@ public class ThirdPersonController : MonoBehaviour
     //player
     private float _currentHorizontalSpeed;
     private float _rotationVelocity;
-    private float _verticalVelocity;
 
     //dash
     private float _dashCooldownTimer = 0;
@@ -46,6 +48,15 @@ public class ThirdPersonController : MonoBehaviour
     private CharacterController _controller;
     private PlayerInputHandler _input;
     private GameObject _mainCamera;
+
+    //Extras (SFX, VFX, Achievements)
+    private SoundFXManager _soundFXManager;
+
+    [Inject]
+    private void ZenjectSetup(SoundFXManager soundFXManager)
+    {
+        _soundFXManager = soundFXManager;
+    }
     private void Awake()
     {
         if (_mainCamera == null)
@@ -70,6 +81,7 @@ public class ThirdPersonController : MonoBehaviour
     {
         float targetSpeed = CalculateMaximumSpeed();
         _currentHorizontalSpeed = CalculateCurrentSpeed(targetSpeed);
+
         _horizontalSpeedAnimationBlend = CalculateAnimationBlend(targetSpeed);
 
         Vector3 inputDirection = GetInputDirection();
@@ -85,26 +97,33 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (_input.MovementInput == Vector2.zero)
             return 0.0f;
+        
+        if(_input.SprintButtonHeld)
+            return sprintSpeed;
 
-        return _input.SprintButtonHeld ? sprintSpeed : walkSpeed;
+        if(PlayerInputHandler.Instance.AttackButtonHeld)
+            return slowWalkSpeed;
+
+        return walkSpeed;
     }
 
-    private float CalculateCurrentSpeed(float targetSpeed)
+    private float CalculateCurrentSpeed(float targetSpeedThisFrame)
     {
         float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
         float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.MovementInput.magnitude : 1f;
 
-        if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-            currentHorizontalSpeed > targetSpeed + speedOffset)
+        if (currentHorizontalSpeed < targetSpeedThisFrame - speedOffset ||
+            currentHorizontalSpeed > targetSpeedThisFrame + speedOffset)
         {
-            float newSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * speedChangeRate);
+            float newSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeedThisFrame * inputMagnitude, Time.deltaTime * speedChangeRate);
             return Mathf.Round(newSpeed * 1000f) / 1000f;
         }
-        if(_dashDurationTimer > 0)
+
+        if (_dashDurationTimer > 0)
             return dashSpeed;
 
-        return targetSpeed;
+        return targetSpeedThisFrame;
     }
 
     private float CalculateAnimationBlend(float targetSpeed)
@@ -120,7 +139,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private float CalculateTargetRotation(Vector3 inputDirection)
     {
-        if (_input.MovementInput == Vector2.zero)
+        if (_input.MovementInput == Vector2.zero || PlayerInputHandler.Instance.AttackButtonHeld)
             return transform.eulerAngles.y;
 
         return Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
@@ -138,10 +157,8 @@ public class ThirdPersonController : MonoBehaviour
     }
     private void MovePlayer(Vector3 targetDirection)
     {
-        _controller.Move(targetDirection.normalized * (_currentHorizontalSpeed * Time.deltaTime) +
-                         new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        _controller.Move(targetDirection.normalized * (_currentHorizontalSpeed * Time.deltaTime));
     }
-
     #endregion
 
     #region Dash
@@ -188,7 +205,7 @@ public class ThirdPersonController : MonoBehaviour
             if (footstepAudioClips.Length > 0)
             {
                 var index = Random.Range(0, footstepAudioClips.Length);
-                AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_controller.center), footstepAudioVolume);
+                _soundFXManager.PlayRandomSoundFXAtPosition(footstepAudioClips, transform, footstepAudioVolume);
             }
         }
     }

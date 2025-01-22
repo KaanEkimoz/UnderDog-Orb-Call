@@ -23,11 +23,11 @@ public class OrbController : MonoBehaviour
     [SerializeField] private ObjectPool objectPool;
 
 
-    private List<Orb> orbsOnEllipse = new();
+    private List<SimpleOrb> orbsOnEllipse = new();
 
     //Orb Throw
-    private Orb orbToThrow;
-    private List<Orb> orbsThrowed = new();
+    private SimpleOrb orbToThrow;
+    private List<SimpleOrb> orbsThrowed = new();
 
     //Flags
     private bool isAiming = false;
@@ -66,7 +66,7 @@ public class OrbController : MonoBehaviour
 
         orbsThrowed.Clear();
     }
-    private void CallOrb(Orb orb)
+    private void CallOrb(SimpleOrb orb)
     {
         orb.Return();
         AddOrbToList(orb);
@@ -111,17 +111,17 @@ public class OrbController : MonoBehaviour
     }
     public void AddOrb()
     {
-        Orb newOrb = objectPool.GetPooledObject(0).GetComponent<Orb>();
+        SimpleOrb newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
 
         orbsOnEllipse.Add(newOrb);
         UpdateOrbEllipsePositions();
     }
-    public void AddOrbToList(Orb orb)
+    public void AddOrbToList(SimpleOrb orb)
     {
         orbsOnEllipse.Add(orb);
     }
-    public void RemoveOrbFromList(Orb orb)
+    public void RemoveOrbFromList(SimpleOrb orb)
     {
         orbsOnEllipse.Remove(orb);
         UpdateOrbEllipsePositions();
