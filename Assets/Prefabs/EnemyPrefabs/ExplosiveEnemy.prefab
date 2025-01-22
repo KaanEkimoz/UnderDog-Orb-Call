@@ -129,6 +129,9 @@ MonoBehaviour:
   explosionDamage: 30
   preperationTime: 1.5
   explosionRadius: 5
+  explosiveEnemyRenderer: {fileID: 2005591546825292462}
+  explotionColor: {r: 1, g: 0.6079833, b: 0, a: 1}
+  defaultColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!195 &5095704278801328434
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -8,6 +8,9 @@ public class ExploderEnemy : Enemy
     public float explosionDamage = 30f;
     public float preperationTime = 2f;
     public float explosionRadius = 5f;
+    public MeshRenderer explosiveEnemyRenderer;
+    public Color explotionColor = Color.white;
+    public Color defaultColor = Color.red;
 
     private bool isPreparingToExplode = false;
     private Coroutine preparationCoroutine = null;
@@ -35,11 +38,14 @@ public class ExploderEnemy : Enemy
         isPreparingToExplode = true;
         float elapsedTime = 0f;
 
+        explosiveEnemyRenderer.material.color = explotionColor;
+
         while(elapsedTime < preperationTime) //patlama suresi dolmadigi surece
         {
             if (!CheckDistanceToPlayer()) //karakter dusmandan uzaklasirsa
             {
                 isPreparingToExplode = false; //patlama hazirligini iptal et
+                explosiveEnemyRenderer.material.color = defaultColor;
                 yield break;
             }
 
@@ -70,5 +76,6 @@ public class ExploderEnemy : Enemy
         StopCoroutine(preparationCoroutine);
         preparationCoroutine = null;
         isPreparingToExplode = false;
+        explosiveEnemyRenderer.material.color = defaultColor;
     }
 }
