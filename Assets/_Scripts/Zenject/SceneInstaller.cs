@@ -1,3 +1,4 @@
+using com.game.player;
 using Zenject;
 public class SceneInstaller : MonoInstaller
 {
