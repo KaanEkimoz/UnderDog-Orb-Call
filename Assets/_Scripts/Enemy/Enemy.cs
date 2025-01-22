@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     public EnemyStats enemyStats;
-    public GameObject target;
+    protected GameObject target;
 
     protected NavMeshAgent navMeshAgent;
 
@@ -28,6 +28,17 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         navMeshAgent.SetDestination(target.transform.position);
+
+        CustomUpdate();
     }
+
+    protected virtual void CustomUpdate() { }
+
+    protected bool CheckDistanceToPlayer() //dusmanin playera uzakligini dondur
+    {
+        return Vector3.Distance(transform.position, target.transform.position) <= enemyStats.stoppingDistance;
+    }
+
+
 }
 

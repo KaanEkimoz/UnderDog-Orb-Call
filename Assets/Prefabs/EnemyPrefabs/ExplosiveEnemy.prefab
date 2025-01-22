@@ -126,7 +126,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyStats: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
-  target: {fileID: 0}
+  explosionDamage: 30
+  preperationTime: 1.5
+  explosionRadius: 5
 --- !u!195 &5095704278801328434
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -177,7 +179,7 @@ Transform:
   m_GameObject: {fileID: 8276937745736403641}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.26999986, y: 0.404, z: 0}
+  m_LocalPosition: {x: -0.017000228, y: 0.404, z: 0.20400046}
   m_LocalScale: {x: 0.64, y: 0.64, z: 0.64}
   m_ConstrainProportionsScale: 1
   m_Children: []
