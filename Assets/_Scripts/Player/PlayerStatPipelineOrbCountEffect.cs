@@ -11,7 +11,7 @@ namespace com.game.player
         const float k_guiWidth = 540f;
 
         const float k_minAmplitude = 0f;
-        const float k_maxAmplitude = 5f;
+        const float k_maxAmplitude = 10f;
         const float k_minShift = -1f;
         const float k_maxShift = 0f;
         const float k_minCoefficient = -1f;
