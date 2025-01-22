@@ -1,14 +1,14 @@
 using com.absence.attributes;
+using com.game.statsystem;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace com.game.orbsystem.statsystemextensions
 {
-    public class OrbStats : MonoBehaviour
+    public class OrbStats : MonoBehaviour, IStats<OrbStatType>
     {
         [Header("Utilities")]
-
-        [SerializeField, Tooltip("If enabled, this component with initialize itself, and also some additional console messages will take place.")]
-        private bool m_debugMode = false;
 
         [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")]
         private OrbDefaultStats m_defaultStats;
@@ -18,12 +18,13 @@ namespace com.game.orbsystem.statsystemextensions
 
         Dictionary<OrbStatType, float> m_defaultValues;
 
-        public OrbStatHolder StatHolder => m_statHolder;
+        public IStatManipulator<OrbStatType> Manipulator => m_statHolder;
         public Dictionary<OrbStatType, float> DefaultValues => m_defaultValues;
 
         private void Awake()
         {
             Initialize(m_defaultStats);
+            //if (m_debugMode) ApplyCharacterProfile(m_defaultCharacterProfile);
         }
 
         #region Public API
@@ -35,9 +36,27 @@ namespace com.game.orbsystem.statsystemextensions
         public void Initialize(OrbDefaultStats defaultValues)
         {
             m_statHolder = new OrbStatHolder(defaultValues);
+
+            FillDefaultValues();
+
             Debug.Log("OrbStats initialized.");
         }
 
         #endregion
+
+        void FillDefaultValues()
+        {
+            m_defaultValues = new();
+
+            foreach (OrbStatType enumValue in Enum.GetValues(typeof(OrbStatType)))
+            {
+                m_defaultValues.Add(enumValue, m_statHolder.GetStat(enumValue));
+            }
+        }
+
+        public float GetStat(OrbStatType targetStat)
+        {
+            return m_statHolder.GetStat(targetStat);
+        }
     }
 }

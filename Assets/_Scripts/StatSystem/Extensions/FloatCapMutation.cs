@@ -11,9 +11,13 @@ namespace com.game.statsystem.extensions
         public float MinValue;
         public float MaxValue;
 
-        protected override int m_order => 2;
+        protected override int m_order => 0;
 
         public FloatCapMutation() : base(0f, AffectionMethod.Overall)
+        {
+        }
+
+        protected FloatCapMutation(AffectionMethod affectionMethod) : base(0f, affectionMethod)
         {
         }
 
@@ -35,6 +39,36 @@ namespace com.game.statsystem.extensions
         public override void OnAdd(Variable<float> variable)
         {
             base.OnAdd(variable);
+
+            if (!StatSystemSettings.CAPS_WIPE_OUT_MOD_HISTORY) return;
+
+            if (AffectionMethod != AffectionMethod.Overall) return;
+
+            FloatCapMutation mut = CreateSecondary();
+            variable.Mutate(mut);
+        }
+
+        public override void OnRemove(Variable<float> variable)
+        {
+            base.OnAdd(variable);
+
+            if (!StatSystemSettings.CAPS_WIPE_OUT_MOD_HISTORY) return;
+
+            if (AffectionMethod != AffectionMethod.Overall) return;
+
+            FloatCapMutation mut = CreateSecondary();
+            variable.Mutate(mut);
+        }
+
+        FloatCapMutation CreateSecondary()
+        {
+            return new FloatCapMutation(AffectionMethod.InOrder)
+            {
+                CapLow = CapLow,
+                CapHigh = CapHigh,
+                MinValue = MinValue,
+                MaxValue = MaxValue
+            };
         }
     }
 }

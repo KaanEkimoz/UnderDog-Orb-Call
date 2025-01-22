@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb940c2288e52d4299dbefc9710f809, type: 3}
+  m_Name: Developer Console Profile
+  m_EditorClassIdentifier: 
+  m_commands:
+  - m_keyword: help
+    m_arguments: []
+    m_description: Displays generic info about commands.
+    m_methodPreview: Help()
+    m_isExpanded: 0
+  - m_keyword: help
+    m_arguments:
+    - m_name: command_name
+      m_valueType: 2
+    m_description: Shows the description for the command wanted.
+    m_methodPreview: Help(String commandName)
+    m_isExpanded: 0
+  - m_keyword: setstat
+    m_arguments:
+    - m_name: stat_name
+      m_valueType: 2
+    - m_name: new_value
+      m_valueType: 1
+    m_description: Overrides a stat to a given value and clears its modifiers.
+    m_methodPreview: SetStat(String statName, Single newValue)
+    m_isExpanded: 0
+  - m_keyword: bedeprived
+    m_arguments: []
+    m_description: Be deprived.
+    m_methodPreview: BeDeprived()
+    m_isExpanded: 0

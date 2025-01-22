@@ -15,9 +15,10 @@ namespace com.game.generics.itembehaviours
         [SerializeField] private PlayerStatModification m_modification = new();
 
         int m_kills;
+        int m_steps;
         List<ModifierObject<PlayerStatType>> m_modifiers = new();
 
-        PlayerStatHolder m_statHolder;
+        IStatManipulator<PlayerStatType> m_manipulator;
 
         public override string GenerateActionDescription(bool richText)
         {
@@ -43,13 +44,17 @@ namespace com.game.generics.itembehaviours
 
             sb.Append(" for every ");
 
-            if (richText) sb.Append("<b>");
+            if (m_amountOfEnemies != 1)
+            {
+                if (richText) sb.Append("<b>");
 
-            sb.Append(m_amountOfEnemies);
+                sb.Append(m_amountOfEnemies);
 
-            if (richText) sb.Append("</b>");
+                if (richText) sb.Append("</b>");
+            }
 
-            sb.Append(" enemies killed in a wave.");
+            if (m_amountOfEnemies == 1) sb.Append("enemy killed in a wave.");
+            else sb.Append(" enemies killed in a wave.");
 
             return sb.ToString();
         }
@@ -58,7 +63,7 @@ namespace com.game.generics.itembehaviours
         {
             StringBuilder sb = new();
             sb.Append(" stats gained: ");
-            sb.Append(m_kills * m_modification.Value);
+            sb.Append(m_steps * m_modification.Value);
 
             if (!richText) return sb.ToString();
             else return com.game.utilities.Helpers.Text.Italic(sb.ToString());
@@ -69,13 +74,21 @@ namespace com.game.generics.itembehaviours
             TestEventChannel.OnEnemyKilled += OnEnemyKilled;
 
             m_kills = 0;
-            m_statHolder = Player.Instance.Hub.Stats.StatHolder;
+            m_manipulator = Player.Instance.Hub.Stats.Manipulator;
         }
 
         private void OnEnemyKilled()
         {
             m_kills++;
-            m_modifiers.Add(m_statHolder.ModifyWith(m_modification));
+            if (m_kills >= m_amountOfEnemies) StepUp();
+        }
+
+        void StepUp()
+        {
+            m_kills = 0;
+            m_steps++;
+
+            m_modifiers.Add(m_manipulator.ModifyWith(m_modification));
         }
 
         public override void Despawn()
@@ -84,7 +97,7 @@ namespace com.game.generics.itembehaviours
 
             m_modifiers.ForEach(modifier =>
             {
-                m_statHolder.Demodify(modifier);
+                m_manipulator.Demodify(modifier);
             });
         }
     }
