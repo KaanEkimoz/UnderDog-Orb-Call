@@ -85,6 +85,8 @@ namespace com.game.testing
 
         private void OnGUI()
         {
+            if (!Game.Paused) return;
+
             GUILayout.BeginHorizontal();
 
             GUILayout.BeginVertical("box");
