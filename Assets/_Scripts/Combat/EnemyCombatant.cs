@@ -33,6 +33,16 @@ namespace com.game
         public void Die()
         {
             TestEventChannel.ReceiveEnemyKill();
+            SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
+
+            foreach (SimpleOrb orb in orbsOnEnemy)
+            {
+                orb.ResetParent();
+                orb.transform.position = new Vector3(orb.transform.position.x, 0,orb.transform.position.z);
+            }
+                
+
+
             Destroy(gameObject);
         }
     }

@@ -23,6 +23,7 @@ public class SimpleOrb : MonoBehaviour
 
     //Movement
     private Transform startParent;
+    private Vector3 startScale;
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
     private const float distanceThreshold = 0.1f;
@@ -42,6 +43,7 @@ public class SimpleOrb : MonoBehaviour
         _sphereCollider = GetComponent<SphereCollider>();
         swayOffset = Random.Range(0f, Mathf.PI * 2);
         startParent = transform.parent;
+        startScale = transform.localScale;
     }
     private void Update()
     {
@@ -84,6 +86,7 @@ public class SimpleOrb : MonoBehaviour
     public void ResetParent()
     {
         transform.SetParent(startParent);
+        transform.localScale = startScale;
     }
     public void Throw(Vector3 force)
     {
@@ -128,9 +131,7 @@ public class SimpleOrb : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
-        {
             damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
-        }
     }
     private void Sway()
     {
