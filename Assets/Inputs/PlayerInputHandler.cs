@@ -1,3 +1,4 @@
+using com.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour
@@ -7,8 +8,10 @@ public class PlayerInputHandler : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Game.OnResume += OnGameResume;
     }
     #endregion
+
     public bool DashButtonPressed { get { return IsDashButtonPressedThisFrame(); } }
     public bool DashButtonHeld { get { return _dashButtonHeld; } }
     public bool AttackButtonPressed { get { return IsAttackButtonPressedThisFrame(); } }
@@ -40,6 +43,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     [Header("Movement Settings")]
     public bool analogMovement;
+
+    private void OnGameResume()
+    {
+        _attackButtonPressedThisFrame = false;
+        _attackButtonReleasedThisFrame = false;
+        _attackButtonHeld = false;
+    }
 
     private bool IsAttackButtonPressedThisFrame()
     {

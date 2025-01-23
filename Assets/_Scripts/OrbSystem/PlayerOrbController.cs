@@ -1,3 +1,4 @@
+using com.game;
 using com.game.player;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,8 @@ public class OrbController : MonoBehaviour
     }
     private void Update()
     {
+        if (Game.Paused) return;
+
         if(input.AttackButtonPressed)
             Aim();
         else if(input.AttackButtonReleased)
