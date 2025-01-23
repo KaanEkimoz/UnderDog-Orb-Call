@@ -139,7 +139,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private float CalculateTargetRotation(Vector3 inputDirection)
     {
-        if (_input.MovementInput == Vector2.zero)
+        if (_input.MovementInput == Vector2.zero )
             return transform.eulerAngles.y;
 
         return Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
@@ -147,6 +147,8 @@ public class ThirdPersonController : MonoBehaviour
 
     private void ApplyRotation(float targetRotation)
     {
+        if (PlayerInputHandler.Instance.AttackButtonHeld)
+            return;
         float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref _rotationVelocity, rotationSmoothTime);
         transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
     }
