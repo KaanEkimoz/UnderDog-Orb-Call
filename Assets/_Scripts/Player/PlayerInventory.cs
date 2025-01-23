@@ -83,7 +83,6 @@ namespace com.game.player
             targetItem.Dispose();
         }
 
-#if UNITY_EDITOR
         const float k_totalGUIWidth = 340f;
 
         public void OnTestGUI()
@@ -136,6 +135,5 @@ namespace com.game.player
 
             GUILayout.Label(m_labelText);
         }
-#endif
     }
 }
