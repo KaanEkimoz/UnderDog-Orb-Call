@@ -135,24 +135,6 @@ namespace com.game.player
 
             GUILayout.BeginVertical();
 
-            bool cannotAddOrb = m_orbHandler.OrbsAtMax;
-
-            if (cannotAddOrb) GUI.enabled = false;
-            if (GUILayout.Button("Add Orb"))
-            {
-                m_orbHandler.AddOrb();
-            }
-            if (cannotAddOrb) GUI.enabled = true;
-
-            bool cannotRemoveOrb = m_orbHandler.OrbsAtMin;
-
-            if (cannotRemoveOrb) GUI.enabled = false;
-            if (GUILayout.Button("Remove Orb"))
-            {
-                m_orbHandler.RemoveOrb();
-            }
-            if (cannotRemoveOrb) GUI.enabled = true;
-
             GUILayout.Label("Orb Count -> Modifier:");
             GUILayout.Label($"{m_orbHandler.OrbsInHand} -> {precalculatedDiff}");
 
