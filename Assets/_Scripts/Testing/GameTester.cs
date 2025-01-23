@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace com.game.testing
 {
@@ -52,6 +53,14 @@ namespace com.game.testing
             m_percentageButtonAmount = k_initialPercentageButtonAmount;
         }
 
+        private void Update()
+        {
+            if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
+
+            if (Game.Paused) Game.Resume();
+            else Game.Pause();
+        }
+
         private void OnDestroy()
         {
             PlayerStatPipelineComponentBase rawComponent = m_playerStats.Pipeline.Query.
@@ -88,10 +97,10 @@ namespace com.game.testing
             m_playerInventory.OnTestGUI();
             GUILayout.EndVertical();
 
-            GUILayout.BeginVertical("box");
-            GUILayout.Label("Utilities");
-            TestUtilityGUI();
-            GUILayout.EndVertical();
+            //GUILayout.BeginVertical("box");
+            //GUILayout.Label("Utilities");
+            //TestUtilityGUI();
+            //GUILayout.EndVertical();
 
             GUILayout.BeginVertical("box");
             GUILayout.Label("Player Stat Pipeline");
@@ -99,6 +108,41 @@ namespace com.game.testing
             GUILayout.EndVertical();
 
             GUILayout.EndHorizontal();
+
+            TestOverlayGUI();
+        }
+
+        public void TestOverlayGUI()
+        {
+            DrawPausedLabel();
+
+            return;
+
+            void DrawPausedLabel()
+            {
+                if (!Game.Paused) return;
+
+                const string labelText = "<b>Game Paused</b>";
+                const float padding = 5f;
+
+                GUIContent labelContent = new GUIContent()
+                {
+                    text = labelText,
+                };
+
+                GUIStyle style = new GUIStyle(GUI.skin.label)
+                {
+                    richText = true
+                };
+
+                Vector2 labelSizeRaw = style.CalcSize(labelContent);
+                Vector2 labelSize = style.CalcScreenSize(labelSizeRaw);
+
+                Rect pausedTextRect = new Rect(Screen.width - labelSize.x - padding, padding,
+                    labelSize.x, labelSize.y);
+
+                GUI.Label(pausedTextRect, labelContent);
+            }
         }
 
         public void TestStatGUI()
