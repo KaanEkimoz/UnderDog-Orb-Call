@@ -50,7 +50,7 @@ public class ThirdPersonController : MonoBehaviour
     private GameObject _mainCamera;
 
     //Extras (Events, SFX, VFX, Achievements)
-    private SoundFXManager _soundFXManager;
+    [SerializeField] private SoundFXManager _soundFXManager;
 
     [Inject]
     private void ZenjectSetup(SoundFXManager soundFXManager)

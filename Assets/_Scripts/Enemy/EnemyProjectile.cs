@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
-    public float Damage;
+    private float _damage;
+    private Rigidbody _rigidBody;
+
+    private void OnEnable()
+    {
+        if(_rigidBody == null)
+            _rigidBody = GetComponent<Rigidbody>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -12,10 +19,18 @@ public class EnemyProjectile : MonoBehaviour
             Debug.Log("projectile playera carpti");
 
             if (other.gameObject.TryGetComponent(out IDamageable damageable))
-                damageable.TakeDamage(Damage);
+                damageable.TakeDamage(_damage);
 
             //HASAR VER
             Destroy(gameObject);
         }
+    }
+    public void ApplyVelocity(Vector3 velocity)
+    {
+        _rigidBody.linearVelocity = velocity;
+    }
+    public void SetDamage (float damage)
+    {
+        _damage = damage;
     }
 }
