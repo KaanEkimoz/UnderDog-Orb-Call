@@ -49,7 +49,7 @@ public class ThirdPersonController : MonoBehaviour
     private PlayerInputHandler _input;
     private GameObject _mainCamera;
 
-    //Extras (SFX, VFX, Achievements)
+    //Extras (Events, SFX, VFX, Achievements)
     private SoundFXManager _soundFXManager;
 
     [Inject]
@@ -139,7 +139,7 @@ public class ThirdPersonController : MonoBehaviour
 
     private float CalculateTargetRotation(Vector3 inputDirection)
     {
-        if (_input.MovementInput == Vector2.zero || PlayerInputHandler.Instance.AttackButtonHeld)
+        if (_input.MovementInput == Vector2.zero)
             return transform.eulerAngles.y;
 
         return Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;

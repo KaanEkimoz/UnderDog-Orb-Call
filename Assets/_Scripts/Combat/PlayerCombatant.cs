@@ -19,7 +19,6 @@ namespace com.game
         }
         public void TakeDamage(float damage)
         {
-
             _health -= damage;
 
             if (_health <= 0)
