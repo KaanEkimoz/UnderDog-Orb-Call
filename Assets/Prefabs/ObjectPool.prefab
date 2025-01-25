@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7441109518502746199}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -47,3 +47,5 @@ MonoBehaviour:
   pools:
   - objectPrefab: {fileID: 8886230964089384064, guid: 6fb39a6dedc47b749b8b8b0140313001, type: 3}
     poolSize: 20
+  - objectPrefab: {fileID: 7729622762826746845, guid: 18621b4b0193f3341bfe4bfffb0c34a3, type: 3}
+    poolSize: 30

@@ -2712,20 +2712,28 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: spawnDelay
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: maxEnemyCount
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: spawnPoints.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: enemyPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: 'spawnPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1035666963}
+    - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: 'enemyPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4972913073822748566, guid: ad2f8150d4e5f1e4ea150ff4f8ed0766, type: 3}
     - target: {fileID: 2592178667866607631, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5871,18 +5879,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
-      propertyPath: pools.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
-      propertyPath: pools.Array.data[1].poolSize
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
-      propertyPath: pools.Array.data[1].objectPrefab
-      value: 
-      objectReference: {fileID: 7729622762826746845, guid: 18621b4b0193f3341bfe4bfffb0c34a3, type: 3}
     - target: {fileID: 7441109518502746199, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: m_Name
       value: ObjectPool

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 9142682306460946039}
   - component: {fileID: 2005591546825292462}
   - component: {fileID: 3833071481733924819}
-  - component: {fileID: 499462253952226114}
   - component: {fileID: 5095704278801328434}
+  - component: {fileID: 499462253952226114}
   - component: {fileID: -2758663310200919992}
   - component: {fileID: 1597358280258413786}
   m_Layer: 8
@@ -115,26 +115,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &499462253952226114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1415160704175932166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf0b6016e2a56ee4ca09a7bb775d44c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyStats: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
-  newEnemyStats: {fileID: 1597358280258413786}
-  explosionDamage: 30
-  preperationTime: 1.5
-  explosionRadius: 5
-  explosiveEnemyRenderer: {fileID: 2005591546825292462}
-  explotionColor: {r: 1, g: 0.6079833, b: 0, a: 1}
-  defaultColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!195 &5095704278801328434
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -157,6 +137,26 @@ NavMeshAgent:
   m_BaseOffset: 0.99999994
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &499462253952226114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415160704175932166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0b6016e2a56ee4ca09a7bb775d44c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyStats: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
+  newEnemyStats: {fileID: 1597358280258413786}
+  explosionDamage: 30
+  preperationTime: 1.5
+  explosionRadius: 5
+  explosiveEnemyRenderer: {fileID: 2005591546825292462}
+  explotionColor: {r: 1, g: 0.6079833, b: 0, a: 1}
+  defaultColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &-2758663310200919992
 MonoBehaviour:
   m_ObjectHideFlags: 0

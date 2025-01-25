@@ -33,7 +33,6 @@ public class OrbController : MonoBehaviour
     //Flags
     private bool isAiming = false;
     private bool isReturning = false;
-
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
@@ -102,7 +101,6 @@ public class OrbController : MonoBehaviour
 
         isAiming = false;
         orbToThrow.Throw(firePointTransform.forward * 20f);
-        //orbToThrow.SetNewDestination(firePointTransform.position + (firePointTransform.forward * 20f));
         orbsThrowed.Add(orbToThrow);
         orbToThrow = null;
         Player.Instance.Hub.OrbHandler.RemoveOrb();
