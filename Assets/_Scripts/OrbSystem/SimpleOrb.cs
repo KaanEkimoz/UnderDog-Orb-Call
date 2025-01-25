@@ -1,5 +1,6 @@
 using com.game;
 using com.game.orbsystem.statsystemextensions;
+using System.Collections;
 using UnityEngine;
 public class SimpleOrb : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class SimpleOrb : MonoBehaviour
     private void Start()
     {
         isOnEllipse = true;
+        isReturning = false;
 
         if (orbStats == null)
             orbStats = GetComponent<OrbStats>();
@@ -58,6 +60,7 @@ public class SimpleOrb : MonoBehaviour
             isOnEllipse = true;
             _sphereCollider.isTrigger = false;
         }
+
     }
     private void HandleMovement()
     {
@@ -101,6 +104,7 @@ public class SimpleOrb : MonoBehaviour
     public void SetNewDestination(Vector3 newPos)
     {
         currentTargetPos = newPos;
+        isOnEllipse = false;
     }
     private void MoveTargetPos()
     {
@@ -132,6 +136,16 @@ public class SimpleOrb : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
             damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
+    }
+    public void IncreaseSpeedForSeconds(float speedIncrease, float duration)
+    {
+        StartCoroutine(IncreaseSpeed(speedIncrease, duration));
+    }
+    private IEnumerator IncreaseSpeed(float speedIncrease, float duration)
+    {
+        movementSpeed += speedIncrease;
+        yield return new WaitForSeconds(duration);
+        movementSpeed -= speedIncrease;
     }
     private void Sway()
     {

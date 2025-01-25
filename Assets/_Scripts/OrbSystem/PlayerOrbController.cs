@@ -2,6 +2,7 @@ using com.game;
 using com.game.player;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 public class OrbController : MonoBehaviour
 {
     [Header("Orb Count")]
@@ -10,6 +11,7 @@ public class OrbController : MonoBehaviour
     [Space]
     [Header("Orb Throw")]
     [SerializeField] private Transform firePointTransform;
+    [SerializeField] private LayerMask cursorDetectMask;
     [Space]
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
@@ -58,7 +60,11 @@ public class OrbController : MonoBehaviour
             CallOrbs();
 
         if (orbToThrow != null)
+        {
+            orbToThrow.IncreaseSpeedForSeconds(15f,0.5f);
             orbToThrow.SetNewDestination(firePointTransform.position);
+        }
+            
 
         UpdateEllipsePos();
         UpdateOrbEllipsePositions();
@@ -100,7 +106,10 @@ public class OrbController : MonoBehaviour
             return;
 
         isAiming = false;
-        orbToThrow.Throw(firePointTransform.forward * 20f);
+
+        Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;
+
+        orbToThrow.Throw(throwDirection.normalized * 20f);
         orbsThrowed.Add(orbToThrow);
         orbToThrow = null;
         Player.Instance.Hub.OrbHandler.RemoveOrb();
@@ -152,6 +161,15 @@ public class OrbController : MonoBehaviour
             
             orbsOnEllipse[i].SetNewDestination(targetPosition);
         }
+    }
+    private Vector3 GetMouseWorldPosition()
+    {
+        var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, cursorDetectMask))
+            return hitInfo.point;
+
+        return Vector3.zero;
     }
     private float CalculateAngleBetweenOrbs()
     {

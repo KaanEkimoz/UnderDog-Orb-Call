@@ -2780,7 +2780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5331071310023750704, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5992,6 +5992,10 @@ PrefabInstance:
       propertyPath: m_ascendingOrbCountCurve.m_Curve.Array.data[1].tangentMode
       value: 34
       objectReference: {fileID: 0}
+    - target: {fileID: 4487526138420041412, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+      propertyPath: rotationSmoothTime
+      value: 0.08
+      objectReference: {fileID: 0}
     - target: {fileID: 5895881473504401873, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6113,6 +6117,10 @@ PrefabInstance:
       propertyPath: ellipseCenterTransform
       value: 
       objectReference: {fileID: 878954946}
+    - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
+      propertyPath: cursorDetectMask.m_Bits
+      value: 257
+      objectReference: {fileID: 0}
     - target: {fileID: 4548954406257375815, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: m_Name
       value: OrbController
