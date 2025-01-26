@@ -54,6 +54,9 @@ namespace com.game.orbsystem.ui
 
         private void Update()
         {
+            if (Game.Paused)
+                return;
+
             if (Keyboard.current.qKey.wasPressedThisFrame)
                 SelectPreviousOrb();
             else if (Keyboard.current.eKey.wasPressedThisFrame)
