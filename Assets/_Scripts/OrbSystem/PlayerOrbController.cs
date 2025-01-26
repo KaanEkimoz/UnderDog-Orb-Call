@@ -19,7 +19,7 @@ public class OrbController : MonoBehaviour
     [SerializeField] private float ellipseYRadius = 0.75f;
     [Space]
     [Header("Ellipse Movement")]
-    [SerializeField] private float ellipseMovementSpeed = 5f;
+    [SerializeField] private float ellipseMovementSpeed = 1.5f;
     [SerializeField] private float ellipseRotationSpeed = 5f;
     [Space]
     [Header("Components")]

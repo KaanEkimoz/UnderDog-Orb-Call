@@ -6,6 +6,7 @@ public class SimpleOrb : MonoBehaviour
 {
     [Header("Orb Movement")]
     [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float speedMultiplier = 1f;
     [Space]
     
     [Space]
@@ -102,11 +103,17 @@ public class SimpleOrb : MonoBehaviour
         currentTargetPos = newPos;
         isOnEllipse = false;
     }
+    public void SetNewDestination(Vector3 newPos, float multiplier)
+    {
+        currentTargetPos = newPos;
+        isOnEllipse = false;
+        speedMultiplier = multiplier;
+    }
     private void MoveTargetPos()
     {
         // Move towards target position
         Vector3 posToMove = currentTargetPos;
-        transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed);
+        transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed * speedMultiplier);
 
         // Check if the orb has reached the target
         if (Vector3.Distance(transform.position, posToMove) < distanceThreshold)

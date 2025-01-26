@@ -51,9 +51,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Block",
+                    "name": "Recall",
                     "type": "Button",
                     "id": "d6988846-9614-42b0-95e2-d1d182dcf0bb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Next Choose",
+                    "type": "Button",
+                    "id": "460106cc-0247-4474-b5e3-28b29e7d8792",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Previous Choose",
+                    "type": "Button",
+                    "id": "9175b8d5-18e8-4550-b6cb-e2925b55b91b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -273,11 +291,33 @@
                 {
                     "name": "",
                     "id": "58ce7197-87ef-4c34-97f1-4e1d73bcf8bd",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Block",
+                    "action": "Recall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66d5ffe2-bae6-4744-bd86-d94f0dddd9b2",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next Choose",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d1d16e73-4fb3-42a9-8bf2-5a86276e7e7e",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Previous Choose",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
