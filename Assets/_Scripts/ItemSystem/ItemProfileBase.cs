@@ -1,7 +1,5 @@
 using com.absence.attributes;
-using com.game.utilities;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace com.game.itemsystem.scriptables
@@ -18,7 +16,7 @@ namespace com.game.itemsystem.scriptables
 
         [Space, Header3("Information")]
 
-        [SpriteField, Tooltip("Icon of this item that will be displayed in the UI.")] 
+        [SpriteField, Tooltip("Icon of this item that will be displayed in the UI.")]
         public Sprite Icon;
 
         [Tooltip("Name of this item that will be displayed in the UI.")] 
