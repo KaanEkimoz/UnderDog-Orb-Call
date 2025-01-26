@@ -1,7 +1,4 @@
-using com.game.player.statsystemextensions;
-using com.game.player;
 using UnityEngine;
-using Zenject;
 using com.game.testing;
 
 namespace com.game
@@ -35,10 +32,11 @@ namespace com.game
             TestEventChannel.ReceiveEnemyKill();
 
             SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
+
             foreach (SimpleOrb orb in orbsOnEnemy)
             {
+                orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
                 orb.ResetParent();
-                orb.transform.position = new Vector3(orb.transform.position.x, 0,orb.transform.position.z);
             }
             Destroy(gameObject);
         }

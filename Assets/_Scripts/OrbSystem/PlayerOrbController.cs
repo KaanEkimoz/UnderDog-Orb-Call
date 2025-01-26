@@ -61,7 +61,7 @@ public class OrbController : MonoBehaviour
 
         if (orbToThrow != null)
         {
-            orbToThrow.IncreaseSpeedForSeconds(15f,0.5f);
+            orbToThrow.IncreaseSpeedForSeconds(15f,0.1f);
             orbToThrow.SetNewDestination(firePointTransform.position);
         }
             
@@ -71,7 +71,10 @@ public class OrbController : MonoBehaviour
     }
     private void CallOrbs()
     {
-        for(int i = 0; i < orbsThrowed.Count; i++)
+        if(orbsThrowed.Count == 0)
+            return;
+
+        for (int i = 0; i < orbsThrowed.Count; i++)
             CallOrb(orbsThrowed[i]);
 
         orbsThrowed.Clear();
@@ -97,7 +100,7 @@ public class OrbController : MonoBehaviour
             return;
 
         isAiming = true;
-        orbToThrow = orbsOnEllipse[orbsOnEllipse.Count - 1];
+        orbToThrow = orbsOnEllipse[0];
         RemoveOrbFromList(orbToThrow);
     }
     private void Throw()
