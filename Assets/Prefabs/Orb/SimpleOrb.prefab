@@ -151,15 +151,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 2
-  swayRange: 0.1
-  swayOffset: 0
-  swaySpeed: 2
+  speedMultiplier: 1
   orbStats: {fileID: 6960696444875857668}
   isOnEllipse: 0
-  isSwaying: 0
   isSticked: 0
   isThrowing: 0
   isReturning: 0
+  startMaterial: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0

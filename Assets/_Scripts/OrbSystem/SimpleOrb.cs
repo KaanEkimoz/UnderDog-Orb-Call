@@ -23,6 +23,7 @@ public class SimpleOrb : MonoBehaviour
     //Movement
     private Transform startParent;
     private Vector3 startScale;
+    [SerializeField] private Material startMaterial;
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
     private const float distanceThreshold = 0.1f;
@@ -30,6 +31,7 @@ public class SimpleOrb : MonoBehaviour
     //Components
     private Rigidbody _rigidBody;
     private SphereCollider _sphereCollider;
+    private MeshRenderer _meshRenderer;
 
     private void Start()
     {
@@ -41,7 +43,8 @@ public class SimpleOrb : MonoBehaviour
 
         _rigidBody = GetComponent<Rigidbody>();
         _sphereCollider = GetComponent<SphereCollider>();
-        //swayOffset = Random.Range(0f, Mathf.PI * 2);
+        _meshRenderer = GetComponent<MeshRenderer>();
+
         startParent = transform.parent;
         startScale = transform.localScale;
     }
@@ -87,6 +90,14 @@ public class SimpleOrb : MonoBehaviour
         transform.SetParent(startParent);
         transform.localScale = startScale;
         isSticked = false;
+    }
+    public void ResetMaterial()
+    {
+        _meshRenderer.material = startMaterial;
+    }
+    public void SetMaterial(Material newMaterial)
+    {
+        _meshRenderer.material = newMaterial;
     }
     public void Throw(Vector3 force)
     {

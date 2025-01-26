@@ -96,13 +96,13 @@ public class ThirdPersonController : MonoBehaviour
     }
     private float CalculateMaximumSpeed()
     {
+        if (_input.MovementInput == Vector2.zero)
+            return 0.0f;
+
         if (alwaysSprint)
             return sprintSpeed;
 
-        if (_input.MovementInput == Vector2.zero)
-            return 0.0f;
-        
-        if(_input.SprintButtonHeld)
+        if (_input.SprintButtonHeld)
             return sprintSpeed;
 
         if(PlayerInputHandler.Instance.AttackButtonHeld)
