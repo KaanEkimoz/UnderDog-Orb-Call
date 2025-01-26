@@ -116,9 +116,6 @@ public class SimpleOrb : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
-
         if (!isReturning)
         {
             isSticked = true;
@@ -127,6 +124,10 @@ public class SimpleOrb : MonoBehaviour
             transform.position = collision.contacts[0].point;
             transform.SetParent(collision.transform);
         }
+
+        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
+        
     }
     private void OnTriggerEnter(Collider other)
     {
