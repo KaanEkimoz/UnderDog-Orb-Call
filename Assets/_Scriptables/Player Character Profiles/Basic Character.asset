@@ -14,11 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OrbCount: 7
   Overrides: []
-  Modifications:
-  - ModificationType: 0
-    m_incrementalValue: -2
-    m_percentageValue: 100
-    TargetStatType: 9
+  Modifications: []
   Caps:
   - CapLow: 0
     CapHigh: 0
