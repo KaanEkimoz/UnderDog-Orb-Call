@@ -181,7 +181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &59184531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,7 +345,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1864, y: 30.372036}
+  m_SizeDelta: {x: 1864, y: 31.832975}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &146626041
 MonoBehaviour:
@@ -845,7 +845,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &304624443
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1409,13 +1409,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_profile: {fileID: 11400000, guid: 515705b813f7d43459d1425dd2198949, type: 2}
-  m_panel: {fileID: 1494674069}
+  m_inputPanel: {fileID: 59184530}
+  m_logPanel: {fileID: 304624442}
   m_inputField: {fileID: 59184531}
   m_logText: {fileID: 146626043}
   m_scrollRect: {fileID: 866991316}
-  m_caseSensitive: 0
-  m_dontDestroyOnLoad: 1
+  m_logTextSize: 1
   m_singleton: 1
+  m_dontDestroyOnLoad: 1
+  m_caseSensitive: 0
+  m_closeWindowOnPush: 1
+  m_displayLog: 0
 --- !u!1 &578070448
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,7 +3102,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 431244275}
   m_HandleRect: {fileID: 431244273}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4043,7 +4047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1494674070
 MonoBehaviour:
   m_ObjectHideFlags: 0
