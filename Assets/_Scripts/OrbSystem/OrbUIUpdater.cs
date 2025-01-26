@@ -72,7 +72,7 @@ namespace com.game.orbsystem.ui
                 return;
 
             m_orbDisplays[m_selectedOrbIndex].SetThrown(true);
-            SelectNextOrb();
+            //SelectNextOrb();
         }
 
         private void Recall()
