@@ -12,6 +12,7 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Sprint")]
     [Tooltip("Sprint speed of the character in m/s")]
     [SerializeField] private float sprintSpeed = 5.335f;
+    [SerializeField] private bool alwaysSprint = false;
     [Header("Dash")]
     [Tooltip("Dash speed of the character in m/s")]
     [SerializeField] private float dashSpeed = 30.0f;
@@ -97,8 +98,11 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (_input.MovementInput == Vector2.zero)
             return 0.0f;
-        
-        if(_input.SprintButtonHeld)
+
+        if (alwaysSprint)
+            return sprintSpeed;
+
+        if (_input.SprintButtonHeld)
             return sprintSpeed;
 
         if(PlayerInputHandler.Instance.AttackButtonHeld)

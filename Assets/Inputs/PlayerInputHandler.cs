@@ -11,35 +11,40 @@ public class PlayerInputHandler : MonoBehaviour
         Game.OnResume += OnGameResume;
     }
     #endregion
-
     public bool DashButtonPressed { get { return IsDashButtonPressedThisFrame(); } }
     public bool DashButtonHeld { get { return _dashButtonHeld; } }
     public bool AttackButtonPressed { get { return IsAttackButtonPressedThisFrame(); } }
     public bool AttackButtonReleased { get { return IsAttackButtonReleasedThisFrame(); } }
-    public bool AttackButtonHeld { get { return _attackButtonHeld; } }
-    public bool BlockButtonPressed { get { return IsBlockButtonPressedThisFrame(); } }
+    public bool AttackButtonHeld { get { return _attackButtonHeld; } } 
+    public bool RecallButtonPressed { get { return IsBlockButtonPressedThisFrame(); } } 
+    public bool NextChooseButtonPressed { get { return IsNextChooseButtonPressedThisFrame(); } }
+    public bool PreviousChooseButtonPressed { get { return IsPreviousChooseButtonPressedThisFrame(); } }
     public bool SprintButtonHeld { get { return _sprintButtonHeld; } }
     public Vector2 MovementInput { get { return _moveInput; } }
     public Vector2 MouseInput { get { return _mouseInput; } }
 
-    //Movement
+    //Movement - WASD Keyboard Buttons, Mouse Cursor
     private Vector2 _moveInput;
     private Vector2 _mouseInput;
 
-    //Jump
+    //Dash - Space Keyboard Button 
     private bool _dashButtonHeld;
     private bool _dashButtonPressedThisFrame;
 
-    //Sprint
+    //Sprint - Left Shift
     private bool _sprintButtonHeld;
 
-    //Attack
+    //Attack - Left Mouse Button
     private bool _attackButtonPressedThisFrame;
     private bool _attackButtonReleasedThisFrame;
     private bool _attackButtonHeld;
 
-    //Block
-    private bool _blockButtonPressedThisFrame;
+    //Recall - R Keyboard Button
+    private bool _recallButtonPressedThisFrame;
+
+    //Choose - Q and E Keyboard Buttons
+    private bool _nextChooseButtonPressedThisFrame;
+    private bool _previousChooseButtonPressedThisFrame;
 
     [Header("Movement Settings")]
     public bool analogMovement;
@@ -71,19 +76,36 @@ public class PlayerInputHandler : MonoBehaviour
     }
     private bool IsBlockButtonPressedThisFrame()
     {
-        if (_blockButtonPressedThisFrame)
+        if (_recallButtonPressedThisFrame)
         {
-            _blockButtonPressedThisFrame = false;
+            _recallButtonPressedThisFrame = false;
             return true;
         }
         return false;
     }
-
     private bool IsDashButtonPressedThisFrame()
     {
         if (_dashButtonPressedThisFrame)
         {
             _dashButtonPressedThisFrame = false;
+            return true;
+        }
+        return false;
+    }
+    private bool IsNextChooseButtonPressedThisFrame()
+    {
+        if (_nextChooseButtonPressedThisFrame)
+        {
+            _nextChooseButtonPressedThisFrame = false;
+            return true;
+        }
+        return false;
+    }
+    private bool IsPreviousChooseButtonPressedThisFrame()
+    {
+        if (_previousChooseButtonPressedThisFrame)
+        {
+            _previousChooseButtonPressedThisFrame = false;
             return true;
         }
         return false;
@@ -147,8 +169,18 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnBlock(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
-            _blockButtonPressedThisFrame = true;
+            _recallButtonPressedThisFrame = true;
 
+    }
+    public void OnNextChoose(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+            _nextChooseButtonPressedThisFrame = true;
+    }
+    public void OnPreviousChoose(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+            _previousChooseButtonPressedThisFrame = true;
     }
     #endregion
 }

@@ -2,6 +2,7 @@ using com.game;
 using com.game.player;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 public class OrbController : MonoBehaviour
 {
     [Header("Orb Count")]
@@ -10,6 +11,7 @@ public class OrbController : MonoBehaviour
     [Space]
     [Header("Orb Throw")]
     [SerializeField] private Transform firePointTransform;
+    [SerializeField] private LayerMask cursorDetectMask;
     [Space]
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
@@ -17,18 +19,22 @@ public class OrbController : MonoBehaviour
     [SerializeField] private float ellipseYRadius = 0.75f;
     [Space]
     [Header("Ellipse Movement")]
-    [SerializeField] private float ellipseMovementSpeed = 5f;
+    [SerializeField] private float ellipseMovementSpeed = 1.5f;
     [SerializeField] private float ellipseRotationSpeed = 5f;
     [Space]
     [Header("Components")]
     [SerializeField] private PlayerInputHandler input;
     [SerializeField] private ObjectPool objectPool;
+    [Header("Orb Selection")]
+    [SerializeField] private Material highlightMaterial;
 
     private List<SimpleOrb> orbsOnEllipse = new();
 
     //Orb Throw
     private SimpleOrb orbToThrow;
     private List<SimpleOrb> orbsThrowed = new();
+
+    private Material startMaterial;
 
     //Flags
     private bool isAiming = false;
@@ -54,18 +60,34 @@ public class OrbController : MonoBehaviour
         else if(input.AttackButtonReleased)
             Throw();
 
-        if (input.BlockButtonPressed)
+        if (input.RecallButtonPressed)
             CallOrbs();
 
+        if(PlayerInputHandler.Instance.NextChooseButtonPressed)
+        {
+            Debug.Log("E BUTTON PRESSED");
+            ChooseNextOrb();
+        }
+            
+
+        if(PlayerInputHandler.Instance.PreviousChooseButtonPressed)
+            ChoosePreviousOrb();
+
         if (orbToThrow != null)
+        {
+            orbToThrow.IncreaseSpeedForSeconds(15f,0.1f);
             orbToThrow.SetNewDestination(firePointTransform.position);
+        }
 
         UpdateEllipsePos();
         UpdateOrbEllipsePositions();
     }
     private void CallOrbs()
     {
-        for(int i = 0; i < orbsThrowed.Count; i++)
+        if(orbsThrowed.Count == 0)
+            return;
+
+        for (int i = 0; i < orbsThrowed.Count; i++)
             CallOrb(orbsThrowed[i]);
 
         orbsThrowed.Clear();
@@ -76,6 +98,29 @@ public class OrbController : MonoBehaviour
         Player.Instance.Hub.OrbHandler.AddOrb();
         AddOrbToList(orb);
     }
+    private void ChooseNextOrb()
+    {
+        if (orbsOnEllipse.Count <= 1)
+            return;
+
+        // Son elemaný alýyoruz
+        SimpleOrb lastOrb = orbsOnEllipse[orbsOnEllipse.Count - 1];
+
+        // Listenin her elemanýný bir saða kaydýrýyoruz
+        for (int i = orbsOnEllipse.Count - 1; i > 0; i--)
+            orbsOnEllipse[i] = orbsOnEllipse[i - 1];
+
+        // Son elemaný listenin baþýna ekliyoruz
+        orbsOnEllipse[0] = lastOrb;
+
+        // Debug log ile durumu kontrol edebiliriz
+        Debug.Log("Orb list rotated.");
+    }
+    private void ChoosePreviousOrb()
+    {
+        if (orbsOnEllipse.Count == 0)
+            return;
+    }
     private void CreateOrbsAtStart()
     {
         if (orbCountAtStart <= 0)
@@ -83,6 +128,7 @@ public class OrbController : MonoBehaviour
 
         for (int i = 0; i < orbCountAtStart; i++)
             AddOrb();
+
     }
 
     private void Aim()
@@ -91,7 +137,7 @@ public class OrbController : MonoBehaviour
             return;
 
         isAiming = true;
-        orbToThrow = orbsOnEllipse[orbsOnEllipse.Count - 1];
+        orbToThrow = orbsOnEllipse[0];
         RemoveOrbFromList(orbToThrow);
     }
     private void Throw()
@@ -100,8 +146,14 @@ public class OrbController : MonoBehaviour
             return;
 
         isAiming = false;
-        orbToThrow.Throw(firePointTransform.forward * 20f);
+
+        Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;
+
+        orbToThrow.Throw(throwDirection.normalized * 20f);
         orbsThrowed.Add(orbToThrow);
+
+        orbToThrow.ResetMaterial();
+        orbsOnEllipse[0].SetMaterial(highlightMaterial);
         orbToThrow = null;
         Player.Instance.Hub.OrbHandler.RemoveOrb();
     }
@@ -121,7 +173,6 @@ public class OrbController : MonoBehaviour
 
         orbsOnEllipse.Add(newOrb);
         Player.Instance.Hub.OrbHandler.AddOrb();
-
         UpdateOrbEllipsePositions();
     }
     public void AddOrbToList(SimpleOrb orb)
@@ -152,6 +203,15 @@ public class OrbController : MonoBehaviour
             
             orbsOnEllipse[i].SetNewDestination(targetPosition);
         }
+    }
+    private Vector3 GetMouseWorldPosition()
+    {
+        var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, cursorDetectMask))
+            return hitInfo.point;
+
+        return Vector3.zero;
     }
     private float CalculateAngleBetweenOrbs()
     {

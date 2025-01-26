@@ -1,8 +1,6 @@
-using com.game.player.statsystemextensions;
-using com.game.player;
 using UnityEngine;
-using Zenject;
 using com.game.testing;
+using System.Linq;
 
 namespace com.game
 {
@@ -32,14 +30,15 @@ namespace com.game
         }
         public void Die()
         {
-            TestEventChannel.ReceiveEnemyKill();
-
             SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
+
             foreach (SimpleOrb orb in orbsOnEnemy)
             {
+                orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
                 orb.ResetParent();
-                orb.transform.position = new Vector3(orb.transform.position.x, 0,orb.transform.position.z);
             }
+
+            TestEventChannel.ReceiveEnemyKill();
             Destroy(gameObject);
         }
     }
