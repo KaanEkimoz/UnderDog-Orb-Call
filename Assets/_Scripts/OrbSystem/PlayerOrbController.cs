@@ -1,4 +1,4 @@
-using com.game;
+ï»¿using com.game;
 using com.game.player;
 using System.Collections.Generic;
 using UnityEngine;
@@ -64,13 +64,9 @@ public class OrbController : MonoBehaviour
             CallOrbs();
 
         if(PlayerInputHandler.Instance.NextChooseButtonPressed)
-        {
-            Debug.Log("E BUTTON PRESSED");
             ChooseNextOrb();
-        }
-            
 
-        if(PlayerInputHandler.Instance.PreviousChooseButtonPressed)
+        if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
             ChoosePreviousOrb();
 
         if (orbToThrow != null)
@@ -103,24 +99,42 @@ public class OrbController : MonoBehaviour
         if (orbsOnEllipse.Count <= 1)
             return;
 
-        // Son elemaný alýyoruz
         SimpleOrb lastOrb = orbsOnEllipse[orbsOnEllipse.Count - 1];
 
-        // Listenin her elemanýný bir saða kaydýrýyoruz
+        // Shifts all orbs to the right
         for (int i = orbsOnEllipse.Count - 1; i > 0; i--)
             orbsOnEllipse[i] = orbsOnEllipse[i - 1];
 
-        // Son elemaný listenin baþýna ekliyoruz
         orbsOnEllipse[0] = lastOrb;
 
-        // Debug log ile durumu kontrol edebiliriz
-        Debug.Log("Orb list rotated.");
+        CheckMaterials();
     }
     private void ChoosePreviousOrb()
     {
-        if (orbsOnEllipse.Count == 0)
+        if (orbsOnEllipse.Count <= 1)
             return;
+
+        SimpleOrb firstOrb = orbsOnEllipse[0];
+
+        // Shifts all orbs to the left
+        for (int i = 0; i < orbsOnEllipse.Count - 1; i++)
+            orbsOnEllipse[i] = orbsOnEllipse[i + 1];
+
+        orbsOnEllipse[orbsOnEllipse.Count - 1] = firstOrb;
+
+        CheckMaterials();
     }
+    private void CheckMaterials()
+    {
+        foreach (SimpleOrb orb in orbsOnEllipse)
+        {
+            if (orb == orbsOnEllipse[0])
+                orb.SetMaterial(highlightMaterial);
+            else
+                orb.ResetMaterial();
+        }
+    }
+    
     private void CreateOrbsAtStart()
     {
         if (orbCountAtStart <= 0)
@@ -191,16 +205,20 @@ public class OrbController : MonoBehaviour
             if (orbsOnEllipse[i] == orbToThrow)
                 continue;
 
-            float angle = i * CalculateAngleBetweenOrbs() * Mathf.Deg2Rad;
+            // Ä°lk topun her zaman en Ã¼stte olmasÄ±nÄ± saÄŸla
+            float angleOffset = 90f; // 0 derece Ã¼stte, 90 dereceyi sola kaydÄ±rÄ±r
+            float angle = angleOffset + i * CalculateAngleBetweenOrbs();
 
-            float localX = Mathf.Cos(angle) * ellipseXRadius;
-            float localY = Mathf.Sin(angle) * ellipseYRadius;
+            float angleInRadians = angle * Mathf.Deg2Rad;
+
+            float localX = Mathf.Cos(angleInRadians) * ellipseXRadius;
+            float localY = Mathf.Sin(angleInRadians) * ellipseYRadius;
 
             Vector3 localPosition = new Vector3(localX, localY, 0f);
 
             Vector3 rotatedPosition = ellipseCenterTransform.rotation * localPosition;
             Vector3 targetPosition = ellipseCenterTransform.position + rotatedPosition;
-            
+
             orbsOnEllipse[i].SetNewDestination(targetPosition);
         }
     }
