@@ -51,19 +51,18 @@ namespace com.game.orbsystem.ui
 
             UpdateArrangement();
         }
-
         private void Update()
         {
             if (Game.Paused)
                 return;
 
-            if (Keyboard.current.qKey.wasPressedThisFrame)
+            if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
                 SelectPreviousOrb();
-            else if (Keyboard.current.eKey.wasPressedThisFrame)
+            else if (PlayerInputHandler.Instance.NextChooseButtonPressed)
                 SelectNextOrb();
-            else if (Mouse.current.leftButton.wasPressedThisFrame)
+            else if (PlayerInputHandler.Instance.AttackButtonReleased)
                 Throw();
-            else if (Mouse.current.rightButton.wasPressedThisFrame)
+            else if (PlayerInputHandler.Instance.RecallButtonPressed)
                 Recall();
         }
 

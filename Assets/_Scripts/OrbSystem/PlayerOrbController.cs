@@ -75,6 +75,8 @@ public class OrbController : MonoBehaviour
             orbToThrow.SetNewDestination(firePointTransform.position);
         }
 
+        orbsOnEllipse[0].SetMaterial(highlightMaterial);
+
         UpdateEllipsePos();
         UpdateOrbEllipsePositions();
     }
@@ -86,6 +88,7 @@ public class OrbController : MonoBehaviour
         for (int i = 0; i < orbsThrowed.Count; i++)
             CallOrb(orbsThrowed[i]);
 
+        orbsOnEllipse[0].SetMaterial(highlightMaterial);
         orbsThrowed.Clear();
     }
     private void CallOrb(SimpleOrb orb)
@@ -151,24 +154,29 @@ public class OrbController : MonoBehaviour
             return;
 
         isAiming = true;
+
         orbToThrow = orbsOnEllipse[0];
+        
         RemoveOrbFromList(orbToThrow);
     }
     private void Throw()
     {
-        if (orbToThrow == null)
+        if (orbToThrow == null || !isAiming)
             return;
 
         isAiming = false;
 
         Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;
-
         orbToThrow.Throw(throwDirection.normalized * 20f);
-        orbsThrowed.Add(orbToThrow);
 
         orbToThrow.ResetMaterial();
-        orbsOnEllipse[0].SetMaterial(highlightMaterial);
+
+        if(orbsOnEllipse.Count > 0)
+            orbsOnEllipse[0].SetMaterial(highlightMaterial);
+
+        orbsThrowed.Add(orbToThrow);
         orbToThrow = null;
+
         Player.Instance.Hub.OrbHandler.RemoveOrb();
     }
     
@@ -200,6 +208,9 @@ public class OrbController : MonoBehaviour
     }
     private void UpdateOrbEllipsePositions()
     {
+        if (orbsOnEllipse.Count == 0)
+            return;
+
         for (int i = 0; i < orbsOnEllipse.Count; i++)
         {
             if (orbsOnEllipse[i] == orbToThrow)
