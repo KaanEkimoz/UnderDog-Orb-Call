@@ -1,5 +1,6 @@
 ﻿using com.game;
 using com.game.player;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,6 +28,17 @@ public class OrbController : MonoBehaviour
     [SerializeField] private ObjectPool objectPool;
     [Header("Orb Selection")]
     [SerializeField] private Material highlightMaterial;
+
+    //Events
+    public static event Action OnOrbThrowed;
+    public static event Action OnOrbCalled;
+    public static event Action<int> OnOrbCountChanged;
+    public static event Action OnAllOrbsCalled;
+    public static event Action OnNextOrbSelected;
+    public static event Action OnPreviousOrbSelected;
+    public static event Action OnSelectedOrbChanged;
+    
+    public static event Action OnOrbAdded;
 
     private List<SimpleOrb> orbsOnEllipse = new();
 
@@ -78,8 +90,6 @@ public class OrbController : MonoBehaviour
             orbToThrow.SetNewDestination(firePointTransform.position);
         }
 
-       
-
         UpdateEllipsePos();
         UpdateOrbEllipsePositions();
     }
@@ -99,6 +109,8 @@ public class OrbController : MonoBehaviour
         orb.Return();
         Player.Instance.Hub.OrbHandler.AddOrb();
         AddOrbToList(orb);
+
+        OnOrbCalled?.Invoke();
     }
     private void ChooseNextOrb()
     {
@@ -114,6 +126,7 @@ public class OrbController : MonoBehaviour
         orbsOnEllipse[0] = lastOrb;
 
         CheckMaterials();
+        OnNextOrbSelected?.Invoke();
     }
     private void ChoosePreviousOrb()
     {
@@ -129,6 +142,7 @@ public class OrbController : MonoBehaviour
         orbsOnEllipse[orbsOnEllipse.Count - 1] = firstOrb;
 
         CheckMaterials();
+        OnPreviousOrbSelected?.Invoke();
     }
     private void CheckMaterials()
     {
@@ -149,6 +163,7 @@ public class OrbController : MonoBehaviour
         for (int i = 0; i < orbCountAtStart; i++)
             AddOrb();
 
+        OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
 
     private void Aim()
@@ -181,6 +196,7 @@ public class OrbController : MonoBehaviour
         orbToThrow = null;
 
         Player.Instance.Hub.OrbHandler.RemoveOrb();
+        OnOrbThrowed?.Invoke();
     }
     
     private void UpdateEllipsePos()
@@ -199,6 +215,7 @@ public class OrbController : MonoBehaviour
         orbsOnEllipse.Add(newOrb);
         Player.Instance.Hub.OrbHandler.AddOrb();
         UpdateOrbEllipsePositions();
+        OnOrbAdded?.Invoke();
     }
     public void AddOrbToList(SimpleOrb orb)
     {
