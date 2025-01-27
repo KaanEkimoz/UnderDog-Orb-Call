@@ -1,22 +1,21 @@
 using com.game;
 using com.game.orbsystem.statsystemextensions;
+using System.Collections;
 using UnityEngine;
 public class SimpleOrb : MonoBehaviour
 {
     [Header("Orb Movement")]
     [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float speedMultiplier = 1f;
     [Space]
-    [Header("Orb Sway")]
-    [SerializeField] private float swayRange = 0.1f;
-    [SerializeField] private float swayOffset;
-    [SerializeField] private float swaySpeed = 2f;
+    
     [Space]
     [Header("Orb Stats")]
     [SerializeField] private OrbStats orbStats;
 
+
     //Flags
     [SerializeField] private bool isOnEllipse = false;
-    [SerializeField] private bool isSwaying = false;
     [SerializeField] private bool isSticked = false;
     [SerializeField] private bool isThrowing = false;
     [SerializeField] private bool isReturning = false;
@@ -24,6 +23,7 @@ public class SimpleOrb : MonoBehaviour
     //Movement
     private Transform startParent;
     private Vector3 startScale;
+    [SerializeField] private Material startMaterial;
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
     private const float distanceThreshold = 0.1f;
@@ -31,35 +31,36 @@ public class SimpleOrb : MonoBehaviour
     //Components
     private Rigidbody _rigidBody;
     private SphereCollider _sphereCollider;
+    private MeshRenderer _meshRenderer;
 
     private void Start()
     {
         isOnEllipse = true;
+        isReturning = false;
 
         if (orbStats == null)
             orbStats = GetComponent<OrbStats>();
 
         _rigidBody = GetComponent<Rigidbody>();
         _sphereCollider = GetComponent<SphereCollider>();
-        swayOffset = Random.Range(0f, Mathf.PI * 2);
+        _meshRenderer = GetComponent<MeshRenderer>();
+
         startParent = transform.parent;
         startScale = transform.localScale;
     }
     private void Update()
     {
-        HandleMovement();
+        HandleTransformMovement();
 
-        if(isOnEllipse)
-            Sway();
-
-        if (isReturning && hasReachedTargetPos)
+        if (isOnEllipse && isReturning && hasReachedTargetPos)
         {
+            //TO DO: BUGFIX 
             isReturning = false;
-            isOnEllipse = true;
             _sphereCollider.isTrigger = false;
         }
+
     }
-    private void HandleMovement()
+    private void HandleTransformMovement()
     {
         if (!isSticked && !isThrowing)
             MoveTargetPos();
@@ -74,6 +75,7 @@ public class SimpleOrb : MonoBehaviour
 
         isSticked = false;
         isThrowing = false;
+        isOnEllipse = true;
 
         _sphereCollider.isTrigger = true;
         _rigidBody.isKinematic = true;
@@ -87,6 +89,15 @@ public class SimpleOrb : MonoBehaviour
     {
         transform.SetParent(startParent);
         transform.localScale = startScale;
+        isSticked = false;
+    }
+    public void ResetMaterial()
+    {
+        _meshRenderer.material = startMaterial;
+    }
+    public void SetMaterial(Material newMaterial)
+    {
+        _meshRenderer.material = newMaterial;
     }
     public void Throw(Vector3 force)
     {
@@ -101,12 +112,19 @@ public class SimpleOrb : MonoBehaviour
     public void SetNewDestination(Vector3 newPos)
     {
         currentTargetPos = newPos;
+        isOnEllipse = false;
+    }
+    public void SetNewDestination(Vector3 newPos, float multiplier)
+    {
+        currentTargetPos = newPos;
+        isOnEllipse = false;
+        speedMultiplier = multiplier;
     }
     private void MoveTargetPos()
     {
         // Move towards target position
         Vector3 posToMove = currentTargetPos;
-        transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed);
+        transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed * speedMultiplier);
 
         // Check if the orb has reached the target
         if (Vector3.Distance(transform.position, posToMove) < distanceThreshold)
@@ -116,9 +134,6 @@ public class SimpleOrb : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
-
         if (!isReturning)
         {
             isSticked = true;
@@ -127,12 +142,34 @@ public class SimpleOrb : MonoBehaviour
             transform.position = collision.contacts[0].point;
             transform.SetParent(collision.transform);
         }
+
+        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
+        
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
             damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
     }
+    public void IncreaseSpeedForSeconds(float speedIncrease, float duration)
+    {
+        StartCoroutine(IncreaseSpeed(speedIncrease, duration));
+    }
+    private IEnumerator IncreaseSpeed(float speedIncrease, float duration)
+    {
+        movementSpeed += speedIncrease;
+        yield return new WaitForSeconds(duration);
+        movementSpeed -= speedIncrease;
+    }
+
+    /*
+    
+    [Header("Orb Sway")]
+    [SerializeField] private float swayRange = 0.1f;
+    [SerializeField] private float swayOffset;
+    [SerializeField] private float swaySpeed = 2f; 
+     
     private void Sway()
     {
         Vector3 basePosition = currentTargetPos;
@@ -141,4 +178,5 @@ public class SimpleOrb : MonoBehaviour
 
         transform.localPosition = Vector3.Lerp(transform.localPosition, swayPosition, Time.deltaTime * movementSpeed);
     }
+    */
 }
