@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using com.game.testing;
-
 public class ExploderEnemy : Enemy
 {
     [Header("Explosion Settings")]
@@ -34,8 +33,7 @@ public class ExploderEnemy : Enemy
                 CancelPreparation(); //hazirligi iptal et
             }
         }
-    } 
-
+    }
     private IEnumerator PrepareToExplode() 
     {
         isPreparingToExplode = true;
@@ -72,7 +70,17 @@ public class ExploderEnemy : Enemy
                     damageable.TakeDamage(newEnemyStats.GetStat(EnemyStatType.Damage));
             }
         }
-        TestEventChannel.ReceiveEnemyKill();
+
+        SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
+
+        foreach (SimpleOrb orb in orbsOnEnemy)
+        {
+            orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
+            orb.ResetParent();
+        }
+
+        //TestEventChannel.ReceiveEnemyKill();
+
         Destroy(gameObject);
     }
 

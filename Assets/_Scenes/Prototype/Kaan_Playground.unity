@@ -2728,7 +2728,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: enemyPrefabs.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: 'spawnPoints.Array.data[0]'
@@ -2738,6 +2738,14 @@ PrefabInstance:
       propertyPath: 'enemyPrefabs.Array.data[0]'
       value: 
       objectReference: {fileID: 4972913073822748566, guid: ad2f8150d4e5f1e4ea150ff4f8ed0766, type: 3}
+    - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: 'enemyPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 3708648756833819485, guid: a513d7f275cc2e946960d5b44752c2d9, type: 3}
+    - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: 'enemyPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1415160704175932166, guid: b87d779f6f84f1f4c8dddbc54d3a4219, type: 3}
     - target: {fileID: 2592178667866607631, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2784,7 +2792,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5331071310023750704, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

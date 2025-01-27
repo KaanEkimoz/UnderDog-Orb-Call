@@ -55,7 +55,10 @@ public class OrbController : MonoBehaviour
     {
         if (Game.Paused) return;
 
-        if(input.AttackButtonPressed)
+        if(orbsOnEllipse.Count > 0)
+            orbsOnEllipse[0].SetMaterial(highlightMaterial);
+
+        if (input.AttackButtonPressed)
             Aim();
         else if(input.AttackButtonReleased)
             Throw();
@@ -75,7 +78,7 @@ public class OrbController : MonoBehaviour
             orbToThrow.SetNewDestination(firePointTransform.position);
         }
 
-        orbsOnEllipse[0].SetMaterial(highlightMaterial);
+       
 
         UpdateEllipsePos();
         UpdateOrbEllipsePositions();
