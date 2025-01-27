@@ -56,13 +56,13 @@ namespace com.game.orbsystem.ui
             if (Game.Paused)
                 return;
 
-            if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
+            if (Keyboard.current.qKey.wasPressedThisFrame)
                 SelectPreviousOrb();
-            else if (PlayerInputHandler.Instance.NextChooseButtonPressed)
+            else if (Keyboard.current.eKey.wasPressedThisFrame)
                 SelectNextOrb();
-            else if (PlayerInputHandler.Instance.AttackButtonReleased)
+            else if (Mouse.current.leftButton.wasPressedThisFrame)
                 Throw();
-            else if (PlayerInputHandler.Instance.RecallButtonPressed)
+            else if (Keyboard.current.rKey.wasPressedThisFrame)
                 Recall();
         }
 
@@ -76,12 +76,10 @@ namespace com.game.orbsystem.ui
             m_orbDisplays[m_selectedOrbIndex].SetThrown(true);
             //SelectNextOrb();
         }
-
         private void Recall()
         {
             m_orbDisplays.ForEach(orbDisplay => orbDisplay.SetThrown(false));
         }
-
         public void SelectNextOrb()
         {
             m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
