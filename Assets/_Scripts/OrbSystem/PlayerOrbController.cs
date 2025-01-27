@@ -185,6 +185,7 @@ public class OrbController : MonoBehaviour
         isAiming = false;
 
         Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;
+        throwDirection.y = 0;
         orbToThrow.Throw(throwDirection.normalized * 20f);
 
         orbToThrow.ResetMaterial();
