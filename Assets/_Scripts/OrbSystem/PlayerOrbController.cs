@@ -30,15 +30,15 @@ public class OrbController : MonoBehaviour
     [SerializeField] private Material highlightMaterial;
 
     //Events
-    public static event Action OnOrbThrowed;
-    public static event Action OnOrbCalled;
-    public static event Action<int> OnOrbCountChanged;
-    public static event Action OnAllOrbsCalled;
-    public static event Action OnNextOrbSelected;
-    public static event Action OnPreviousOrbSelected;
-    public static event Action OnSelectedOrbChanged;
+    public event Action OnOrbThrowed;
+    public event Action OnOrbCalled;
+    public event Action<int> OnOrbCountChanged;
+    public event Action OnAllOrbsCalled;
+    public event Action OnNextOrbSelected;
+    public event Action OnPreviousOrbSelected;
+    public event Action OnSelectedOrbChanged;
     
-    public static event Action OnOrbAdded;
+    public event Action OnOrbAdded;
 
     private List<SimpleOrb> orbsOnEllipse = new();
 
