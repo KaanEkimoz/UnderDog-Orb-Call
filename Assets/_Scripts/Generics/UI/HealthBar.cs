@@ -23,8 +23,11 @@ namespace com.game
         [SerializeField, Min(0f), ShowIf(nameof(m_useEffect))]
         private float m_effectDuration;
 
+        [SerializeField, Min(0f), ShowIf(nameof(m_useEffect))]
+        private float m_effectDelay;
+
         IDamageable m_target;
-        Sequence m_effectSequence;
+        Tween m_effectTween;
 
         private void Start()
         {
@@ -57,13 +60,19 @@ namespace com.game
             if (!m_useEffect)
                 return;
 
-            var effectTween = m_effectLayer.DOFillAmount(newFillAmount, m_effectDuration)
-                .SetEase(m_effectEase);
+            if (m_effectTween != null)
+                m_effectTween.Kill();
 
-            if (m_effectSequence == null)
-                m_effectSequence = DOTween.Sequence();
+            m_effectTween = m_effectLayer.DOFillAmount(newFillAmount, m_effectDuration)
+                .SetEase(m_effectEase)
+                .SetDelay(m_effectDelay, false)
+                .OnKill(OnTweenComplete)
+                .OnComplete(OnTweenComplete);
+        }
 
-            m_effectSequence.Append(effectTween);
+        private void OnTweenComplete()
+        {
+            m_effectTween = null;
         }
     }
 }

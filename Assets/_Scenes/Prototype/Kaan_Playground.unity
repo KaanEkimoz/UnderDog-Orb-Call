@@ -1490,8 +1490,9 @@ MonoBehaviour:
   m_foreground: {fileID: 280001357}
   m_useEffect: 1
   m_effectLayer: {fileID: 1312231080}
-  m_effectEase: 14
-  m_effectDuration: 0.3
+  m_effectEase: 1
+  m_effectDuration: 0.2
+  m_effectDelay: 0.3
 --- !u!1 &542508511
 GameObject:
   m_ObjectHideFlags: 0
