@@ -1,24 +1,36 @@
-using com.game.player;
 using com.game.player.statsystemextensions;
+using System;
 using UnityEngine;
-using Zenject;
-namespace com.game
+
+namespace com.game.player
 {
     public class PlayerCombatant : MonoBehaviour, IDamageable
     {
-        private float _health;
-        private readonly int _maxHealth;
-        private PlayerStats _playerStats;
+        float _health;
+        float _maxHealth;
+        PlayerStats _playerStats;
+
         public bool IsAlive => _health > 0;
+        public float Health => _health;
+        public float MaxHealth => _maxHealth;
+
+        public event Action<float> OnTakeDamage = delegate { };
+        public event Action OnDie = delegate { };
+
         private void Start()
         {
             _playerStats = GetComponent<PlayerStats>();
-            _health = _playerStats.GetStat(PlayerStatType.Health);
+            _maxHealth = _playerStats.GetStat(PlayerStatType.Health);
+            _health = _maxHealth;
 
             Debug.Log("Player Health: " + _health);
         }
+
         public void TakeDamage(float damage)
         {
+            if (damage == 0f)
+                return;
+
             _health -= damage;
 
             if (_health <= 0)
@@ -26,10 +38,15 @@ namespace com.game
                 _health = 0;
                 Die();
             }
+
+            OnTakeDamage?.Invoke(damage);
         }
+
         public void Die()
         {
             Destroy(gameObject);
+
+            OnDie?.Invoke();
         }
     }
 }

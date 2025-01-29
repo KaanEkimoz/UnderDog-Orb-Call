@@ -17,11 +17,11 @@ TagManager:
   - Player
   - Enemy
   - Projectiles
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerAttackIndicatorLine
+  - PlayerAttackIndicatorCircle
+  - Wall
+  - Ground
+  - Development
   - 
   - 
   - 

@@ -1,25 +1,37 @@
 using UnityEngine;
 using com.game.testing;
-using System.Linq;
+using System;
 
-namespace com.game
+namespace com.game.enemysystem
 {
     public class EnemyCombatant : MonoBehaviour, IDamageable
     {
-        private float _health;
-        private readonly int _maxHealth;
+        float _health;
+        float _maxHealth;
+
         public bool IsAlive => _health > 0;
+        public float Health => _health;
+        public float MaxHealth => _maxHealth;
+
+        public event Action<float> OnTakeDamage = delegate { };
+        public event Action OnDie = delegate { };
 
         private void Start()
         {
-            _health = 20;
+            _maxHealth = 20f;
+            _health = _maxHealth;
         }
+
         private void Update()
         {
-            Debug.Log("Enemy Health: " + _health);
+            //Debug.Log("Enemy Health: " + _health);
         }
+
         public void TakeDamage(float damage)
         {
+            if (damage == 0f)
+                return;
+
             _health -= damage;
 
             if (_health <= 0)
@@ -27,7 +39,10 @@ namespace com.game
                 _health = 0;
                 Die();
             }
+
+            OnTakeDamage?.Invoke(damage);
         }
+
         public void Die()
         {
             SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
@@ -40,6 +55,8 @@ namespace com.game
 
             TestEventChannel.ReceiveEnemyKill();
             Destroy(gameObject);
+
+            OnDie?.Invoke();
         }
     }
 }

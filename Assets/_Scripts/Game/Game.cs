@@ -16,6 +16,7 @@ namespace com.game
             if (Paused) return;
 
             Time.timeScale = 0f;
+            Cursor.visible = true;
             Paused = true;
 
             OnPause?.Invoke();
@@ -26,6 +27,7 @@ namespace com.game
             if (!Paused) return;
 
             Time.timeScale = overrideTimeScale;
+            Cursor.visible = false;
             Paused = false;
 
             OnResume?.Invoke();

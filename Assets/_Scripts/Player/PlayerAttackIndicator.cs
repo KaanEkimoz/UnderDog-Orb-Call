@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace com.game
+namespace com.game.player
 {
     public class PlayerAttackIndicator : MonoBehaviour
     {

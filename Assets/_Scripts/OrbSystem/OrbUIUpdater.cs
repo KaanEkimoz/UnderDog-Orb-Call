@@ -1,19 +1,24 @@
 using com.game.player;
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace com.game.orbsystem.ui
 {
     public class OrbUIUpdater : MonoBehaviour
     {
         [SerializeField] private float m_diameter;
+        [SerializeField] private Ease m_rotationEase;
         [SerializeField] [Range(0.1f, 1f)] private float m_scalingFactor;
         [SerializeField] [Min(0f)] private float m_rotatingDuration;
+        [SerializeField] private Transform m_orbSelectionBorder;
+        [SerializeField] private Transform m_pivot;
+        [SerializeField] private OrbController m_orbController;
         [SerializeField] private OrbDisplayGP m_prefab;
 
         List<OrbDisplayGP> m_orbDisplays;
+        Queue<OrbDisplayGP> m_orbDisplaysWaitingForAddition;
         int m_orbCount;
         float m_stepAngle;
         float m_realScalingFactor;
@@ -22,12 +27,72 @@ namespace com.game.orbsystem.ui
 
         private void Start()
         {
+            m_orbDisplaysWaitingForAddition = new();
+
+            SubscribeToEvents();
+            FetchVariables();
+            CreateOrbDisplays();
+
+            m_selectedOrbIndex = -1;
+            SelectNextOrb();
+
+            UpdateArrangement();
+        }
+
+        void SubscribeToEvents()
+        {
+            m_orbController.OnOrbThrowed += OnThrow;
+            m_orbController.OnOrbCalled += OnRecall;
+            m_orbController.OnAllOrbsCalled += OnAllRecall;
+            m_orbController.OnOrbAdded += OnAdd;
+            m_orbController.OnNextOrbSelected += SelectNextOrb;
+            m_orbController.OnPreviousOrbSelected += SelectPreviousOrb;
+        }
+
+        private void OnAdd()
+        {
+            if (m_orbDisplaysWaitingForAddition.TryDequeue(out OrbDisplayGP target))
+            {
+                target.SetState(OrbDisplayGP.DisplayState.Ready);
+            }
+        }
+
+        private void OnAllRecall()
+        {
+            for (int i = 0; i < m_orbCount; ++i) 
+            {
+                OrbDisplayGP target = m_orbDisplays[i];
+                target.SetState(OrbDisplayGP.DisplayState.Recalling);
+                m_orbDisplaysWaitingForAddition.Enqueue(target);
+            }
+        }
+
+        private void OnRecall()
+        {
+            OrbDisplayGP target = m_orbDisplays[m_selectedOrbIndex];
+
+            if (m_orbDisplaysWaitingForAddition.Contains(target))
+                return;
+
+            m_orbDisplaysWaitingForAddition.Enqueue(target);
+        }
+
+        private void OnThrow()
+        {
+            OrbDisplayGP target = m_orbDisplays[m_selectedOrbIndex];
+
+            target.SetState(OrbDisplayGP.DisplayState.Thrown);
+        }
+
+        void FetchVariables()
+        {
             m_orbCount = Player.Instance.CharacterProfile.OrbCount;
             m_stepAngle = 360f / m_orbCount;
             m_realScalingFactor = m_scalingFactor / m_orbCount;
+        }
 
-            m_selectedOrbIndex = 0;
-
+        void CreateOrbDisplays()
+        {
             m_orbDisplays = new();
             for (int i = 0; i < m_orbCount; i++)
             {
@@ -38,72 +103,44 @@ namespace com.game.orbsystem.ui
                 Vector2 position = direction * m_diameter;
 
                 OrbDisplayGP orbDisplay = Instantiate(m_prefab);
-                orbDisplay.transform.SetParent(transform, false);
+                orbDisplay.transform.SetParent(m_pivot, false);
                 orbDisplay.transform.localPosition = position;
 
-                orbDisplay.SetSelected(false);
-                orbDisplay.SetThrown(false);
+                //orbDisplay.SetSelected(false);
+                orbDisplay.SetState(OrbDisplayGP.DisplayState.Ready);
 
                 m_orbDisplays.Add(orbDisplay);
+
+                if (i == 0) m_orbSelectionBorder.localPosition = position;
             }
 
-            m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
-
-            UpdateArrangement();
-        }
-        private void Update()
-        {
-            if (Game.Paused)
-                return;
-
-            if (Keyboard.current.qKey.wasPressedThisFrame)
-                SelectPreviousOrb();
-            else if (Keyboard.current.eKey.wasPressedThisFrame)
-                SelectNextOrb();
-            else if (Mouse.current.leftButton.wasPressedThisFrame)
-                Throw();
-            else if (Keyboard.current.rKey.wasPressedThisFrame)
-                Recall();
+            m_orbSelectionBorder.SetAsFirstSibling();
         }
 
-        private void Throw()
+        void SelectNextOrb()
         {
-            OrbDisplayGP orbDisplay = m_orbDisplays[m_selectedOrbIndex];
-
-            if (orbDisplay.IsThrown)
-                return;
-
-            m_orbDisplays[m_selectedOrbIndex].SetThrown(true);
-            //SelectNextOrb();
-        }
-        private void Recall()
-        {
-            m_orbDisplays.ForEach(orbDisplay => orbDisplay.SetThrown(false));
-        }
-        public void SelectNextOrb()
-        {
-            m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
+            //if (m_selectedOrbIndex != -1) m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
 
             m_selectedOrbIndex++;
 
             if (m_selectedOrbIndex >= m_orbCount) m_selectedOrbIndex -= m_orbCount;
             else if (m_selectedOrbIndex < 0) m_selectedOrbIndex += m_orbCount;
 
-            m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
+            //m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
 
             UpdateArrangement();
         }
 
-        private void SelectPreviousOrb()
+        void SelectPreviousOrb()
         {
-            m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
+            //m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
 
             m_selectedOrbIndex--;
 
             if (m_selectedOrbIndex >= m_orbCount) m_selectedOrbIndex -= m_orbCount;
             else if (m_selectedOrbIndex < 0) m_selectedOrbIndex += m_orbCount;
 
-            m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
+            //m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
 
             UpdateArrangement();
         }
@@ -119,14 +156,14 @@ namespace com.game.orbsystem.ui
 
             m_rotatingSequence = DOTween.Sequence();
 
-            var rotationTween = transform.DORotate(endingRotation, m_rotatingDuration, RotateMode.Fast);
+            var rotationTween = m_pivot.DORotate(endingRotation, m_rotatingDuration, RotateMode.Fast);
             m_rotatingSequence.Insert(0f, rotationTween);
 
             //for (int i = 0; i < m_orbCount; i++)
             //{
             //    OrbDisplayGP orbDisplay = m_orbDisplays[i];
 
-            //    int reversedIndex = m_orbCount - 1 - i;
+            //    int reversedIndex = m_orbCount - i;
 
             //    int selectionDiff = Mathf.Abs(m_selectedOrbIndex - i);
             //    int reversedSelectionDiff = Mathf.Abs(m_selectedOrbIndex - reversedIndex);
@@ -135,7 +172,7 @@ namespace com.game.orbsystem.ui
             //    m_rotatingSequence.Insert(0f, scalingTween);
             //}
 
-            m_rotatingSequence.SetEase(Ease.InOutSine);
+            m_rotatingSequence.SetEase(m_rotationEase);
             m_rotatingSequence.OnComplete(OnRotationEnds);
             m_rotatingSequence.OnKill(OnRotationEnds);
             m_orbDisplays.ForEach(display => display.SetRotating(true));
