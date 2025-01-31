@@ -1,42 +1,59 @@
 using com.game;
 using com.game.orbsystem.statsystemextensions;
+using System;
 using System.Collections;
 using UnityEngine;
+public enum OrbState
+{
+    OnEllipse,
+    Sticked,
+    Throwing,
+    Returning
+}
+[RequireComponent(typeof(Rigidbody), typeof(SphereCollider), typeof(MeshRenderer))]
 public class SimpleOrb : MonoBehaviour
 {
+    public OrbState currentState = OrbState.OnEllipse;
+
     [Header("Orb Movement")]
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float speedMultiplier = 1f;
-    [Space]
-    
+    [SerializeField] private AnimationCurve movementCurve;
+    [Header("Orb Throw")]
+    [SerializeField] private float maxDistance = 20f;
     [Space]
     [Header("Orb Stats")]
     [SerializeField] private OrbStats orbStats;
-
-
-    //Flags
-    [SerializeField] private bool isOnEllipse = false;
-    [SerializeField] private bool isSticked = false;
-    [SerializeField] private bool isThrowing = false;
-    [SerializeField] private bool isReturning = false;
+    [Space]
+    [Header("Orb Material")]
+    [SerializeField] private Material startMaterial;
 
     //Movement
     private Transform startParent;
     private Vector3 startScale;
-    [SerializeField] private Material startMaterial;
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
-    private const float distanceThreshold = 0.1f;
+    private const float ellipseReachThreshold = 0.15f;
+
+    //Throw
+    private float distanceTraveled;
+    private Vector3 throwStartPosition;
 
     //Components
     private Rigidbody _rigidBody;
     private SphereCollider _sphereCollider;
     private MeshRenderer _meshRenderer;
 
+    //Events
+    public event Action OnThrown;
+    public event Action OnCalled;
+    public event Action OnStuck;
+    public event Action OnReachedToEllipse;
+    public event Action<OrbState> OnStateChanged;
+
     private void Start()
     {
-        isOnEllipse = true;
-        isReturning = false;
+        currentState = OrbState.OnEllipse;
 
         if (orbStats == null)
             orbStats = GetComponent<OrbStats>();
@@ -52,17 +69,24 @@ public class SimpleOrb : MonoBehaviour
     {
         HandleTransformMovement();
 
-        if (isOnEllipse && isReturning && hasReachedTargetPos)
+        if (currentState == OrbState.Throwing)
         {
-            //TO DO: BUGFIX 
-            isReturning = false;
-            _sphereCollider.isTrigger = false;
+            CalculateDistanceTraveled();
+            if (distanceTraveled >= maxDistance)
+                Stick(startParent);
         }
+        if (currentState == OrbState.Returning && hasReachedTargetPos)
+        {
+            _sphereCollider.isTrigger = false;
+            currentState = OrbState.OnEllipse;
 
+            OnReachedToEllipse?.Invoke();
+            OnStateChanged?.Invoke(currentState);
+        }
     }
     private void HandleTransformMovement()
     {
-        if (!isSticked && !isThrowing)
+        if (currentState == OrbState.Returning || currentState == OrbState.OnEllipse)
             MoveTargetPos();
     }
     public void Disable()
@@ -71,25 +95,19 @@ public class SimpleOrb : MonoBehaviour
     }
     public void Return()
     {
-        isReturning = true;
-
-        isSticked = false;
-        isThrowing = false;
-        isOnEllipse = true;
+        currentState = OrbState.Returning;
 
         _sphereCollider.isTrigger = true;
         _rigidBody.isKinematic = true;
         ResetParent();
-    }
-    private void TogglePhysics()
-    {
-        _rigidBody.isKinematic = !_rigidBody.isKinematic;
+
+        OnCalled?.Invoke();
+        OnStateChanged?.Invoke(currentState);
     }
     public void ResetParent()
     {
         transform.SetParent(startParent);
         transform.localScale = startScale;
-        isSticked = false;
     }
     public void ResetMaterial()
     {
@@ -101,23 +119,31 @@ public class SimpleOrb : MonoBehaviour
     }
     public void Throw(Vector3 force)
     {
-        isThrowing = true;
-        isReturning = false;
-        isOnEllipse = false;
+        currentState = OrbState.Throwing;
 
+        // Distance Calculation
+        throwStartPosition = transform.position;
+        distanceTraveled = 0;
+
+        //Enable Collision and Physics
         _rigidBody.isKinematic = false;
         _sphereCollider.isTrigger = false;
         _rigidBody.AddForce(force,ForceMode.Impulse);
+
+        OnThrown?.Invoke();
+        OnStateChanged?.Invoke(currentState);
+    }
+    private void CalculateDistanceTraveled()
+    {
+        distanceTraveled = Vector3.Distance(throwStartPosition, transform.position);
     }
     public void SetNewDestination(Vector3 newPos)
     {
         currentTargetPos = newPos;
-        isOnEllipse = false;
     }
     public void SetNewDestination(Vector3 newPos, float multiplier)
     {
         currentTargetPos = newPos;
-        isOnEllipse = false;
         speedMultiplier = multiplier;
     }
     private void MoveTargetPos()
@@ -126,29 +152,37 @@ public class SimpleOrb : MonoBehaviour
         Vector3 posToMove = currentTargetPos;
         transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed * speedMultiplier);
 
-        // Check if the orb has reached the target
-        if (Vector3.Distance(transform.position, posToMove) < distanceThreshold)
-            hasReachedTargetPos = true;
-        else
-            hasReachedTargetPos = false;
+        hasReachedTargetPos = Vector3.Distance(transform.position, posToMove) < ellipseReachThreshold;
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (!isReturning)
-        {
-            isSticked = true;
-            isThrowing = false;
-            _rigidBody.isKinematic = true;
-            transform.position = collision.contacts[0].point;
-            transform.SetParent(collision.transform);
-        }
+        if(currentState != OrbState.Throwing)
+            return;
+
+        currentState = OrbState.Sticked;
+
+        //Disable Physics and Stick to Surface
+        transform.position = collision.contacts[0].point;
+        Stick(collision.transform);
 
         if (collision.gameObject.TryGetComponent(out IDamageable damageable))
             damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
-        
+    }
+    private void Stick(Transform transform)
+    {
+        currentState = OrbState.Sticked;
+        _rigidBody.isKinematic = true;
+        _sphereCollider.isTrigger = true;
+        transform.SetParent(transform);
+
+        OnStuck?.Invoke();
+        OnStateChanged?.Invoke(currentState);
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (currentState != OrbState.Returning)
+            return;
+
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
             damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
     }

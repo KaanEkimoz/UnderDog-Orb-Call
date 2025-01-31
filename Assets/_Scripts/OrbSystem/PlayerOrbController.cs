@@ -37,7 +37,6 @@ public class OrbController : MonoBehaviour
     public event Action OnNextOrbSelected;
     public event Action OnPreviousOrbSelected;
     public event Action OnSelectedOrbChanged;
-    
     public event Action OnOrbAdded;
 
     private List<SimpleOrb> orbsOnEllipse = new();
@@ -46,11 +45,8 @@ public class OrbController : MonoBehaviour
     private SimpleOrb orbToThrow;
     private List<SimpleOrb> orbsThrowed = new();
 
-    private Material startMaterial;
-
     //Flags
     private bool isAiming = false;
-    private bool isReturning = false;
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
@@ -103,13 +99,14 @@ public class OrbController : MonoBehaviour
 
         orbsOnEllipse[0].SetMaterial(highlightMaterial);
         orbsThrowed.Clear();
+
+        OnAllOrbsCalled?.Invoke();
     }
     private void CallOrb(SimpleOrb orb)
     {
         orb.Return();
         Player.Instance.Hub.OrbHandler.AddOrb();
         AddOrbToList(orb);
-
         OnOrbCalled?.Invoke();
     }
     private void ChooseNextOrb()
@@ -154,7 +151,6 @@ public class OrbController : MonoBehaviour
                 orb.ResetMaterial();
         }
     }
-    
     private void CreateOrbsAtStart()
     {
         if (orbCountAtStart <= 0)
@@ -165,7 +161,6 @@ public class OrbController : MonoBehaviour
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
-
     private void Aim()
     {
         if (orbToThrow != null || orbsOnEllipse.Count == 0)
