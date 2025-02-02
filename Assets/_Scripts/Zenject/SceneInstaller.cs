@@ -6,5 +6,6 @@ public class SceneInstaller : MonoInstaller
     {
         Container.Bind<PlayerStats>().FromComponentInHierarchy().AsSingle();
         Container.Bind<SoundFXManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<OrbController>().FromComponentInHierarchy().AsSingle();
     }
 }

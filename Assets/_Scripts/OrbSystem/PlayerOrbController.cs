@@ -48,7 +48,7 @@ public class OrbController : MonoBehaviour
     private float throwCooldownTimer;
 
     //Flags
-    private bool isAiming = false;
+    public bool isAiming = false;
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
@@ -181,6 +181,7 @@ public class OrbController : MonoBehaviour
             return;
 
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
+
         isAiming = false;
 
         Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;

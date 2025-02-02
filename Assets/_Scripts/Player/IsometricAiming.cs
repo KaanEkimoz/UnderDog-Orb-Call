@@ -1,12 +1,15 @@
 using com.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 public class IsometricAiming : MonoBehaviour
 {
     [Header("Cursor Detection")]
     [SerializeField] private LayerMask cursorDetectMask;
     private Camera _mainCamera;
     private Vector3 _hitPoint;
+
+    [Inject] OrbController _orbController;
 
     private void Start()
     {
@@ -20,7 +23,7 @@ public class IsometricAiming : MonoBehaviour
     {
         if (Game.Paused) return;
 
-        if (!PlayerInputHandler.Instance.AttackButtonHeld) return;
+        if (!_orbController.isAiming) return;
 
         if (TryGetMouseWorldPosition(out var targetPosition))
             AimAtTarget(targetPosition);

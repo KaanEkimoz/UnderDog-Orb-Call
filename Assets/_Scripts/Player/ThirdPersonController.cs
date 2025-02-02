@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using com.game.player;
+using com.game.player.statsystemextensions;
+using UnityEngine;
 using Zenject;
 [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler))]
 public class ThirdPersonController : MonoBehaviour
@@ -55,12 +57,19 @@ public class ThirdPersonController : MonoBehaviour
     private GameObject _mainCamera;
 
     //Extras (Events, SFX, VFX, Achievements)
-    [SerializeField] private SoundFXManager _soundFXManager;
+    private PlayerStats _playerStats;
+    private SoundFXManager _soundFXManager;
 
     [Inject]
-    private void ZenjectSetup(SoundFXManager soundFXManager)
+    private void ZenjectSetup(PlayerStats playerStats,SoundFXManager soundFXManager)
     {
+        _playerStats = playerStats;
         _soundFXManager = soundFXManager;
+
+        if (_playerStats == null)
+            Debug.LogError("ThirdPersonController Zenject setup failed!! Player Stats is null");
+        if (_soundFXManager == null)
+            Debug.LogError("ThirdPersonController Zenject setup failed!! Player Stats is null");
     }
     private void Awake()
     {
@@ -72,6 +81,8 @@ public class ThirdPersonController : MonoBehaviour
         _hasAnimator = TryGetComponent(out _animator);
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputHandler>();
+
+        walkSpeed *= _playerStats.GetStat(PlayerStatType.WalkSpeed);
         _dashCount = maxDashCount;
 
         AssignAnimationIDs();
