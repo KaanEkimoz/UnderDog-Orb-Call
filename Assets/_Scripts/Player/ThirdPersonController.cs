@@ -18,7 +18,10 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] private float dashSpeed = 30.0f;
     [Tooltip("Dash duration of the character in seconds")]
     [SerializeField] private float dashDurationInSeconds = 0.21f;
+    [Tooltip("Dash cooldown of the character in seconds")]
     [SerializeField] private float dashCooldownInSeconds = 1.5f;
+    [Tooltip("Maximum dash count")]
+    [SerializeField] private int maxDashCount = 2;
     [Header("Rotation")]
     [Tooltip("How fast the character turns to face movement direction")]
     [Range(0.0f, 0.3f)]
@@ -35,6 +38,7 @@ public class ThirdPersonController : MonoBehaviour
     private float _rotationVelocity;
 
     //dash
+    private int _dashCount = 0;
     private float _dashCooldownTimer = 0;
     private float _dashDurationTimer = 0;
 
@@ -68,17 +72,19 @@ public class ThirdPersonController : MonoBehaviour
         _hasAnimator = TryGetComponent(out _animator);
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputHandler>();
+        _dashCount = maxDashCount;
+
         AssignAnimationIDs();
     }
     private void Update()
     {
-        Dash();
-        Move();
+        HandleDash();
+        HandleHorizontalMovement();
     }
 
     #region Horizontal Movement
 
-    private void Move()
+    private void HandleHorizontalMovement()
     {
         float targetSpeed = CalculateMaximumSpeed();
         _currentHorizontalSpeed = CalculateCurrentSpeed(targetSpeed);
@@ -168,22 +174,32 @@ public class ThirdPersonController : MonoBehaviour
     #endregion
 
     #region Dash
-    private void Dash()
+    private void HandleDash()
     {
         HandleDashTimers();
 
-        if (PlayerInputHandler.Instance.DashButtonPressed && _dashCooldownTimer <= 0)
-            ResetDashTimers();
+        if (!PlayerInputHandler.Instance.DashButtonPressed) return;
+
+        if (CanDash())
+            StartDash();
+    }
+    private bool CanDash()
+    {
+        if (_dashCooldownTimer <= 0)
+            _dashCount = maxDashCount;
+
+        return _dashCount > 0 && _dashDurationTimer <= 0;
+    }
+    private void StartDash()
+    {
+        _dashCount--;
+        _dashDurationTimer = dashDurationInSeconds;
+        _dashCooldownTimer = dashCooldownInSeconds + dashDurationInSeconds;
     }
     private void HandleDashTimers()
     {
-        _dashCooldownTimer -= Time.deltaTime;
-        _dashDurationTimer -= Time.deltaTime;
-    }
-    private void ResetDashTimers()
-    {
-        _dashDurationTimer = dashDurationInSeconds;
-        _dashCooldownTimer = dashCooldownInSeconds;
+        _dashCooldownTimer = Mathf.Max(0, _dashCooldownTimer - Time.deltaTime);
+        _dashDurationTimer = Mathf.Max(0, _dashDurationTimer - Time.deltaTime);
     }
     #endregion
 

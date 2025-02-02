@@ -11,6 +11,7 @@ public class OrbController : MonoBehaviour
     [Range(0, 10)][SerializeField] private int orbCountAtStart;
     [Space]
     [Header("Orb Throw")]
+    [SerializeField] private float cooldownBetweenThrowsInSeconds = 2f;
     [SerializeField] private Transform firePointTransform;
     [SerializeField] private LayerMask cursorDetectMask;
     [Space]
