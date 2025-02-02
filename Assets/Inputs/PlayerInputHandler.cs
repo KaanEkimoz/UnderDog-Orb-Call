@@ -11,38 +11,39 @@ public class PlayerInputHandler : MonoBehaviour
         Game.OnResume += OnGameResume;
     }
     #endregion
-    public bool DashButtonPressed { get { return IsDashButtonPressedThisFrame(); } }
-    public bool DashButtonHeld { get { return _dashButtonHeld; } }
-    public bool AttackButtonPressed { get { return IsAttackButtonPressedThisFrame(); } }
-    public bool AttackButtonReleased { get { return IsAttackButtonReleasedThisFrame(); } }
-    public bool AttackButtonHeld { get { return _attackButtonHeld; } } 
-    public bool RecallButtonPressed { get { return IsBlockButtonPressedThisFrame(); } } 
-    public bool NextChooseButtonPressed { get { return IsNextChooseButtonPressedThisFrame(); } }
-    public bool PreviousChooseButtonPressed { get { return IsPreviousChooseButtonPressedThisFrame(); } }
-    public bool SprintButtonHeld { get { return _sprintButtonHeld; } }
-    public Vector2 MovementInput { get { return _moveInput; } }
-    public Vector2 MouseInput { get { return _mouseInput; } }
 
-    //Movement - WASD Keyboard Buttons, Mouse Cursor
+    public bool DashButtonPressed => _dashButtonPressedThisFrame;
+    public bool DashButtonHeld => _dashButtonHeld;
+    public bool AttackButtonPressed => _attackButtonPressedThisFrame;
+    public bool AttackButtonReleased => _attackButtonReleasedThisFrame;
+    public bool AttackButtonHeld => _attackButtonHeld;
+    public bool RecallButtonPressed => _recallButtonPressedThisFrame;
+    public bool NextChooseButtonPressed => _nextChooseButtonPressedThisFrame;
+    public bool PreviousChooseButtonPressed => _previousChooseButtonPressedThisFrame;
+    public bool SprintButtonHeld => _sprintButtonHeld;
+    public Vector2 MovementInput => _moveInput;
+    public Vector2 MouseInput => _mouseInput;
+
+    // Movement - WASD Keyboard Buttons, Mouse Cursor
     private Vector2 _moveInput;
     private Vector2 _mouseInput;
 
-    //Dash - Space Keyboard Button 
+    // Dash - Space Keyboard Button
     private bool _dashButtonHeld;
     private bool _dashButtonPressedThisFrame;
 
-    //Sprint - Left Shift
+    // Sprint - Left Shift
     private bool _sprintButtonHeld;
 
-    //Attack - Left Mouse Button
+    // Attack - Left Mouse Button
     private bool _attackButtonPressedThisFrame;
     private bool _attackButtonReleasedThisFrame;
     private bool _attackButtonHeld;
 
-    //Recall - R Keyboard Button
+    // Recall - R Keyboard Button
     private bool _recallButtonPressedThisFrame;
 
-    //Choose - Q and E Keyboard Buttons
+    // Choose - Q and E Keyboard Buttons
     private bool _nextChooseButtonPressedThisFrame;
     private bool _previousChooseButtonPressedThisFrame;
 
@@ -51,64 +52,20 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnGameResume()
     {
+        ResetInputFlags();
+    }
+    private void LateUpdate()
+    {
+        ResetInputFlags();
+    }
+    private void ResetInputFlags()
+    {
         _attackButtonPressedThisFrame = false;
         _attackButtonReleasedThisFrame = false;
-        _attackButtonHeld = false;
-    }
-
-    private bool IsAttackButtonPressedThisFrame()
-    {
-        if (_attackButtonPressedThisFrame)
-        {
-            _attackButtonPressedThisFrame = false;
-            return true;
-        }
-        return false;
-    }
-    private bool IsAttackButtonReleasedThisFrame()
-    {
-        if (_attackButtonReleasedThisFrame)
-        {
-            _attackButtonReleasedThisFrame = false;
-            return true;
-        }
-        return false;
-    }
-    private bool IsBlockButtonPressedThisFrame()
-    {
-        if (_recallButtonPressedThisFrame)
-        {
-            _recallButtonPressedThisFrame = false;
-            return true;
-        }
-        return false;
-    }
-    private bool IsDashButtonPressedThisFrame()
-    {
-        if (_dashButtonPressedThisFrame)
-        {
-            _dashButtonPressedThisFrame = false;
-            return true;
-        }
-        return false;
-    }
-    private bool IsNextChooseButtonPressedThisFrame()
-    {
-        if (_nextChooseButtonPressedThisFrame)
-        {
-            _nextChooseButtonPressedThisFrame = false;
-            return true;
-        }
-        return false;
-    }
-    private bool IsPreviousChooseButtonPressedThisFrame()
-    {
-        if (_previousChooseButtonPressedThisFrame)
-        {
-            _previousChooseButtonPressedThisFrame = false;
-            return true;
-        }
-        return false;
+        _dashButtonPressedThisFrame = false;
+        _recallButtonPressedThisFrame = false;
+        _nextChooseButtonPressedThisFrame = false;
+        _previousChooseButtonPressedThisFrame = false;
     }
 
     #region Mouse Cursor
@@ -116,10 +73,12 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Mouse Cursor Settings")]
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
+
     private void OnApplicationFocus(bool hasFocus)
     {
         SetCursorState(cursorLocked);
     }
+
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
@@ -128,14 +87,17 @@ public class PlayerInputHandler : MonoBehaviour
     #endregion
 
     #region Input Functions
+
     public void OnMovement(InputAction.CallbackContext context)
     {
         _moveInput = context.ReadValue<Vector2>();
     }
+
     public void OnLook(InputAction.CallbackContext context)
     {
         _mouseInput = context.ReadValue<Vector2>();
     }
+
     public void OnDash(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -144,8 +106,11 @@ public class PlayerInputHandler : MonoBehaviour
             _dashButtonHeld = true;
         }
         else if (context.canceled)
+        {
             _dashButtonHeld = false;
+        }
     }
+
     public void OnSprint(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -153,6 +118,7 @@ public class PlayerInputHandler : MonoBehaviour
         else if (context.canceled)
             _sprintButtonHeld = false;
     }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -166,21 +132,24 @@ public class PlayerInputHandler : MonoBehaviour
             _attackButtonReleasedThisFrame = true;
         }
     }
+
     public void OnBlock(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
             _recallButtonPressedThisFrame = true;
-
     }
+
     public void OnNextChoose(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
             _nextChooseButtonPressedThisFrame = true;
     }
+
     public void OnPreviousChoose(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
             _previousChooseButtonPressedThisFrame = true;
     }
+
     #endregion
 }

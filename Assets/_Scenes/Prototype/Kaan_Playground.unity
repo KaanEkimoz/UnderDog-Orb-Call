@@ -6971,6 +6971,10 @@ PrefabInstance:
       propertyPath: _soundFXManager
       value: 
       objectReference: {fileID: 1663323936}
+    - target: {fileID: 5339787145452883190, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+      propertyPath: cursorDetectMask.m_Bits
+      value: 12545
+      objectReference: {fileID: 0}
     - target: {fileID: 5895881473504401873, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7125,6 +7129,10 @@ PrefabInstance:
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: cursorDetectMask.m_Bits
       value: 12544
+      objectReference: {fileID: 0}
+    - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
+      propertyPath: cooldownBetweenThrowsInSeconds
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4548954406257375815, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: m_Name

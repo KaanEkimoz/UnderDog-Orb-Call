@@ -19,6 +19,7 @@ public class IsometricAiming : MonoBehaviour
     private void HandleAiming()
     {
         if (Game.Paused) return;
+
         if (!PlayerInputHandler.Instance.AttackButtonHeld) return;
 
         if (TryGetMouseWorldPosition(out var targetPosition))
