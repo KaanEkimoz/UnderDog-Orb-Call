@@ -26,6 +26,8 @@ namespace com.game.player
         PlayerOrbHandler_Test m_orbHandler;
 
         float m_countToGraphX;
+        float m_maxOrbRatio;
+        int m_absoluteMaxOrbs;
 
         string m_curveType;
 
@@ -39,14 +41,18 @@ namespace com.game.player
 
         protected override void Initialize_Internal()
         {
+            m_absoluteMaxOrbs = Constants.MAX_ORBS_CAN_BE_HELD;
             m_orbHandler = Player.Instance.Hub.OrbHandler;
 
+            int maxOrbsFromProfile = m_orbHandler.MaxOrbsCanBeHeld;
+
             m_curveType = "Custom";
-            m_countToGraphX = 1f / m_orbHandler.MaxOrbsCanBeHeld;
+            m_countToGraphX = 1f / m_absoluteMaxOrbs;
+            m_maxOrbRatio = maxOrbsFromProfile / m_absoluteMaxOrbs;
 
 #if !UNITY_EDITOR
             m_evaluationPairs = new();
-            for (int i = 0; i <= m_orbHandler.MaxOrbsCanBeHeld; i++)
+            for (int i = 0; i <= m_absoluteMaxOrbs; i++)
             {
                 Evaluate(i);
             }
@@ -56,7 +62,7 @@ namespace com.game.player
         protected override float Process_Internal(PlayerStatType statType, float statCoefficient, float rawValue)
         {
             int orbCount = statCoefficient < 0f ?
-                m_orbHandler.MaxOrbsCanBeHeld - m_orbHandler.OrbsInHand : m_orbHandler.OrbsInHand;
+                m_absoluteMaxOrbs - m_orbHandler.OrbsInHand : m_orbHandler.OrbsInHand;
 
             float realStatCoefficient = Mathf.Abs(statCoefficient);
             float precalculatedDiff = Evaluate(orbCount);
@@ -67,10 +73,10 @@ namespace com.game.player
 
         private float Evaluate(int orbCount)
         {
-            if (orbCount < 0 || orbCount > m_orbHandler.MaxOrbsCanBeHeld)
+            if (orbCount < 0 || orbCount > m_absoluteMaxOrbs)
                 return float.NaN;
 
-            if (m_inverse) orbCount = m_orbHandler.MaxOrbsCanBeHeld - orbCount;
+            if (m_inverse) orbCount = m_absoluteMaxOrbs - orbCount;
 
 #if !UNITY_EDITOR
             if (m_evaluationPairs.ContainsKey(orbCount))

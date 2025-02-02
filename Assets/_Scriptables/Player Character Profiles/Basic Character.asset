@@ -15,10 +15,5 @@ MonoBehaviour:
   OrbCount: 7
   Overrides: []
   Modifications: []
-  Caps:
-  - CapLow: 0
-    CapHigh: 0
-    MinValue: 6.38
-    MaxValue: 90.9
-    TargetStatType: 0
+  Caps: []
   m_notReadyYet: 0
