@@ -3,6 +3,7 @@ using com.game.player.itemsystemextensions;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace com.game.player
@@ -25,6 +26,7 @@ namespace com.game.player
         private void Start()
         {
             m_stats = Player.Instance.Hub.Stats;
+            m_itemBank = ItemManager.GetItemsOfType<PlayerItemProfile>().ToList();
         }
 
         public bool AddItem(ItemObject itemToAdd)
@@ -100,7 +102,7 @@ namespace com.game.player
                 if (GUILayout.Button($"Buy {itemProfile.DisplayName}"))
                     AddItem(ItemObject.Create(itemProfile));
 
-                if (GUILayout.Button("i"))
+                if (GUILayout.Button("i", GUILayout.Width(20f)))
                     m_labelText = ItemSystemHelpers.Text.GenerateDescription(itemProfile, true);
 
                 GUILayout.EndHorizontal();

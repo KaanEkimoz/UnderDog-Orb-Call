@@ -26,7 +26,7 @@ namespace com.game.itemsystem
 
         public static ItemObject Create(string guid)
         {
-            //ItemProfile profile = ItemDatabase.GetItem(guid);
+            //ItemProfileBase profile = IteMMana.GetItem(guid);
 
             //return new ItemObject()
             //{

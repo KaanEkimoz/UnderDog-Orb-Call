@@ -26,7 +26,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3b9d01732c0df6db81b9639657208dab7e254b63"
+      "hash": "7fd52bf21f6e987b64b0fe09bda3fcc64c57dab9"
     },
     "com.absence.variablesystem": {
       "version": "https://www.github.com/b1lodHand/absent-variables.git",

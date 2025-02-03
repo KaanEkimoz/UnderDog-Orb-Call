@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.utilities.experimental.databases;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace com.game.itemsystem.scriptables
     /// <summary>
     /// The abstract scriptable object used for holding built-in data of an item.
     /// </summary>
-    public abstract class ItemProfileBase : ScriptableObject
+    public abstract class ItemProfileBase : ScriptableObject, IDatabaseMember<string>
     {
         [Header1("Item Profile")]
 
@@ -35,5 +36,10 @@ namespace com.game.itemsystem.scriptables
         }
 
         public abstract string GenerateFurtherDescription(ItemObject context, bool richText);
+
+        public string GetDatabaseKey()
+        {
+            return Guid;
+        }
     }
 }
