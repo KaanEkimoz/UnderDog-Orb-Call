@@ -150,8 +150,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579ce1de92727ca499b6677a69223028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   movementSpeed: 2
   speedMultiplier: 1
+  movementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   orbStats: {fileID: 6960696444875857668}
   isOnEllipse: 0
   isSticked: 0

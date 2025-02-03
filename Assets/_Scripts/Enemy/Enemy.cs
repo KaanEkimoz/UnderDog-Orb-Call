@@ -4,7 +4,7 @@ using EnemyNewStats = com.game.enemysystem.EnemyStats;
 
 public class Enemy : MonoBehaviour
 {
-    public EnemyStats enemyStats;
+    public EnemyMovementData enemyMovementData;
     protected GameObject target;
     [SerializeField] protected EnemyNewStats newEnemyStats;
 
@@ -22,10 +22,10 @@ public class Enemy : MonoBehaviour
         if (newEnemyStats == null)
             GetComponent<EnemyNewStats>();
 
-        navMeshAgent.speed = enemyStats.speed;
-        navMeshAgent.angularSpeed = enemyStats.angularSpeed;
-        navMeshAgent.acceleration = enemyStats.acceleration;
-        navMeshAgent.stoppingDistance = enemyStats.stoppingDistance;
+        navMeshAgent.speed = enemyMovementData.speed;
+        navMeshAgent.angularSpeed = enemyMovementData.angularSpeed;
+        navMeshAgent.acceleration = enemyMovementData.acceleration;
+        navMeshAgent.stoppingDistance = enemyMovementData.stoppingDistance;
 
         navMeshAgent.SetDestination(target.transform.position);
     }
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
 
     protected bool CheckDistanceToPlayer() //dusmanin playera uzakligini dondur
     {
-        return Vector3.Distance(transform.position, target.transform.position) <= enemyStats.stoppingDistance;
+        return Vector3.Distance(transform.position, target.transform.position) <= enemyMovementData.stoppingDistance;
     }
 
 

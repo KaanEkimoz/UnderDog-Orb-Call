@@ -1568,6 +1568,9 @@ MonoBehaviour:
   maximumOrbCount: 10
   orbCountAtStart: 0
   firePointTransform: {fileID: 1886567772}
+  cursorDetectMask:
+    serializedVersion: 2
+    m_Bits: 0
   ellipseCenterTransform: {fileID: 878954946}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
@@ -1575,6 +1578,7 @@ MonoBehaviour:
   ellipseRotationSpeed: 5
   input: {fileID: 0}
   objectPool: {fileID: 0}
+  highlightMaterial: {fileID: 0}
 --- !u!4 &1183125827
 Transform:
   m_ObjectHideFlags: 0
@@ -3856,6 +3860,7 @@ MonoBehaviour:
   walkSpeed: 2
   slowWalkSpeed: 0.6
   sprintSpeed: 5.335
+  alwaysSprint: 0
   dashSpeed: 25
   dashDurationInSeconds: 0.2
   dashCooldownInSeconds: 1.5
@@ -3863,6 +3868,7 @@ MonoBehaviour:
   speedChangeRate: 10
   footstepAudioClips: []
   footstepAudioVolume: 0.5
+  _soundFXManager: {fileID: 0}
 --- !u!143 &4416926083347132233
 CharacterController:
   m_ObjectHideFlags: 0
