@@ -26,6 +26,8 @@ namespace com.game.testing
 
         const float k_utilityPanelWidth = 100f;
 
+        [SerializeField] private bool m_displayUnpaused = false;
+
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
 
@@ -85,7 +87,14 @@ namespace com.game.testing
 
         private void OnGUI()
         {
-            if (!Game.Paused) return;
+            if (!Game.Paused)
+            {
+                if (!m_displayUnpaused) 
+                    return;
+
+                TestUnpausedGUI();
+                return;
+            }
 
             GUILayout.BeginHorizontal();
 
@@ -99,7 +108,7 @@ namespace com.game.testing
             m_playerInventory.OnTestGUI();
             GUILayout.EndVertical();
 
-            //GUILayout.BeginVertical("box");
+            //GUILayout.BeginVertical(styleName);
             //GUILayout.Label("Utilities");
             //TestUtilityGUI();
             //GUILayout.EndVertical();
@@ -112,6 +121,33 @@ namespace com.game.testing
             GUILayout.EndHorizontal();
 
             TestOverlayGUI();
+        }
+
+        public void TestUnpausedGUI()
+        {
+            m_playerStats.Manipulator.ForAllStatEntries((key, value) =>
+            {
+                float diff = value;
+                float refinedValue = m_playerStats.GetStat(key);
+
+                float refinedDiff = refinedValue;
+                string colorName;
+
+                if (diff > 0f) colorName = "green";
+                else if (diff == 0f) colorName = "white";
+                else colorName = "red";
+
+                string valueLabel = utilities.Helpers.Text.Colorize(value.ToString("0"), colorName);
+
+                if (refinedDiff > 0f) colorName = "green";
+                else if (refinedDiff == 0f) colorName = "white";
+                else colorName = "red";
+
+                string refinedValueLabel = utilities.Helpers.Text.Colorize($" ({refinedValue.ToString("0.00")})", colorName);
+
+                GUILayout.Label(utilities.Helpers.Text.Bold($"{StatSystemHelpers.Text.GetDisplayName(key, true)}: " +
+                valueLabel + refinedValueLabel), GUILayout.Width(k_totalStatAreaWidth));
+            });
         }
 
         public void TestOverlayGUI()
