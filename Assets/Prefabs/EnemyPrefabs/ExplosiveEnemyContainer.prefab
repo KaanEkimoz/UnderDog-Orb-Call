@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0b6016e2a56ee4ca09a7bb775d44c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyStats: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
+  enemyMovementData: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
   newEnemyStats: {fileID: 635029754020833559}
   explosionDamage: 30
   preperationTime: 1.5

@@ -45,6 +45,8 @@ public class OrbController : MonoBehaviour
     private SimpleOrb orbToThrow;
     private List<SimpleOrb> orbsThrowed = new();
 
+    public List<SimpleOrb> OrbsOnEllipse => orbsOnEllipse;
+
     //Flags
     private bool isAiming = false;
     private void Start()

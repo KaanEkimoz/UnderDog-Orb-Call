@@ -1,12 +1,12 @@
+using com.game.enemysystem;
 using UnityEngine;
 using UnityEngine.AI;
-using EnemyNewStats = com.game.enemysystem.EnemyStats;
 
 public class Enemy : MonoBehaviour
 {
     public EnemyMovementData enemyMovementData;
     protected GameObject target;
-    [SerializeField] protected EnemyNewStats newEnemyStats;
+    [SerializeField] protected EnemyStats newEnemyStats;
 
     protected NavMeshAgent navMeshAgent;
 
@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
         target = GameObject.FindWithTag("Player");
 
         if (newEnemyStats == null)
-            GetComponent<EnemyNewStats>();
+            GetComponent<EnemyStats>();
 
         navMeshAgent.speed = enemyMovementData.speed;
         navMeshAgent.angularSpeed = enemyMovementData.angularSpeed;
