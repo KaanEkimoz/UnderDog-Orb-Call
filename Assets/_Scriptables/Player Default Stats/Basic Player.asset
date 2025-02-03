@@ -18,7 +18,7 @@ MonoBehaviour:
   - TargetStat: 1
     Value: 0
   - TargetStat: 2
-    Value: 0
+    Value: 1.1
   - TargetStat: 3
     Value: 0
   - TargetStat: 4

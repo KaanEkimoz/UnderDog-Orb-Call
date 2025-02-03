@@ -11,6 +11,7 @@ public class OrbController : MonoBehaviour
     [Range(0, 10)][SerializeField] private int orbCountAtStart;
     [Space]
     [Header("Orb Throw")]
+    [SerializeField] private float cooldownBetweenThrowsInSeconds = 2f;
     [SerializeField] private Transform firePointTransform;
     [SerializeField] private LayerMask cursorDetectMask;
     [Space]
@@ -44,9 +45,10 @@ public class OrbController : MonoBehaviour
     //Orb Throw
     private SimpleOrb orbToThrow;
     private List<SimpleOrb> orbsThrowed = new();
+    private float throwCooldownTimer;
 
     //Flags
-    private bool isAiming = false;
+    public bool isAiming = false;
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
@@ -86,6 +88,7 @@ public class OrbController : MonoBehaviour
             orbToThrow.SetNewDestination(firePointTransform.position);
         }
 
+        HandleCooldowns();
         UpdateEllipsePos();
         UpdateOrbEllipsePositions();
     }
@@ -163,7 +166,7 @@ public class OrbController : MonoBehaviour
     }
     private void Aim()
     {
-        if (orbToThrow != null || orbsOnEllipse.Count == 0)
+        if (orbToThrow != null || orbsOnEllipse.Count == 0 || throwCooldownTimer > 0)
             return;
 
         isAiming = true;
@@ -176,6 +179,8 @@ public class OrbController : MonoBehaviour
     {
         if (orbToThrow == null || !isAiming)
             return;
+
+        throwCooldownTimer = cooldownBetweenThrowsInSeconds;
 
         isAiming = false;
 
@@ -194,7 +199,12 @@ public class OrbController : MonoBehaviour
         Player.Instance.Hub.OrbHandler.RemoveOrb();
         OnOrbThrowed?.Invoke();
     }
-    
+    private void HandleCooldowns()
+    {
+        if (throwCooldownTimer > 0)
+            throwCooldownTimer -= Time.deltaTime;
+    }
+
     private void UpdateEllipsePos()
     {
         Vector3 targetPosition = ellipseCenterTransform.position;
