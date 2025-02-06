@@ -26,14 +26,13 @@ public class OrbController : MonoBehaviour
     [SerializeField] private float ellipseRotationSpeed = 5f;
 
     [Header("Components")]
-    [SerializeField] private PlayerInputHandler input;
     [SerializeField] private ObjectPool objectPool;
 
     [Header("Orb Materials")]
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private Material ghostMaterial;
 
-    //Events
+    // Events
     public event Action OnOrbThrowed;
     public event Action OnOrbCalled;
     public event Action<int> OnOrbCountChanged;
@@ -43,16 +42,15 @@ public class OrbController : MonoBehaviour
     public event Action OnSelectedOrbChanged;
     public event Action OnOrbAdded;
 
-    //Orbs
     private List<SimpleOrb> orbsOnEllipse = new();
     private List<SimpleOrb> orbsThrowed = new();
     private SimpleOrb orbToThrow;
-
-    //Cooldown
     private float throwCooldownTimer;
+    public bool isAiming = false;
 
-    //Flags
-    private bool isAiming = false;
+    private int activeOrbCount = 0;
+    private int selectedOrbIndex = 0;
+    private float angleStep; // The angle between orbs
 
     private void Start()
     {
@@ -61,12 +59,9 @@ public class OrbController : MonoBehaviour
         if (objectPool == null)
             objectPool = FindAnyObjectByType<ObjectPool>();
 
-        if (input == null)
-            input = FindAnyObjectByType<PlayerInputHandler>();
-
         CreateOrbsAtStart();
+        CalculateAngleStep();
     }
-
     private void Update()
     {
         if (Game.Paused) return;
@@ -79,12 +74,12 @@ public class OrbController : MonoBehaviour
 
     private void HandleInput()
     {
-        if (input.AttackButtonPressed)
+        if (PlayerInputHandler.Instance.AttackButtonPressed)
             Aim();
-        else if (input.AttackButtonReleased)
+        else if (PlayerInputHandler.Instance.AttackButtonReleased)
             Throw();
 
-        if (input.RecallButtonPressed)
+        if (PlayerInputHandler.Instance.RecallButtonPressed)
             CallOrbs();
 
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
@@ -123,11 +118,8 @@ public class OrbController : MonoBehaviour
     {
         if (orbsOnEllipse.Count <= 1) return;
 
-        var lastOrb = orbsOnEllipse[orbsOnEllipse.Count - 1];
-        orbsOnEllipse.RemoveAt(orbsOnEllipse.Count - 1);
-        orbsOnEllipse.Insert(0, lastOrb);
-
-        UpdateOrbMaterials();
+        selectedOrbIndex = (selectedOrbIndex + 1) % orbsOnEllipse.Count; // Dairesel olarak artır
+        UpdateSelectedOrbMaterial();
         OnNextOrbSelected?.Invoke();
     }
 
@@ -135,19 +127,16 @@ public class OrbController : MonoBehaviour
     {
         if (orbsOnEllipse.Count <= 1) return;
 
-        var firstOrb = orbsOnEllipse[0];
-        orbsOnEllipse.RemoveAt(0);
-        orbsOnEllipse.Add(firstOrb);
-
-        UpdateOrbMaterials();
+        selectedOrbIndex = (selectedOrbIndex - 1 + orbsOnEllipse.Count) % orbsOnEllipse.Count; // Dairesel olarak azalt
+        UpdateSelectedOrbMaterial();
         OnPreviousOrbSelected?.Invoke();
     }
 
-    private void UpdateOrbMaterials()
+    private void UpdateSelectedOrbMaterial()
     {
         for (int i = 0; i < orbsOnEllipse.Count; i++)
         {
-            if (i == 0)
+            if (i == selectedOrbIndex)
                 orbsOnEllipse[i].SetMaterial(highlightMaterial);
             else
                 orbsOnEllipse[i].ResetMaterial();
@@ -169,8 +158,8 @@ public class OrbController : MonoBehaviour
         if (orbToThrow != null || orbsOnEllipse.Count == 0 || throwCooldownTimer > 0) return;
 
         isAiming = true;
-        orbToThrow = orbsOnEllipse[0];
-        RemoveOrbFromList(orbToThrow);
+        orbToThrow = orbsOnEllipse[selectedOrbIndex];
+        RemoveOrbFromEllipse(orbToThrow);
     }
 
     private void Throw()
@@ -209,15 +198,14 @@ public class OrbController : MonoBehaviour
         var newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
 
+        activeOrbCount++;
         orbsOnEllipse.Add(newOrb);
-        Player.Instance.Hub.OrbHandler.AddOrb();
+        CalculateAngleStep();
+
         UpdateOrbEllipsePositions();
+
+        Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbAdded?.Invoke();
-    }
-    public void RemoveOrb()
-    {
-        var orbToRemove = orbsOnEllipse[orbsOnEllipse.Count - 1];
-        RemoveOrbFromList(orbToRemove);
     }
 
     public void AddOrbToList(SimpleOrb orb)
@@ -225,9 +213,18 @@ public class OrbController : MonoBehaviour
         orbsOnEllipse.Add(orb);
     }
 
-    public void RemoveOrbFromList(SimpleOrb orb)
+    public void RemoveOrbFromEllipse(SimpleOrb orb)
     {
         orbsOnEllipse.Remove(orb);
+        activeOrbCount--;
+        UpdateOrbEllipsePositions();
+    }
+    public void RemoveOrb()
+    {
+        int indexToRemove = orbsOnEllipse.Count - 1;
+        orbsOnEllipse.RemoveAt(indexToRemove);
+        activeOrbCount--;
+        CalculateAngleStep();
         UpdateOrbEllipsePositions();
     }
 
@@ -235,7 +232,6 @@ public class OrbController : MonoBehaviour
     {
         if (orbsOnEllipse.Count == 0) return;
 
-        float angleStep = 360f / orbsOnEllipse.Count;
         float angleOffset = 90f; // Start from the top
 
         for (int i = 0; i < orbsOnEllipse.Count; i++)
@@ -249,11 +245,17 @@ public class OrbController : MonoBehaviour
             float localY = Mathf.Sin(angleInRadians) * ellipseYRadius;
 
             Vector3 localPosition = new Vector3(localX, localY, 0f);
-            Vector3 targetPosition = ellipseCenterTransform.position + ellipseCenterTransform.rotation * localPosition;
+            Vector3 targetPosition = ellipseCenterTransform.position + (ellipseCenterTransform.rotation * localPosition);
 
             orbsOnEllipse[i].SetNewDestination(targetPosition);
         }
     }
+
+    private void CalculateAngleStep()
+    {
+        angleStep = 360f / activeOrbCount;
+    }
+
     private Vector3 GetMouseWorldPosition()
     {
         var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
