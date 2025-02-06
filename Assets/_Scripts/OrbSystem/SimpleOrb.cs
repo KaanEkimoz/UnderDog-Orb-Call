@@ -27,6 +27,11 @@ public class SimpleOrb : MonoBehaviour
     [Space]
     [Header("Orb Material")]
     [SerializeField] private Material startMaterial;
+    [Space]
+    [Header("Components")]
+    [SerializeField] private Rigidbody _rigidBody;
+    [SerializeField] private SphereCollider _sphereCollider;
+    [SerializeField] private Renderer _renderer;
 
     //Movement
     private Transform startParent;
@@ -39,11 +44,6 @@ public class SimpleOrb : MonoBehaviour
     private float distanceTraveled;
     private Vector3 throwStartPosition;
 
-    //Components
-    private Rigidbody _rigidBody;
-    private SphereCollider _sphereCollider;
-    private MeshRenderer _meshRenderer;
-
     //Events
     public event Action OnThrown;
     public event Action OnCalled;
@@ -54,13 +54,23 @@ public class SimpleOrb : MonoBehaviour
     private void Start()
     {
         currentState = OrbState.OnEllipse;
-
+        CheckStartVariables();
+    }
+    private void OnEnable()
+    {
+        currentState = OrbState.OnEllipse;
+        CheckStartVariables();
+    }
+    private void CheckStartVariables()
+    {
+        if(_rigidBody == null)
+            _rigidBody = GetComponent<Rigidbody>();
+        if(_sphereCollider == null)
+            _sphereCollider = GetComponent<SphereCollider>();
+        if(_renderer == null)
+            _renderer = GetComponent<MeshRenderer>();
         if (orbStats == null)
             orbStats = GetComponent<OrbStats>();
-
-        _rigidBody = GetComponent<Rigidbody>();
-        _sphereCollider = GetComponent<SphereCollider>();
-        _meshRenderer = GetComponent<MeshRenderer>();
 
         startParent = transform.parent;
         startScale = transform.localScale;
@@ -111,11 +121,11 @@ public class SimpleOrb : MonoBehaviour
     }
     public void ResetMaterial()
     {
-        _meshRenderer.material = startMaterial;
+        _renderer.material = startMaterial;
     }
     public void SetMaterial(Material newMaterial)
     {
-        _meshRenderer.material = newMaterial;
+        _renderer.material = newMaterial;
     }
     public void Throw(Vector3 force)
     {

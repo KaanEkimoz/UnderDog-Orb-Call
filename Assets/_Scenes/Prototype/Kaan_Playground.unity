@@ -7111,6 +7111,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1284514659}
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
+      propertyPath: ghostMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 65ba979039bbd8e43a84a432b500c2a3, type: 2}
+    - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: highlightMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 972f4578ed8e54341a5bab19204b0f2a, type: 2}
