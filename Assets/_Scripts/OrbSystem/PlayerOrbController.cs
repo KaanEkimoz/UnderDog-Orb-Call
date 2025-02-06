@@ -4,7 +4,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+<<<<<<< Updated upstream
 
+=======
+using Zenject;
+>>>>>>> Stashed changes
 public class OrbController : MonoBehaviour
 {
     [Header("Orb Count")]
@@ -48,10 +52,20 @@ public class OrbController : MonoBehaviour
     private float throwCooldownTimer;
     public bool isAiming = false;
 
+<<<<<<< Updated upstream
     private int activeOrbCount = 0;
     private int selectedOrbIndex = 0;
     private float angleStep; // The angle between orbs
 
+=======
+    private PlayerStats _playerStats;
+
+    [Inject]
+    private void ZenjectSetup(PlayerStats playerStats)
+    {
+        _playerStats = playerStats;
+    }
+>>>>>>> Stashed changes
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
