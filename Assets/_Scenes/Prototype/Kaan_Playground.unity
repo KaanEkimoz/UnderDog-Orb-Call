@@ -1410,6 +1410,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304624442}
   m_CullTransparentMesh: 1
+--- !u!1 &312242443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312242445}
+  - component: {fileID: 312242444}
+  m_Layer: 0
+  m_Name: Timer Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &312242444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312242443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77f40110a303674bb15b71fd887c698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_initialPoolCapacity: 16
+  m_dontDestroyOnLoad: 1
+  m_useSingleton: 1
+  m_activeTimers: []
+--- !u!4 &312242445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312242443}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &321404247
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,6 +2209,11 @@ MonoBehaviour:
   m_damageableObject: {fileID: 1773443582}
   m_background: {fileID: 631576911}
   m_foreground: {fileID: 280001357}
+  m_hideAutomatically: 0
+  m_graphic: {fileID: 0}
+  m_hideShowEase: 0
+  m_hideEffectDuration: 0
+  m_timeBeforeHide: 0
   m_useEffect: 1
   m_effectLayer: {fileID: 1312231080}
   m_effectEase: 1
@@ -9665,3 +9718,4 @@ SceneRoots:
   - {fileID: 925526839}
   - {fileID: 108268441}
   - {fileID: 449109141}
+  - {fileID: 312242445}

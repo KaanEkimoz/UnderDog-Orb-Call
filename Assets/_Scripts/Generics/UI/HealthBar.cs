@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.timersystem;
 using DG.Tweening;
 using System;
 using System.Text;
@@ -19,6 +20,23 @@ namespace com.game
         [SerializeField] private GameObject m_damageableObject;
         [SerializeField] private Image m_background;
         [SerializeField] private Image m_foreground;
+
+        [Space]
+
+        [SerializeField]
+        private bool m_hideAutomatically = false;
+
+        [SerializeField, ShowIf(nameof(m_hideAutomatically))]
+        private CanvasGroup m_graphic;
+
+        [SerializeField, ShowIf(nameof(m_hideAutomatically))]
+        private Ease m_hideShowEase;
+
+        [SerializeField, ShowIf(nameof(m_hideAutomatically))]
+        private float m_hideEffectDuration;
+
+        [SerializeField, ShowIf(nameof(m_hideAutomatically))]
+        private float m_timeBeforeHide;
 
         [Space]
 
@@ -59,9 +77,12 @@ namespace com.game
 
         IDamageable m_target;
         Tween m_effectTween;
+        Tween m_hideTween;
         float m_currentHealthRatio;
         float m_currentHealth;
         float m_maxHealth;
+
+        Timer m_hideTimer;
 
         private void Start()
         {
@@ -78,19 +99,37 @@ namespace com.game
             }
 
             m_target.OnTakeDamage += OnTakeDamage;
-            m_target.OnDie += OnDie;
 
             Refresh();
-        }
-
-        private void OnDie()
-        {
-            // prolly nothing.
+            if (m_hideAutomatically) m_graphic.alpha = 0f; 
         }
 
         private void OnTakeDamage(float amount)
         {
             Refresh();
+            RestartHideTimer();
+        }
+
+        private void OnHideTimerComplete(TimerCompletionContext context)
+        {
+            m_hideTimer = null;
+
+            if (!context.Succeeded)
+            {
+                if (m_hideTween != null) m_hideTween.Kill();
+                m_graphic.alpha = 1.0f;
+                return;
+            }
+
+            m_graphic.DOFade(0f, m_hideEffectDuration)
+                .OnComplete(OnHideTweenComplete)
+                .OnKill(OnHideTweenComplete)
+                .SetEase(m_hideShowEase);
+        }
+
+        private void OnHideTweenComplete()
+        {
+            m_hideTween = null;
         }
 
         void CacheVariables()
@@ -113,6 +152,20 @@ namespace com.game
             m_foreground.fillAmount = m_currentHealthRatio;
         }
 
+        public void RestartHideTimer()
+        {
+            if (!m_hideAutomatically)
+                return;
+
+            if (m_hideTimer != null)
+                m_hideTimer.Fail();
+
+            m_graphic.alpha = 1f;
+
+            m_hideTimer = Timer.Create(m_timeBeforeHide, null, OnHideTimerComplete);
+            m_hideTimer.Start();
+        }
+
         public void UpdateEffect()
         {
             if (!m_useEffect)
@@ -120,7 +173,9 @@ namespace com.game
 
             if (m_effectTween != null)
                 m_effectTween.Kill();
-;
+
+            m_effectLayer.gameObject.SetActive(true);
+
             m_effectTween = m_effectLayer.DOFillAmount(m_currentHealthRatio, m_effectDuration)
                 .SetEase(m_effectEase)
                 .SetDelay(m_effectDelay, false)
@@ -166,6 +221,7 @@ namespace com.game
         private void OnTweenComplete()
         {
             m_effectTween = null;
+            m_effectLayer.gameObject.SetActive(false);
         }
     }
 }
