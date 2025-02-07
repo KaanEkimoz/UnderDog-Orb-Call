@@ -1804,8 +1804,10 @@ MonoBehaviour:
   m_light: {fileID: 449109140}
   m_zeroIntensity: 0
   m_stepIntensity: 7.94
+  m_intensitySpeed: 4
   m_zeroRange: 0
   m_stepRange: 1.2
+  m_rangeSpeed: 2
 --- !u!114 &449109139
 MonoBehaviour:
   m_ObjectHideFlags: 0
