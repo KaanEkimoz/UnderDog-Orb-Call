@@ -14,29 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_defaultValues:
   - TargetStat: 0
-    Value: 100
+    Value: 10
   - TargetStat: 1
     Value: 0
   - TargetStat: 2
     Value: 1.1
   - TargetStat: 3
-    Value: 0
+    Value: 1
   - TargetStat: 4
     Value: 0
   - TargetStat: 5
     Value: 0
   - TargetStat: 6
-    Value: 10
+    Value: 1
   - TargetStat: 7
     Value: 0
   - TargetStat: 8
-    Value: 0
+    Value: 1
   - TargetStat: 9
     Value: 0
   - TargetStat: 10
-    Value: 0
+    Value: 1
   - TargetStat: 11
-    Value: 0
+    Value: 1
   - TargetStat: 12
     Value: 0
   - TargetStat: 13

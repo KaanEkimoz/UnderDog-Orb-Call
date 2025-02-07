@@ -496,6 +496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_container: {fileID: 1615555516738219183}
+  m_stats: {fileID: 1072382937486459194}
 --- !u!1 &5958879475438055213
 GameObject:
   m_ObjectHideFlags: 0

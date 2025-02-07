@@ -205,9 +205,6 @@ public class ThirdPersonController : MonoBehaviour
     }
     private bool CanDash()
     {
-        if (_dashCooldownTimer <= 0)
-            _dashCount = maxDashCount;
-
         return _dashCount > 0 && _dashDurationTimer <= 0;
     }
     private void StartDash()
@@ -220,6 +217,9 @@ public class ThirdPersonController : MonoBehaviour
     {
         _dashCooldownTimer = Mathf.Max(0, _dashCooldownTimer - Time.deltaTime);
         _dashDurationTimer = Mathf.Max(0, _dashDurationTimer - Time.deltaTime);
+
+        if (_dashCooldownTimer <= 0)
+            _dashCount = maxDashCount;
     }
     #endregion
 
