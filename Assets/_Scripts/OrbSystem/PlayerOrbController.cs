@@ -7,10 +7,6 @@ using UnityEngine.InputSystem;
 
 public class OrbController : MonoBehaviour
 {
-    [Header("Orb Count")]
-    [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
-    [Range(0, 10)][SerializeField] private int orbCountAtStart;
-
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 2f;
     [SerializeField] private Transform firePointTransform;
@@ -20,10 +16,6 @@ public class OrbController : MonoBehaviour
     [SerializeField] private Transform ellipseCenterTransform;
     [SerializeField] private float ellipseXRadius = 0.5f;
     [SerializeField] private float ellipseYRadius = 0.75f;
-
-    [Header("Ellipse Movement")]
-    [SerializeField] private float ellipseMovementSpeed = 1.5f;
-    [SerializeField] private float ellipseRotationSpeed = 5f;
 
     [Header("Components")]
     [SerializeField] private PlayerInputHandler input;
@@ -47,6 +39,7 @@ public class OrbController : MonoBehaviour
     private List<SimpleOrb> orbsOnEllipse = new();
     private List<SimpleOrb> orbsThrowed = new();
     private SimpleOrb orbToThrow;
+    private int orbCountAtStart;
 
     //Cooldown
     private float throwCooldownTimer;
@@ -204,8 +197,9 @@ public class OrbController : MonoBehaviour
 
     private void UpdateEllipsePosition()
     {
-        transform.position = Vector3.Lerp(transform.position, ellipseCenterTransform.position, Time.deltaTime * ellipseMovementSpeed);
-        transform.rotation = Quaternion.Lerp(transform.rotation, ellipseCenterTransform.rotation, Time.deltaTime * ellipseRotationSpeed);
+        //transform.position = Vector3.Lerp(transform.position, ellipseCenterTransform.position, Time.deltaTime * ellipseMovementSpeed);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, ellipseCenterTransform.rotation, Time.deltaTime * ellipseRotationSpeed);
+        transform.forward = ellipseCenterTransform.forward;
     }
 
     public void AddOrb(bool withCallbacks = true)
