@@ -110,10 +110,10 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _ElectricityAmount: 14.47
-    - _ElectricityScale: 15
+    - _ElectricityScale: 13
     - _ElectricityThickness: 0.3
     - _EnvironmentReflections: 1
-    - _FadeMultiplier: 3
+    - _FadeMultiplier: 0.4
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -133,8 +133,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 9.898307, g: 3.2231152, b: 52.561546, a: 1}
-    - _ElectricitySpeed: {r: 0, g: 0.5, b: 0, a: 0}
+    - _Color: {r: 47.647255, g: 15.515037, b: 253.01433, a: 1}
+    - _ElectricitySpeed: {r: 0.1, g: 0.2, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _NoiseSpeed: {r: 0.1, g: -0.8, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
