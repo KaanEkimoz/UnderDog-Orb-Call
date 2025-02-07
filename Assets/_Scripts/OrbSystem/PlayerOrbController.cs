@@ -56,6 +56,8 @@ public class OrbController : MonoBehaviour
     //Flags
     private bool isAiming = false;
 
+    public bool IsAiming => isAiming;
+
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
@@ -161,7 +163,7 @@ public class OrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb();
+            AddOrb(false);
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
@@ -206,8 +208,11 @@ public class OrbController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, ellipseCenterTransform.rotation, Time.deltaTime * ellipseRotationSpeed);
     }
 
-    public void AddOrb()
+    public void AddOrb(bool withCallbacks = true)
     {
+        if (orbsThrowed.Count + orbsOnEllipse.Count >= Constants.MAX_ORBS_CAN_BE_HELD)
+            return;
+
         var newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
 
@@ -215,11 +220,15 @@ public class OrbController : MonoBehaviour
         Player.Instance.Hub.OrbHandler.AddOrb();
         UpdateOrbEllipsePositions();
         OnOrbAdded?.Invoke();
+
+        if (withCallbacks) OnOrbCountChanged?.Invoke(orbsThrowed.Count + orbsOnEllipse.Count + 1);
     }
     public void RemoveOrb()
     {
         var orbToRemove = orbsOnEllipse[orbsOnEllipse.Count - 1];
         RemoveOrbFromList(orbToRemove);
+
+        OnOrbCountChanged?.Invoke(orbsThrowed.Count + orbsOnEllipse.Count - 1);
     }
 
     public void AddOrbToList(SimpleOrb orb)

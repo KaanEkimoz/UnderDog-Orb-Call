@@ -44,6 +44,15 @@ public class ThirdPersonController : MonoBehaviour
     private float _dashCooldownTimer = 0;
     private float _dashDurationTimer = 0;
 
+    public float DashCooldown => dashCooldownInSeconds;
+    public float DashCooldownTimer => _dashCooldownTimer;
+
+    public float DashDuration => dashDurationInSeconds;
+    public float DashDurationTimer => _dashDurationTimer;
+
+    public int MaxDashCount => maxDashCount;
+    public int DashCount => _dashCount;
+
     //animation
     private bool _hasAnimator;
     private float _horizontalSpeedAnimationBlend;

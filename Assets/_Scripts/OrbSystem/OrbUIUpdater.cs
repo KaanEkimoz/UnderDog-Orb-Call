@@ -18,7 +18,6 @@ namespace com.game.orbsystem.ui
         [SerializeField] private OrbDisplayGP m_prefab;
 
         List<OrbDisplayGP> m_orbDisplays;
-        Queue<OrbDisplayGP> m_orbDisplaysWaitingForAddition;
         int m_orbCount;
         float m_stepAngle;
         float m_realScalingFactor;
@@ -28,10 +27,13 @@ namespace com.game.orbsystem.ui
 
         private void Start()
         {
-            m_orbDisplaysWaitingForAddition = new();
-
             SubscribeToEvents();
             FetchVariables();
+        }
+
+        private void Update()
+        {
+            //if (m_selectedOrbIndex != m_orbController.orb)
         }
 
         void SubscribeToEvents()
@@ -57,6 +59,15 @@ namespace com.game.orbsystem.ui
         void CreateOrbDisplays()
         {
             if (m_orbDisplays == null) m_orbDisplays = new();
+            else
+            {
+                for (int i = 0; i < m_orbDisplays.Count; i++)
+                {
+                    Destroy(m_orbDisplays[i]);
+                }
+
+                m_orbDisplays.Clear();
+            }
 
             for (int i = 0; i < m_orbCount; i++)
             {
@@ -66,18 +77,13 @@ namespace com.game.orbsystem.ui
                 Vector2 direction = new Vector2(sin, cos);
                 Vector2 position = direction * m_diameter;
 
-                OrbDisplayGP orbDisplay;
-
-                if (i < m_orbDisplays.Count) orbDisplay = m_orbDisplays[i];
-                else orbDisplay = Instantiate(m_prefab);
-
+                OrbDisplayGP orbDisplay = Instantiate(m_prefab);
                 orbDisplay.transform.SetParent(m_pivot, false);
                 orbDisplay.transform.localPosition = position;
 
                 orbDisplay.Initialize(m_orbController.OrbsOnEllipse[i]);
 
-                if (!m_orbDisplays.Contains(orbDisplay)) 
-                    m_orbDisplays.Add(orbDisplay);
+                m_orbDisplays.Add(orbDisplay);
 
                 if (i == 0) m_orbSelectionBorder.localPosition = position;
             }
@@ -97,23 +103,19 @@ namespace com.game.orbsystem.ui
 
         void SelectNextOrb()
         {
-            //if (m_selectedOrbIndex != -1) m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
-
-            m_selectedOrbIndex++;
-
-            if (m_selectedOrbIndex >= m_orbCount) m_selectedOrbIndex -= m_orbCount;
-            else if (m_selectedOrbIndex < 0) m_selectedOrbIndex += m_orbCount;
-
-            //m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
-
-            UpdateArrangement();
+            SelectOrb(m_selectedOrbIndex + 1);
         }
 
         void SelectPreviousOrb()
         {
+            SelectOrb(m_selectedOrbIndex - 1);
+        }
+
+        void SelectOrb(int index)
+        {
             //m_orbDisplays[m_selectedOrbIndex].SetSelected(false);
 
-            m_selectedOrbIndex--;
+            m_selectedOrbIndex = index;
 
             if (m_selectedOrbIndex >= m_orbCount) m_selectedOrbIndex -= m_orbCount;
             else if (m_selectedOrbIndex < 0) m_selectedOrbIndex += m_orbCount;

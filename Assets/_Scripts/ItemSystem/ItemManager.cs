@@ -9,6 +9,7 @@ namespace com.game.itemsystem
     public static class ItemManager
     {
         public const bool ENABLED = true;
+        public const string ITEM_PROFILE_TAG = "itemprofile";
 
         static IDatabaseInstance<string, ItemProfileBase> s_instance;
         public static IDatabaseInstance<string, ItemProfileBase> Instance => s_instance;
@@ -23,7 +24,7 @@ namespace com.game.itemsystem
             if (s_instance != null)
                 s_instance.Dispose();
 
-            s_instance = new AddressablesMemberDatabaseInstance<string, ItemProfileBase>("itemprofile", false);
+            s_instance = new AddressablesDatabaseInstance<string, ItemProfileBase>(ITEM_PROFILE_TAG, false);
             s_instance.Refresh();
         }
 #pragma warning restore CS0162 // Unreachable code detected

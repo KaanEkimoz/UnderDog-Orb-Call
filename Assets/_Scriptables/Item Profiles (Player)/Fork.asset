@@ -27,8 +27,8 @@ MonoBehaviour:
     m_incrementalValue: 6
     m_percentageValue: 200
     TargetStatType: 6
-  - ModificationType: 1
-    m_incrementalValue: 0
+  - ModificationType: 0
+    m_incrementalValue: 100
     m_percentageValue: 100
     TargetStatType: 8
   m_playerStatCaps:
