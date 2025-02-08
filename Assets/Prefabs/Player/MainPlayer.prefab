@@ -2003,6 +2003,7 @@ MonoBehaviour:
   dashSpeed: 35
   dashDurationInSeconds: 0.23
   dashCooldownInSeconds: 1.5
+  maxDashCount: 2
   rotationSmoothTime: 0.08
   speedChangeRate: 10
   footstepAudioClips:
@@ -2017,7 +2018,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   footstepAudioVolume: 1
-  _soundFXManager: {fileID: 0}
 --- !u!114 &2361727026044059572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2064,7 +2064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorDetectMask:
     serializedVersion: 2
-    m_Bits: 257
+    m_Bits: 12545
 --- !u!114 &8092107762673492513
 MonoBehaviour:
   m_ObjectHideFlags: 0

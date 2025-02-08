@@ -31,7 +31,7 @@ public class OrbController : MonoBehaviour
 
     [Header("Orb Materials")]
     [SerializeField] private Material highlightMaterial;
-    [SerializeField] private Material ghostMaterial;
+    [SerializeField] private GameObject ghostOrbPrefab;
 
     // Events
     public event Action OnOrbThrowed;
@@ -44,6 +44,7 @@ public class OrbController : MonoBehaviour
     public event Action OnOrbAdded;
 
     private List<SimpleOrb> orbsOnEllipse = new();
+    private List<GhostOrb> ghostOrbs = new();
     private SimpleOrb orbToThrow;
     private float throwCooldownTimer;
     public bool isAiming = false;
@@ -66,6 +67,7 @@ public class OrbController : MonoBehaviour
         if (objectPool == null)
             objectPool = FindAnyObjectByType<ObjectPool>();
 
+        CreateGhostOrbsAtStart();
         CreateOrbsAtStart();
         CalculateAngleStep();
     }
@@ -96,6 +98,15 @@ public class OrbController : MonoBehaviour
             ChoosePreviousOrb();
 
         
+    }
+    private void CreateGhostOrbsAtStart()
+    {
+        for (int i = 0; i < maximumOrbCount; i++)
+        {
+            var ghostOrb = Instantiate(ghostOrbPrefab, transform);
+            ghostOrb.SetActive(false);
+            ghostOrbs.Add(ghostOrb.GetComponent<GhostOrb>());
+        }
     }
     private void CallOrbs()
     {
@@ -262,18 +273,30 @@ public class OrbController : MonoBehaviour
                 orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
                 orbToThrow.SetNewDestination(firePointTransform.position);
             }
-            else
-                orbsOnEllipse[i].SetNewDestination(targetPosition);
-        }
+            else if (ghostOrbs[i] != null)
+            {
+                if (orbsOnEllipse[i].currentState != OrbState.OnEllipse)
+                {
+                    if (ghostOrbs[i].gameObject.activeSelf == false)
+                        ghostOrbs[i].gameObject.SetActive(true);
 
+                    ghostOrbs[i].SetNewDestination(targetPosition);
+                }
+                else
+                {
+                    if (ghostOrbs[i].gameObject.activeSelf == true)
+                        ghostOrbs[i].gameObject.SetActive(false);
+
+                    orbsOnEllipse[i].SetNewDestination(targetPosition);
+                }
+            }   
+        }
         UpdateSelectedOrbMaterial();
     }
-
     private void CalculateAngleStep()
     {
         angleStep = 360f / activeOrbCount;
     }
-
     private Vector3 GetMouseWorldPosition()
     {
         var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
