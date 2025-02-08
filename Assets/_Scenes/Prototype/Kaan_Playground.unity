@@ -9333,7 +9333,7 @@ PrefabInstance:
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: highlightMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 972f4578ed8e54341a5bab19204b0f2a, type: 2}
+      objectReference: {fileID: 2100000, guid: c68fd06015cbabc4e831614559451308, type: 2}
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: firePointTransform
       value: 

@@ -23,7 +23,7 @@ public class IsometricAiming : MonoBehaviour
     {
         if (Game.Paused) return;
 
-        if (!_orbController.IsAiming) return;
+        if (!_orbController.isAiming) return;
 
         if (TryGetMouseWorldPosition(out var targetPosition))
             AimAtTarget(targetPosition);
