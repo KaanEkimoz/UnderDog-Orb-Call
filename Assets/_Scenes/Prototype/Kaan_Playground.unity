@@ -1850,10 +1850,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_light: {fileID: 449109140}
-  m_zeroIntensity: 0
+  m_zeroIntensity: 6.25
   m_stepIntensity: 7.94
   m_intensitySpeed: 4
-  m_zeroRange: 0
+  m_zeroRange: 4.54
   m_stepRange: 1.2
   m_rangeSpeed: 2
 --- !u!114 &449109139
@@ -1891,7 +1891,7 @@ Light:
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 7.94
-  m_Range: 3.8816357
+  m_Range: 4.54
   m_SpotAngle: 156.31642
   m_InnerSpotAngle: 0
   m_CookieSize: 10
