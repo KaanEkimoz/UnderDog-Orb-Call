@@ -13,12 +13,13 @@ namespace com.game.abilitysystem.ui
             Dash,
         }
 
-        public const bool COOLDOWN_FILL = true;
+        public const bool COOLDOWN_FILL = false;
 
         [SerializeField] private ThirdPersonController m_playerController;
         [SerializeField] private TestAbilityType m_testAbilityType = TestAbilityType.Dash;
         [SerializeField] private CanvasGroup m_graphic;
         [SerializeField] private GameObject m_cooldownPanel;
+        [SerializeField] private Image m_semiCooldownFillImage;
         [SerializeField] private Image m_cooldownFillImage;
         [SerializeField] private TMP_Text m_useCountText;
         [SerializeField] private TMP_Text m_cooldownText;
@@ -58,13 +59,23 @@ namespace com.game.abilitysystem.ui
 
         private void Update()
         {
+            float timerValue = m_playerController.DashCooldownTimer;
+
             if (m_useCountText != null)
                 m_useCountText.text = m_playerController.DashCount.ToString();
 
             if (!m_readyToUse)
+            {
                 UpdateCooldown();
-            else if (m_playerController.DashCount == 0 && m_playerController.DashCooldownTimer > 0f)
+                return;
+            }
+
+            if (m_semiCooldownFillImage) m_semiCooldownFillImage.fillAmount = timerValue / m_totalCooldown;
+
+            if (m_playerController.DashCount == 0 && timerValue > 0f)
+            {
                 SetReady(false);
+            }
         }
 
         void UpdateCooldown()
@@ -88,6 +99,7 @@ namespace com.game.abilitysystem.ui
         {
             m_readyToUse = ready;
             m_cooldownPanel.SetActive(!ready);
+            m_semiCooldownFillImage.gameObject.SetActive(ready);
             m_useCountText?.gameObject.SetActive(ready);
         }
     }
