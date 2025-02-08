@@ -13,7 +13,7 @@ namespace com.game.player.scriptables
         [Space]
         [Header3("Initial")]
 
-        [Min(1)] public int OrbCount;
+        [Range(0, Constants.MAX_ORBS_CAN_BE_HELD)] public int OrbCount;
 
         [Space]
         [Header3("Stat-Based")]

@@ -1,11 +1,16 @@
 using UnityEngine;
 using com.game.testing;
 using System;
+using com.absence.attributes;
+using com.game.enemysystem.statsystemextensions;
 
 namespace com.game.enemysystem
 {
     public class EnemyCombatant : MonoBehaviour, IDamageable
     {
+        [SerializeField] private GameObject m_container;
+        [SerializeField, Required] private EnemyStats m_stats;
+
         float _health;
         float _maxHealth;
 
@@ -18,7 +23,7 @@ namespace com.game.enemysystem
 
         private void Start()
         {
-            _maxHealth = 20f;
+            _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;
         }
 
@@ -54,7 +59,8 @@ namespace com.game.enemysystem
             }
 
             TestEventChannel.ReceiveEnemyKill();
-            Destroy(gameObject);
+            if (m_container != null) Destroy(m_container);
+            else Destroy(gameObject);
 
             OnDie?.Invoke();
         }

@@ -11,6 +11,7 @@ public class ExploderEnemy : Enemy
     public float preperationTime = 2f;
     public float explosionRadius = 5f;
     public MeshRenderer explosiveEnemyRenderer;
+    public GameObject container;
     public Color explotionColor = Color.white;
     public Color defaultColor = Color.red;
 
@@ -81,7 +82,8 @@ public class ExploderEnemy : Enemy
 
         //TestEventChannel.ReceiveEnemyKill();
 
-        Destroy(gameObject);
+        if (container != null) Destroy(container);
+        else Destroy(gameObject);
     }
 
     private void CancelPreparation()

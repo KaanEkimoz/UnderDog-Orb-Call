@@ -52,6 +52,8 @@ public class OrbController : MonoBehaviour
     private int selectedOrbIndex = 0;
     private float angleStep; // The angle between orbs
 
+    public List<SimpleOrb> OrbsOnEllipse => orbsOnEllipse;
+
     private void Start()
     {
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;

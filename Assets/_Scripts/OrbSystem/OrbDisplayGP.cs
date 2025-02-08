@@ -1,5 +1,3 @@
-using com.absence.attributes;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,19 +12,32 @@ namespace com.game.orbsystem.ui
             Recalling,
         }
 
-        [SerializeField, Readonly] private DisplayState m_state = DisplayState.Ready;
         [SerializeField] private Image m_image;
         [SerializeField] private Transform m_swayPivot;
         [SerializeField] private float m_swayMagnitude;
 
         bool m_isRotating = false;
-        bool m_isThrown = false;
-
-        public bool IsThrown => m_isThrown;
+        SimpleOrb m_orb;
 
         private void Start()
         {
-            //transform.DOMove(m_swayPivot);
+            SetDisplay(OrbState.OnEllipse);
+        }
+
+        public void Initialize(SimpleOrb orb)
+        {
+            if (m_orb != null && m_orb != orb)
+            {
+                m_orb.OnStateChanged -= OnOrbStateChanged;
+            }
+
+            m_orb = orb;
+            m_orb.OnStateChanged += OnOrbStateChanged;
+        }
+
+        private void OnOrbStateChanged(OrbState state)
+        {
+            SetDisplay(state);
         }
 
         private void Update()
@@ -40,18 +51,20 @@ namespace com.game.orbsystem.ui
             m_isRotating = rotating;
         }
 
-        public void SetState(DisplayState newState)
+        void SetDisplay(OrbState state)
         {
-            m_state = newState;
-            switch (newState)
+            switch (state)
             {
-                case DisplayState.Ready:
+                case OrbState.OnEllipse:
                     m_image.color = Color.cyan;
                     break;
-                case DisplayState.Thrown:
+                case OrbState.Throwing:
                     m_image.color = Color.red;
                     break;
-                case DisplayState.Recalling:
+                case OrbState.Sticked:
+                    m_image.color = Color.red;
+                    break;
+                case OrbState.Returning:
                     m_image.color = Color.magenta;
                     break;
                 default:

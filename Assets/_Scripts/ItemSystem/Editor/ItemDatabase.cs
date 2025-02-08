@@ -1,41 +1,63 @@
+using com.absence.utilities.experimental.databases;
+using com.absence.utilities.experimental.databases.editor;
 using com.game.itemsystem.scriptables;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Text;
+using UnityEditor;
 using UnityEngine;
 
-namespace com.game.itemsystem
+namespace com.game.itemsystem.editor
 {
     public static class ItemDatabase
     {
-        private static Dictionary<string, ItemProfileBase> s_entries;
-        public static Dictionary<string, ItemProfileBase> Entries => s_entries;
+        public const bool DEBUG_MODE = true;
+        private static IDatabaseInstance<string, ItemProfileBase> s_instance;
 
-        public static async void InitializeAsync()
+        [MenuItem("Game/Item System/Refresh Item Database")]
+        static void Refresh_MenuItem()
         {
-            await Task.Delay(1000);
+            Refresh(true);
+        }
 
-            /*
-                NO LOGIC SET.
-            */
+        [InitializeOnLoadMethod]
+        static void Initialize()
+        {
+            s_instance = new EditorMemberDatabaseInstance<string, ItemProfileBase>();
+            Refresh(DEBUG_MODE);
+        }
+
+        public static void Refresh(bool debugMode = false)
+        {
+            s_instance.Refresh();
+
+            if (debugMode) Print();
+        }
+        public static void Print()
+        {
+            StringBuilder sb = new("<b>[ITEMSYSTEM] Found Items: </b>");
+
+            foreach (ItemProfileBase item in s_instance)
+            {
+                sb.Append("\n\t");
+                sb.Append("-> <color=white>");
+                sb.Append(item.DisplayName);
+                sb.Append("</color>");
+                sb.Append(" [");
+                sb.Append(item.Guid);
+                sb.Append("]");
+            }
+
+            sb.Append("\n");
+            Debug.Log(sb.ToString());
         }
 
         public static ItemProfileBase GetItem(string guid)
         {
-            return null;
-
-            /*
-                NO LOGIC SET.
-            */
+            return s_instance[guid];
         }
-
         public static bool TryGetItem(string guid, out ItemProfileBase result)
         {
-            result = null;
-            return false;
-
-            /*
-                NO LOGIC SET.
-            */
+            bool success = s_instance.TryGet(guid, out result);
+            return success;
         }
     }
 }

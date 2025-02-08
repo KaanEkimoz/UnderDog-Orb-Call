@@ -9,6 +9,9 @@ namespace com.game.player
 
         void Update()
         {
+            if (Game.Paused)
+                return;
+
             UpdatePosition();
         }
 

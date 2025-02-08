@@ -21,12 +21,19 @@
       "dependencies": {},
       "hash": "59ff4466daf17b5c6c557a774eb991a66b1aabc7"
     },
+    "com.absence.timersystem": {
+      "version": "https://www.github.com/b1lodHand/absent-timers.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0d57086ca887b40a86b5e650eae49155ec597e40"
+    },
     "com.absence.utilities": {
       "version": "https://www.github.com/b1lodHand/absent-utilities.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3b9d01732c0df6db81b9639657208dab7e254b63"
+      "hash": "8bdbc16f419f7a26bc5635c269314e86a87e3c50"
     },
     "com.absence.variablesystem": {
       "version": "https://www.github.com/b1lodHand/absent-variables.git",

@@ -8,15 +8,15 @@ namespace com.game.player
     {
         [SerializeField] private LayerMask m_mask;
         [SerializeField] private Image m_image;
-        [SerializeField] private Canvas m_canvas;
+        [SerializeField] private RectTransform m_canvas;
+        [SerializeField] private PlayerAttackIndicator m_indicator;
+        [SerializeField] private Transform m_playerFirepoint;
 
         Camera m_camera;
 
         private void Start()
         {
             m_camera = Camera.main;
-
-            m_canvas.worldCamera = m_camera;
             UpdateAlignment();
         }
 
@@ -32,13 +32,17 @@ namespace com.game.player
             UpdateColor();
         }
 
-        private void UpdatePosition()
+        void UpdatePosition()
         {
-            Vector3 mousePosition = Mouse.current.position.ReadValue();
-            mousePosition.z = m_camera.nearClipPlane;
-            
-            Vector3 mouseWorldPosition = m_camera.ScreenToWorldPoint(mousePosition);
-            m_image.transform.position = mouseWorldPosition;
+            Vector3 worldPosition = m_indicator.transform.position;
+            worldPosition.y += m_playerFirepoint.position.y;
+
+            Vector3 viewportPosition = m_camera.WorldToViewportPoint(worldPosition);
+            Vector2 canvasPosition = new Vector2(
+            ((viewportPosition.x * m_canvas.sizeDelta.x) - (m_canvas.sizeDelta.x * 0.5f)),
+            ((viewportPosition.y * m_canvas.sizeDelta.y) - (m_canvas.sizeDelta.y * 0.5f)));
+
+            m_image.rectTransform.anchoredPosition = canvasPosition;
         }
 
         void UpdateColor()

@@ -28,8 +28,9 @@ public class RangedEnemy : Enemy
     {   
         canShoot = false;
        
-        Vector3 targetCenter = target.transform.position + new Vector3(0, target.GetComponent<Collider>().bounds.extents.y, 0); //playerin boyunun yarisi
-        Vector3 shootingDirection = (targetCenter - transform.position).normalized; //projectile yonu
+        Vector3 shootingDirection = (target.transform.position - transform.position);
+        shootingDirection.y = 0f;
+        shootingDirection = shootingDirection.normalized; //projectile yonu
 
         //projectile'i instantiate et
         EnemyProjectile projectile = CreateProjectile();
