@@ -17,7 +17,7 @@ namespace com.game.player
         public event Action<float> OnTakeDamage = delegate { };
         public event Action OnDie = delegate { };
 
-        private void Start()
+        private void Awake()
         {
             _playerStats = GetComponent<PlayerStats>();
             _maxHealth = _playerStats.GetStat(PlayerStatType.Health);

@@ -41,7 +41,7 @@ namespace com.game.player
 
         protected override void Initialize_Internal()
         {
-            m_absoluteMaxOrbs = Constants.MAX_ORBS_CAN_BE_HELD;
+            m_absoluteMaxOrbs = Constants.Gameplay.MAX_ORBS_CAN_BE_HELD;
             m_orbHandler = Player.Instance.Hub.OrbHandler;
 
             int maxOrbsFromProfile = m_orbHandler.MaxOrbsCanBeHeld;

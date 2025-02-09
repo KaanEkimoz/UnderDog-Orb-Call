@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace com.game.player.scriptables
 {
-    [CreateAssetMenu(fileName = "New PlayerCharacterProfile", menuName = "Game/Player Character Profile", order = int.MinValue)]
+    [CreateAssetMenu(fileName = "New PlayerCharacterProfile", menuName = "Game/Player/Player Character Profile", order = int.MinValue)]
     public class PlayerCharacterProfile : ScriptableObject
     {
         [Header1("Character Profile for Player")]
@@ -13,7 +13,7 @@ namespace com.game.player.scriptables
         [Space]
         [Header3("Initial")]
 
-        [Range(0, Constants.MAX_ORBS_CAN_BE_HELD)] public int OrbCount;
+        [Range(0, Constants.Gameplay.MAX_ORBS_CAN_BE_HELD)] public int OrbCount;
 
         [Space]
         [Header3("Stat-Based")]

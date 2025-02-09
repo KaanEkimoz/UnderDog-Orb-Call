@@ -12,12 +12,6 @@ namespace com.game.player
 
         public List<PlayerStatPipelineComponentBase> Query => m_pipelineComponentList;
 
-        private void Start()
-        {
-            Refresh();
-            m_pipelineComponentList.ForEach(comp => comp.Initialize());
-        }
-
         public float Process(PlayerStatType statType, float rawValue)
         {
             float value = rawValue;
@@ -35,10 +29,12 @@ namespace com.game.player
         }
 
         [Button("Refresh Pipeline Component List")]
-        void Refresh()
+        public void Refresh()
         {
             m_pipelineComponentList = GetComponents<PlayerStatPipelineComponentBase>().ToList().
                 OrderBy(comp => comp.Order).ToList();
+
+            m_pipelineComponentList.ForEach(comp => comp.Initialize());
         }
     }
 }

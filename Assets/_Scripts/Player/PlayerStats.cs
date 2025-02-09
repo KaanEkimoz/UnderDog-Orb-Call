@@ -42,6 +42,8 @@ namespace com.game.player
         {
             Initialize(m_defaultStats);
             if (m_debugMode) ApplyCharacterProfile(m_defaultCharacterProfile);
+
+            if (m_statPipeline != null) m_statPipeline.Refresh();
         }
 
         #region Public API
