@@ -63,5 +63,15 @@ namespace com.game.itemsystem
                 if (item is T itemCasted) yield return itemCasted;
             }
         }
+
+        public static ItemProfileBase GetItem(string guid)
+        {
+            return s_instance[guid];
+        }
+
+        public static T GetItem<T>(string guid) where T : ItemProfileBase
+        {
+            return s_instance[guid] as T;
+        }
     }
 }

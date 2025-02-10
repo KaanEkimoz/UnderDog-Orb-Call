@@ -1903,7 +1903,7 @@ Light:
   m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -9234,6 +9234,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExampleAbility
       objectReference: {fileID: 0}
+    - target: {fileID: 8598935669131777234, guid: 9edf9053b0dbcc44d82df8fece1e18e5, type: 3}
+      propertyPath: m_item.RealValue
+      value: dd7f39af-0e33-42eb-bbfb-c6a824c97716
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598935669131777234, guid: 9edf9053b0dbcc44d82df8fece1e18e5, type: 3}
+      propertyPath: m_item.SkinValue
+      value: 
+      objectReference: {fileID: 11400000, guid: 3f09d8fa0c838ba4bac3a9d1a494d0c0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
