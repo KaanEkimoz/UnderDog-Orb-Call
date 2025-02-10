@@ -43,7 +43,7 @@ public class OrbController : MonoBehaviour
     public event Action OnSelectedOrbChanged;
     public event Action OnOrbAdded;
 
-    private List<SimpleOrb> orbsOnEllipse = new();
+    public List<SimpleOrb> OrbsOnEllipse = new();
     private List<GhostOrb> ghostOrbs = new();
     private SimpleOrb orbToThrow;
     private float throwCooldownTimer;
@@ -110,7 +110,7 @@ public class OrbController : MonoBehaviour
     }
     private void CallOrbs()
     {
-        foreach (var orb in orbsOnEllipse)
+        foreach (var orb in OrbsOnEllipse)
         {
             if (orb.currentState == OrbState.Sticked)
                 CallOrb(orb);
@@ -126,9 +126,9 @@ public class OrbController : MonoBehaviour
 
     private void ChooseNextOrb()
     {
-        if (orbsOnEllipse.Count <= 1) return;
+        if (OrbsOnEllipse.Count <= 1) return;
 
-        selectedOrbIndex = (selectedOrbIndex + 1) % orbsOnEllipse.Count;
+        selectedOrbIndex = (selectedOrbIndex + 1) % OrbsOnEllipse.Count;
         ShiftOrbsInList();
         UpdateOrbEllipsePositions();
         OnNextOrbSelected?.Invoke();
@@ -136,9 +136,9 @@ public class OrbController : MonoBehaviour
 
     private void ChoosePreviousOrb()
     {
-        if (orbsOnEllipse.Count <= 1) return;
+        if (OrbsOnEllipse.Count <= 1) return;
 
-        selectedOrbIndex = (selectedOrbIndex - 1 + orbsOnEllipse.Count) % orbsOnEllipse.Count;
+        selectedOrbIndex = (selectedOrbIndex - 1 + OrbsOnEllipse.Count) % OrbsOnEllipse.Count;
         ShiftOrbsInList();
         UpdateOrbEllipsePositions();
         OnPreviousOrbSelected?.Invoke();
@@ -147,24 +147,24 @@ public class OrbController : MonoBehaviour
     {
         List<SimpleOrb> newList = new();
 
-        for (int i = 0; i < orbsOnEllipse.Count; i++)
+        for (int i = 0; i < OrbsOnEllipse.Count; i++)
         {
-            int newIndex = (i + selectedOrbIndex) % orbsOnEllipse.Count;
-            newList.Add(orbsOnEllipse[newIndex]);
+            int newIndex = (i + selectedOrbIndex) % OrbsOnEllipse.Count;
+            newList.Add(OrbsOnEllipse[newIndex]);
         }
 
-        orbsOnEllipse = newList;
+        OrbsOnEllipse = newList;
         selectedOrbIndex = 0; // En üstteki top her zaman sıfırıncı indexte olacak
     }
 
     private void UpdateSelectedOrbMaterial()
     {
-        for (int i = 0; i < orbsOnEllipse.Count; i++)
+        for (int i = 0; i < OrbsOnEllipse.Count; i++)
         {
             if (i == selectedOrbIndex)
-                orbsOnEllipse[i].SetMaterial(highlightMaterial);
+                OrbsOnEllipse[i].SetMaterial(highlightMaterial);
             else
-                orbsOnEllipse[i].ResetMaterial();
+                OrbsOnEllipse[i].ResetMaterial();
         }
     }
 
@@ -180,10 +180,10 @@ public class OrbController : MonoBehaviour
 
     private void Aim()
     {
-        if (orbToThrow != null || orbsOnEllipse.Count == 0 || throwCooldownTimer > 0) return;
+        if (orbToThrow != null || OrbsOnEllipse.Count == 0 || throwCooldownTimer > 0) return;
 
         isAiming = true;
-        orbToThrow = orbsOnEllipse[selectedOrbIndex];
+        orbToThrow = OrbsOnEllipse[selectedOrbIndex];
     }
 
     private void Throw()
@@ -222,7 +222,7 @@ public class OrbController : MonoBehaviour
         newOrb.transform.position = ellipseCenterTransform.position;
 
         activeOrbCount++;
-        orbsOnEllipse.Add(newOrb);
+        OrbsOnEllipse.Add(newOrb);
         CalculateAngleStep();
 
         UpdateOrbEllipsePositions();
@@ -233,19 +233,19 @@ public class OrbController : MonoBehaviour
 
     public void AddOrbToList(SimpleOrb orb)
     {
-        orbsOnEllipse.Add(orb);
+        OrbsOnEllipse.Add(orb);
     }
 
     public void RemoveOrbFromEllipse(SimpleOrb orb)
     {
-        orbsOnEllipse.Remove(orb);
+        OrbsOnEllipse.Remove(orb);
         activeOrbCount--;
         UpdateOrbEllipsePositions();
     }
     public void RemoveOrb()
     {
-        int indexToRemove = orbsOnEllipse.Count - 1;
-        orbsOnEllipse.RemoveAt(indexToRemove);
+        int indexToRemove = OrbsOnEllipse.Count - 1;
+        OrbsOnEllipse.RemoveAt(indexToRemove);
         activeOrbCount--;
         CalculateAngleStep();
         UpdateOrbEllipsePositions();
@@ -253,11 +253,11 @@ public class OrbController : MonoBehaviour
 
     private void UpdateOrbEllipsePositions()
     {
-        if (orbsOnEllipse.Count == 0) return;
+        if (OrbsOnEllipse.Count == 0) return;
 
         float angleOffset = 90f; // Seçili top en üstte olacak
 
-        for (int i = 0; i < orbsOnEllipse.Count; i++)
+        for (int i = 0; i < OrbsOnEllipse.Count; i++)
         {
             float angle = angleOffset + i * angleStep;
             float angleInRadians = angle * Mathf.Deg2Rad;
@@ -268,14 +268,14 @@ public class OrbController : MonoBehaviour
             Vector3 localPosition = new Vector3(localX, localY, 0f);
             Vector3 targetPosition = ellipseCenterTransform.position + (ellipseCenterTransform.rotation * localPosition);
 
-            if(orbsOnEllipse[i] == orbToThrow)
+            if(OrbsOnEllipse[i] == orbToThrow)
             {
                 orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
                 orbToThrow.SetNewDestination(firePointTransform.position);
             }
             else if (ghostOrbs[i] != null)
             {
-                if (orbsOnEllipse[i].currentState != OrbState.OnEllipse)
+                if (OrbsOnEllipse[i].currentState != OrbState.OnEllipse)
                 {
                     if (ghostOrbs[i].gameObject.activeSelf == false)
                         ghostOrbs[i].gameObject.SetActive(true);
@@ -287,7 +287,7 @@ public class OrbController : MonoBehaviour
                     if (ghostOrbs[i].gameObject.activeSelf == true)
                         ghostOrbs[i].gameObject.SetActive(false);
 
-                    orbsOnEllipse[i].SetNewDestination(targetPosition);
+                    OrbsOnEllipse[i].SetNewDestination(targetPosition);
                 }
             }   
         }
