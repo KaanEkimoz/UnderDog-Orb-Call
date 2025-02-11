@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1500069609196033266}
   - component: {fileID: 1505749297283057371}
+  - component: {fileID: 794347696325058884}
   m_Layer: 0
   m_Name: OrbController
   m_TagString: Untagged
@@ -57,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 4548954406257375815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.4, y: 1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumOrbCount: 10
   orbCountAtStart: 5
-  cooldownBetweenThrowsInSeconds: 0
+  cooldownBetweenThrowsInSeconds: 1
   firePointTransform: {fileID: 0}
   cursorDetectMask:
     serializedVersion: 2
@@ -86,9 +87,26 @@ MonoBehaviour:
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
-  ellipseMovementSpeed: 1.5
-  ellipseRotationSpeed: 5
+  ellipseMovementSpeed: 5
+  ellipseRotationSpeed: 10
   objectPool: {fileID: 0}
-  highlightMaterial: {fileID: 2100000, guid: 972f4578ed8e54341a5bab19204b0f2a, type: 2}
+  highlightMaterial: {fileID: 2100000, guid: c68fd06015cbabc4e831614559451308, type: 2}
   ghostOrbPrefab: {fileID: 8886230964089384064, guid: 3ac12e18f03e79d40b774a17a4df6ba3, type: 3}
+  OrbsOnEllipse: []
   isAiming: 0
+--- !u!114 &794347696325058884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4548954406257375815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f18d2a6265fad4aada38bf12721a10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_followingType: 1
+  m_target: {fileID: 0}
+  m_keepStartingOffset: 1
+  m_offset: {x: 0, y: 0, z: 0}
