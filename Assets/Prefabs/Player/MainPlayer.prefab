@@ -2004,7 +2004,7 @@ MonoBehaviour:
   dashDurationInSeconds: 0.23
   dashCooldownInSeconds: 1.5
   maxDashCount: 2
-  rotationSmoothTime: 0.08
+  rotationSmoothTime: 0.03
   speedChangeRate: 10
   footstepAudioClips:
   - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
