@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
         if (newEnemyStats == null)
             GetComponent<EnemyStats>();
 
+        navMeshAgent.updateRotation = false; //Donus yonetimini manuel yapmak icin
         navMeshAgent.speed = enemyMovementData.speed;
         navMeshAgent.angularSpeed = enemyMovementData.angularSpeed;
         navMeshAgent.acceleration = enemyMovementData.acceleration;
@@ -33,7 +34,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         navMeshAgent.SetDestination(target.transform.position);
-
+        RotateTowardsTarget();
         CustomUpdate();
     }
 
@@ -44,6 +45,19 @@ public class Enemy : MonoBehaviour
         return Vector3.Distance(transform.position, target.transform.position) <= enemyMovementData.stoppingDistance;
     }
 
+    private void RotateTowardsTarget()
+    {
+        if (!navMeshAgent.hasPath) return;
+
+        Vector3 direction = (navMeshAgent.steeringTarget - transform.position).normalized;
+        direction.y = 0;
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * navMeshAgent.angularSpeed);
+        }
+    }
 
 }
 
