@@ -38,13 +38,11 @@ MonoBehaviour:
   - TargetStat: 11
     Value: 1
   - TargetStat: 12
-    Value: 0
+    Value: 10
   - TargetStat: 13
     Value: 0
   - TargetStat: 14
     Value: 0
   - TargetStat: 15
-    Value: 0
-  - TargetStat: 16
     Value: 0
   m_initialized: 1

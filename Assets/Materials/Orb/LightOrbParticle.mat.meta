@@ -1,6 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Materials/Orb/LightOrbParticle.mat.meta
 guid: 32900097a9026e443b65cb71a4e70c84
 NativeFormatImporter:
+========
+guid: cad4f437552def24bbb229939cf05f0c
+folderAsset: yes
+DefaultImporter:
+>>>>>>>> e8c0eb70a9730c41140de40bd19c7ca25f356142:Assets/Prefabs/AbilityBehaviours.meta
   externalObjects: {}
   mainObjectFileID: 2100000
   userData: 

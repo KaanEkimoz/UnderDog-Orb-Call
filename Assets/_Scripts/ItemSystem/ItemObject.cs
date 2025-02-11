@@ -26,15 +26,16 @@ namespace com.game.itemsystem
 
         public static ItemObject Create(string guid)
         {
-            //ItemProfileBase profile = IteMMana.GetItem(guid);
+            ItemProfileBase profile = ItemManager.GetItem(guid);
 
-            //return new ItemObject()
-            //{
-            //    Profile = profile,
-            //    CustomData = new(),
-            //};
+            if (profile == null)
+                return null; 
 
-            return null;
+            return new ItemObject()
+            {
+                Profile = profile,
+                CustomData = new(),
+            };
         }
 
         public void Dispose()

@@ -20,7 +20,7 @@ namespace com.game.itemsystem
 
             m_instance.OnDispose += Dispose;
 
-            Spawn();
+            OnSpawn();
         }
 
         public abstract string GenerateActionDescription(bool richText);
@@ -29,13 +29,13 @@ namespace com.game.itemsystem
             return null;
         }
 
-        public abstract void Spawn();
-        public abstract void Despawn();
+        public abstract void OnSpawn();
+        public abstract void OnDespawn();
 
         protected void Dispose()
         {
             Destroy(gameObject);
-            Despawn();
+            OnDespawn();
         }
 
         private void OnDestroy()

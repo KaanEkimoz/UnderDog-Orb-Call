@@ -1,15 +1,24 @@
 using com.absence.utilities.experimental.databases;
 using com.game.itemsystem.scriptables;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets; // DO NOT ERASE.
 
 namespace com.game.itemsystem
 {
     public static class ItemManager
     {
         public const bool ENABLED = true;
-        public const string ITEM_PROFILE_TAG = "itemprofile";
+        public const string ITEM_PROFILE_TAG = "item-profile";
+
+#if !(DEVELOPMENT_BUILD || UNITY_EDITOR)
+        public const Addressables.MergeMode ItemProfileTagMergeModeRelease = Addressables.MergeMode.Intersection;
+        public static readonly IList<object> ItemProfileTagsRelease = new List<object>()
+        {
+            ITEM_PROFILE_TAG,
+            Constants.AssetManagement.RELEASE_BUILD_ASSET_LABEL,
+        };
+#endif
 
         static IDatabaseInstance<string, ItemProfileBase> s_instance;
         public static IDatabaseInstance<string, ItemProfileBase> Instance => s_instance;
@@ -24,15 +33,45 @@ namespace com.game.itemsystem
             if (s_instance != null)
                 s_instance.Dispose();
 
-            s_instance = new AddressablesDatabaseInstance<string, ItemProfileBase>(ITEM_PROFILE_TAG, false);
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            s_instance = new AddressablesDatabaseInstance<string, ItemProfileBase>
+                (ITEM_PROFILE_TAG, false);
+#else
+            s_instance = new AddressablesDatabaseInstance<string, ItemProfileBase>
+            (ItemProfileTagsRelease, ItemProfileTagMergeModeRelease, false);
+#endif
+
             s_instance.Refresh();
         }
 #pragma warning restore CS0162 // Unreachable code detected
 
-        public static IEnumerable<T> GetItemsOfType<T>() where T : ItemProfileBase
+        public static List<T> GetItemsOfType<T>() where T : ItemProfileBase
         {
-            return s_instance.Values.Where(value => value.GetType().Equals(typeof(T)))
-                .ToList().ConvertAll(value => value as T);
+            List<T> result = new List<T>();
+            foreach (ItemProfileBase item in s_instance)
+            {
+                if (item is T itemCasted) result.Add(itemCasted);
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<T> GetItemsOfTypeOneByOne<T>() where T : ItemProfileBase
+        {
+            foreach (ItemProfileBase item in s_instance)
+            {
+                if (item is T itemCasted) yield return itemCasted;
+            }
+        }
+
+        public static ItemProfileBase GetItem(string guid)
+        {
+            return s_instance[guid];
+        }
+
+        public static T GetItem<T>(string guid) where T : ItemProfileBase
+        {
+            return s_instance[guid] as T;
         }
     }
 }

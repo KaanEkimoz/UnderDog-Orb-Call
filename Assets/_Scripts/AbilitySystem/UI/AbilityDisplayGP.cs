@@ -7,16 +7,8 @@ namespace com.game.abilitysystem.ui
 {
     public class AbilityDisplayGP : MonoBehaviour
     {
-        public enum TestAbilityType
-        {
-            None,
-            Dash,
-        }
-
         public const bool COOLDOWN_FILL = false;
 
-        [SerializeField] private ThirdPersonController m_playerController;
-        [SerializeField] private TestAbilityType m_testAbilityType = TestAbilityType.Dash;
         [SerializeField] private CanvasGroup m_graphic;
         [SerializeField] private GameObject m_cooldownPanel;
         [SerializeField] private Image m_semiCooldownFillImage;
@@ -24,6 +16,7 @@ namespace com.game.abilitysystem.ui
         [SerializeField] private TMP_Text m_useCountText;
         [SerializeField] private TMP_Text m_cooldownText;
 
+        IRuntimeAbility m_ability;
         bool m_readyToUse;
         float m_totalCooldown;
         float m_totalDuration;
@@ -46,23 +39,40 @@ namespace com.game.abilitysystem.ui
 
         private void Start()
         {
-            if (m_testAbilityType == TestAbilityType.None)
+            Reinitialize();
+        }
+
+        public void Initialize(IRuntimeAbility ability)
+        {
+            m_ability = ability;
+            Reinitialize();
+        }
+
+        void Reinitialize()
+        {
+            if (m_ability == null)
             {
                 m_graphic.alpha = 0f;
                 enabled = false;
+                return;
             }
 
-            m_totalCooldown = m_playerController.DashCooldown;
-            m_totalDuration = m_playerController.DashDuration;
-            m_totalUseCount = m_playerController.MaxDashCount;
+            m_graphic.alpha = 1f;
+            enabled = true;
+
+            m_totalCooldown = m_ability.Cooldown;
+            m_totalDuration = m_ability.Duration;
+            m_totalUseCount = m_ability.MaxStack;
         }
 
         private void Update()
         {
-            float timerValue = m_playerController.DashCooldownTimer;
+            if (m_ability == null) return;
+
+            float timerValue = m_ability.CooldownLeft;
 
             if (m_useCountText != null)
-                m_useCountText.text = m_playerController.DashCount.ToString();
+                m_useCountText.text = m_ability.CurrentStack.ToString();
 
             if (!m_readyToUse)
             {
@@ -72,7 +82,7 @@ namespace com.game.abilitysystem.ui
 
             if (m_semiCooldownFillImage) m_semiCooldownFillImage.fillAmount = timerValue / m_totalCooldown;
 
-            if (m_playerController.DashCount == 0 && timerValue > 0f)
+            if (m_ability.CurrentStack == 0 && timerValue > 0f)
             {
                 SetReady(false);
             }
@@ -80,7 +90,7 @@ namespace com.game.abilitysystem.ui
 
         void UpdateCooldown()
         {
-            float timerValue = m_playerController.DashCooldownTimer;
+            float timerValue = m_ability.CooldownLeft;
 
             if (timerValue <= 0f)
             {

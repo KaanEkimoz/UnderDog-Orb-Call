@@ -69,7 +69,7 @@ namespace com.game.generics.itembehaviours
             else return com.game.utilities.Helpers.Text.Italic(sb.ToString());
         }
 
-        public override void Spawn()
+        public override void OnSpawn()
         {
             TestEventChannel.OnEnemyKilled += OnEnemyKilled;
 
@@ -91,7 +91,7 @@ namespace com.game.generics.itembehaviours
             m_modifiers.Add(m_manipulator.ModifyWith(m_modification));
         }
 
-        public override void Despawn()
+        public override void OnDespawn()
         {
             TestEventChannel.OnEnemyKilled -= OnEnemyKilled;
 

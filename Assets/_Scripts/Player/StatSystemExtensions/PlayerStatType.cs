@@ -21,6 +21,5 @@
         CrowdControl,
         OrbThrowSpeed,
         OrbRecallSpeed,
-        Light,
     }
 }

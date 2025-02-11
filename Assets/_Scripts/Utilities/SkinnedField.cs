@@ -1,4 +1,4 @@
-using System;
+using com.absence.utilities.experimental.databases;
 
 namespace com.game.utilities
 {
@@ -7,19 +7,25 @@ namespace com.game.utilities
     {
         public virtual bool AllowSceneObjects => false;
 
-        public abstract Type GetSkinnedType();
-        public abstract Type GetRealType();
+#if UNITY_EDITOR
+        public abstract object Fetch();
+#endif
     }
 
     [System.Serializable]
-    public abstract class SkinnedField<T1, T2> : SkinnedField where T1 : UnityEngine.Object
+    public class SkinnedField<T1, T2> : SkinnedField where T2 : UnityEngine.Object, IDatabaseMember<T1>
     {
-        public T2 RealValue;
+#if UNITY_EDITOR
+        public T2 SkinValue;
+#endif
+        public T1 RealValue;
 
-        public override Type GetSkinnedType() => typeof(T1); 
-        public override Type GetRealType() => typeof(T2); 
-
-        public abstract T2 FetchRealValue(T1 newSkinnedValue);
-        public abstract T1 RefreshSkinnedValue(T2 realValue);
+#if UNITY_EDITOR
+        public override object Fetch()
+        {
+            if (SkinValue == null) return default(T1);
+            return SkinValue.GetDatabaseKey();
+        }
+#endif
     }
 }
