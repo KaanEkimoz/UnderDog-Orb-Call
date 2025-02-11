@@ -520,13 +520,13 @@ Light:
   m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.04
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -1812,57 +1812,13 @@ GameObject:
   - component: {fileID: 449109141}
   - component: {fileID: 449109140}
   - component: {fileID: 449109139}
-  - component: {fileID: 449109138}
-  - component: {fileID: 449109137}
   m_Layer: 0
-  m_Name: Player Dynamic Light
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &449109137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449109136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03f18d2a6265fad4aada38bf12721a10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_followingType: 1
-  m_target: {fileID: 4416926083347132252}
-  m_keepStartingOffset: 1
-  m_offset: {x: 0, y: 0, z: 0}
---- !u!114 &449109138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449109136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 195b52d14ba203141ad63dc31fcf4d95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_light: {fileID: 449109140}
-  m_generalLightStatCoefficient: 1
-  m_zeroInnerSpot: 30
-  m_innerSpotLightStatCoefficient: 3
-  m_stepInnerSpot: 10
-  m_innerSpotSpeed: 3
-  m_zeroIntensity: 6.25
-  m_intensityLigthStatCoefficient: 1
-  m_stepIntensity: 7.94
-  m_intensitySpeed: 4
-  m_zeroRange: 4.54
-  m_rangeLightStatCoefficient: 1
-  m_stepRange: 1.2
-  m_rangeSpeed: 2
 --- !u!114 &449109139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1899,11 +1855,11 @@ Light:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 7.94
   m_Range: 4.54
-  m_SpotAngle: 179
+  m_SpotAngle: 93.888275
   m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -1960,11 +1916,11 @@ Transform:
   m_GameObject: {fileID: 449109136}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3.16, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1944545636}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &450155025
 PrefabInstance:
@@ -8016,6 +7972,99 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920444224}
   m_CullTransparentMesh: 1
+--- !u!1 &1944545635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1944545636}
+  - component: {fileID: 1944545637}
+  - component: {fileID: 1944545638}
+  m_Layer: 0
+  m_Name: Player Dynamic Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1944545636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944545635}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.16, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 449109141}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1944545637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944545635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f18d2a6265fad4aada38bf12721a10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_followingType: 1
+  m_target: {fileID: 4416926083347132252}
+  m_keepStartingOffset: 1
+  m_offset: {x: 0, y: 0, z: 0}
+--- !u!114 &1944545638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944545635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 195b52d14ba203141ad63dc31fcf4d95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_light: {fileID: 449109140}
+  m_groundMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  m_generalLightStatCoefficient: 3
+  m_threshold: 0.1
+  m_innerSpotAngleSettings:
+    InitialValue: 0
+    LightStatCoefficient: 1
+    StepAmount: 1
+    AnimationSpeed: 4
+  m_outerSpotAngleSettings:
+    InitialValue: 30
+    LightStatCoefficient: 0.6
+    StepAmount: 3
+    AnimationSpeed: 4
+  m_intensitySettings:
+    InitialValue: 7.94
+    LightStatCoefficient: 1
+    StepAmount: 10
+    AnimationSpeed: 4
+  m_rangeSettings:
+    InitialValue: 4.54
+    LightStatCoefficient: 1
+    StepAmount: 4.54
+    AnimationSpeed: 4
+  m_localHeightSettings:
+    InitialValue: 0
+    LightStatCoefficient: 0.5
+    StepAmount: 0.5
+    AnimationSpeed: 4
 --- !u!1 &1945134860
 GameObject:
   m_ObjectHideFlags: 0
@@ -9993,6 +10042,6 @@ SceneRoots:
   - {fileID: 703556226}
   - {fileID: 925526839}
   - {fileID: 108268441}
-  - {fileID: 449109141}
+  - {fileID: 1944545636}
   - {fileID: 312242445}
   - {fileID: 5472706269663830322}
