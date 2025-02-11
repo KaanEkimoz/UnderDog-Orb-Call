@@ -152,17 +152,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 2
+  movementSpeed: 12.5
   speedMultiplier: 1
   movementCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.3842153
+      value: 0.8330757
+      inSlope: 0.9429341
+      outSlope: 0.9429341
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0055847
+      value: 0.9937706
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxDistance: 20
   orbStats: {fileID: 6960696444875857668}
   startMaterial: {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
+  _rigidBody: {fileID: 0}
+  _sphereCollider: {fileID: 0}
+  _renderer: {fileID: 0}
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0

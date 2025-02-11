@@ -51,12 +51,12 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnReachedToEllipse;
     public event Action<OrbState> OnStateChanged;
 
-    private void Start()
+    private void OnEnable()
     {
         currentState = OrbState.OnEllipse;
         CheckStartVariables();
     }
-    private void OnEnable()
+    private void Start()
     {
         currentState = OrbState.OnEllipse;
         CheckStartVariables();
@@ -114,6 +114,18 @@ public class SimpleOrb : MonoBehaviour
         OnCalled?.Invoke();
         OnStateChanged?.Invoke(currentState);
     }
+    public void Return(Vector3 returnPosition)
+    {
+        currentState = OrbState.Returning;
+
+        _sphereCollider.isTrigger = true;
+        _rigidBody.isKinematic = true;
+        SetNewDestination(returnPosition);
+        ResetParent();
+
+        OnCalled?.Invoke();
+        OnStateChanged?.Invoke(currentState);
+    }
     public void ResetParent()
     {
         transform.SetParent(startParent);
@@ -158,11 +170,16 @@ public class SimpleOrb : MonoBehaviour
     }
     private void MoveTargetPos()
     {
-        // Move towards target position
-        Vector3 posToMove = currentTargetPos;
-        transform.position = Vector3.Lerp(transform.position, posToMove, Time.deltaTime * movementSpeed * speedMultiplier);
+        float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
 
-        hasReachedTargetPos = Vector3.Distance(transform.position, posToMove) < ellipseReachThreshold;
+        // AnimationCurve adjustments
+        float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / maxDistance));
+        float currentSpeed = movementSpeed * curveValue * speedMultiplier;
+
+        // MoveTowards to the target
+        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * Time.deltaTime);
+
+        hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
     private void OnCollisionEnter(Collision collision)
     {
