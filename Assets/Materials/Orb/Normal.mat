@@ -14,7 +14,7 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _EMISSION
-  m_LightmapFlags: 2
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -39,7 +39,7 @@ Material:
     - _Smoothness: 0
     - _SurfaceMovementSpeed: 0.05
     m_Colors:
-    - _BorderColor: {r: 5.51129, g: 4.3447595, b: 1.0658627, a: 0.84313726}
+    - _BorderColor: {r: 7.358005, g: 7.358005, b: 7.358005, a: 0.84313726}
     - _Color: {r: 6.9563093, g: 0, b: 83.463615, a: 1}
     - _ElectricitySpeed: {r: 0, g: 0.77, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

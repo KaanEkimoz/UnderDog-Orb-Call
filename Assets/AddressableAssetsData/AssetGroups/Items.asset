@@ -14,7 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Items
   m_GUID: 5f2d23f0cde8d9443821eefaa960b9a0
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 1e5b6e6b049aa50409df37f97badb022
+    m_Address: Assets/_Scriptables/Item Profiles (Orb)/Production
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - item-profile
+    - release
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a349514f94d6f7249916d037e1b0b65d
+    m_Address: Assets/_Scriptables/Item Profiles (Player)/Production
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - item-profile
+    - release
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a872956564756fd48bc8ea50c490d9d8
+    m_Address: Assets/_Scriptables/Item Profiles (Orb)/Prototyping
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - item-profile
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8e6a2cfee2e20140b1809f3a17c57bb
+    m_Address: Assets/_Scriptables/Item Profiles (Player)/Prototyping
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - item-profile
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b5bee4bd8e6b5194cab977905a99cea2, type: 2}
   m_SchemaSet:

@@ -46,6 +46,7 @@ namespace com.game.player
 
             m_items.Remove(itemToRemove);
             RevertItemModifiers(itemToRemove);
+            itemToRemove.Dispose();
         }
 
         void ApplyItemModifiers(ItemObject targetItem, PlayerItemProfile profile)
@@ -81,8 +82,6 @@ namespace com.game.player
             });
 
             // simply can not revert overrides, so...
-
-            targetItem.Dispose();
         }
 
         const float k_totalGUIWidth = 340f;

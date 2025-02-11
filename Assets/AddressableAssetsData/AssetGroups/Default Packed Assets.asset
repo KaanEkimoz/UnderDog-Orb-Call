@@ -14,19 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Packed Assets
   m_GUID: d8591c4f84028624da3f9d9add3e9cfd
-  m_SerializeEntries:
-  - m_GUID: 031952c2623a1ea46b20ca29db0bc362
-    m_Address: Assets/_Scriptables/Item Profiles (Player)
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - itemprofile
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 36cf5166c8723174e9662500c2af5e75
-    m_Address: Assets/_Scriptables/Item Profiles (Orb)
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - itemprofile
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b5bee4bd8e6b5194cab977905a99cea2, type: 2}
   m_SchemaSet:

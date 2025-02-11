@@ -55,6 +55,8 @@ public class OrbController : MonoBehaviour
 
     private PlayerStats _playerStats;
 
+    public List<SimpleOrb> OrbsOnEllipse => orbsOnEllipse;
+
     [Inject]
     private void ZenjectSetup(PlayerStats playerStats)
     {
