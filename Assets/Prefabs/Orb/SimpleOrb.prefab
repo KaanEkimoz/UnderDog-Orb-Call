@@ -396,20 +396,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 2
+  movementSpeed: 15
   speedMultiplier: 1
   movementCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.37748617
+      value: 0.97802657
+      inSlope: 0.9429341
+      outSlope: 0.9429341
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.97195435
+      value: 1.1123657
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxDistance: 20
+  maxDistance: 15
   orbStats: {fileID: 6960696444875857668}
   startMaterial: {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
-  _rigidBody: {fileID: 0}
-  _sphereCollider: {fileID: 0}
-  _renderer: {fileID: 0}
+  _rigidBody: {fileID: 4581226788505073321}
+  _sphereCollider: {fileID: 3939961923203656775}
+  _renderer: {fileID: 7423161256905524677}
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,7 +465,7 @@ GameObject:
   - component: {fileID: 6489920008519324392}
   - component: {fileID: 5756904344115542330}
   - component: {fileID: 4051647883533841525}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LightOrb_Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,7 +557,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}

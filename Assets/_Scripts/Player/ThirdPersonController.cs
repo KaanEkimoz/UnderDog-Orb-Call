@@ -179,8 +179,15 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (PlayerInputHandler.Instance.AttackButtonHeld)
             return;
+
+        targetRotation = Mathf.Clamp(targetRotation, -360f, 360f);
+
         float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref _rotationVelocity, rotationSmoothTime);
-        transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+        Quaternion rotationQuat = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+        rotationQuat = Quaternion.Normalize(rotationQuat);
+
+        transform.rotation = rotationQuat;
     }
 
     private Vector3 CalculateTargetDirection(float targetRotation)

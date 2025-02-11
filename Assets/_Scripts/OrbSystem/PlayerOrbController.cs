@@ -79,7 +79,7 @@ public class OrbController : MonoBehaviour
 
         HandleInput();
         HandleCooldowns();
-        UpdateEllipsePosition();
+        //UpdateEllipsePosition();
         UpdateOrbEllipsePositions();
     }
 
@@ -97,9 +97,7 @@ public class OrbController : MonoBehaviour
             ChooseNextOrb();
 
         if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
-            ChoosePreviousOrb();
-
-        
+            ChoosePreviousOrb();  
     }
     private void CreateGhostOrbsAtStart()
     {
@@ -121,11 +119,10 @@ public class OrbController : MonoBehaviour
     }
     private void CallOrb(SimpleOrb orb)
     {
-        orb.Return();
+        orb.Return(firePointTransform.position);
         Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();
     }
-
     private void ChooseNextOrb()
     {
         if (OrbsOnEllipse.Count <= 1) return;
@@ -135,7 +132,6 @@ public class OrbController : MonoBehaviour
         UpdateOrbEllipsePositions();
         OnNextOrbSelected?.Invoke();
     }
-
     private void ChoosePreviousOrb()
     {
         if (OrbsOnEllipse.Count <= 1) return;
@@ -182,7 +178,7 @@ public class OrbController : MonoBehaviour
 
     private void Aim()
     {
-        if (orbToThrow != null || OrbsOnEllipse.Count == 0 || throwCooldownTimer > 0) return;
+        if (orbToThrow != null || OrbsOnEllipse.Count == 0 || throwCooldownTimer > 0 || OrbsOnEllipse[selectedOrbIndex].currentState != OrbState.OnEllipse) return;
 
         isAiming = true;
         orbToThrow = OrbsOnEllipse[selectedOrbIndex];
@@ -257,7 +253,7 @@ public class OrbController : MonoBehaviour
     {
         if (OrbsOnEllipse.Count == 0) return;
 
-        float angleOffset = 90f; // Seçili top en üstte olacak
+        float angleOffset = 90f;
 
         for (int i = 0; i < OrbsOnEllipse.Count; i++)
         {
@@ -289,9 +285,12 @@ public class OrbController : MonoBehaviour
                     if (ghostOrbs[i].gameObject.activeSelf == true)
                         ghostOrbs[i].gameObject.SetActive(false);
 
-                    OrbsOnEllipse[i].SetNewDestination(targetPosition);
+                    OrbsOnEllipse[i]?.SetNewDestination(targetPosition);
                 }
-            }   
+            }
+
+            if (OrbsOnEllipse[i].currentState == OrbState.Returning)
+                OrbsOnEllipse[i].SetNewDestination(firePointTransform.position);
         }
         UpdateSelectedOrbMaterial();
     }
