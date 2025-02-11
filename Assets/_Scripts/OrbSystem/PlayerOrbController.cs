@@ -77,7 +77,7 @@ public class OrbController : MonoBehaviour
 
         HandleInput();
         HandleCooldowns();
-        UpdateEllipsePosition();
+        //UpdateEllipsePosition();
         UpdateOrbEllipsePositions();
     }
 
@@ -176,7 +176,7 @@ public class OrbController : MonoBehaviour
 
     private void Aim()
     {
-        if (orbToThrow != null || OrbsOnEllipse.Count == 0 || throwCooldownTimer > 0) return;
+        if (orbToThrow != null || OrbsOnEllipse.Count == 0 || throwCooldownTimer > 0 || OrbsOnEllipse[selectedOrbIndex].currentState != OrbState.OnEllipse) return;
 
         isAiming = true;
         orbToThrow = OrbsOnEllipse[selectedOrbIndex];
@@ -286,7 +286,8 @@ public class OrbController : MonoBehaviour
                     OrbsOnEllipse[i]?.SetNewDestination(targetPosition);
                 }
             }
-            else if (OrbsOnEllipse[i].currentState == OrbState.Returning)
+
+            if (OrbsOnEllipse[i].currentState == OrbState.Returning)
                 OrbsOnEllipse[i].SetNewDestination(firePointTransform.position);
         }
         UpdateSelectedOrbMaterial();

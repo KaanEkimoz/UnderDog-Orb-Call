@@ -185,9 +185,8 @@ public class ThirdPersonController : MonoBehaviour
         float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref _rotationVelocity, rotationSmoothTime);
         Quaternion rotationQuat = Quaternion.Euler(0.0f, rotation, 0.0f);
 
-        rotationQuat = rotationQuat.normalized;
+        rotationQuat = Quaternion.Normalize(rotationQuat);
 
-        // Apply the validated rotation
         transform.rotation = rotationQuat;
     }
 

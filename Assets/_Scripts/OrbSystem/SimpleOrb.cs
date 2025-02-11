@@ -107,6 +107,7 @@ public class SimpleOrb : MonoBehaviour
     {
         currentState = OrbState.Returning;
 
+        distanceTraveled = 0;
         _sphereCollider.isTrigger = true;
         _rigidBody.isKinematic = true;
         ResetParent();
@@ -173,7 +174,8 @@ public class SimpleOrb : MonoBehaviour
         float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
 
         // AnimationCurve adjustments
-        float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / maxDistance));
+        float dynamicMaxDistance = Mathf.Max(maxDistance, distanceToTarget + 10f);
+        float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
         float currentSpeed = movementSpeed * curveValue * speedMultiplier;
 
         // MoveTowards to the target

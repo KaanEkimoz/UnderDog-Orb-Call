@@ -8295,12 +8295,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4487526138420041412, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: _soundFXManager
-      value: 
-      objectReference: {fileID: 1663323936}
-    - target: {fileID: 5339787145452883190, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: cursorDetectMask.m_Bits
-      value: 12545
+      propertyPath: rotationSmoothTime
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 5895881473504401873, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8345,10 +8341,6 @@ PrefabInstance:
     - target: {fileID: 6338948318937879419, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_Name
       value: PlayerArmature
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052963404396572989, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_RenderingLayerMask
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8395,11 +8387,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1500069609196033266, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 1500069609196033266, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 1500069609196033266, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8451,7 +8443,7 @@ PrefabInstance:
       objectReference: {fileID: 1886567772}
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: ellipseMovementSpeed
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: ellipseRotationSpeed
