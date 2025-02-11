@@ -206,12 +206,6 @@ public class OrbController : MonoBehaviour
             throwCooldownTimer -= Time.deltaTime;
     }
 
-    private void UpdateEllipsePosition()
-    {
-        transform.position = Vector3.Lerp(transform.position, ellipseCenterTransform.position, Time.deltaTime * ellipseMovementSpeed);
-        transform.rotation = Quaternion.Lerp(transform.rotation, ellipseCenterTransform.rotation, Time.deltaTime * ellipseRotationSpeed);
-    }
-
     public void AddOrb()
     {
         var newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
@@ -255,7 +249,7 @@ public class OrbController : MonoBehaviour
 
         for (int i = 0; i < OrbsOnEllipse.Count; i++)
         {
-            float angle = angleOffset + i * angleStep;
+            float angle = angleOffset + i * -angleStep;
             float angleInRadians = angle * Mathf.Deg2Rad;
 
             float localX = Mathf.Cos(angleInRadians) * ellipseXRadius;

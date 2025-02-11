@@ -2212,6 +2212,7 @@ MonoBehaviour:
   m_damageableObject: {fileID: 1773443582}
   m_background: {fileID: 631576911}
   m_foreground: {fileID: 280001357}
+  m_destroyOnDeath: 0
   m_hideAutomatically: 0
   m_graphic: {fileID: 0}
   m_hideShowEase: 0
@@ -9521,7 +9522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1505749297283057371, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: cooldownBetweenThrowsInSeconds
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4548954406257375815, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
       propertyPath: m_Name

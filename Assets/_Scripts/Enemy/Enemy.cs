@@ -33,6 +33,8 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (target == null) return;
+
         navMeshAgent.SetDestination(target.transform.position);
         RotateTowardsTarget();
         CustomUpdate();
