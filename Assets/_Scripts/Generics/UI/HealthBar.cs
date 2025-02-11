@@ -20,6 +20,7 @@ namespace com.game
         [SerializeField] private GameObject m_damageableObject;
         [SerializeField] private Image m_background;
         [SerializeField] private Image m_foreground;
+        [SerializeField] private bool m_destroyOnDeath;
 
         [Space]
 
@@ -99,9 +100,27 @@ namespace com.game
             }
 
             m_target.OnTakeDamage += OnTakeDamage;
+            m_target.OnDie += OnDie;
 
             Refresh();
             if (m_hideAutomatically) m_graphic.alpha = 0f; 
+        }
+
+        private void OnDie()
+        {
+            if (m_destroyOnDeath)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            m_currentHealth = 0f;
+            m_currentHealthRatio = 0f;
+            m_maxHealth = 1f;
+
+            UpdateBar();
+            UpdateEffect();
+            UpdateText();
         }
 
         private void OnTakeDamage(float amount)
