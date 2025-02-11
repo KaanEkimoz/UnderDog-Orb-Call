@@ -3,6 +3,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace com.game.orbsystem.ui
 {
@@ -14,9 +15,9 @@ namespace com.game.orbsystem.ui
         [SerializeField] [Min(0f)] private float m_rotatingDuration;
         [SerializeField] private Transform m_orbSelectionBorder;
         [SerializeField] private Transform m_pivot;
-        [SerializeField] private OrbController m_orbController;
         [SerializeField] private OrbDisplayGP m_prefab;
 
+        [Inject] OrbController m_orbController;
         List<OrbDisplayGP> m_orbDisplays;
         int m_orbCount;
         float m_stepAngle;
