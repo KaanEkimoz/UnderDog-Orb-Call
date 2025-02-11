@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7c728b2a91714cd458b71defb51db6c2, type: 2}
+    - target: {fileID: 7298133027063933198, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 7892791133856918113, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.80686605

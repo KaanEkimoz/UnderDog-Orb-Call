@@ -1567,6 +1567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumOrbCount: 10
   orbCountAtStart: 0
+  cooldownBetweenThrowsInSeconds: 2
   firePointTransform: {fileID: 1886567772}
   cursorDetectMask:
     serializedVersion: 2
@@ -1576,9 +1577,11 @@ MonoBehaviour:
   ellipseYRadius: 0.75
   ellipseMovementSpeed: 5
   ellipseRotationSpeed: 5
-  input: {fileID: 0}
   objectPool: {fileID: 0}
   highlightMaterial: {fileID: 0}
+  ghostOrbPrefab: {fileID: 0}
+  OrbsOnEllipse: []
+  isAiming: 0
 --- !u!4 &1183125827
 Transform:
   m_ObjectHideFlags: 0
@@ -3864,11 +3867,11 @@ MonoBehaviour:
   dashSpeed: 25
   dashDurationInSeconds: 0.2
   dashCooldownInSeconds: 1.5
+  maxDashCount: 2
   rotationSmoothTime: 0.12
   speedChangeRate: 10
   footstepAudioClips: []
   footstepAudioVolume: 0.5
-  _soundFXManager: {fileID: 0}
 --- !u!143 &4416926083347132233
 CharacterController:
   m_ObjectHideFlags: 0

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Explosive Enemy
   m_EditorClassIdentifier: 
   speed: 3
-  angularSpeed: 120
+  angularSpeed: 20
   acceleration: 8
   stoppingDistance: 1.5

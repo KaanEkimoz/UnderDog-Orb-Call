@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ranged Enemy
   m_EditorClassIdentifier: 
   speed: 3
-  angularSpeed: 120
+  angularSpeed: 20
   acceleration: 8
   stoppingDistance: 4
