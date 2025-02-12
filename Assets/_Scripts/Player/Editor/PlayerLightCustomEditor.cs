@@ -1,4 +1,5 @@
 using com.absence.attributes.editor;
+using com.absence.editor.gui;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,26 +28,26 @@ namespace com.game.player.editor
         {
             m_defaultEditor.OnInspectorGUI();
 
-            PlayerLight playerLight = target as PlayerLight;
+            //PlayerLight playerLight = target as PlayerLight;
 
-            EditorGUILayout.BeginVertical("box");
+            //EditorGUILayout.BeginVertical("box");
 
-            EditorGUILayout.LabelField("Simulation");
+            //EditorGUILayout.LabelField("Simulation", absentEditorStyles.Header3Style);
 
-            m_simulationLightStat = EditorGUILayout.IntField("Simulated Light Stat", m_simulationLightStat);
-            m_simulationOrbCount = EditorGUILayout.IntField("Simulated Orb Count", m_simulationOrbCount);
+            //m_simulationLightStat = EditorGUILayout.IntField("Simulated Light Stat", m_simulationLightStat);
+            //m_simulationOrbCount = EditorGUILayout.IntField("Simulated Orb Count", m_simulationOrbCount);
 
-            Color defaultColor = GUI.color;
+            //Color defaultColor = GUI.color;
 
-            if (m_isSimulating) GUI.color = Color.green;
-            if (GUILayout.Button("Simulate"))
-            {
-                m_isSimulating = !m_isSimulating;
-            }
+            //if (m_isSimulating) GUI.color = Color.green;
+            //if (GUILayout.Button("Simulate"))
+            //{
+            //    m_isSimulating = !m_isSimulating;
+            //}
 
-            GUI.color = defaultColor;
+            //GUI.color = defaultColor;
 
-            EditorGUILayout.EndVertical();
+            //EditorGUILayout.EndVertical();
         }
 
         private void OnSceneGUI()
