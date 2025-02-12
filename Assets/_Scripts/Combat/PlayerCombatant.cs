@@ -6,6 +6,8 @@ namespace com.game.player
 {
     public class PlayerCombatant : MonoBehaviour, IDamageable
     {
+        [SerializeField] private GameObject m_container;
+
         float _health;
         float _maxHealth;
         PlayerStats _playerStats;
@@ -44,7 +46,8 @@ namespace com.game.player
 
         public void Die()
         {
-            Destroy(gameObject);
+            if (m_container != null) Destroy(m_container);
+            else Destroy(gameObject);
 
             OnDie?.Invoke();
         }
