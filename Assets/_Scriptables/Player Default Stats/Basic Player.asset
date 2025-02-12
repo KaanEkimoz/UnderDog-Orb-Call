@@ -42,7 +42,7 @@ MonoBehaviour:
   - TargetStat: 13
     Value: 0
   - TargetStat: 14
-    Value: 50
+    Value: 1
   - TargetStat: 15
-    Value: 100
+    Value: 1
   m_initialized: 1
