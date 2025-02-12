@@ -5,8 +5,8 @@ namespace com.game.abilitysystem
 {
     public interface IRuntimeAbility
     {
-        string Guid { get; }
-        RuntimeAbilityState State { get; }
+        //string Guid { get; }
+        //RuntimeAbilityState State { get; }
 
         float Duration { get; }
         float Cooldown { get; }
@@ -21,7 +21,7 @@ namespace com.game.abilitysystem
         bool InCooldown { get; }
         bool ReadyToUse { get; }
 
-        event Action<bool> OnUseAction;
+        //event Action<bool> OnUseAction;
 
         bool CanUse(AbilityUseContext context);
     }

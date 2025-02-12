@@ -18,6 +18,7 @@ namespace com.game.abilitysystem.ui
 
         IRuntimeAbility m_ability;
         bool m_readyToUse;
+        bool m_stackable;
         float m_totalCooldown;
         float m_totalDuration;
         int m_totalUseCount;
@@ -57,6 +58,10 @@ namespace com.game.abilitysystem.ui
                 return;
             }
 
+            m_stackable = m_ability.MaxStack > 1;
+            if (m_useCountText != null && !m_stackable)
+                m_useCountText.gameObject.SetActive(false);
+
             m_graphic.alpha = 1f;
             enabled = true;
 
@@ -71,7 +76,7 @@ namespace com.game.abilitysystem.ui
 
             float timerValue = m_ability.CooldownLeft;
 
-            if (m_useCountText != null)
+            if (m_useCountText != null && !m_stackable)
                 m_useCountText.text = m_ability.CurrentStack.ToString();
 
             if (!m_readyToUse)
@@ -110,7 +115,7 @@ namespace com.game.abilitysystem.ui
             m_readyToUse = ready;
             m_cooldownPanel.SetActive(!ready);
             m_semiCooldownFillImage.gameObject.SetActive(ready);
-            m_useCountText?.gameObject.SetActive(ready);
+            if (m_stackable) m_useCountText?.gameObject.SetActive(ready);
         }
     }
 }
