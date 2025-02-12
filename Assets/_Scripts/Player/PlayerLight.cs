@@ -1,8 +1,8 @@
+using com.absence.attributes.experimental;
 using com.game.generics.interfaces;
 using com.game.player.statsystemextensions;
 using com.game.testing;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace com.game.player
@@ -32,6 +32,11 @@ namespace com.game.player
         [SerializeField] private FieldSettings m_rangeSettings;
         [SerializeField] private FieldSettings m_localHeightSettings;
 
+        [SerializeField, BeginFoldoutGroup("Vision Settings")] private float m_fullVisionRadiusShift;
+        [SerializeField] private float m_halfVisionRadiusShift;
+        [SerializeField, Min(0)] private float m_fullVisionRadiusMultiplier;
+        [SerializeField, Min(0), EndFoldoutGroup()] private float m_halfVisionRadiusMultiplier;
+
         PlayerStats m_playerStats;
         PlayerOrbHandler_Test m_orbHandler;
         int m_orbsInHand;
@@ -51,6 +56,9 @@ namespace com.game.player
         List<IVisible> m_halfVisibles;
         List<IVisible> m_fullVisibles;
 
+        public float FullVisionRadius => m_fullVisionRadius;
+        public float HalfVisionRadius => m_halfVisionRadius;
+
         private void Awake()
         {
             m_halfVisibles = new();
@@ -67,7 +75,7 @@ namespace com.game.player
         {
             CacheVariables();
             UpdateFields();
-            CalculateView();
+            CalculateView(out _);
             DetectAll();
             SparkAll();
         }
@@ -94,7 +102,7 @@ namespace com.game.player
             m_light.transform.localPosition = lightLocalPosition;
         }
 
-        bool CalculateView()
+        public bool CalculateView(out RaycastHit groundData)
         {
             float outerAngleInRads = m_light.spotAngle * Mathf.Deg2Rad;
             float innerAngleInRads = m_light.innerSpotAngle * Mathf.Deg2Rad;
@@ -102,7 +110,7 @@ namespace com.game.player
 
             m_hasGround = Physics.Raycast(m_light.transform.position,
             Vector3.down,
-            out m_groundData,
+            out groundData,
             range,
             m_groundMask,
             QueryTriggerInteraction.UseGlobal);
@@ -110,6 +118,13 @@ namespace com.game.player
             m_fullVisionRadius = Mathf.Tan(innerAngleInRads / 2) * m_groundData.distance;
             m_halfVisionRadius = Mathf.Tan(outerAngleInRads / 2) * m_groundData.distance;
 
+            m_fullVisionRadius *= m_fullVisionRadiusMultiplier;
+            m_halfVisionRadius *= m_halfVisionRadiusMultiplier;
+
+            m_fullVisionRadius += m_fullVisionRadiusShift;
+            m_halfVisionRadius += m_halfVisionRadiusShift;
+
+            m_groundData = groundData;
             return m_hasGround;
         }
 
@@ -167,29 +182,6 @@ namespace com.game.player
                 result = Mathf.Lerp(initialValue, targetValue, localSpeed * Time.deltaTime);
 
             return result;
-        }
-
-        private void OnDrawGizmos()
-        {
-            bool hit;
-
-            if (Application.isPlaying) hit = m_hasGround;
-            else hit = CalculateView();
-
-            const float kAlpha = 1f;
-
-            Color fullSeenColor = Color.red;
-            fullSeenColor.a = kAlpha;
-
-            Color halfSeenColor = Color.yellow;
-            halfSeenColor.a = kAlpha;
-
-#if UNITY_EDITOR
-            UnityEditor.Handles.color = fullSeenColor;
-            if (hit) UnityEditor.Handles.DrawWireDisc(m_groundData.point, Vector2.up, m_fullVisionRadius);
-            UnityEditor.Handles.color = halfSeenColor;
-            if (hit) UnityEditor.Handles.DrawWireDisc(m_groundData.point, Vector2.up, m_halfVisionRadius);
-#endif
         }
     }
 }

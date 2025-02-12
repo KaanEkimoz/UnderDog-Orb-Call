@@ -217,3 +217,7 @@ MonoBehaviour:
     LightStatCoefficient: 0.5
     StepAmount: 0.5
     AnimationSpeed: 4
+  m_fullVisionRadiusShift: 0
+  m_halfVisionRadiusShift: 0
+  m_fullVisionRadiusMultiplier: 1
+  m_halfVisionRadiusMultiplier: 1
