@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyMovementData: {fileID: 11400000, guid: e5b2f0a111d087b4197a2780bff9ef50, type: 2}
-  newEnemyStats: {fileID: 8405162856804353120}
+  enemyStats: {fileID: 8405162856804353120}
   meleeAttackDelay: 2
   attackingCooldown: 2
 --- !u!114 &8405162856804353120 stripped

@@ -3,13 +3,18 @@ using com.game.testing;
 using System;
 using com.absence.attributes;
 using com.game.enemysystem.statsystemextensions;
+using com.game.generics.interfaces;
+using com.game.generics;
 
 namespace com.game.enemysystem
 {
-    public class EnemyCombatant : MonoBehaviour, IDamageable
+    public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
     {
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
+        [SerializeField] private SparkLight m_sparkLight;
+
+        public SparkLight Spark => m_sparkLight;
 
         float _health;
         float _maxHealth;
@@ -26,26 +31,21 @@ namespace com.game.enemysystem
             _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;
         }
-
-        private void Update()
-        {
-            //Debug.Log("Enemy Health: " + _health);
-        }
-
         public void TakeDamage(float damage)
         {
             if (damage == 0f)
                 return;
 
-            _health -= damage;
+            float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
+
+            _health -= realDamage;
 
             if (_health <= 0)
             {
                 _health = 0;
                 Die();
             }
-
-            OnTakeDamage?.Invoke(damage);
+            OnTakeDamage?.Invoke(realDamage);
         }
 
         public void Die()

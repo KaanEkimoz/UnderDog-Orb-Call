@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 15
+  movementSpeed: 1
   speedMultiplier: 1
   movementCurve:
     serializedVersion: 2

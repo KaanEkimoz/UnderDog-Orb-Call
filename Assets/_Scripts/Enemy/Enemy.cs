@@ -1,4 +1,5 @@
 using com.game.enemysystem;
+using com.game.enemysystem.statsystemextensions;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,9 +7,10 @@ public class Enemy : MonoBehaviour
 {
     public EnemyMovementData enemyMovementData;
     protected GameObject target;
-    [SerializeField] protected EnemyStats newEnemyStats;
-
+    [SerializeField] protected EnemyStats enemyStats;
     protected NavMeshAgent navMeshAgent;
+
+    float defaultSpeed;
 
     protected virtual void Awake()
     {
@@ -19,11 +21,13 @@ public class Enemy : MonoBehaviour
     {  
         target = GameObject.FindWithTag("Player");
 
-        if (newEnemyStats == null)
+        if (enemyStats == null)
             GetComponent<EnemyStats>();
 
-        navMeshAgent.updateRotation = false; //Donus yonetimini manuel yapmak icin
-        navMeshAgent.speed = enemyMovementData.speed;
+        defaultSpeed = enemyMovementData.speed;
+
+        navMeshAgent.updateRotation = false;
+        navMeshAgent.speed = defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed);
         navMeshAgent.angularSpeed = enemyMovementData.angularSpeed;
         navMeshAgent.acceleration = enemyMovementData.acceleration;
         navMeshAgent.stoppingDistance = enemyMovementData.stoppingDistance;
@@ -35,6 +39,7 @@ public class Enemy : MonoBehaviour
     {
         if (target == null) return;
 
+        navMeshAgent.speed = defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed);
         navMeshAgent.SetDestination(target.transform.position);
         RotateTowardsTarget();
         CustomUpdate();
@@ -46,7 +51,6 @@ public class Enemy : MonoBehaviour
     {
         return Vector3.Distance(transform.position, target.transform.position) <= enemyMovementData.stoppingDistance;
     }
-
     private void RotateTowardsTarget()
     {
         if (!navMeshAgent.hasPath) return;

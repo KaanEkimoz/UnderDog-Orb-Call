@@ -1,4 +1,3 @@
-using com.game.enemysystem.statsystemextensions;
 using com.game;
 using UnityEngine;
 
@@ -29,7 +28,15 @@ public class EnemyProjectile : MonoBehaviour
     {
         _rigidBody.linearVelocity = velocity;
     }
-    public void SetDamage (float damage)
+    public Vector3 GetVelocity()
+    {
+        return _rigidBody.linearVelocity;
+    }
+    public Rigidbody GetRigidbody()
+    {
+        return _rigidBody;
+    }
+    public void SetDamage(float damage)
     {
         _damage = damage;
     }

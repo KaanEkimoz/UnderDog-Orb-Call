@@ -25,7 +25,7 @@ public class MeleeEnemy : Enemy
 
         //HASAR VER
         if (target.gameObject.TryGetComponent(out IDamageable damageable))
-            damageable.TakeDamage(newEnemyStats.GetStat(EnemyStatType.Damage));
+            damageable.TakeDamage(enemyStats.GetStat(EnemyStatType.Damage));
 
         Debug.Log("hasar verildi");
 

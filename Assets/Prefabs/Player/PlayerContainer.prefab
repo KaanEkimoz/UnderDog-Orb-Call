@@ -288,9 +288,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3269507191101686336, guid: 96fb3945f36ff734bb66ee032220d9eb, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3650338133286202745, guid: 96fb3945f36ff734bb66ee032220d9eb, type: 3}
       propertyPath: m_Name
       value: Player Static Light
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873007820241263000, guid: 96fb3945f36ff734bb66ee032220d9eb, type: 3}
+      propertyPath: m_RenderingLayers
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8700901640586027812, guid: 96fb3945f36ff734bb66ee032220d9eb, type: 3}
       propertyPath: m_target
