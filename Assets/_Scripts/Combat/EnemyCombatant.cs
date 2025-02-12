@@ -26,26 +26,21 @@ namespace com.game.enemysystem
             _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;
         }
-
-        private void Update()
-        {
-            //Debug.Log("Enemy Health: " + _health);
-        }
-
         public void TakeDamage(float damage)
         {
             if (damage == 0f)
                 return;
 
-            _health -= damage;
+            float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
+
+            _health -= realDamage;
 
             if (_health <= 0)
             {
                 _health = 0;
                 Die();
             }
-
-            OnTakeDamage?.Invoke(damage);
+            OnTakeDamage?.Invoke(realDamage);
         }
 
         public void Die()

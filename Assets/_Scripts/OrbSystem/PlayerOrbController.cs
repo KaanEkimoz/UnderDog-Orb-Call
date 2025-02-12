@@ -1,34 +1,29 @@
 ﻿using com.game;
 using com.game.player;
+using com.game.player.statsystemextensions;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
-
 public class OrbController : MonoBehaviour
 {
     [Header("Orb Count")]
     [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
     [Range(0, 10)][SerializeField] private int orbCountAtStart;
-
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 2f;
     [SerializeField] private Transform firePointTransform;
     [SerializeField] private LayerMask cursorDetectMask;
-
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
     [SerializeField] private float ellipseXRadius = 0.5f;
     [SerializeField] private float ellipseYRadius = 0.75f;
-
     [Header("Ellipse Movement")]
     [SerializeField] private float ellipseMovementSpeed = 1.5f;
     [SerializeField] private float ellipseRotationSpeed = 5f;
-
     [Header("Components")]
     [SerializeField] private ObjectPool objectPool;
-
     [Header("Orb Materials")]
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private GameObject ghostOrbPrefab;
@@ -36,6 +31,7 @@ public class OrbController : MonoBehaviour
     // Events
     public event Action OnOrbThrowed;
     public event Action OnOrbCalled;
+    public event Action<float> OnDamageGiven;
     public event Action<int> OnOrbCountChanged;
     public event Action OnAllOrbsCalled;
     public event Action OnNextOrbSelected;
@@ -152,7 +148,6 @@ public class OrbController : MonoBehaviour
         OrbsOnEllipse = newList;
         selectedOrbIndex = 0; // En üstteki top her zaman sıfırıncı indexte olacak
     }
-
     private void UpdateSelectedOrbMaterial()
     {
         for (int i = 0; i < OrbsOnEllipse.Count; i++)
@@ -191,7 +186,7 @@ public class OrbController : MonoBehaviour
 
         Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;
         throwDirection.y = 0;
-        orbToThrow.Throw(throwDirection.normalized * 20f);
+        orbToThrow.Throw(throwDirection.normalized);
 
         orbToThrow.ResetMaterial();
         orbToThrow = null;
@@ -203,14 +198,16 @@ public class OrbController : MonoBehaviour
     private void HandleCooldowns()
     {
         if (throwCooldownTimer > 0)
-            throwCooldownTimer -= Time.deltaTime;
+            throwCooldownTimer -= Time.deltaTime * ((_playerStats.GetStat(PlayerStatType.AttackSpeed) / 10) + 1);
     }
 
     public void AddOrb()
     {
         var newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
+        newOrb.AssignPlayerStats(_playerStats);
 
+        newOrb.OnDamageGiven += (float damage) => OnDamageGiven?.Invoke(damage);
         activeOrbCount++;
         OrbsOnEllipse.Add(newOrb);
         CalculateAngleStep();

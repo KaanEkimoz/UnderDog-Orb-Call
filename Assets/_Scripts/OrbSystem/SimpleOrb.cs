@@ -1,5 +1,7 @@
 using com.game;
 using com.game.orbsystem.statsystemextensions;
+using com.game.player;
+using com.game.player.statsystemextensions;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -33,6 +35,9 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private SphereCollider _sphereCollider;
     [SerializeField] private Renderer _renderer;
 
+
+    private PlayerStats _playerStats;
+
     //Movement
     private Transform startParent;
     private Vector3 startScale;
@@ -49,8 +54,13 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnCalled;
     public event Action OnStuck;
     public event Action OnReachedToEllipse;
+    public event Action<float> OnDamageGiven;
     public event Action<OrbState> OnStateChanged;
 
+    public void AssignPlayerStats(PlayerStats playerStats)
+    {
+        _playerStats = playerStats;
+    }
     private void OnEnable()
     {
         currentState = OrbState.OnEllipse;
@@ -82,7 +92,7 @@ public class SimpleOrb : MonoBehaviour
         if (currentState == OrbState.Throwing)
         {
             CalculateDistanceTraveled();
-            if (distanceTraveled >= maxDistance)
+            if (distanceTraveled >= maxDistance + _playerStats.GetStat(PlayerStatType.Range));
                 Stick(startParent);
         }
         if (currentState == OrbState.Returning && hasReachedTargetPos)
@@ -140,7 +150,7 @@ public class SimpleOrb : MonoBehaviour
     {
         _renderer.material = newMaterial;
     }
-    public void Throw(Vector3 force)
+    public void Throw(Vector3 forceDirection)
     {
         currentState = OrbState.Throwing;
 
@@ -151,7 +161,10 @@ public class SimpleOrb : MonoBehaviour
         //Enable Collision and Physics
         _rigidBody.isKinematic = false;
         _sphereCollider.isTrigger = false;
-        _rigidBody.AddForce(force,ForceMode.Impulse);
+
+        Vector3 force = forceDirection * (((orbStats.GetStat(OrbStatType.Speed) / 10)) * ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
+
+        _rigidBody.AddForce(force, ForceMode.Impulse);
 
         OnThrown?.Invoke();
         OnStateChanged?.Invoke(currentState);
@@ -174,12 +187,12 @@ public class SimpleOrb : MonoBehaviour
         float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
 
         // AnimationCurve adjustments
-        float dynamicMaxDistance = Mathf.Max(maxDistance, distanceToTarget + 10f);
+        float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
         float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
         float currentSpeed = movementSpeed * curveValue * speedMultiplier;
 
         // MoveTowards to the target
-        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
@@ -195,7 +208,16 @@ public class SimpleOrb : MonoBehaviour
         Stick(collision.transform);
 
         if (collision.gameObject.TryGetComponent(out IDamageable damageable))
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
+        {
+            damageable.OnTakeDamage += GiveDamage;
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            damageable.OnTakeDamage -= GiveDamage;
+        }
+
+    }
+    private void GiveDamage(float damage)
+    {
+        OnDamageGiven?.Invoke(damage);
     }
     private void Stick(Transform transform)
     {
