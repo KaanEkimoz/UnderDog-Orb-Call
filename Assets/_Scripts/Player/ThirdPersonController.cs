@@ -46,10 +46,8 @@ public class ThirdPersonController : MonoBehaviour
 
     public float DashCooldown => dashCooldownInSeconds;
     public float DashCooldownTimer => _dashCooldownTimer;
-
     public float DashDuration => dashDurationInSeconds;
     public float DashDurationTimer => _dashDurationTimer;
-
     public int MaxDashCount => maxDashCount;
     public int DashCount => _dashCount;
 

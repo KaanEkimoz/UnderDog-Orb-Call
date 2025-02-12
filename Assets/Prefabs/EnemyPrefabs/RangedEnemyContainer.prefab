@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyMovementData: {fileID: 11400000, guid: 6dd71966895b35046975c791111324ea, type: 2}
-  newEnemyStats: {fileID: 5693652140678723031}
+  enemyStats: {fileID: 5693652140678723031}
   projectilePrebfab: {fileID: 7729622762826746845, guid: 18621b4b0193f3341bfe4bfffb0c34a3, type: 3}
   shootingCooldown: 3
   firePoint: {fileID: 8595730504301805588}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d09fbe22b9abb4c8974f4745872104, type: 3}
   m_Name: Ranged Enemy
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 10
   angularSpeed: 20
   acceleration: 8
-  stoppingDistance: 4
+  stoppingDistance: 6
