@@ -45,6 +45,9 @@ namespace com.game.generics
             if (!m_update)
                 return;
 
+            if (Target == null)
+                return;
+
             RefreshPosition();
         }
 

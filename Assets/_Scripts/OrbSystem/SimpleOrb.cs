@@ -92,7 +92,7 @@ public class SimpleOrb : MonoBehaviour
         if (currentState == OrbState.Throwing)
         {
             CalculateDistanceTraveled();
-            if (distanceTraveled >= maxDistance + _playerStats.GetStat(PlayerStatType.Range));
+            if (distanceTraveled >= maxDistance + _playerStats.GetStat(PlayerStatType.Range))
                 Stick(startParent);
         }
         if (currentState == OrbState.Returning && hasReachedTargetPos)

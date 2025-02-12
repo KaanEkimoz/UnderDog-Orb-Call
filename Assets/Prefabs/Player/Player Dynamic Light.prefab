@@ -184,6 +184,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_light: {fileID: 5789188721859287695}
+  m_sparkMask:
+    serializedVersion: 2
+    m_Bits: 256
   m_groundMask:
     serializedVersion: 2
     m_Bits: 8192
@@ -214,3 +217,7 @@ MonoBehaviour:
     LightStatCoefficient: 0.5
     StepAmount: 0.5
     AnimationSpeed: 4
+  m_fullVisionRadiusShift: 0
+  m_halfVisionRadiusShift: 0
+  m_fullVisionRadiusMultiplier: 1
+  m_halfVisionRadiusMultiplier: 1

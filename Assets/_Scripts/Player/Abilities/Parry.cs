@@ -1,13 +1,17 @@
+using com.game.abilitysystem;
+using com.game.abilitysystem.gamedependent;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+
 namespace com.game
 {
-    public class Parry : MonoBehaviour
+    public class Parry : MonoBehaviour, IRuntimeAbility
     {
         [Header("Settings")]
         public bool activateShieldTimer = false;
         public bool activateCooldown = false;
+
         [Header("Shield")]
         [SerializeField] private GameObject shieldOnPlayer;
         [SerializeField] private float parryShieldDurationInSeconds = 1f;
@@ -18,6 +22,7 @@ namespace com.game
         [SerializeField] private float reflectSpeedMultiplier = 1.5f; // Speed multiplier after reflection
 
         [Space]
+
         [Header("Events")]
         public UnityEvent OnShieldEnable;
         public UnityEvent OnShieldDisable;
@@ -28,6 +33,25 @@ namespace com.game
         private Camera mainCamera;
 
         private float _shieldCooldownTimer = 0;
+        private int _stack = 1;
+
+        public float Duration => 0f;
+
+        public float Cooldown => parryShieldCooldownInSeconds;
+
+        public float DurationLeft => 0f;
+
+        public float CooldownLeft => _shieldCooldownTimer;
+
+        public int MaxStack => 1;
+
+        public int CurrentStack => _stack;
+
+        public bool InUse => isShieldActive;
+
+        public bool InCooldown => _shieldCooldownTimer > 0;
+
+        public bool ReadyToUse => !InCooldown && !InUse;
 
         private void Start()
         {
@@ -65,6 +89,7 @@ namespace com.game
             if(_shieldCooldownTimer > 0)
                 return;
 
+            _stack -= 1;
             _shieldCooldownTimer = parryShieldCooldownInSeconds;
             shieldOnPlayer.SetActive(true);
             isShieldActive = true;
@@ -92,9 +117,15 @@ namespace com.game
         }
         private void DisableShield()
         {
+            _stack = 1;
             isShieldActive = false;
             shieldOnPlayer.SetActive(false);
             OnShieldDisable?.Invoke();
+        }
+
+        public bool CanUse(AbilityUseContext context)
+        {
+            return ReadyToUse;
         }
     }
 }

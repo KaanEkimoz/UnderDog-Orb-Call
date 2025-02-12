@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyMovementData: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
-  newEnemyStats: {fileID: 635029754020833559}
+  enemyStats: {fileID: 635029754020833559}
   explosionDamage: 30
   preperationTime: 1.5
   explosionRadius: 5

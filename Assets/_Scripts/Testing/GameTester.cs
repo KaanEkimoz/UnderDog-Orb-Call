@@ -1,3 +1,5 @@
+using com.game.abilitysystem;
+using com.game.abilitysystem.ui;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
@@ -27,6 +29,8 @@ namespace com.game.testing
         const float k_utilityPanelWidth = 100f;
 
         [SerializeField] private bool m_displayUnpaused = false;
+        [SerializeField] private AbilityDisplayGP m_parryDisplay;
+        [SerializeField] private Parry m_parry;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
@@ -53,6 +57,8 @@ namespace com.game.testing
 
             m_additionButtonAmount = k_initialAdditionButtonAmount;
             m_percentageButtonAmount = k_initialPercentageButtonAmount;
+
+            m_parryDisplay.Initialize(m_parry);
         }
 
         private void Update()
