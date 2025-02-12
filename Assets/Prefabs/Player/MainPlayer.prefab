@@ -1139,6 +1139,7 @@ GameObject:
   - component: {fileID: 3751801434260902456}
   - component: {fileID: 4107960892725049667}
   - component: {fileID: 9089125673551966090}
+  - component: {fileID: 1868102590449632697}
   m_Layer: 7
   m_Name: ParryShield
   m_TagString: Untagged
@@ -1156,7 +1157,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.83, z: 0}
-  m_LocalScale: {x: 3.9898846, y: 3.9898846, z: 3.9898846}
+  m_LocalScale: {x: 2.4381785, y: 2.4381785, z: 2.4381785}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5895881473504401873}
@@ -1235,6 +1236,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1868102590449632697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3930817169394365275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae205458876fa94a8207c8e6eb47b2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reflectAngleOffset: 0
+  reflectSpeedMultiplier: 3
 --- !u!1 &4026778808033858036
 GameObject:
   m_ObjectHideFlags: 0
@@ -2358,10 +2373,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78cec39fd9239dc459e91ee2e0cbea71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activateShieldTimer: 0
+  activateCooldown: 0
   shieldOnPlayer: {fileID: 3930817169394365275}
-  shieldEffectsTimer: 0.01
+  parryShieldDurationInSeconds: 1
+  parryShieldCooldownInSeconds: 2
   reflectAngleOffset: 0
-  reflectSpeedMultiplier: 1.5
+  reflectSpeedMultiplier: 1500
   OnShieldEnable:
     m_PersistentCalls:
       m_Calls:

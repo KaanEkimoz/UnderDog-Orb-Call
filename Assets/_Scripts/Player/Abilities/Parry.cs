@@ -5,9 +5,13 @@ namespace com.game
 {
     public class Parry : MonoBehaviour
     {
+        [Header("Settings")]
+        public bool activateShieldTimer = false;
+        public bool activateCooldown = false;
         [Header("Shield")]
         [SerializeField] private GameObject shieldOnPlayer;
-        [SerializeField] private float shieldEffectsTimer = 0.75f;
+        [SerializeField] private float parryShieldDurationInSeconds = 1f;
+        [SerializeField] private float parryShieldCooldownInSeconds = 2.0f;
 
         [Header("Reflection Settings")]
         [SerializeField] private float reflectAngleOffset = 0f; // Adjustable reflection angle
@@ -22,6 +26,8 @@ namespace com.game
         private Animator shieldAnimator;
         private bool isShieldActive = false;
         private Camera mainCamera;
+
+        private float _shieldCooldownTimer = 0;
 
         private void Start()
         {
@@ -38,6 +44,7 @@ namespace com.game
         }
         void Update()
         {
+            HandleCooldownTimer();
             if (PlayerInputHandler.Instance.ParryButtonPressed && !isShieldActive)
                 EnableShield();
 
@@ -49,31 +56,44 @@ namespace com.game
             if (PlayerInputHandler.Instance.ParryButtonReleased && isShieldActive)
                 StartCoroutine(nameof(ShieldDisableEffectsCoroutine));
         }
+        private void HandleCooldownTimer()
+        {
+            _shieldCooldownTimer = Mathf.Max(0, _shieldCooldownTimer - Time.deltaTime);
+        }
         private void EnableShield()
         {
+            if(_shieldCooldownTimer > 0)
+                return;
+
+            _shieldCooldownTimer = parryShieldCooldownInSeconds;
             shieldOnPlayer.SetActive(true);
             isShieldActive = true;
             StartCoroutine(nameof(ShieldEnableEffectsCoroutine));
             OnShieldEnable?.Invoke();
         }
+        private IEnumerator ShieldDisableCoroutine()
+        {
+            yield return new WaitForSeconds(parryShieldDurationInSeconds);
+            DisableShield();
+        }
         private IEnumerator ShieldEnableEffectsCoroutine()
         {
             //shieldCollider.enabled = false;
             //shieldAnimator.SetTrigger("Enable");
-            yield return new WaitForSeconds(shieldEffectsTimer);
-            //shieldCollider.enabled = true;
+            yield return new WaitForSeconds(parryShieldDurationInSeconds);
+            DisableShield();
         }
         private IEnumerator ShieldDisableEffectsCoroutine()
         {
             
             //shieldAnimator.SetTrigger("Disable");
-            yield return new WaitForSeconds(shieldEffectsTimer);
+            yield return new WaitForSeconds(parryShieldDurationInSeconds);
             DisableShield();
         }
         private void DisableShield()
         {
-            shieldOnPlayer.SetActive(false);
             isShieldActive = false;
+            shieldOnPlayer.SetActive(false);
             OnShieldDisable?.Invoke();
         }
     }

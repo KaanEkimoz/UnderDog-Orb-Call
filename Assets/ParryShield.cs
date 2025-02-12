@@ -4,10 +4,9 @@ namespace com.game
 {
     public class ParryShield : MonoBehaviour
     {
-        [Header("Reflection Settings")]
-        [SerializeField] private float reflectAngleOffset = 0f; // Adjustable reflection angle
-        [SerializeField] private float reflectSpeedMultiplier = 1.5f; // Speed multiplier after reflection
-
+       [Header("Reflection Settings")]
+       [SerializeField] private float reflectAngleOffset = 0f; // Adjustable reflection angle
+       [SerializeField] private float reflectSpeedMultiplier = 1.5f; // Speed multiplier after reflection
         
        private void OnTriggerEnter(Collider other)
        {
