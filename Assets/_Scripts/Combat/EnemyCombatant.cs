@@ -3,13 +3,18 @@ using com.game.testing;
 using System;
 using com.absence.attributes;
 using com.game.enemysystem.statsystemextensions;
+using com.game.generics.interfaces;
+using com.game.generics;
 
 namespace com.game.enemysystem
 {
-    public class EnemyCombatant : MonoBehaviour, IDamageable
+    public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
     {
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
+        [SerializeField] private SparkLight m_sparkLight;
+
+        public SparkLight Spark => m_sparkLight;
 
         float _health;
         float _maxHealth;

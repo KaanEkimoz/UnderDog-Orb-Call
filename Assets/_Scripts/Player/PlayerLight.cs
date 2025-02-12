@@ -1,5 +1,8 @@
+using com.game.generics.interfaces;
 using com.game.player.statsystemextensions;
 using com.game.testing;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace com.game.player
@@ -18,6 +21,7 @@ namespace com.game.player
         const float k_threshold = 0.1f;
 
         [SerializeField] private Light m_light;
+        [SerializeField] private LayerMask m_sparkMask;
         [SerializeField] private LayerMask m_groundMask;
         [SerializeField] private float m_generalLightStatCoefficient;
         [SerializeField] private float m_threshold = k_threshold;
@@ -34,6 +38,24 @@ namespace com.game.player
         float m_rawLightStat;
         float m_generalCoefficient;
         float m_generalShift;
+        float m_fullVisionRadius;
+        float m_halfVisionRadius;
+        RaycastHit m_groundData;
+        bool m_hasGround;
+
+#if UNITY_EDITOR
+        int m_fullSeenCount;
+        int m_halfSeenCount;
+#endif
+
+        List<IVisible> m_halfVisibles;
+        List<IVisible> m_fullVisibles;
+
+        private void Awake()
+        {
+            m_halfVisibles = new();
+            m_fullVisibles = new();
+        }
 
         private void Start()
         {
@@ -44,15 +66,10 @@ namespace com.game.player
         private void Update()
         {
             CacheVariables();
-
-            m_light.innerSpotAngle = UpdateViaFieldData(m_innerSpotAngleSettings, m_light.innerSpotAngle);
-            m_light.spotAngle = UpdateViaFieldData(m_outerSpotAngleSettings, m_light.spotAngle);
-            m_light.intensity = UpdateViaFieldData(m_intensitySettings, m_light.intensity);
-            m_light.range = UpdateViaFieldData(m_rangeSettings, m_light.range);
-
-            Vector3 lightLocalPosition = m_light.transform.localPosition;
-            lightLocalPosition.y = UpdateViaFieldData(m_localHeightSettings, lightLocalPosition.y);
-            m_light.transform.localPosition = lightLocalPosition;
+            UpdateFields();
+            CalculateView();
+            DetectAll();
+            SparkAll();
         }
 
         void CacheVariables()
@@ -63,6 +80,75 @@ namespace com.game.player
             float refinedLightStat = m_rawLightStat * m_generalLightStatCoefficient;
             m_generalCoefficient = m_orbsInHand;
             m_generalShift = refinedLightStat;
+        }
+
+        void UpdateFields()
+        {
+            m_light.innerSpotAngle = UpdateViaFieldData(m_innerSpotAngleSettings, m_light.innerSpotAngle);
+            m_light.spotAngle = UpdateViaFieldData(m_outerSpotAngleSettings, m_light.spotAngle);
+            m_light.intensity = UpdateViaFieldData(m_intensitySettings, m_light.intensity);
+            m_light.range = UpdateViaFieldData(m_rangeSettings, m_light.range);
+
+            Vector3 lightLocalPosition = m_light.transform.localPosition;
+            lightLocalPosition.y = UpdateViaFieldData(m_localHeightSettings, lightLocalPosition.y);
+            m_light.transform.localPosition = lightLocalPosition;
+        }
+
+        bool CalculateView()
+        {
+            float outerAngleInRads = m_light.spotAngle * Mathf.Deg2Rad;
+            float innerAngleInRads = m_light.innerSpotAngle * Mathf.Deg2Rad;
+            float range = m_light.range;
+
+            m_hasGround = Physics.Raycast(m_light.transform.position,
+            Vector3.down,
+            out m_groundData,
+            range,
+            m_groundMask,
+            QueryTriggerInteraction.UseGlobal);
+
+            m_fullVisionRadius = Mathf.Tan(innerAngleInRads / 2) * m_groundData.distance;
+            m_halfVisionRadius = Mathf.Tan(outerAngleInRads / 2) * m_groundData.distance;
+
+            return m_hasGround;
+        }
+
+        void DetectAll()
+        {
+            bool hit = m_hasGround;
+            if (!hit) return;
+
+            Vector3 position = transform.position;
+            position.y = 0f;
+
+            Collider[] rawFullSeens = Physics.OverlapSphere(position, m_fullVisionRadius, m_sparkMask);
+            Collider[] rawHalfSeens = Physics.OverlapSphere(position, m_halfVisionRadius, m_sparkMask);
+            
+            m_fullVisibles.Clear();
+            m_halfVisibles.Clear();
+
+            foreach (Collider collider in rawFullSeens)
+            {
+                if (!collider.TryGetComponent(out IVisible visible)) continue;
+
+                m_fullVisibles.Add(visible);
+            }
+
+            foreach (Collider collider in rawHalfSeens)
+            {
+                if (!collider.TryGetComponent(out IVisible visible)) continue;
+                if (m_fullVisibles.Contains(visible)) continue;
+
+                m_halfVisibles.Add(visible);
+            }
+
+            m_fullSeenCount = m_fullVisibles.Count;
+            m_halfSeenCount = m_halfVisibles.Count;
+        }
+
+        void SparkAll()
+        {
+            m_halfVisibles.ForEach(full => full.Spark.Spark());
         }
 
         float UpdateViaFieldData(FieldSettings target, float initialValue)
@@ -85,19 +171,10 @@ namespace com.game.player
 
         private void OnDrawGizmos()
         {
-            float outerAngleInRads = m_light.spotAngle * Mathf.Deg2Rad;
-            float innerAngleInRads = m_light.innerSpotAngle * Mathf.Deg2Rad;
-            float range = m_light.range;
+            bool hit;
 
-            bool hit = Physics.Raycast(m_light.transform.position,
-            Vector3.down,
-            out RaycastHit groundData,
-            range,
-            m_groundMask,
-            QueryTriggerInteraction.UseGlobal);
-
-            float innerRadius = Mathf.Tan(innerAngleInRads / 2) * groundData.distance;
-            float outerRadius = Mathf.Tan(outerAngleInRads / 2) * groundData.distance;
+            if (Application.isPlaying) hit = m_hasGround;
+            else hit = CalculateView();
 
             const float kAlpha = 1f;
 
@@ -109,15 +186,10 @@ namespace com.game.player
 
 #if UNITY_EDITOR
             UnityEditor.Handles.color = fullSeenColor;
-            if (hit) UnityEditor.Handles.DrawWireDisc(groundData.point, Vector2.up, innerRadius);
+            if (hit) UnityEditor.Handles.DrawWireDisc(m_groundData.point, Vector2.up, m_fullVisionRadius);
             UnityEditor.Handles.color = halfSeenColor;
-            if (hit) UnityEditor.Handles.DrawWireDisc(groundData.point, Vector2.up, outerRadius);
+            if (hit) UnityEditor.Handles.DrawWireDisc(m_groundData.point, Vector2.up, m_halfVisionRadius);
 #endif
-
-            //Gizmos.color = fullSeenColor;
-            //if (hit) Gizmos.DrawSphere(groundData.point, innerRadius);
-            //Gizmos.color = halfSeenColor;
-            //if (hit) Gizmos.DrawSphere(groundData.point, outerRadius);
         }
     }
 }
