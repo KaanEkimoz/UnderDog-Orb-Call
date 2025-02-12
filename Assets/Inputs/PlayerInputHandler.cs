@@ -17,6 +17,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool AttackButtonPressed => _attackButtonPressedThisFrame;
     public bool AttackButtonReleased => _attackButtonReleasedThisFrame;
     public bool AttackButtonHeld => _attackButtonHeld;
+    public bool ParryButtonPressed => _parryButtonPressedThisFrame;
+    public bool ParryButtonReleased => _parryButtonReleasedThisFrame;
     public bool RecallButtonPressed => _recallButtonPressedThisFrame;
     public bool NextChooseButtonPressed => _nextChooseButtonPressedThisFrame;
     public bool PreviousChooseButtonPressed => _previousChooseButtonPressedThisFrame;
@@ -39,6 +41,10 @@ public class PlayerInputHandler : MonoBehaviour
     private bool _attackButtonPressedThisFrame;
     private bool _attackButtonReleasedThisFrame;
     private bool _attackButtonHeld;
+
+    //Parry - Right Mouse Button
+    private bool _parryButtonPressedThisFrame;
+    private bool _parryButtonReleasedThisFrame;
 
     // Recall - R Keyboard Button
     private bool _recallButtonPressedThisFrame;
@@ -66,8 +72,9 @@ public class PlayerInputHandler : MonoBehaviour
         _recallButtonPressedThisFrame = false;
         _nextChooseButtonPressedThisFrame = false;
         _previousChooseButtonPressedThisFrame = false;
+        _parryButtonPressedThisFrame = false;
+        _parryButtonReleasedThisFrame = false;
     }
-
     #region Mouse Cursor
 
     [Header("Mouse Cursor Settings")]
@@ -78,12 +85,10 @@ public class PlayerInputHandler : MonoBehaviour
     {
         SetCursorState(cursorLocked);
     }
-
     private void SetCursorState(bool newState)
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
-
     #endregion
 
     #region Input Functions
@@ -149,6 +154,13 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
             _previousChooseButtonPressedThisFrame = true;
+    }
+    public void OnParry(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+            _parryButtonPressedThisFrame = true;
+        else if (context.phase == InputActionPhase.Canceled)
+            _parryButtonReleasedThisFrame = true;
     }
 
     #endregion
