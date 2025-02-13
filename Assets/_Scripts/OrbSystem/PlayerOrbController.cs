@@ -84,9 +84,9 @@ public class OrbController : MonoBehaviour
         else if (PlayerInputHandler.Instance.AttackButtonReleased)
             Throw();
 
-       // if (PlayerInputHandler.Instance.RecallButtonPressed)
-         //   CallOrb();
-        if (PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(1.0f))
+        if(PlayerInputHandler.Instance.RecallButtonPressed)
+            CallOrb(OrbsOnEllipse[selectedOrbIndex]);
+        if(PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(0.2f))
             CallOrbs();
 
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
@@ -114,6 +114,7 @@ public class OrbController : MonoBehaviour
     }
     private void CallOrb(SimpleOrb orb)
     {
+        if (orb.currentState != OrbState.Sticked) return;
         orb.Return(firePointTransform.position);
         Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();
