@@ -13,7 +13,6 @@ namespace com.game.enemysystem
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
         [SerializeField] private SparkLight m_sparkLight;
-
         public SparkLight Spark => m_sparkLight;
 
         float _health;
@@ -50,7 +49,7 @@ namespace com.game.enemysystem
 
         public void Die()
         {
-            SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
+            SimpleOrb[] orbsOnEnemy = GetOrbsOnEnemy();
 
             foreach (SimpleOrb orb in orbsOnEnemy)
             {
@@ -63,6 +62,14 @@ namespace com.game.enemysystem
             else Destroy(gameObject);
 
             OnDie?.Invoke();
+        }
+        public int GetOrbsCountOnEnemy()
+        {
+            return GetOrbsOnEnemy().Length;
+        }
+        public SimpleOrb[] GetOrbsOnEnemy()
+        {
+            return GetComponentsInChildren<SimpleOrb>();
         }
     }
 }

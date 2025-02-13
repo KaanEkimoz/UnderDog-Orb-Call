@@ -164,8 +164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_displayUnpaused: 1
-  m_parryDisplay: {fileID: 0}
-  m_parry: {fileID: 0}
+  m_parryDisplay: {fileID: 1351729384}
+  m_parry: {fileID: 4416926083347132241}
 --- !u!1 &59184530
 GameObject:
   m_ObjectHideFlags: 0
@@ -1683,11 +1683,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: spawnDelay
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: maxEnemyCount
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: spawnPoints.Array.size
@@ -1695,7 +1695,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: enemyPrefabs.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: 'spawnPoints.Array.data[0]'
@@ -1709,6 +1709,14 @@ PrefabInstance:
       propertyPath: 'enemyPrefabs.Array.data[0]'
       value: 
       objectReference: {fileID: 6307766008950331458, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+    - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: 'enemyPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 7795562328944617973, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+    - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: 'enemyPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1178343884590122114, guid: e447143fcb506dc4f9c2c1995d0de447, type: 3}
     - target: {fileID: 2592178667866607631, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1755,7 +1763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5331071310023750704, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2100,6 +2108,17 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 342eec56cf44435478a59474dfd1cbd8, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &1351729384 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2834120892147562603, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
+  m_PrefabInstance: {fileID: 7596575343863148016}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b005b8a9b53bee4fbb6435941ea873d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1476810621
 GameObject:
   m_ObjectHideFlags: 0
@@ -3399,6 +3418,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5895881473504401873, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
   m_PrefabInstance: {fileID: 6049935697521339334}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4416926083347132241 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6740164441137565520, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+  m_PrefabInstance: {fileID: 6049935697521339334}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1773443582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78cec39fd9239dc459e91ee2e0cbea71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5412284127006876646
 PrefabInstance:
   m_ObjectHideFlags: 0

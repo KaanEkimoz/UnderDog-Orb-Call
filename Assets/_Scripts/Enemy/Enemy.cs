@@ -1,16 +1,16 @@
 using com.game.enemysystem;
 using com.game.enemysystem.statsystemextensions;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-
 public class Enemy : MonoBehaviour
 {
     public EnemyMovementData enemyMovementData;
     protected GameObject target;
     [SerializeField] protected EnemyStats enemyStats;
     protected NavMeshAgent navMeshAgent;
-
     float defaultSpeed;
+    private float slowAmount = 0;
 
     protected virtual void Awake()
     {
@@ -27,7 +27,8 @@ public class Enemy : MonoBehaviour
         defaultSpeed = enemyMovementData.speed;
 
         navMeshAgent.updateRotation = false;
-        navMeshAgent.speed = defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed);
+
+        AdjustSpeed(defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed));
         navMeshAgent.angularSpeed = enemyMovementData.angularSpeed;
         navMeshAgent.acceleration = enemyMovementData.acceleration;
         navMeshAgent.stoppingDistance = enemyMovementData.stoppingDistance;
@@ -39,12 +40,25 @@ public class Enemy : MonoBehaviour
     {
         if (target == null) return;
 
-        navMeshAgent.speed = defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed);
+        AdjustSpeed((defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * (1 - (slowAmount/100)));
         navMeshAgent.SetDestination(target.transform.position);
         RotateTowardsTarget();
         CustomUpdate();
     }
-
+    public void AdjustSpeed(float newSpeed)
+    {
+        navMeshAgent.speed = newSpeed;
+    }
+    public void ApplySlowForSeconds(float slowPercent, float duration)
+    {
+        StartCoroutine(SlowForSeconds(slowPercent, duration));
+    }
+    private IEnumerator SlowForSeconds(float slowPercent, float duration)
+    {
+        slowAmount = slowPercent;
+        yield return new WaitForSeconds(duration);
+        slowAmount = 0;
+    }
     protected virtual void CustomUpdate() { }
 
     protected bool CheckDistanceToPlayer() //dusmanin playera uzakligini dondur

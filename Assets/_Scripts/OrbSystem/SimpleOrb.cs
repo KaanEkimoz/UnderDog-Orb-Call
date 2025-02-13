@@ -219,12 +219,12 @@ public class SimpleOrb : MonoBehaviour
     {
         OnDamageGiven?.Invoke(damage);
     }
-    private void Stick(Transform transform)
+    private void Stick(Transform stickTransform)
     {
         currentState = OrbState.Sticked;
         _rigidBody.isKinematic = true;
         _sphereCollider.isTrigger = true;
-        transform.SetParent(transform);
+        transform.SetParent(stickTransform);
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);
@@ -235,7 +235,15 @@ public class SimpleOrb : MonoBehaviour
             return;
 
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage));
+        {
+            damageable.OnTakeDamage += GiveDamage;
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            damageable.OnTakeDamage -= GiveDamage;
+
+            if(other.gameObject.TryGetComponent(out Enemy hittedEnemy))
+                hittedEnemy.ApplySlowForSeconds(100f,2f);
+        }
+            
     }
     public void IncreaseSpeedForSeconds(float speedIncrease, float duration)
     {
@@ -247,7 +255,6 @@ public class SimpleOrb : MonoBehaviour
         yield return new WaitForSeconds(duration);
         movementSpeed -= speedIncrease;
     }
-
     /*
     
     [Header("Orb Sway")]
