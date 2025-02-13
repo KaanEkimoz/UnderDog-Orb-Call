@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     public EnemyMovementData enemyMovementData;
+    public float slowPercentPerOrb = 25f;
     protected GameObject target;
     [SerializeField] protected EnemyStats enemyStats;
     protected NavMeshAgent navMeshAgent;
@@ -52,6 +53,10 @@ public class Enemy : MonoBehaviour
     public void ApplySlowForSeconds(float slowPercent, float duration)
     {
         StartCoroutine(SlowForSeconds(slowPercent, duration));
+    }
+    public void ApplySlowForOrbs(int orbCount)
+    {
+        slowAmount = slowPercentPerOrb * orbCount;
     }
     private IEnumerator SlowForSeconds(float slowPercent, float duration)
     {
