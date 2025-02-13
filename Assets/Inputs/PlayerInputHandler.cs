@@ -11,7 +11,6 @@ public class PlayerInputHandler : MonoBehaviour
         Game.OnResume += OnGameResume;
     }
     #endregion
-
     public bool DashButtonPressed => _dashButtonPressedThisFrame;
     public bool DashButtonHeld => _dashButtonHeld;
     public bool AttackButtonPressed => _attackButtonPressedThisFrame;
@@ -20,6 +19,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool ParryButtonPressed => _parryButtonPressedThisFrame;
     public bool ParryButtonReleased => _parryButtonReleasedThisFrame;
     public bool RecallButtonPressed => _recallButtonPressedThisFrame;
+    public bool RecallButtonReleased => _recallButtonReleasedThisFrame;
+    public bool RecallButtonHeld => _recallButtonHeld;
     public bool NextChooseButtonPressed => _nextChooseButtonPressedThisFrame;
     public bool PreviousChooseButtonPressed => _previousChooseButtonPressedThisFrame;
     public bool SprintButtonHeld => _sprintButtonHeld;
@@ -48,6 +49,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     // Recall - R Keyboard Button
     private bool _recallButtonPressedThisFrame;
+    private bool _recallButtonReleasedThisFrame;
+    private bool _recallButtonHeld;
+    private float _recallButtonHoldTime;
 
     // Choose - Q and E Keyboard Buttons
     private bool _nextChooseButtonPressedThisFrame;
@@ -70,11 +74,33 @@ public class PlayerInputHandler : MonoBehaviour
         _attackButtonReleasedThisFrame = false;
         _dashButtonPressedThisFrame = false;
         _recallButtonPressedThisFrame = false;
+        _recallButtonReleasedThisFrame = false;
         _nextChooseButtonPressedThisFrame = false;
         _previousChooseButtonPressedThisFrame = false;
         _parryButtonPressedThisFrame = false;
         _parryButtonReleasedThisFrame = false;
     }
+
+    #region Timers
+    private void Update()
+    {
+        HandleRecallHoldTimer();
+    }
+    public bool IsRecallHoldTimeGreaterThan(float time = 0.15f)
+    {
+        return _recallButtonHoldTime > time;
+    }
+    private void HandleRecallHoldTimer()
+    {
+        if (_recallButtonHeld)
+            _recallButtonHoldTime += Time.deltaTime;
+
+        if (_recallButtonReleasedThisFrame)
+            _recallButtonHoldTime = 0;
+    }
+
+    #endregion
+
     #region Mouse Cursor
 
     [Header("Mouse Cursor Settings")]
@@ -102,7 +128,6 @@ public class PlayerInputHandler : MonoBehaviour
     {
         _mouseInput = context.ReadValue<Vector2>();
     }
-
     public void OnDash(InputAction.CallbackContext context)
     {
         if (context.started)
@@ -138,10 +163,19 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
-    public void OnBlock(InputAction.CallbackContext context)
+    public void OnRecall(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
+        {
+            _recallButtonHeld = true;
             _recallButtonPressedThisFrame = true;
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            _recallButtonHeld = false;
+            _recallButtonReleasedThisFrame = true;
+        }
+
     }
 
     public void OnNextChoose(InputAction.CallbackContext context)

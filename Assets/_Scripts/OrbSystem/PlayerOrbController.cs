@@ -84,13 +84,14 @@ public class OrbController : MonoBehaviour
         else if (PlayerInputHandler.Instance.AttackButtonReleased)
             Throw();
 
-        if (PlayerInputHandler.Instance.RecallButtonPressed)
+       // if (PlayerInputHandler.Instance.RecallButtonPressed)
+         //   CallOrb();
+        if (PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(1.0f))
             CallOrbs();
 
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
             ChooseNextOrb();
-
-        if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
+        else if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
             ChoosePreviousOrb();  
     }
     private void CreateGhostOrbsAtStart()
