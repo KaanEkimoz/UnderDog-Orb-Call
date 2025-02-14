@@ -89,7 +89,6 @@ public class ThirdPersonController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputHandler>();
 
-        walkSpeed *= _playerStats.GetStat(PlayerStatType.WalkSpeed);
         _dashCount = maxDashCount;
 
         AssignAnimationIDs();
@@ -104,7 +103,8 @@ public class ThirdPersonController : MonoBehaviour
 
     private void HandleHorizontalMovement()
     {
-        float targetSpeed = CalculateMaximumSpeed();
+        float stat = (_playerStats.GetStat(PlayerStatType.WalkSpeed) / 10) + 1;
+        float targetSpeed = CalculateMaximumSpeed() * stat;
         _currentHorizontalSpeed = CalculateCurrentSpeed(targetSpeed);
 
         _horizontalSpeedAnimationBlend = CalculateAnimationBlend(targetSpeed);
