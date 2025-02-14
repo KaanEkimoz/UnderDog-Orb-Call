@@ -15,6 +15,8 @@ public class OrbController : MonoBehaviour
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 2f;
     [SerializeField] private Transform firePointTransform;
     [SerializeField] private LayerMask cursorDetectMask;
+    [Header("Orb Recall")]
+    [SerializeField] private float recallHoldTime = 0.2f;
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
     [SerializeField] private float ellipseXRadius = 0.5f;
@@ -84,13 +86,14 @@ public class OrbController : MonoBehaviour
         else if (PlayerInputHandler.Instance.AttackButtonReleased)
             Throw();
 
-        if (PlayerInputHandler.Instance.RecallButtonPressed)
+        if(PlayerInputHandler.Instance.RecallButtonPressed)
+            CallOrb(OrbsOnEllipse[selectedOrbIndex]);
+        if(PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(recallHoldTime))
             CallOrbs();
 
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
             ChooseNextOrb();
-
-        if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
+        else if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
             ChoosePreviousOrb();  
     }
     private void CreateGhostOrbsAtStart()
@@ -113,6 +116,7 @@ public class OrbController : MonoBehaviour
     }
     private void CallOrb(SimpleOrb orb)
     {
+        if (orb.currentState != OrbState.Sticked) return;
         orb.Return(firePointTransform.position);
         Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();

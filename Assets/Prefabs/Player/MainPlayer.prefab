@@ -2059,8 +2059,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1309948186291933912}
-        m_TargetAssemblyTypeName: StarterAssets.StarterAssetsInputs, Assembly-CSharp
-        m_MethodName: OnBlock
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnRecall
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2237,6 +2237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd21205ba91a0bb428b6d644c7619337, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_container: {fileID: 0}
 --- !u!114 &1070504648105895888
 MonoBehaviour:
   m_ObjectHideFlags: 0

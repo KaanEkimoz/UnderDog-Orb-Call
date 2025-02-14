@@ -466,7 +466,6 @@ GameObject:
   - component: {fileID: 3559195268074278607}
   - component: {fileID: 6489920008519324392}
   - component: {fileID: 5756904344115542330}
-  - component: {fileID: 4051647883533841525}
   m_Layer: 6
   m_Name: LightOrb_Inner
   m_TagString: Untagged
@@ -542,27 +541,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4051647883533841525
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9011708957313349184}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8321302766463661466
 PrefabInstance:
   m_ObjectHideFlags: 0
