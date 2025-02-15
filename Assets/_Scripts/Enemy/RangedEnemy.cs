@@ -10,6 +10,11 @@ public class RangedEnemy : Enemy
     public Transform firePoint;
     [Header("Projectile")]
     public float projectileSpeed = 5f;
+    [Header("Raycast")]
+    public float rayDistance = 20f;
+    public GameObject raySource;
+    [SerializeField] LayerMask layerMask;
+    [SerializeField] bool canSeePlayer;
 
     private bool canShoot = true;
 
@@ -21,9 +26,32 @@ public class RangedEnemy : Enemy
     }
     protected override void CustomUpdate()
     {
-        if (CheckDistanceToPlayer() && canShoot)
+        canSeePlayer = CanSeePlayer();
+
+        if (canShoot && CheckDistanceToPlayer() && CanSeePlayer())
             Shoot();
+
     }
+    
+    private bool CanSeePlayer()
+    {
+        Vector3 rayDirection = transform.TransformDirection(Vector3.forward); 
+        Debug.DrawRay(raySource.transform.position, rayDirection * rayDistance, Color.blue); //ray'i default olarak mavi ciz
+
+        if (Physics.Raycast(raySource.transform.position, rayDirection, out RaycastHit hitInfo, rayDistance, layerMask)) //ray bir seye carpti mi?
+        {          
+            Debug.Log("gorulen nesne: " + hitInfo.collider.name);
+
+            bool isPlayer = hitInfo.collider.CompareTag("Player"); //carpilan nesne player mi?
+            
+            Debug.DrawRay(raySource.transform.position, rayDirection * rayDistance, isPlayer ? Color.green : Color.red ); //ray'in carptigi nesne player'sa yesil, degilse kirmizi ciz
+           
+            return isPlayer;
+        }
+
+        return false;   
+    }
+
     private void Shoot()
     {   
         canShoot = false;
