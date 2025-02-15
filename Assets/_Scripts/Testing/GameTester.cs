@@ -37,6 +37,7 @@ namespace com.game.testing
 
         PlayerStats m_playerStats;
         PlayerInventory m_playerInventory;
+        PlayerLevelingLogic m_playerLevelingLogic;
 
         float m_additionButtonWidth;
         float m_percentageButtonWidth;
@@ -51,6 +52,7 @@ namespace com.game.testing
 
             m_playerStats = Player.Instance.Hub.Stats;
             m_playerInventory = Player.Instance.Hub.Inventory;
+            m_playerLevelingLogic = Player.Instance.Hub.Leveling;
 
             m_additionButtonWidth = k_totalButtonAreaWidth * 2 / 5 / 2;
             m_percentageButtonWidth = k_totalButtonAreaWidth * 3 / 5 / 2;
@@ -114,10 +116,10 @@ namespace com.game.testing
             m_playerInventory.OnTestGUI();
             GUILayout.EndVertical();
 
-            //GUILayout.BeginVertical(styleName);
-            //GUILayout.Label("Utilities");
-            //TestUtilityGUI();
-            //GUILayout.EndVertical();
+            GUILayout.BeginVertical("box");
+            GUILayout.Label("Utilities");
+            TestUtilityGUI();
+            GUILayout.EndVertical();
 
             GUILayout.BeginVertical("box");
             GUILayout.Label("Player Stat Pipeline");
@@ -265,15 +267,26 @@ namespace com.game.testing
         {
             GUILayout.BeginVertical(GUILayout.Width(k_utilityPanelWidth));
 
-            GUI.enabled = false;
-            if (GUILayout.Button("Kill enemy"))
+            int experienceAmount = Mathf.FloorToInt(m_additionButtonAmount);
+            if (GUILayout.Button($"Gain {experienceAmount} Experience"))
             {
-                TestEventChannel.ReceiveEnemyKill();
-                m_enemiesKilled++;
+                m_playerLevelingLogic.GainExperience(experienceAmount);
             }
-            GUI.enabled = true;
 
-            GUILayout.Label($"Enemies Killed: {m_enemiesKilled}");
+            if (GUILayout.Button("Level Up"))
+            {
+                m_playerLevelingLogic.LevelUp();
+            }
+
+            //GUI.enabled = false;
+            //if (GUILayout.Button("Kill enemy"))
+            //{
+            //    TestEventChannel.ReceiveEnemyKill();
+            //    m_enemiesKilled++;
+            //}
+            //GUI.enabled = true;
+
+            //GUILayout.Label($"Enemies Killed: {m_enemiesKilled}");
 
             GUILayout.EndVertical();
         }

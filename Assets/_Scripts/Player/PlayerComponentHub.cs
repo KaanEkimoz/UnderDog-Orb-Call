@@ -9,10 +9,12 @@ namespace com.game.player
         [SerializeField] private PlayerStats m_stats;
         [SerializeField] private PlayerOrbHandler_Test m_orbHandler;
         [SerializeField] private PlayerInventory m_inventory;
+        [SerializeField] private PlayerLevelingLogic m_leveling;
         [SerializeField] private Entity m_entity;
 
         public PlayerStats Stats => m_stats;
         public PlayerOrbHandler_Test OrbHandler => m_orbHandler;
         public PlayerInventory Inventory => m_inventory;
+        public PlayerLevelingLogic Leveling => m_leveling;
     }
 }
