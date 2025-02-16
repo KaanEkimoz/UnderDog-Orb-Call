@@ -12,6 +12,12 @@ namespace com.game
             public const int MAX_ORBS_CAN_BE_HELD = 12;
         }
 
+        public static class Shopping
+        {
+            public const int PLAYER_SHOP_CAPACITY = 4;
+            public const int ORB_SHOP_CAPACITY = 3;
+        }
+
         public static class AssetManagement
         {
             public const string RELEASE_BUILD_ASSET_LABEL = "release";

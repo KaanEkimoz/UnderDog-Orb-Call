@@ -23,7 +23,7 @@ namespace com.game.player
         private void Awake()
         {
             m_currentLevel = 1;
-            m_targetExperience = m_placeholder[0];
+            m_targetExperience = 10;
         }
 
         public bool GainExperience(int amount)
