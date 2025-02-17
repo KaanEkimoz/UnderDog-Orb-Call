@@ -1,8 +1,9 @@
+using com.game.player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace com.game.player
+namespace com.game.ui
 {
     public class PlayerExperienceBar : MonoBehaviour
     {
