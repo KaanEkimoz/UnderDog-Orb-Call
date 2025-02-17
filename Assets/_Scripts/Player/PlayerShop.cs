@@ -40,6 +40,8 @@ namespace com.game.player
             {
                 m_itemsOnStand[i] = m_itemsAvailable[UnityEngine.Random.Range(0, m_itemsAvailable.Count)];
             }
+
+            OnReroll?.Invoke(this);
         }
     }
 }

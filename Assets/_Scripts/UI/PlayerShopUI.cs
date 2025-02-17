@@ -8,36 +8,43 @@ namespace com.game.ui
 {
     public class PlayerShopUI : MonoBehaviour
     {
-        [SerializeField] private GameObject m_itemDisplayPrefab;
-        [SerializeField] private Transform m_root;
+        [SerializeField] private ItemDisplay m_itemDisplayPrefab;
+        [SerializeField] private GameObject m_panel;
+        [SerializeField] private RectTransform m_stand;
 
         PlayerShop m_shop;
 
         private void Awake()
         {
             m_shop = Player.Instance.Hub.Shop;
-            //m_shop.OnReroll += OnShopReroll;
+            m_shop.OnReroll += OnShopReroll;
         }
 
-        //private void OnShopReroll(PlayerShop shop)
-        //{
-        //    Clear();
-        //    foreach (PlayerItemProfile item in shop.ItemsOnStand)
-        //    {
-        //        Instantiate(m_itemDisplayPrefab, m_root);
-        //    }
-        //}
+        public void SetVisibility(bool visibility)
+        {
+            m_panel.SetActive(visibility);
+        }
 
-        //public void Clear()
-        //{
-        //    m_root.DestroyChildren();
-        //}
+        private void OnShopReroll(PlayerShop shop)
+        {
+            Clear();
+            foreach (PlayerItemProfile item in shop.ItemsOnStand)
+            {
+                ItemDisplay display = Instantiate(m_itemDisplayPrefab, m_stand);
+                display.Initialize(item);
+            }
+        }
+
+        public void Clear()
+        {
+            m_stand.DestroyChildren();
+        }
 
         private void OnGUI()
         {
             GUILayout.BeginHorizontal();
 
-            DrawItems();
+            //DrawItems();
 
             if (GUILayout.Button("Reroll"))
             {
