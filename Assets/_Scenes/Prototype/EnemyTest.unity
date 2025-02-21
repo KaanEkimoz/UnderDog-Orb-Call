@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 79527687}
   - component: {fileID: 79527686}
   - component: {fileID: 79527685}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,8 +147,8 @@ Transform:
   m_GameObject: {fileID: 79527683}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.76, y: 0.47, z: 6.99}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 6.76, y: 0.9346, z: 5.9356}
+  m_LocalScale: {x: 1, y: 1.9293, z: 3.1088}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1299050795}
@@ -404,8 +404,8 @@ GameObject:
   - component: {fileID: 438156605}
   - component: {fileID: 438156604}
   - component: {fileID: 438156603}
-  - component: {fileID: 438156606}
   - component: {fileID: 438156602}
+  - component: {fileID: 438156606}
   m_Layer: 13
   m_Name: Ground
   m_TagString: Untagged
@@ -522,7 +522,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 45056
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -533,7 +533,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: df972fff07976754cb657217962424b0, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: cc1ff680fc301c84d8afc118d8fbc3df, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &439150040
 GameObject:
@@ -644,7 +644,7 @@ GameObject:
   - component: {fileID: 653998627}
   - component: {fileID: 653998626}
   - component: {fileID: 653998625}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1359,7 +1359,7 @@ GameObject:
   - component: {fileID: 1203885872}
   - component: {fileID: 1203885871}
   - component: {fileID: 1203885870}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1539,7 +1539,7 @@ GameObject:
   - component: {fileID: 1324911321}
   - component: {fileID: 1324911320}
   - component: {fileID: 1324911319}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

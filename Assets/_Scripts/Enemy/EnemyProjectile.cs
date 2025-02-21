@@ -20,7 +20,6 @@ public class EnemyProjectile : MonoBehaviour
             if (other.gameObject.TryGetComponent(out IDamageable damageable))
                 damageable.TakeDamage(_damage);
 
-            //HASAR VER
             Destroy(gameObject);
         }
     }

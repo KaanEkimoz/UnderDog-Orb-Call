@@ -130,6 +130,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 463920630172978688}
   m_SourcePrefab: {fileID: 100100000, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+--- !u!1 &2471353394308393575 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7182738088335711882, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+  m_PrefabInstance: {fileID: 4747415150584018157}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5693652140678723031 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1072382937486459194, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
@@ -164,8 +169,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyMovementData: {fileID: 11400000, guid: 6dd71966895b35046975c791111324ea, type: 2}
+  slowPercentPerOrb: 25
   enemyStats: {fileID: 5693652140678723031}
   projectilePrebfab: {fileID: 7729622762826746845, guid: 18621b4b0193f3341bfe4bfffb0c34a3, type: 3}
   shootingCooldown: 3
   firePoint: {fileID: 8595730504301805588}
   projectileSpeed: 5
+  rayDistance: 20
+  raySource: {fileID: 2471353394308393575}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 32776
+  canSeePlayer: 0
