@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
+
 public class OrbController : MonoBehaviour
 {
     [Header("Orb Count")]

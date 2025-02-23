@@ -51,6 +51,10 @@ namespace com.game.player
             }
             OnTakeDamage?.Invoke(damage);
         }
+        public void HealWithLifeSteal(float amount)
+        {
+            Heal(amount * (_playerStats.GetStat(PlayerStatType.LifeSteal) / 100));
+        }
         public void Heal(float healAmount)
         {
             _health += healAmount;
@@ -58,7 +62,6 @@ namespace com.game.player
             if (_health > _maxHealth)
                 _health = _maxHealth;
         }
-
         public void Die()
         {
             if (m_container != null) Destroy(m_container);

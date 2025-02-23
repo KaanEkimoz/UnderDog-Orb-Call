@@ -5,6 +5,8 @@ using com.absence.attributes;
 using com.game.enemysystem.statsystemextensions;
 using com.game.generics.interfaces;
 using com.game.generics;
+using Zenject;
+using com.game.player;
 
 namespace com.game.enemysystem
 {
@@ -25,6 +27,8 @@ namespace com.game.enemysystem
 
         public event Action<float> OnTakeDamage = delegate { };
         public event Action OnDie = delegate { };
+
+        [Inject] PlayerCombatant _playerCombatant;
 
         private void Start()
         {
