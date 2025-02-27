@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
         if (target == null) return;
 
         AdjustSpeed((defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * (1 - (slowAmount/100)));
-        navMeshAgent.SetDestination(target.transform.position);
+        
         RotateTowardsTarget();
         CustomUpdate();
     }

@@ -20,6 +20,8 @@ public class ExploderEnemy : Enemy
 
     protected override void CustomUpdate()
     {
+        navMeshAgent.SetDestination(target.transform.position);
+
         if (CheckDistanceToPlayer()) //dusman karaktere yeterince yakinsa
         {
             if (isPreparingToExplode == false) //ve halihazirda patlamaya hazirlanmiyorsa
