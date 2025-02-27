@@ -57,5 +57,27 @@ namespace com.game.itemsystem
                 return sb.ToString();
             }
         }
+        public static class Recipes
+        {
+            public static bool TryCombine<T>(T profile1, T profile2, out T result) where T : ItemProfileBase
+            {
+                result = null;
+                bool success = CanCombine(profile1, profile2);
+                if (!success) return success;
+
+                result = Combine<T>(profile1, profile2);
+                return result;
+            }
+
+            public static bool CanCombine<T>(T profile1, T profile2) where T : ItemProfileBase 
+            {
+                return false;
+            }
+
+            public static T Combine<T>(T profile1, T profile2) where T : ItemProfileBase
+            {
+                return null;
+            }
+        }
     }
 }

@@ -49,6 +49,8 @@ public class SimpleOrb : MonoBehaviour
     private float distanceTraveled;
     private Vector3 throwStartPosition;
 
+    public OrbStats Stats => orbStats;
+
     //Events
     public event Action OnThrown;
     public event Action OnCalled;

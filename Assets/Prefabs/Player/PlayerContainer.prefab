@@ -111,6 +111,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1500069609196033266, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
   m_PrefabInstance: {fileID: 2039692251543290217}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &624608683657201586 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
+  m_PrefabInstance: {fileID: 2039692251543290217}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5b78279520a9134aabf8d6ccd680a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2599686826208818648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -163,6 +174,10 @@ PrefabInstance:
       propertyPath: m_statEntries.Array.data[4].Coefficient
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3688062287412388757, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+      propertyPath: m_targetController
+      value: 
+      objectReference: {fileID: 624608683657201586}
     - target: {fileID: 5339787145452883190, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: cursorDetectMask.m_Bits
       value: 12545

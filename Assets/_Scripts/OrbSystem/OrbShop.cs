@@ -1,17 +1,17 @@
-using com.game.itemsystem;
 using com.game.itemsystem.scriptables;
-using com.game.player.itemsystemextensions;
+using com.game.itemsystem;
 using com.game.shopsystem;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
+using com.game.orbsystem.itemsystemextensions;
 
-namespace com.game.player
+namespace com.game.orbsystem
 {
-    public class PlayerShop : MonoBehaviour, IShop<PlayerItemProfile>
+    public class OrbShop : MonoBehaviour, IShop<OrbItemProfile>
     {
-        public List<PlayerItemProfile> ItemsAvailable
+        public List<OrbItemProfile> ItemsAvailable
         {
             get
             {
@@ -24,7 +24,7 @@ namespace com.game.player
             }
         }
 
-        public List<PlayerItemProfile> ItemsOnStand
+        public List<OrbItemProfile> ItemsOnStand
         {
             get
             {
@@ -33,17 +33,17 @@ namespace com.game.player
 
             set
             {
-                m_itemsOnStand = value;     
+                m_itemsOnStand = value;
             }
         }
 
         List<ItemProfileBase> IShop.ItemsAvailable { get { return null; } set { } }
         List<ItemProfileBase> IShop.ItemsOnStand { get { return null; } set { } }
 
-        public event Action<IShop<PlayerItemProfile>> OnReroll = null;
+        public event Action<IShop<OrbItemProfile>> OnReroll = null;
 
-        List<PlayerItemProfile> m_itemsAvailable;
-        List<PlayerItemProfile> m_itemsOnStand;
+        List<OrbItemProfile> m_itemsAvailable;
+        List<OrbItemProfile> m_itemsOnStand;
 
         event Action<IShop> IShop.OnReroll
         {
@@ -65,17 +65,17 @@ namespace com.game.player
 
         public void Reinitialize()
         {
-            m_itemsAvailable = ItemManager.GetItemsOfType<PlayerItemProfile>();
+            m_itemsAvailable = ItemManager.GetItemsOfType<OrbItemProfile>();
         }
 
         public void Reroll()
         {
-            Reroll(Constants.Shopping.PLAYER_SHOP_CAPACITY);
+            Reroll(Constants.Shopping.ORB_SHOP_CAPACITY);
         }
 
         public void Reroll(int count)
         {
-            PlayerItemProfile[] itemsFound = new PlayerItemProfile[count];
+            OrbItemProfile[] itemsFound = new OrbItemProfile[count];
             for (int i = 0; i < count; i++)
             {
                 itemsFound[i] = m_itemsAvailable[UnityEngine.Random.Range(0, m_itemsAvailable.Count)];

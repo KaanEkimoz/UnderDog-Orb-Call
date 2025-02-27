@@ -17,6 +17,7 @@ MonoBehaviour:
   DisplayName: Spoon
   Description: 
   CustomActions: []
+  Price: 25
   m_playerStatOverrides: []
   m_playerStatModifications: []
   m_playerStatCaps: []

@@ -19,6 +19,7 @@ MonoBehaviour:
   CustomActions:
   - ActionType: 1
     ItemBehaviour: {fileID: 5413943036052786957, guid: a5df528c5b7446b438ed06048db5cdd6, type: 3}
+  Price: 50
   m_playerStatOverrides:
   - NewValue: 15
     TargetStatType: 4

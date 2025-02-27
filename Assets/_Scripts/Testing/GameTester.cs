@@ -1,8 +1,10 @@
-using com.game.abilitysystem;
 using com.game.abilitysystem.ui;
+using com.game.enemysystem;
+using com.game.orbsystem;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
+using com.game.ui;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,11 +40,17 @@ namespace com.game.testing
         PlayerStats m_playerStats;
         PlayerInventory m_playerInventory;
         PlayerLevelingLogic m_playerLevelingLogic;
+        OrbShop m_orbShop;
+        PlayerShop m_playerShop;
+
+        OrbShopUI m_orbShopUI;
+        PlayerShopUI m_playerShopUI;
 
         float m_additionButtonWidth;
         float m_percentageButtonWidth;
         float m_additionButtonAmount;
         float m_percentageButtonAmount;
+        bool m_pausedGame;
 
         int m_enemiesKilled;
 
@@ -53,6 +61,13 @@ namespace com.game.testing
             m_playerStats = Player.Instance.Hub.Stats;
             m_playerInventory = Player.Instance.Hub.Inventory;
             m_playerLevelingLogic = Player.Instance.Hub.Leveling;
+            m_orbShop = Player.Instance.Hub.OrbShop;
+            m_playerShop = Player.Instance.Hub.Shop;
+
+            m_orbShopUI = OrbShopUI.Instance;
+            m_playerShopUI = PlayerShopUI.Instance;
+
+            m_playerLevelingLogic.OnLevelUp += OnPlayerLevelUp;
 
             m_additionButtonWidth = k_totalButtonAreaWidth * 2 / 5 / 2;
             m_percentageButtonWidth = k_totalButtonAreaWidth * 3 / 5 / 2;
@@ -63,12 +78,38 @@ namespace com.game.testing
             m_parryDisplay.Initialize(m_parry);
         }
 
+        private void OnPlayerLevelUp(PlayerLevelingLogic logic)
+        {
+            m_pausedGame = false;
+            Game.Pause();
+
+            foreach (EnemyCombatant enemy in GameObject.FindObjectsByType<EnemyCombatant>(
+                FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+            {
+                enemy.Die();
+            }
+
+            m_orbShopUI.Show(true);
+            m_orbShopUI.OnItemBoughtOneShot += (_) =>
+            {
+                m_orbShopUI.Hide(true);
+                m_playerShopUI.Show(true);
+            };
+        }
+
         private void Update()
         {
             if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
 
-            if (Game.Paused) Game.Resume();
-            else Game.Pause();
+            if (Game.Paused)
+            {
+                if (m_pausedGame) Game.Resume();
+            }
+            else 
+            {
+                m_pausedGame = true;
+                Game.Pause();
+            }
         }
 
         private void OnDestroy()
