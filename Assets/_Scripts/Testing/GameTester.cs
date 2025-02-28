@@ -45,6 +45,7 @@ namespace com.game.testing
 
         OrbShopUI m_orbShopUI;
         PlayerShopUI m_playerShopUI;
+        OrbContainerUI m_orbContainerUI;
 
         float m_additionButtonWidth;
         float m_percentageButtonWidth;
@@ -66,6 +67,7 @@ namespace com.game.testing
 
             m_orbShopUI = OrbShopUI.Instance;
             m_playerShopUI = PlayerShopUI.Instance;
+            m_orbContainerUI = OrbContainerUI.Instance;
 
             m_playerLevelingLogic.OnLevelUp += OnPlayerLevelUp;
 
@@ -88,6 +90,9 @@ namespace com.game.testing
             {
                 enemy.Die();
             }
+
+            m_orbContainerUI.Show(true);
+            return;
 
             m_orbShopUI.Show(true);
             m_orbShopUI.OnItemBoughtOneShot += (_) =>

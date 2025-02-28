@@ -4,6 +4,8 @@ using com.game.orbsystem.statsystemextensions;
 using com.game.statsystem;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 
 namespace com.game.orbsystem
 {
@@ -92,6 +94,24 @@ namespace com.game.orbsystem
 
             RevertCurrentModifiers();
             m_currentElement = null;
+        }
+
+        public Sprite GetIcon()
+        {
+            if (m_currentElement == null) return null;
+
+            return m_currentElement.Icon;
+        }
+
+        public string GenerateDescription()
+        {
+            if (m_currentElement == null) return "No elements.";
+
+            StringBuilder sb = new();
+            sb.Append(m_currentElement.DisplayName);
+            sb.Append("\n\n");
+            sb.Append(ItemSystemHelpers.Text.GenerateDescription(m_currentItem, false));
+            return sb.ToString();
         }
     }
 }

@@ -59,8 +59,8 @@ namespace com.game.ui
             {
                 ItemDisplay display = Instantiate(m_itemDisplayPrefab, m_stand);
                 display.Initialize(item);
-                display.SetBuyButtonText("Get");
-                display.SetupBuyButton(() =>
+                display.SetButtonText("Get");
+                display.SetupButton(() =>
                 {
                     InvokeOnGet(item);
                 });

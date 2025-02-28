@@ -38,7 +38,7 @@ namespace com.game.ui
                 m_buyButton.interactable = m_buyButtonInteractability.Invoke();
         }
 
-        public void SetBuyButtonText(string text, bool richText = false)
+        public void SetButtonText(string text, bool richText = false)
         {
             if (m_buyButton == null)
                 return;
@@ -47,7 +47,7 @@ namespace com.game.ui
             m_buyButtonText.text = text;
         }
 
-        public void SetupBuyButton(Action onClick, Func<bool> interactability = null)
+        public void SetupButton(Action onClick, Func<bool> interactability = null)
         {
             if (m_buyButton == null)
                 return;

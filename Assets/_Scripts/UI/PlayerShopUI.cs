@@ -62,8 +62,8 @@ namespace com.game.ui
 
                 m_currentDisplays.Add(display, item);
 
-                display.SetBuyButtonText(GetItemButtonText(item), true);
-                display.SetupBuyButton(() => OnDisplayBuyButtonClicked(display), () => CanDisplayBuyButtonBeClicked(display));
+                display.SetButtonText(GetItemButtonText(item), true);
+                display.SetupButton(() => OnDisplayBuyButtonClicked(display), () => CanDisplayBuyButtonBeClicked(display));
             }
         }
 
@@ -80,7 +80,7 @@ namespace com.game.ui
 
             Player.Instance.Hub.Money.Spend(item.Price);
             Player.Instance.Hub.Inventory.Add(ItemObject.Create(item));
-            display.SetupBuyButton(delegate { }, () => false);
+            display.SetupButton(delegate { }, () => false);
             display.CanvasGroup.alpha = 0f;
 
             RefreshAll();
@@ -121,7 +121,7 @@ namespace com.game.ui
             foreach (KeyValuePair<ItemDisplay, PlayerItemProfile> kvp in m_currentDisplays)
             {
                 ItemDisplay display = kvp.Key;
-                display.SetBuyButtonText(GetItemButtonText(kvp.Value), true);
+                display.SetButtonText(GetItemButtonText(kvp.Value), true);
                 display.Refresh();
             }
         }
