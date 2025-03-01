@@ -1,4 +1,5 @@
 using com.game.itemsystem;
+using com.game.itemsystem.scriptables;
 using com.game.orbsystem.itemsystemextensions;
 using com.game.orbsystem.statsystemextensions;
 using com.game.statsystem;
@@ -38,13 +39,16 @@ namespace com.game.orbsystem
                 return true;
             }
 
-            if (!ItemSystemHelpers.Recipes.TryCombine<OrbItemProfile>(m_currentElement, profile, out OrbItemProfile sumProfile)) 
+            if (!ItemRecipeManager.Exists(m_currentElement, profile, out ItemRecipeProfile recipeProfile)) 
+                return false;
+
+            if (ItemManager.GetItem(recipeProfile.ResultGuid) is not OrbItemProfile resultProfile)
                 return false;
 
             RemoveCurrentElement();
 
-            m_currentElement = sumProfile;
-            m_currentItem = ItemObject.Create(sumProfile);
+            m_currentElement = resultProfile;
+            m_currentItem = ItemObject.Create(resultProfile);
             ApplyStatModifiers(m_currentItem, m_currentElement);
             return true;
         }

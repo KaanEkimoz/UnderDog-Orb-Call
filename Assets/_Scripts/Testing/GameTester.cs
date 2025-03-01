@@ -1,10 +1,12 @@
 using com.game.abilitysystem.ui;
 using com.game.enemysystem;
 using com.game.orbsystem;
+using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
 using com.game.ui;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,8 +33,12 @@ namespace com.game.testing
         const float k_utilityPanelWidth = 100f;
 
         [SerializeField] private bool m_displayUnpaused = false;
+        [SerializeField] private bool m_displayPaused = false;
         [SerializeField] private AbilityDisplayGP m_parryDisplay;
         [SerializeField] private Parry m_parry;
+        [SerializeField] OrbShopUI m_orbShopUI;
+        [SerializeField] PlayerShopUI m_playerShopUI;
+        [SerializeField] OrbContainerUI m_orbContainerUI;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
@@ -43,31 +49,27 @@ namespace com.game.testing
         OrbShop m_orbShop;
         PlayerShop m_playerShop;
 
-        OrbShopUI m_orbShopUI;
-        PlayerShopUI m_playerShopUI;
-        OrbContainerUI m_orbContainerUI;
-
         float m_additionButtonWidth;
         float m_percentageButtonWidth;
         float m_additionButtonAmount;
         float m_percentageButtonAmount;
         bool m_pausedGame;
+        bool m_passGUI;
 
-        int m_enemiesKilled;
+        int m_levelsGained;
+        List<OrbItemProfile> m_orbUpgradeCache;
 
         private void Start()
         {
-            m_enemiesKilled = 0;
+            m_passGUI = false;
+            m_levelsGained = 0;
+            m_orbUpgradeCache = new();
 
             m_playerStats = Player.Instance.Hub.Stats;
             m_playerInventory = Player.Instance.Hub.Inventory;
             m_playerLevelingLogic = Player.Instance.Hub.Leveling;
             m_orbShop = Player.Instance.Hub.OrbShop;
             m_playerShop = Player.Instance.Hub.Shop;
-
-            m_orbShopUI = OrbShopUI.Instance;
-            m_playerShopUI = PlayerShopUI.Instance;
-            m_orbContainerUI = OrbContainerUI.Instance;
 
             m_playerLevelingLogic.OnLevelUp += OnPlayerLevelUp;
 
@@ -82,6 +84,11 @@ namespace com.game.testing
 
         private void OnPlayerLevelUp(PlayerLevelingLogic logic)
         {
+            m_levelsGained++;
+        }
+
+        private void OnWaveEnd()
+        {
             m_pausedGame = false;
             Game.Pause();
 
@@ -91,15 +98,82 @@ namespace com.game.testing
                 enemy.Die();
             }
 
-            m_orbContainerUI.Show(true);
-            return;
+            m_orbShopUI.Hide(true);
+            m_orbContainerUI.Hide(true);
+            m_playerShopUI.Hide(true);
 
-            m_orbShopUI.Show(true);
-            m_orbShopUI.OnItemBoughtOneShot += (_) =>
+            m_orbContainerUI.SoftRefresh();
+
+            m_passGUI = true;
+            if (m_levelsGained > 0) EnterLevelUpMenu();
+            else EnterShop();
+        }
+
+        void EnterLevelUpMenu(bool reroll = true)
+        {
+            m_orbShopUI.Show(reroll);
+            m_orbShopUI.Title.text = m_levelsGained > 1 ? $"Level Up! ({m_levelsGained})" : "Level Up!";
+            m_orbShopUI.SetupButtons(EnterOrbInventoryTemporarily, PassOrbUpgrades);
+            m_orbShopUI.OnItemBought -= OnOrbUpgradeBought;
+            m_orbShopUI.OnItemBought += OnOrbUpgradeBought;
+        }
+
+        private void EnterOrbInventoryTemporarily()
+        {
+            //m_orbShopUI.Hide(false);
+            m_orbContainerUI.SetUpgradeCache(null);
+            m_orbContainerUI.Show(false);
+            m_orbContainerUI.SetupButtons(() =>
             {
-                m_orbShopUI.Hide(true);
-                m_playerShopUI.Show(true);
-            };
+                m_orbContainerUI.Hide(false);
+                EnterLevelUpMenu(false);
+            });
+        }
+
+        private void PassOrbUpgrades()
+        {
+            EnterOrbInventory();
+        }
+
+        void OnOrbUpgradeBought(OrbItemProfile profile)
+        {
+            m_orbUpgradeCache.Add(profile);
+            m_levelsGained--;
+
+            if (m_levelsGained > 0)
+                EnterLevelUpMenu();
+            else
+                EnterOrbInventory();
+        }
+
+        private void EnterOrbInventory()
+        {
+            m_orbShopUI.Hide(true);
+            m_orbContainerUI.SetUpgradeCache(m_orbUpgradeCache);
+            m_orbContainerUI.Show(true);
+
+            m_orbContainerUI.SetupButtons(null, OnConfirmUpgrades);
+        }
+
+        private void OnConfirmUpgrades()
+        {
+            m_orbContainerUI.Hide(true);
+            EnterShop();
+        }
+
+        private void EnterShop()
+        {
+            m_playerShopUI.Show(true);
+            m_playerShopUI.SetupButtons(ExitShop);
+        }
+
+        private void ExitShop()
+        {
+            m_playerShopUI.Hide(true);
+
+            m_pausedGame = true;
+            m_passGUI = false;
+            Game.Resume();
         }
 
         private void Update()
@@ -141,6 +215,9 @@ namespace com.game.testing
 
         private void OnGUI()
         {
+            if (m_passGUI)
+                return;
+
             if (!Game.Paused)
             {
                 if (!m_displayUnpaused) 
@@ -149,6 +226,9 @@ namespace com.game.testing
                 TestUnpausedGUI();
                 return;
             }
+
+            if (!m_displayPaused)
+                return;
 
             GUILayout.BeginHorizontal();
 
@@ -324,15 +404,10 @@ namespace com.game.testing
                 m_playerLevelingLogic.LevelUp();
             }
 
-            //GUI.enabled = false;
-            //if (GUILayout.Button("Kill enemy"))
-            //{
-            //    TestEventChannel.ReceiveEnemyKill();
-            //    m_enemiesKilled++;
-            //}
-            //GUI.enabled = true;
-
-            //GUILayout.Label($"Enemies Killed: {m_enemiesKilled}");
+            if (GUILayout.Button("End Wave"))
+            {
+                OnWaveEnd();
+            }
 
             GUILayout.EndVertical();
         }

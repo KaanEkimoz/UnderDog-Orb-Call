@@ -1,3 +1,4 @@
+using com.absence.attributes.experimental;
 using com.absence.utilities;
 using com.game.itemsystem;
 using com.game.player;
@@ -7,14 +8,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace com.game.ui
 {
-    public class PlayerShopUI : Singleton<PlayerShopUI>
+    public class PlayerShopUI : MonoBehaviour
     {
-        [SerializeField] private ItemDisplay m_itemDisplayPrefab;
         [SerializeField] private GameObject m_panel;
         [SerializeField] private RectTransform m_stand;
+        [SerializeField] private Button m_rerollButton;
+        [SerializeField] private Button m_proceedButton;
+        [SerializeField, InlineEditor] private ItemDisplay m_itemDisplayPrefab;
 
         public event Action<PlayerItemProfile> OnItemBoughtOneShot;
 
@@ -22,12 +26,13 @@ namespace com.game.ui
 
         Dictionary<ItemDisplay, PlayerItemProfile> m_currentDisplays = new();
 
-        protected override void Awake()
+        private void Start()
         {
-            base.Awake();
-
             m_shop = Player.Instance.Hub.Shop;
             m_shop.OnReroll += OnShopReroll;
+
+            Hide(true);
+            SetupButton(m_rerollButton, SoftReroll);
         }
 
         public void SetVisibility(bool visibility)
@@ -38,13 +43,18 @@ namespace com.game.ui
         public void Show(bool reroll = false)
         {
             if (reroll) SoftReroll();
-            m_panel.SetActive(true);
+            SetVisibility(true);
         }
 
         public void Hide(bool clear = false)
         {
-            m_panel.SetActive(true);
+            SetVisibility(false);
             if (clear) Clear();
+        }
+
+        public void SetupButtons(Action proceedButton)
+        {
+            SetupButton(m_proceedButton, proceedButton);
         }
 
         void OnShopReroll(IShop<PlayerItemProfile> shop)
@@ -109,6 +119,19 @@ namespace com.game.ui
         {
             OnItemBoughtOneShot?.Invoke(item);
             OnItemBoughtOneShot = null;
+        }
+
+        private void SetupButton(Button target, Action action)
+        {
+            if (action == null)
+            {
+                target.onClick.RemoveAllListeners();
+                target.gameObject.SetActive(false);
+                return;
+            }
+
+            target.gameObject.SetActive(true);
+            target.onClick.AddListener(() => action.Invoke());
         }
 
         public void SoftReroll()
