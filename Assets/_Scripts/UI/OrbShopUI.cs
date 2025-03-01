@@ -107,7 +107,6 @@ namespace com.game.ui
 
         public void Clear()
         {
-            OnItemBought = null;
             m_stand.DestroyChildren();
         }
     }
