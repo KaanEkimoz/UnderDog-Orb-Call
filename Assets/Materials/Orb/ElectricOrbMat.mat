@@ -113,7 +113,7 @@ Material:
     - _ElectricityScale: 13
     - _ElectricityThickness: 0.3
     - _EnvironmentReflections: 1
-    - _FadeMultiplier: 0.4
+    - _FadeMultiplier: 0.61
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
