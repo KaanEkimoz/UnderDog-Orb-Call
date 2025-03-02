@@ -73,7 +73,14 @@ namespace com.game
         {
             string guid1 = item1.Guid;
             string guid2 = item2.Guid;
-            IEnumerable<ItemRecipeProfile> search = s_recipes.Where(recipe => recipe.Contains(guid1) && recipe.Contains(guid2));
+
+            IEnumerable<ItemRecipeProfile> search = s_recipes.Where(recipe =>
+            {
+                bool match = recipe.LHSGuid.Equals(guid1) && recipe.RHSGuid.Equals(guid2);
+                bool inversedMatch = recipe.LHSGuid.Equals(guid2) && recipe.RHSGuid.Equals(guid1);
+
+                return match || inversedMatch;
+            });
             List<ItemRecipeProfile> result = search != null ? search.ToList() : new List<ItemRecipeProfile>();
 
             if (result.Count == 0) return null;

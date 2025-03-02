@@ -106,6 +106,7 @@ namespace com.game.testing
 
             m_passGUI = true;
             if (m_levelsGained > 0) EnterLevelUpMenu();
+            else if (Player.Instance.Hub.OrbContainer.RestoredUpgradeCache != null) EnterOrbInventory();
             else EnterShop();
         }
 
@@ -158,6 +159,7 @@ namespace com.game.testing
 
         private void OnConfirmUpgrades()
         {
+            m_orbUpgradeCache = new(Player.Instance.Hub.OrbContainer.UpgradeCache);
             m_orbContainerUI.Hide(true);
             EnterShop();
         }
