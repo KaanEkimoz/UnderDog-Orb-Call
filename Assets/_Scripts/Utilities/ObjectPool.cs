@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class ObjectPool : MonoBehaviour
 {
     [Serializable]
@@ -12,7 +13,6 @@ public class ObjectPool : MonoBehaviour
     }
 
     [SerializeField] private Pool[] pools = null;
-
     private void Awake()
     {
         for (int j = 0; j < pools.Length; j++)

@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace com.game
 {
-    public class FireOrb : SimpleOrb, IElemental
+    public class IceOrb : SimpleOrb, IElemental
     {
-
+    
     }
 }

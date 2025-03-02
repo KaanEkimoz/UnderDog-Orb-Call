@@ -3477,6 +3477,66 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[2].poolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[3].poolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[4].poolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[5].poolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[2].objectPrefab
+      value: 
+      objectReference: {fileID: 8886230964089384064, guid: ff8b3979d0807f440b16d73629673149, type: 3}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[3].objectPrefab
+      value: 
+      objectReference: {fileID: 8886230964089384064, guid: 137521e94abb83445b1f47839e6ada84, type: 3}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[4].objectPrefab
+      value: 
+      objectReference: {fileID: 8886230964089384064, guid: 48afa4b6fa4d16341b1ce23285df9391, type: 3}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[5].objectPrefab
+      value: 
+      objectReference: {fileID: 7764693436690310166, guid: 1959897422ad0064abd0cffa26836ae1, type: 3}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[0].uniqueComponentName
+      value: SimpleOrb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[1].uniqueComponentName
+      value: EnemyProjectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[2].uniqueComponentName
+      value: FireOrb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[3].uniqueComponentName
+      value: IceOrb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[4].uniqueComponentName
+      value: ElectricOrb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[5].uniqueComponentName
+      value: ElectricOrb
+      objectReference: {fileID: 0}
     - target: {fileID: 7441109518502746199, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: m_Name
       value: ObjectPool
@@ -3607,6 +3667,10 @@ PrefabInstance:
       propertyPath: ellipseCenterTransform
       value: 
       objectReference: {fileID: 878954946}
+    - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
+      propertyPath: cooldownBetweenThrowsInSeconds
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 4548954406257375815, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
       propertyPath: m_Name
       value: OrbController

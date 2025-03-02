@@ -12,6 +12,7 @@ public enum OrbState
     Throwing,
     Returning
 }
+
 [RequireComponent(typeof(Rigidbody), typeof(SphereCollider), typeof(MeshRenderer))]
 public class SimpleOrb : MonoBehaviour
 {

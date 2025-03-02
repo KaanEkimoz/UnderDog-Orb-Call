@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 7423161256905524677}
   - component: {fileID: 4581226788505073321}
   - component: {fileID: 3939961923203656775}
-  - component: {fileID: -8593687116418555536}
+  - component: {fileID: 7143535229156785589}
   - component: {fileID: 6960696444875857668}
   m_Layer: 6
-  m_Name: SimpleOrb
+  m_Name: IceOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 2
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
+  - {fileID: 2100000, guid: 652dbcfe3814521498b87d4ec4e4a300, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -139,7 +139,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-8593687116418555536
+--- !u!114 &7143535229156785589
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,11 +148,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8886230964089384064}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 579ce1de92727ca499b6677a69223028, type: 3}
+  m_Script: {fileID: 11500000, guid: d73aa3679bf38dc44ac5cbcc8322bcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 1
+  movementSpeed: 5
   speedMultiplier: 1
   movementCurve:
     serializedVersion: 2
@@ -160,24 +160,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.37748617
-      value: 0.97802657
-      inSlope: 0.9429341
-      outSlope: 0.9429341
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.97195435
-      value: 1.1123657
+      time: 1
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -187,12 +178,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxDistance: 15
-  orbStats: {fileID: 6960696444875857668}
-  startMaterial: {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
-  _rigidBody: {fileID: 4581226788505073321}
-  _sphereCollider: {fileID: 3939961923203656775}
-  _renderer: {fileID: 7423161256905524677}
+  maxDistance: 20
+  orbStats: {fileID: 0}
+  startMaterial: {fileID: 2100000, guid: 652dbcfe3814521498b87d4ec4e4a300, type: 2}
+  _rigidBody: {fileID: 0}
+  _sphereCollider: {fileID: 0}
+  _renderer: {fileID: 0}
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0
