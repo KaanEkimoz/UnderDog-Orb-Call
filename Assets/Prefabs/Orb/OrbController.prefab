@@ -79,11 +79,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumOrbCount: 10
   orbCountAtStart: 5
-  cooldownBetweenThrowsInSeconds: 1
+  cooldownBetweenThrowsInSeconds: 0.2
   firePointTransform: {fileID: 0}
   cursorDetectMask:
     serializedVersion: 2
-    m_Bits: 8448
+    m_Bits: 12544
   recallHoldTime: 0.2
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5
