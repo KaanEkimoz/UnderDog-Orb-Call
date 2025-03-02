@@ -46,6 +46,7 @@ namespace com.game.testing
         PlayerStats m_playerStats;
         PlayerInventory m_playerInventory;
         PlayerLevelingLogic m_playerLevelingLogic;
+        PlayerOrbContainer m_orbContainer;
         OrbShop m_orbShop;
         PlayerShop m_playerShop;
 
@@ -70,6 +71,7 @@ namespace com.game.testing
             m_playerLevelingLogic = Player.Instance.Hub.Leveling;
             m_orbShop = Player.Instance.Hub.OrbShop;
             m_playerShop = Player.Instance.Hub.Shop;
+            m_orbContainer = Player.Instance.Hub.OrbContainer;
 
             m_playerLevelingLogic.OnLevelUp += OnPlayerLevelUp;
 
@@ -106,7 +108,7 @@ namespace com.game.testing
 
             m_passGUI = true;
             if (m_levelsGained > 0) EnterLevelUpMenu();
-            else if (Player.Instance.Hub.OrbContainer.RestoredUpgradeCache != null) EnterOrbInventory();
+            else if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) EnterOrbInventory();
             else EnterShop();
         }
 
@@ -159,7 +161,7 @@ namespace com.game.testing
 
         private void OnConfirmUpgrades()
         {
-            m_orbUpgradeCache = new(Player.Instance.Hub.OrbContainer.UpgradeCache);
+            m_orbUpgradeCache = new(m_orbContainer.UpgradeCache);
             m_orbContainerUI.Hide(true);
             EnterShop();
         }
