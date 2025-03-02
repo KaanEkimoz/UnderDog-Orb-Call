@@ -12,10 +12,12 @@ namespace com.game.player
         [SerializeField] private OrbController m_targetController;
 
         Dictionary<SimpleOrb, OrbInventory> m_orbInventoryEntries = new();
+        List<OrbItemProfile> m_restoredUpgradeCache;
         List<OrbItemProfile> m_upgradeCache;
         Stack<OrbInventoryChange> m_undoCache = new();
 
         public Dictionary<SimpleOrb, OrbInventory> OrbInventoryEntries => m_orbInventoryEntries;
+        public List<OrbItemProfile> RestoredUpgradeCache { get { return m_restoredUpgradeCache; } }
         public List<OrbItemProfile> UpgradeCache { get { return m_upgradeCache; } set { m_upgradeCache = value; } }
         public Stack<OrbInventoryChange> UndoCache { get { return m_undoCache; } set { m_undoCache = value; } }
 
@@ -24,10 +26,12 @@ namespace com.game.player
             if (enumerable == null)
             {
                 m_upgradeCache = null;
+                m_restoredUpgradeCache = null;
                 return;
             }
 
             m_upgradeCache = new List<OrbItemProfile>(enumerable);
+            m_restoredUpgradeCache = new List<OrbItemProfile>(enumerable);
         }
 
         public void Refresh()
@@ -46,6 +50,8 @@ namespace com.game.player
 
         public void UndoAll()
         {
+            m_upgradeCache = new(m_restoredUpgradeCache);
+
             while(m_undoCache.TryPop(out OrbInventoryChange lastChange))
             {
                 lastChange.Undo();
@@ -65,6 +71,7 @@ namespace com.game.player
             if (success)
             {
                 m_undoCache.Push(undo);
+                m_upgradeCache.Remove(upgrade);
             }
 
             return success;

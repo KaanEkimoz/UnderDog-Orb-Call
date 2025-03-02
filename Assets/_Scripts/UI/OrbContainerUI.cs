@@ -282,6 +282,7 @@ namespace com.game.ui
 
         void ConfirmChanges()
         {
+            m_undoable = false;
             m_container.ClearUndoHistory();
         }
 
