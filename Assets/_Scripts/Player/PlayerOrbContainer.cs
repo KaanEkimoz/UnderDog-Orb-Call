@@ -1,6 +1,7 @@
 using com.game.itemsystem;
 using com.game.orbsystem;
 using com.game.orbsystem.itemsystemextensions;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,7 +51,7 @@ namespace com.game.player
                 lastChange.Undo();
             }
 
-            m_undoCache.Clear();
+            ClearUndoHistory();
         }
 
         public bool ApplyUpgrade(OrbItemProfile upgrade, SimpleOrb target)
@@ -67,6 +68,11 @@ namespace com.game.player
             }
 
             return success;
+        }
+
+        public void ClearUndoHistory()
+        {
+            m_undoCache.Clear();
         }
     }
 }

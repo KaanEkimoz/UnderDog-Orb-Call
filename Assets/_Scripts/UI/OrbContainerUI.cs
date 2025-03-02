@@ -66,7 +66,6 @@ namespace com.game.ui
             m_panel.SetActive(visibility);
             SetupButtons(null, null);
             SetupButton(m_confirmButton, ConfirmChanges);
-            m_undoable = false;
             RefreshButtonStates();
         }
 
@@ -166,6 +165,8 @@ namespace com.game.ui
             if (!success)
                 return;
 
+            m_displays[orb].Refresh();
+
             m_undoable = true;
 
             UnselectCurrentUpgrade(true);
@@ -195,6 +196,7 @@ namespace com.game.ui
 
             UnselectCurrentUpgrade(false);
 
+            FetchOrbIcons();
             RefreshUpgradeDescription();
 
             foreach (ItemDisplay display in m_upgradeDisplays)
@@ -222,6 +224,14 @@ namespace com.game.ui
                 display.onPointerClick += OnSelectUpgrade;
 
                 m_upgradeDisplays.Add(display);
+            }
+        }
+
+        private void FetchOrbIcons()
+        {
+            foreach (OrbDisplay display in m_displays.Values)
+            {
+                display.Refresh();
             }
         }
 
@@ -272,7 +282,7 @@ namespace com.game.ui
 
         void ConfirmChanges()
         {
-            Debug.Log("yipee!!!");
+            m_container.ClearUndoHistory();
         }
 
         void InitializeDescriptionPanel(SimpleOrb orb)

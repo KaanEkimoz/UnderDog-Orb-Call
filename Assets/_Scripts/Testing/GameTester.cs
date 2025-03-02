@@ -121,7 +121,7 @@ namespace com.game.testing
         private void EnterOrbInventoryTemporarily()
         {
             //m_orbShopUI.Hide(false);
-            m_orbContainerUI.SetUpgradeCache(null);
+            //m_orbContainerUI.SetUpgradeCache(null);
             m_orbContainerUI.Show(false);
             m_orbContainerUI.SetupButtons(() =>
             {

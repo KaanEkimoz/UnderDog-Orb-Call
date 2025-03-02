@@ -1,3 +1,4 @@
+using com.game.itemsystem;
 using com.game.orbsystem;
 using System;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace com.game.ui
 
         Sprite m_initialSprite;
         SimpleOrb m_target;
+        OrbInventory m_inventory;
 
         public SimpleOrb Target => m_target;
 
@@ -30,10 +32,16 @@ namespace com.game.ui
         public void Initialize(SimpleOrb orb, OrbInventory inventory)
         {
             m_target = orb;
+            m_inventory = inventory;
 
+            Refresh();
+        }
+
+        public void Refresh()
+        {
             if (m_iconImage != null)
             {
-                Sprite icon = inventory.GetIcon();
+                Sprite icon = m_inventory.GetIcon();
                 m_iconImage.sprite = icon != null ? icon : m_initialSprite;
             }
         }
