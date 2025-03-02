@@ -83,7 +83,8 @@ MonoBehaviour:
   firePointTransform: {fileID: 0}
   cursorDetectMask:
     serializedVersion: 2
-    m_Bits: 12544
+    m_Bits: 8448
+  recallHoldTime: 0.2
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
