@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace com.game.orbsystem.ui
+namespace com.game.ui
 {
     public class OrbDisplayGP : MonoBehaviour
     {

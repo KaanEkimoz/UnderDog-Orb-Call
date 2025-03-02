@@ -32,7 +32,12 @@ namespace com.game.itemsystem
 
                 if (itemObject != null)
                 {
-                    string dataDesc = (itemObject.CustomData[ItemBehaviour.CustomDataKey] as ItemBehaviour).GenerateDataDescription(richText);
+                    string dataDesc = null;
+                    if (itemObject.CustomData.TryGetValue(ItemBehaviour.CustomDataKey, out object value))
+                    {
+                        dataDesc =  (value as ItemBehaviour).GenerateDataDescription(richText);
+                    }
+
                     if (dataDesc != null) sb.Append(dataDesc);
                 }
 

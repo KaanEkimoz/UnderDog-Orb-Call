@@ -40,7 +40,7 @@ public class OrbController : MonoBehaviour
     public event Action OnNextOrbSelected;
     public event Action OnPreviousOrbSelected;
     public event Action OnSelectedOrbChanged;
-    public event Action OnOrbAdded;
+    public event Action<SimpleOrb> OnOrbAdded;
 
     public List<SimpleOrb> OrbsOnEllipse = new();
     private List<GhostOrb> ghostOrbs = new();
@@ -220,7 +220,7 @@ public class OrbController : MonoBehaviour
         UpdateOrbEllipsePositions();
 
         Player.Instance.Hub.OrbHandler.AddOrb();
-        OnOrbAdded?.Invoke();
+        OnOrbAdded?.Invoke(newOrb);
     }
 
     public void AddOrbToList(SimpleOrb orb)

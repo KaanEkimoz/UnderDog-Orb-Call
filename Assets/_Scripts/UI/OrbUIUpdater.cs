@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-namespace com.game.orbsystem.ui
+namespace com.game.ui
 {
     public class OrbUIUpdater : MonoBehaviour
     {

@@ -35,6 +35,7 @@ namespace com.game.itemsystem.scriptables
             Debug.Log(ItemSystemHelpers.Text.GenerateDescription(this, true));
         }
 
+        public virtual string TypeName => null;
         public abstract string GenerateFurtherDescription(ItemObject context, bool richText);
 
         public string GetDatabaseKey()

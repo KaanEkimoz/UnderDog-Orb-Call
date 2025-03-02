@@ -18,6 +18,12 @@ namespace com.game.orbsystem.itemsystemextensions
         [SerializeField] private List<OrbStatModification> m_orbStatModifications;
         [SerializeField] private List<OrbStatCap> m_orbStatCaps;
 
+        public List<OrbStatOverride> StatOverrides => m_orbStatOverrides;
+        public List<OrbStatModification> StatModifications => m_orbStatModifications;
+        public List<OrbStatCap> StatCaps => m_orbStatCaps;
+
+        public override string TypeName => "Elemental";
+
         public override string GenerateFurtherDescription(ItemObject context, bool richText)
         {
             StringBuilder sb = new();

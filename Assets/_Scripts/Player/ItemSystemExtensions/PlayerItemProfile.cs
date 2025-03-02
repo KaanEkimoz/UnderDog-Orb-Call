@@ -12,6 +12,9 @@ namespace com.game.player.itemsystemextensions
     [CreateAssetMenu(fileName = "New Player Item", menuName = "Game/Item System/ Player Item Profile", order = int.MinValue)]
     public class PlayerItemProfile : ItemProfileBase
     {
+        [Space, Header3("More Information")]
+        [Min(0)] public int Price = 0;
+
         [Space, Header3("Effects on Player Stats")]
 
         [SerializeField] private List<PlayerStatOverride> m_playerStatOverrides;
@@ -21,6 +24,8 @@ namespace com.game.player.itemsystemextensions
         public List<PlayerStatOverride> StatOverrides => m_playerStatOverrides;
         public List<PlayerStatModification> StatModifications => m_playerStatModifications;
         public List<PlayerStatCap> StatCaps => m_playerStatCaps;
+
+        public override string TypeName => "Item";
 
         public override string GenerateFurtherDescription(ItemObject context, bool richText)
         {

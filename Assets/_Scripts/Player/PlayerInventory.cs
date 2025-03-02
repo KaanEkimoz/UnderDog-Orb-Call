@@ -3,14 +3,13 @@ using com.game.player.itemsystemextensions;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace com.game.player
 {
-    public class PlayerInventory : MonoBehaviour
+    public class PlayerInventory : MonoBehaviour, IInventory<ItemObject>
     {
-        [SerializeField] private List<PlayerItemProfile> m_itemBank = new();
+        //[SerializeField] private List<PlayerItemProfile> m_itemBank = new();
 
         [SerializeField] private List<ItemObject> m_items = new();
 
@@ -26,13 +25,12 @@ namespace com.game.player
         private void Start()
         {
             m_stats = Player.Instance.Hub.Stats;
-            m_itemBank = ItemManager.GetItemsOfType<PlayerItemProfile>().ToList();
+            //m_itemBank = ItemManager.GetItemsOfType<PlayerItemProfile>().ToList();
         }
 
-        public bool AddItem(ItemObject itemToAdd)
+        public bool Add(ItemObject itemToAdd)
         {
             if (itemToAdd.Profile is not PlayerItemProfile profile) return false;
-            if (m_items.Contains(itemToAdd)) return false;
 
             ApplyItemModifiers(itemToAdd, profile);
             m_items.Add(itemToAdd);
@@ -40,7 +38,7 @@ namespace com.game.player
             return true;
         }
 
-        public void RemoveItem(ItemObject itemToRemove)
+        public void Remove(ItemObject itemToRemove)
         {
             if (!m_items.Contains(itemToRemove)) return;
 
@@ -51,16 +49,16 @@ namespace com.game.player
 
         void ApplyItemModifiers(ItemObject targetItem, PlayerItemProfile profile)
         {
-            List<ModifierObject<PlayerStatType>> m_modifiers = new();
+            List<ModifierObject<PlayerStatType>> modifiers = new();
 
             profile.StatModifications.ForEach(mod =>
             {
-                m_modifiers.Add(m_stats.Manipulator.ModifyWith(mod));
+                modifiers.Add(m_stats.Manipulator.ModifyWith(mod));
             });
 
             profile.StatCaps.ForEach(cap =>
             {
-                m_modifiers.Add(m_stats.Manipulator.CapWith(cap));
+                modifiers.Add(m_stats.Manipulator.CapWith(cap));
             });
 
             profile.StatOverrides.ForEach(ovr =>
@@ -68,7 +66,7 @@ namespace com.game.player
                 m_stats.Manipulator.OverrideWith(ovr);
             });
 
-            m_itemModifierEntries.Add(targetItem, m_modifiers);
+            m_itemModifierEntries.Add(targetItem, modifiers);
             ItemActionDispatcher.DispatchAll(targetItem);
         }
 
@@ -88,53 +86,53 @@ namespace com.game.player
 
         public void OnTestGUI()
         {
-            GUILayout.BeginHorizontal(GUILayout.Width(k_totalGUIWidth));
+            //GUILayout.BeginHorizontal(GUILayout.Width(k_totalGUIWidth));
 
-            GUILayout.BeginVertical("box");
+            //GUILayout.BeginVertical("box");
 
-            GUILayout.Label("Shop");
+            //GUILayout.Label("Shop");
 
-            m_itemBank.ForEach(itemProfile =>
-            {
-                GUILayout.BeginHorizontal();
+            //m_itemBank.ForEach(itemProfile =>
+            //{
+            //    GUILayout.BeginHorizontal();
 
-                if (GUILayout.Button($"Buy {itemProfile.DisplayName}"))
-                    AddItem(ItemObject.Create(itemProfile));
+            //    if (GUILayout.Button($"Buy {itemProfile.DisplayName}"))
+            //        Add(ItemObject.Create(itemProfile));
 
-                if (GUILayout.Button("i", GUILayout.Width(20f)))
-                    m_labelText = ItemSystemHelpers.Text.GenerateDescription(itemProfile, true);
+            //    if (GUILayout.Button("i", GUILayout.Width(20f)))
+            //        m_labelText = ItemSystemHelpers.Text.GenerateDescription(itemProfile, true);
 
-                GUILayout.EndHorizontal();
-            });
+            //    GUILayout.EndHorizontal();
+            //});
 
-            GUILayout.EndVertical();
+            //GUILayout.EndVertical();
 
-            GUILayout.BeginVertical("box");
+            //GUILayout.BeginVertical("box");
 
-            GUILayout.Label("Inventory");
+            //GUILayout.Label("Inventory");
 
-            List<ItemObject> itemsMarkedForRemoval = new();
+            //List<ItemObject> itemsMarkedForRemoval = new();
 
-            m_items.ForEach(itemObject =>
-            {
-                GUILayout.BeginHorizontal();
+            //m_items.ForEach(itemObject =>
+            //{
+            //    GUILayout.BeginHorizontal();
 
-                if (GUILayout.Button($"Sell {itemObject.Profile.DisplayName}"))
-                    itemsMarkedForRemoval.Add(itemObject);
+            //    if (GUILayout.Button($"Sell {itemObject.Profile.DisplayName}"))
+            //        itemsMarkedForRemoval.Add(itemObject);
 
-                if (GUILayout.Button("i"))
-                    m_labelText = ItemSystemHelpers.Text.GenerateDescription(itemObject, true);
+            //    if (GUILayout.Button("i"))
+            //        m_labelText = ItemSystemHelpers.Text.GenerateDescription(itemObject, true);
 
-                GUILayout.EndHorizontal();
-            });
+            //    GUILayout.EndHorizontal();
+            //});
 
-            itemsMarkedForRemoval.ForEach(item => RemoveItem(item));
+            //itemsMarkedForRemoval.ForEach(item => Remove(item));
 
-            GUILayout.EndVertical();
+            //GUILayout.EndVertical();
 
-            GUILayout.EndHorizontal();
+            //GUILayout.EndHorizontal();
 
-            GUILayout.Label(m_labelText);
+            //GUILayout.Label(m_labelText);
         }
     }
 }
