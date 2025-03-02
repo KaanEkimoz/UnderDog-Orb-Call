@@ -73,7 +73,8 @@ namespace com.game
         {
             string guid1 = item1.Guid;
             string guid2 = item2.Guid;
-            List<ItemRecipeProfile> result = s_instance.Where(recipe => recipe.Contains(guid1) && recipe.Contains(guid2)).ToList();
+            IEnumerable<ItemRecipeProfile> search = s_recipes.Where(recipe => recipe.Contains(guid1) && recipe.Contains(guid2));
+            List<ItemRecipeProfile> result = search != null ? search.ToList() : new List<ItemRecipeProfile>();
 
             if (result.Count == 0) return null;
             if (result.Count > 1)

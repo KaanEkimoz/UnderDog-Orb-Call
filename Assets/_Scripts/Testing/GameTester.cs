@@ -132,6 +132,7 @@ namespace com.game.testing
 
         private void PassOrbUpgrades()
         {
+            m_levelsGained = 0;
             EnterOrbInventory();
         }
 

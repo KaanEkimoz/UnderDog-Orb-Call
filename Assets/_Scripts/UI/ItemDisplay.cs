@@ -4,38 +4,108 @@ using com.game.itemsystem.scriptables;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace com.game.ui
 {
-    public class ItemDisplay : MonoBehaviour, IDisplay<ItemObject>, IDisplay<ItemProfileBase>
+    public class ItemDisplay : MonoBehaviour, IDisplay<ItemObject>, IDisplay<ItemProfileBase>, 
+        IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         [SerializeField] private Image m_iconImage;
         [SerializeField] private TMP_Text m_nameText;
         [SerializeField] private TMP_Text m_typeText;
+        [SerializeField] private GameObject m_descriptionPanel;
         [SerializeField] private TMP_Text m_descriptionText;
+        [SerializeField] private GameObject m_outline;
         [SerializeField] private CanvasGroup m_canvasGroup;
         [SerializeField] private Button m_buyButton;
         [HideInInspector, SerializeField] private TMP_Text m_buyButtonText;
 
+        public event Action<ItemDisplay> onPointerEnter;
+        public event Action<ItemDisplay> onPointerExit;
+        public event Action<ItemDisplay> onPointerClick;
+
         public CanvasGroup CanvasGroup => m_canvasGroup;
 
-        Func<bool> m_buyButtonInteractability = () => true;
+        public Func<ItemDisplay, bool> buttonInteractabilityProvider;
+        public event Action<ItemDisplay> onButtonClick;
+
+        ItemObject m_object;
+        ItemProfileBase m_profile;
+
+        public ItemObject Target => m_object;
+        public ItemProfileBase Profile => m_profile;
+        public bool Interactable
+        {
+            get
+            {
+                return m_interactable;
+            }
+
+            set
+            {
+                m_interactable = value;
+                Refresh();
+            }
+        }
+
+        bool m_lockOutlineState;
+        bool m_hover;
+        bool m_interactable = true;
+
+        private void Start()
+        {
+            if (m_buyButton != null) 
+                m_buyButton.onClick.AddListener(OnButtonClick);
+
+            OnPointerExit(null);
+        }
+
+        private void OnButtonClick()
+        {
+            onButtonClick?.Invoke(this);
+        }
 
         public void Initialize(ItemObject instance)
         {
-            Refresh(instance, instance.Profile);
+            m_object = instance;
+            m_profile = instance.Profile;
+            Redraw();
         }
 
         public void Initialize(ItemProfileBase profile)
         {
-            Refresh(null, profile);
+            m_object = null;
+            m_profile = profile;
+            Redraw();
         }
 
         public void Refresh()
         {
-            if (m_buyButton != null) 
-                m_buyButton.interactable = m_buyButtonInteractability.Invoke();
+            Redraw();
+
+            if (m_buyButton != null)
+            {
+                if (buttonInteractabilityProvider != null)
+                    m_buyButton.interactable = buttonInteractabilityProvider.Invoke(this);
+                else
+                    m_buyButton.interactable = true;
+            }
+
+            if (!m_interactable)
+            {
+                m_canvasGroup.alpha = 0.5f;
+                UnlockOutline();
+                SetOutlineVisibility(false);
+                LockOutline();
+            }
+
+            else
+            {
+                m_canvasGroup.alpha = 1f;
+                UnlockOutline();
+            }
         }
 
         public void SetButtonText(string text, bool richText = false)
@@ -47,30 +117,75 @@ namespace com.game.ui
             m_buyButtonText.text = text;
         }
 
-        public void SetupButton(Action onClick, Func<bool> interactability = null)
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            if (m_buyButton == null)
+            m_hover = true;
+
+            if (!m_interactable)
                 return;
 
-            if (interactability != null) m_buyButtonInteractability = interactability;
-            else m_buyButtonInteractability = () => true;
+            if (m_descriptionPanel != null)
+                m_descriptionPanel.SetActive(true);
 
-            m_buyButton.onClick.AddListener(() => onClick?.Invoke());
+            SetOutlineVisibility(true);
 
-            Refresh();
+            onPointerEnter?.Invoke(this);
         }
 
-        void Refresh(ItemObject instance, ItemProfileBase profile)
+        public void OnPointerExit(PointerEventData eventData)
         {
-            if (profile == null)
+            m_hover = false;
+
+            if (!m_interactable)
                 return;
 
-            if (profile.Icon != null) m_iconImage.sprite = profile.Icon;
-            if (m_nameText != null) m_nameText.text = profile.DisplayName;
-            if (m_typeText != null) m_typeText.text = profile.TypeName ?? Helpers.SplitCamelCase(profile.GetType().Name, " ");
+            if (m_descriptionPanel != null)
+                m_descriptionPanel.SetActive(false);
 
-            if (instance != null) m_descriptionText.text = ItemSystemHelpers.Text.GenerateDescription(instance, false);
-            else m_descriptionText.text = ItemSystemHelpers.Text.GenerateDescription(profile, false);
+            SetOutlineVisibility(false);
+
+            onPointerExit?.Invoke(this);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!m_interactable)
+                return;
+
+            onPointerClick?.Invoke(this);
+        }
+
+        public void LockOutline() => m_lockOutlineState = true;
+        public void UnlockOutline()
+        {
+            m_lockOutlineState = false;
+
+            SetOutlineVisibility(m_hover);
+        }
+
+        public void SetOutlineVisibility(bool visibility)
+        {
+            if (m_lockOutlineState)
+                return;
+
+            if (m_outline != null)
+                m_outline.SetActive(visibility);
+        }
+
+        void Redraw()
+        {
+            if (m_profile == null)
+                return;
+
+            if (m_profile.Icon != null) m_iconImage.sprite = m_profile.Icon;
+            if (m_nameText != null) m_nameText.text = m_profile.DisplayName;
+            if (m_typeText != null) m_typeText.text = m_profile.TypeName ?? Helpers.SplitCamelCase(m_profile.GetType().Name, " ");
+
+            if (m_descriptionText == null)
+                return;
+
+            if (m_object != null) m_descriptionText.text = ItemSystemHelpers.Text.GenerateDescription(m_object, false);
+            else m_descriptionText.text = ItemSystemHelpers.Text.GenerateDescription(m_profile, false);
         }
 
         private void OnValidate()

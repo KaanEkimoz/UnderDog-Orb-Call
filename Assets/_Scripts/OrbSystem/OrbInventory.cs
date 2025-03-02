@@ -14,32 +14,31 @@ namespace com.game.orbsystem
     public class OrbInventory : IInventory<ItemObject>
     {
         ItemObject m_currentItem;
-        OrbItemProfile m_currentElement;
         OrbStats m_stats;
 
         List<ModifierObject<OrbStatType>> m_modifiers;
+
+        public ItemObject CurrentItem => m_currentItem;
 
         public OrbInventory(OrbStats stats)
         {
             m_stats = stats;
             m_modifiers = new();
             m_currentItem = null;
-            m_currentElement = null;
         }
 
         public bool Add(ItemObject target)
         {
             if (target.Profile is not OrbItemProfile profile) return false;
 
-            if (m_currentElement == null)
+            if (m_currentItem == null)
             {
                 m_currentItem = target;
-                m_currentElement = profile;
                 ApplyStatModifiers(target, profile);
                 return true;
             }
 
-            if (!ItemRecipeManager.Exists(m_currentElement, profile, out ItemRecipeProfile recipeProfile)) 
+            if (!ItemRecipeManager.Exists(m_currentItem.Profile, profile, out ItemRecipeProfile recipeProfile)) 
                 return false;
 
             if (ItemManager.GetItem(recipeProfile.ResultGuid) is not OrbItemProfile resultProfile)
@@ -47,9 +46,8 @@ namespace com.game.orbsystem
 
             RemoveCurrentElement();
 
-            m_currentElement = resultProfile;
             m_currentItem = ItemObject.Create(resultProfile);
-            ApplyStatModifiers(m_currentItem, m_currentElement);
+            ApplyStatModifiers(m_currentItem, resultProfile);
             return true;
         }
 
@@ -93,26 +91,28 @@ namespace com.game.orbsystem
 
         public void RemoveCurrentElement()
         {
-            if (m_currentElement == null)
+            if (m_currentItem == null)
                 return;
 
             RevertCurrentModifiers();
-            m_currentElement = null;
+            m_currentItem = null;
         }
 
         public Sprite GetIcon()
         {
-            if (m_currentElement == null) return null;
+            if (m_currentItem == null) 
+                return null;
 
-            return m_currentElement.Icon;
+            return m_currentItem.Profile.Icon;
         }
 
         public string GenerateDescription()
         {
-            if (m_currentElement == null) return "No elements.";
+            if (m_currentItem == null) 
+                return "No elements.";
 
             StringBuilder sb = new();
-            sb.Append(m_currentElement.DisplayName);
+            sb.Append(m_currentItem.Profile.DisplayName);
             sb.Append("\n\n");
             sb.Append(ItemSystemHelpers.Text.GenerateDescription(m_currentItem, false));
             return sb.ToString();

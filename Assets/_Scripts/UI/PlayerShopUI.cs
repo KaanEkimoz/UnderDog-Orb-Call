@@ -1,6 +1,7 @@
 using com.absence.attributes.experimental;
 using com.absence.utilities;
 using com.game.itemsystem;
+using com.game.itemsystem.scriptables;
 using com.game.player;
 using com.game.player.itemsystemextensions;
 using com.game.shopsystem;
@@ -24,7 +25,7 @@ namespace com.game.ui
 
         IShop<PlayerItemProfile> m_shop;
 
-        Dictionary<ItemDisplay, PlayerItemProfile> m_currentDisplays = new();
+        List<ItemDisplay> m_currentDisplays = new();
 
         private void Start()
         {
@@ -62,7 +63,7 @@ namespace com.game.ui
             GenerateDisplay(shop);
         }
 
-        public virtual void GenerateDisplay(IShop<PlayerItemProfile> shop)
+        void GenerateDisplay(IShop<PlayerItemProfile> shop)
         {
             Clear();
             foreach (PlayerItemProfile item in shop.ItemsOnStand)
@@ -70,31 +71,39 @@ namespace com.game.ui
                 ItemDisplay display = Instantiate(m_itemDisplayPrefab, m_stand);
                 display.Initialize(item);
 
-                m_currentDisplays.Add(display, item);
+                m_currentDisplays.Add(display);
 
                 display.SetButtonText(GetItemButtonText(item), true);
-                display.SetupButton(() => OnDisplayBuyButtonClicked(display), () => CanDisplayBuyButtonBeClicked(display));
+                display.onButtonClick += OnDisplayBuyButtonClicked;
+                display.buttonInteractabilityProvider = CanDisplayBuyButtonBeClicked;
+                display.Refresh();
             }
         }
 
         private bool CanDisplayBuyButtonBeClicked(ItemDisplay display)
         {
-            PlayerItemProfile item = m_currentDisplays[display];
+            ItemProfileBase item = display.Profile;
 
-            return Player.Instance.Hub.Money.CanAfford(item.Price);
+            if (item is not PlayerItemProfile playerItem)
+                return false;
+
+            return Player.Instance.Hub.Money.CanAfford(playerItem.Price);
         }
 
         private void OnDisplayBuyButtonClicked(ItemDisplay display)
         {
-            PlayerItemProfile item = m_currentDisplays[display];
+            ItemProfileBase item = display.Profile;
 
-            Player.Instance.Hub.Money.Spend(item.Price);
+            if (item is not PlayerItemProfile playerItem)
+                return;
+
+            Player.Instance.Hub.Money.Spend(playerItem.Price);
             Player.Instance.Hub.Inventory.Add(ItemObject.Create(item));
-            display.SetupButton(delegate { }, () => false);
+            display.buttonInteractabilityProvider = (_) => false;
             display.CanvasGroup.alpha = 0f;
 
             RefreshAll();
-            InvokeOnItemBought(item);
+            InvokeOnItemBought(playerItem);
         }
 
         private static string GetItemButtonText(PlayerItemProfile item)
@@ -141,10 +150,9 @@ namespace com.game.ui
 
         public void RefreshAll()
         {
-            foreach (KeyValuePair<ItemDisplay, PlayerItemProfile> kvp in m_currentDisplays)
+            foreach (ItemDisplay display in m_currentDisplays)
             {
-                ItemDisplay display = kvp.Key;
-                display.SetButtonText(GetItemButtonText(kvp.Value), true);
+                display.SetButtonText(GetItemButtonText(display.Profile as PlayerItemProfile), true);
                 display.Refresh();
             }
         }

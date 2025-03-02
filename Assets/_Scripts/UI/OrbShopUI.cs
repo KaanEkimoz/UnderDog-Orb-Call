@@ -78,10 +78,10 @@ namespace com.game.ui
                 ItemDisplay display = Instantiate(m_itemDisplayPrefab, m_stand);
                 display.Initialize(item);
                 display.SetButtonText("Get");
-                display.SetupButton(() =>
+                display.onButtonClick += (_) =>
                 {
                     InvokeOnGet(item);
-                });
+                };
             }
         }
 

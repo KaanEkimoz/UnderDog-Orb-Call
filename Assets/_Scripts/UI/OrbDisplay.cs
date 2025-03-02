@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace com.game.ui
 {
-    public class OrbDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class OrbDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         [SerializeField] private Image m_iconImage;
         [SerializeField] private GameObject m_outline;
@@ -14,6 +14,7 @@ namespace com.game.ui
 
         public event Action<SimpleOrb> onPointerEnter;
         public event Action<SimpleOrb> onPointerExit;
+        public event Action<SimpleOrb> onPointerClick;
 
         Sprite m_initialSprite;
         SimpleOrb m_target;
@@ -49,6 +50,11 @@ namespace com.game.ui
             if (m_handleSelfOutline) DoSetOutlineVisibility(false);
 
             onPointerExit?.Invoke(m_target);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            onPointerClick?.Invoke(m_target);
         }
 
         public void SetOutlineVisibility(bool visibility)
