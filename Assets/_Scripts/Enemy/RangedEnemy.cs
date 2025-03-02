@@ -5,7 +5,7 @@ public class RangedEnemy : Enemy
 {
     public GameObject projectilePrebfab;
 
-    [Header("Shoot")]
+    [Header("Shooting")]
     public float shootingCooldown = 3f;
     public Transform firePoint;
     [Header("Projectile")]
@@ -26,6 +26,8 @@ public class RangedEnemy : Enemy
     }
     protected override void CustomUpdate()
     {
+        navMeshAgent.SetDestination(target.transform.position);
+
         canSeePlayer = CanSeePlayer();
 
         if (canShoot && CheckDistanceToPlayer() && CanSeePlayer())
@@ -39,9 +41,7 @@ public class RangedEnemy : Enemy
         Debug.DrawRay(raySource.transform.position, rayDirection * rayDistance, Color.blue); //ray'i default olarak mavi ciz
 
         if (Physics.Raycast(raySource.transform.position, rayDirection, out RaycastHit hitInfo, rayDistance, layerMask)) //ray bir seye carpti mi?
-        {          
-            Debug.Log("gorulen nesne: " + hitInfo.collider.name);
-
+        {   
             bool isPlayer = hitInfo.collider.CompareTag("Player"); //carpilan nesne player mi?
             
             Debug.DrawRay(raySource.transform.position, rayDirection * rayDistance, isPlayer ? Color.green : Color.red ); //ray'in carptigi nesne player'sa yesil, degilse kirmizi ciz

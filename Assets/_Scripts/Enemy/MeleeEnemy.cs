@@ -13,6 +13,8 @@ public class MeleeEnemy : Enemy
 
     protected override void CustomUpdate()
     {
+        navMeshAgent.SetDestination(target.transform.position);
+
         if (CheckDistanceToPlayer() && canAttack)
         {
             Attack();

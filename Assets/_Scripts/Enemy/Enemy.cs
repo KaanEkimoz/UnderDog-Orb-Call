@@ -42,10 +42,12 @@ public class Enemy : MonoBehaviour
         if (target == null) return;
 
         AdjustSpeed((defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * (1 - (slowAmount/100)));
-        navMeshAgent.SetDestination(target.transform.position);
+        
         RotateTowardsTarget();
         CustomUpdate();
     }
+
+    protected virtual void CustomUpdate() { }
     public void AdjustSpeed(float newSpeed)
     {
         navMeshAgent.speed = newSpeed;
@@ -64,8 +66,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(duration);
         slowAmount = 0;
     }
-    protected virtual void CustomUpdate() { }
-
+    
     protected bool CheckDistanceToPlayer() //dusmanin playera uzakligini dondur
     {
         return Vector3.Distance(transform.position, target.transform.position) <= enemyMovementData.stoppingDistance;
