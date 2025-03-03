@@ -129,8 +129,7 @@ namespace com.game.testing
             m_orbContainerUI.SetupButtons(() =>
             {
                 m_orbContainerUI.Hide(false);
-                EnterLevelUpMenu(false);
-            });
+            }, OnConfirmUpgrades);
         }
 
         private void PassOrbUpgrades()
@@ -156,20 +155,24 @@ namespace com.game.testing
             m_orbContainerUI.SetUpgradeCache(m_orbUpgradeCache);
             m_orbContainerUI.Show(true);
 
-            m_orbContainerUI.SetupButtons(null, OnConfirmUpgrades);
+            m_orbContainerUI.SetupButtons(null, () =>
+            {
+                OnConfirmUpgrades();
+                EnterShop();
+            });
         }
 
         private void OnConfirmUpgrades()
         {
             m_orbUpgradeCache = new(m_orbContainer.UpgradeCache);
-            m_orbContainerUI.Hide(true);
-            EnterShop();
+            m_orbContainerUI.SoftRefresh();
+            m_orbContainerUI.Hide(false);
         }
 
         private void EnterShop()
         {
             m_playerShopUI.Show(true);
-            m_playerShopUI.SetupButtons(ExitShop);
+            m_playerShopUI.SetupButtons(EnterOrbInventoryTemporarily, ExitShop);
         }
 
         private void ExitShop()

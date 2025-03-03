@@ -17,7 +17,7 @@ namespace com.game.ui
         [SerializeField] private Transform m_pivot;
         [SerializeField] private OrbDisplayGP m_prefab;
 
-        [Inject] OrbController m_orbController;
+        OrbController m_orbController;
         List<OrbDisplayGP> m_orbDisplays;
         int m_orbCount;
         float m_stepAngle;
@@ -26,10 +26,18 @@ namespace com.game.ui
         bool m_firstCreation = true;
         Sequence m_rotatingSequence;
 
+        [Inject]
+        void Initialize(OrbController orbController)
+        {
+            m_orbController = orbController;
+        }
+
         private void Start()
         {
             SubscribeToEvents();
             FetchVariables();
+
+            OnOrbCountChanged(m_orbCount);
         }
 
         private void Update()

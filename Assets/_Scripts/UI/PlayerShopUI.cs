@@ -17,6 +17,7 @@ namespace com.game.ui
     {
         [SerializeField] private GameObject m_panel;
         [SerializeField] private RectTransform m_stand;
+        [SerializeField] private Button m_inventoryButton;
         [SerializeField] private Button m_rerollButton;
         [SerializeField] private Button m_proceedButton;
         [SerializeField, InlineEditor] private ItemDisplay m_itemDisplayPrefab;
@@ -53,8 +54,9 @@ namespace com.game.ui
             if (clear) Clear();
         }
 
-        public void SetupButtons(Action proceedButton)
+        public void SetupButtons(Action inventoryButton, Action proceedButton)
         {
+            SetupButton(m_inventoryButton, inventoryButton);
             SetupButton(m_proceedButton, proceedButton);
         }
 

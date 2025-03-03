@@ -77,8 +77,10 @@ namespace com.game.ui
 
         void RefreshButtonStates()
         {
-            m_resetButton.gameObject.SetActive(m_container.UpgradeCache != null);
-            m_confirmButton.gameObject.SetActive(m_container.UpgradeCache != null);
+            bool hasCache = m_container.UpgradeCache != null && m_container.UpgradeCache.Count > 0;
+            bool hasUndo = m_undoable;
+            m_resetButton.gameObject.SetActive(hasCache || hasUndo);
+            m_confirmButton.gameObject.SetActive(hasCache || hasUndo);
             m_resetButton.interactable = m_undoable;
         }
 
@@ -92,6 +94,8 @@ namespace com.game.ui
         {
             SetupButton(m_backButton, backButton);
             SetupButton(m_confirmButton, confirmButton);
+
+            RefreshButtonStates();
         }
 
         public void SetupButtons(Action backButton)
