@@ -23,7 +23,7 @@ namespace com.game.player
         [SerializeField, Range(k_minShift, k_maxShift)] private float m_shift = -0.5f;
         [SerializeField, Range(k_minAmplitude, k_maxAmplitude)] private float m_amplitude = 1f;
 
-        PlayerOrbHandler_Test m_orbHandler;
+        PlayerOrbHandler m_orbHandler;
 
         float m_countToGraphX;
         float m_maxOrbRatio;
