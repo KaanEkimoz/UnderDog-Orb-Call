@@ -17,6 +17,8 @@ namespace com.game.ui
 {
     public class PlayerShopUI : MonoBehaviour
     {
+        public const int REROLL_COST = 10;
+
         [SerializeField] private GameObject m_panel;
         [SerializeField] private RectTransform m_stand;
         [SerializeField] private Button m_inventoryButton;
@@ -27,12 +29,19 @@ namespace com.game.ui
 
         public event Action<PlayerItemProfile> OnItemBoughtOneShot;
 
+        public ButtonHandle RerollButton => m_rerollButtonHandle;
+        public ButtonHandle InventoryButton => m_inventoryButtonHandle;
+        public ButtonHandle ProceedButton => m_proceedButtonHandle;
+
         IShop<PlayerItemProfile> m_shop;
+        List<ItemDisplay> m_currentDisplays = new();
         PlayerStats m_stats;
         PlayerMoneyLogic m_money;
         PlayerInventory m_inventory;
 
-        List<ItemDisplay> m_currentDisplays = new();
+        ButtonHandle m_rerollButtonHandle;
+        ButtonHandle m_inventoryButtonHandle;
+        ButtonHandle m_proceedButtonHandle;
 
         private void Start()
         {
@@ -42,13 +51,46 @@ namespace com.game.ui
             m_inventory = Player.Instance.Hub.Inventory;
             m_money = Player.Instance.Hub.Money;
 
+            CacheButtons();
+
             Hide(true);
-            SetupButton(m_rerollButton, SoftReroll);
+        }
+
+        void CacheButtons()
+        {
+            m_rerollButtonHandle = new ButtonHandle(m_rerollButton);
+            m_inventoryButtonHandle = new ButtonHandle(m_inventoryButton);
+            m_proceedButtonHandle = new ButtonHandle(m_proceedButton);
+
+            RerollButton.Interactability = () => m_money.CanAfford(REROLL_COST);
+        }
+
+        void ResetButtons()
+        {
+            RerollButton.ClearClickCallbacks();
+            InventoryButton.ClearClickCallbacks();
+            ProceedButton.ClearClickCallbacks();
+
+            RerollButton.OnClick += OnRerollButton;
+        }
+
+        void RefreshButtons()
+        {
+            RerollButton.Refresh();
+            InventoryButton.Refresh();
+            ProceedButton.Refresh();
+        }
+
+        private void OnRerollButton()
+        {
+            m_money.Spend(REROLL_COST);
+            SoftReroll();
         }
 
         public void SetVisibility(bool visibility)
         {
             m_panel.SetActive(visibility);
+            ResetButtons();
         }
 
         public void Show(bool reroll = false)
@@ -61,12 +103,6 @@ namespace com.game.ui
         {
             SetVisibility(false);
             if (clear) Clear();
-        }
-
-        public void SetupButtons(Action inventoryButton, Action proceedButton)
-        {
-            SetupButton(m_inventoryButton, inventoryButton);
-            SetupButton(m_proceedButton, proceedButton);
         }
 
         void OnShopReroll(IShop<PlayerItemProfile> shop)
@@ -173,19 +209,6 @@ namespace com.game.ui
             OnItemBoughtOneShot = null;
         }
 
-        private void SetupButton(Button target, Action action)
-        {
-            if (action == null)
-            {
-                target.onClick.RemoveAllListeners();
-                target.gameObject.SetActive(false);
-                return;
-            }
-
-            target.gameObject.SetActive(true);
-            target.onClick.AddListener(() => action.Invoke());
-        }
-
         public void SoftReroll()
         {
             m_shop.Reroll();
@@ -200,6 +223,12 @@ namespace com.game.ui
             }
 
             RefreshStatText();
+            RefreshButtons();
+
+            bool canAfford = m_money.CanAfford(REROLL_COST);
+            string colorLabel = canAfford ? "white" : "red";
+
+            m_rerollButtonHandle.Text = $"Reroll <color={colorLabel}>{REROLL_COST}$</color>";
         }
 
         public void Clear()

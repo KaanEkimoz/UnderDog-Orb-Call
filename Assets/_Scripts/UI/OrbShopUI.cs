@@ -12,6 +12,8 @@ namespace com.game.ui
 {
     public class OrbShopUI : MonoBehaviour
     {
+        public const int REROLL_COST = 30;
+
         [SerializeField] private GameObject m_panel;
         [SerializeField] private RectTransform m_stand;
         [SerializeField] private TMP_Text m_title;
@@ -20,26 +22,76 @@ namespace com.game.ui
         [SerializeField] private Button m_passButton;
         [SerializeField, InlineEditor] private ItemDisplay m_itemDisplayPrefab;
 
-        IShop<OrbItemProfile> m_shop;
-
         public event Action<OrbItemProfile> OnItemBought;
         public event Action<OrbItemProfile> OnItemBoughtOneShot;
-
         public TMP_Text Title => m_title;
+
+        IShop<OrbItemProfile> m_shop;
+        PlayerMoneyLogic m_money;
+        int m_passIncome;
+
+        ButtonHandle m_rerollButtonHandle;
+        ButtonHandle m_inventoryButtonHandle;
+        ButtonHandle m_passButtonHandle;
+
+        public ButtonHandle RerollButton => m_rerollButtonHandle;
+        public ButtonHandle InventoryButton => m_inventoryButtonHandle;
+        public ButtonHandle PassButton => m_passButtonHandle;
 
         private void Start()
         {
             m_shop = Player.Instance.Hub.OrbShop;
+            m_money = Player.Instance.Hub.Money;
             m_shop.OnReroll += OnShopReroll;
 
+            CacheButtons();
+
+            m_passIncome = Mathf.FloorToInt(REROLL_COST * 1.5f);
+
             Hide(true);
-            SetupButton(m_rerollButton, SoftReroll);
+        }
+
+        private void CacheButtons()
+        {
+            m_rerollButtonHandle = new ButtonHandle(m_rerollButton);
+            m_passButtonHandle = new ButtonHandle(m_passButton);
+            m_inventoryButtonHandle = new ButtonHandle(m_inventoryButton);
+
+            RerollButton.Interactability = () => m_money.CanAfford(REROLL_COST);
+        }
+
+        private void ClearButtonActions()
+        {
+            RerollButton.ClearClickCallbacks();
+            PassButton.ClearClickCallbacks();
+            InventoryButton.ClearClickCallbacks();
+
+            RerollButton.OnClick += OnRerollButton;
+            PassButton.OnClick += OnPassButton;
+        }
+
+        private void RefreshButtons()
+        {
+            RerollButton.Refresh();
+            PassButton.Refresh();
+            InventoryButton.Refresh();
+        }
+
+        private void OnRerollButton()
+        {
+            m_money.Spend(REROLL_COST);
+            SoftReroll();
+        }
+
+        private void OnPassButton()
+        {
+            m_money.Gain(m_passIncome);
         }
 
         public void SetVisibility(bool visibility)
         {
             m_panel.SetActive(visibility);
-            SetupButtons(null, null);
+            ClearButtonActions();
         }
 
         public void Show(bool reroll = false)
@@ -54,12 +106,6 @@ namespace com.game.ui
             if (clear) Clear();
         }
 
-        public void SetupButtons(Action inventoryButton, Action passButton)
-        {
-            SetupButton(m_inventoryButton, inventoryButton);
-            SetupButton(m_passButton, passButton);
-        }
-
         void OnShopReroll(IShop<OrbItemProfile> shop)
         {
             GenerateDisplay(shop);
@@ -70,7 +116,7 @@ namespace com.game.ui
             m_shop.Reroll();
         }
 
-        public virtual void GenerateDisplay(IShop<OrbItemProfile> shop)
+        void GenerateDisplay(IShop<OrbItemProfile> shop)
         {
             Clear();
             foreach (OrbItemProfile item in shop.ItemsOnStand)
@@ -81,8 +127,18 @@ namespace com.game.ui
                 display.onButtonClick += (_) =>
                 {
                     InvokeOnGet(item);
+                    RefreshButtons();
                 };
             }
+
+            RefreshButtons();
+
+            bool canAfford = m_money.CanAfford(REROLL_COST);
+            string greenLabel = "green";
+            string colorLabel = canAfford ? "white" : "red";
+
+            RerollButton.Text = $"Reroll <color={colorLabel}>{REROLL_COST}$</color>";
+            PassButton.Text = $"Pass <color={greenLabel}>+{m_passIncome}$</color>";
         }
 
         private void InvokeOnGet(OrbItemProfile itemInContext)
@@ -90,19 +146,6 @@ namespace com.game.ui
             OnItemBought?.Invoke(itemInContext);
             OnItemBoughtOneShot?.Invoke(itemInContext);
             OnItemBoughtOneShot = null;
-        }
-
-        private void SetupButton(Button target, Action action)
-        {
-            if (action == null)
-            {
-                target.onClick.RemoveAllListeners();
-                target.gameObject.SetActive(false);
-                return;
-            }
-
-            target.gameObject.SetActive(true);
-            target.onClick.AddListener(() => action.Invoke());
         }
 
         public void Clear()

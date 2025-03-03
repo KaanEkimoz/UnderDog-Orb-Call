@@ -116,20 +116,17 @@ namespace com.game.testing
         {
             m_orbShopUI.Show(reroll);
             m_orbShopUI.Title.text = m_levelsGained > 1 ? $"Level Up! ({m_levelsGained})" : "Level Up!";
-            m_orbShopUI.SetupButtons(EnterOrbInventoryTemporarily, PassOrbUpgrades);
+            m_orbShopUI.InventoryButton.OnClick += EnterOrbInventoryTemporarily;
+            m_orbShopUI.PassButton.OnClick += PassOrbUpgrades;
             m_orbShopUI.OnItemBought -= OnOrbUpgradeBought;
             m_orbShopUI.OnItemBought += OnOrbUpgradeBought;
         }
 
         private void EnterOrbInventoryTemporarily()
         {
-            //m_orbShopUI.Hide(false);
-            //m_orbContainerUI.SetUpgradeCache(null);
             m_orbContainerUI.Show(false);
-            m_orbContainerUI.SetupButtons(() =>
-            {
-                m_orbContainerUI.Hide(false);
-            }, OnConfirmUpgrades);
+            m_orbContainerUI.BackButton.OnClick += () => m_orbContainerUI.Hide(false);
+            m_orbContainerUI.ConfirmButton.OnClick += OnConfirmUpgrades;
         }
 
         private void PassOrbUpgrades()
@@ -157,12 +154,11 @@ namespace com.game.testing
             m_orbShopUI.Hide(true);
             m_orbContainerUI.SetUpgradeCache(m_orbUpgradeCache);
             m_orbContainerUI.Show(true);
-
-            m_orbContainerUI.SetupButtons(null, () =>
+            m_orbContainerUI.ConfirmButton.OnClick += () =>
             {
                 OnConfirmUpgrades();
                 EnterShop();
-            });
+            };
         }
 
         private void OnConfirmUpgrades()
@@ -176,7 +172,8 @@ namespace com.game.testing
         {
             m_orbShopUI.Hide(true);
             m_playerShopUI.Show(true);
-            m_playerShopUI.SetupButtons(EnterOrbInventoryTemporarily, ExitShop);
+            m_playerShopUI.InventoryButton.OnClick += EnterOrbInventoryTemporarily;
+            m_playerShopUI.ProceedButton.OnClick += ExitShop;
         }
 
         private void ExitShop()
