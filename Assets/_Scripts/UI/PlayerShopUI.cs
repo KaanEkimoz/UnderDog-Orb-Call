@@ -24,6 +24,7 @@ namespace com.game.ui
         [SerializeField] private Button m_inventoryButton;
         [SerializeField] private Button m_rerollButton;
         [SerializeField] private Button m_proceedButton;
+        [SerializeField] private TMP_Text m_moneyText;
         [SerializeField] private TMP_Text m_statText;
         [SerializeField, InlineEditor] private ItemDisplay m_itemDisplayPrefab;
 
@@ -120,6 +121,7 @@ namespace com.game.ui
 
                 m_currentDisplays.Add(display);
 
+                display.SetNonInteractableAlpha(0f);
                 display.SetButtonText(GetItemButtonText(item), true);
                 display.onButtonClick += OnDisplayBuyButtonClicked;
                 display.buttonInteractabilityProvider = CanDisplayBuyButtonBeClicked;
@@ -147,15 +149,16 @@ namespace com.game.ui
 
             m_money.Spend(playerItem.Price);
             m_inventory.Add(ItemObject.Create(item));
-            display.buttonInteractabilityProvider = (_) => false;
-            display.CanvasGroup.alpha = 0f;
+            display.Interactable = false;
 
             InvokeOnItemBought(playerItem);
             RefreshAll();
         }
 
-        private void RefreshStatText()
+        private void RefreshTexts()
         {
+            m_moneyText.text = $"Balance: {m_money.Money.ToString()}$";
+
             StringBuilder sb = new();
             m_stats.Manipulator.ForAllStatEntries((key, value) =>
             {
@@ -222,13 +225,13 @@ namespace com.game.ui
                 display.Refresh();
             }
 
-            RefreshStatText();
+            RefreshTexts();
             RefreshButtons();
 
             bool canAfford = m_money.CanAfford(REROLL_COST);
             string colorLabel = canAfford ? "white" : "red";
 
-            m_rerollButtonHandle.Text = $"Reroll <color={colorLabel}>{REROLL_COST}$</color>";
+            RerollButton.Text = $"Reroll <color={colorLabel}>{REROLL_COST}$</color>";
         }
 
         public void Clear()

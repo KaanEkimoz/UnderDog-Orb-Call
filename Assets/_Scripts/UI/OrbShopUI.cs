@@ -17,6 +17,7 @@ namespace com.game.ui
         [SerializeField] private GameObject m_panel;
         [SerializeField] private RectTransform m_stand;
         [SerializeField] private TMP_Text m_title;
+        [SerializeField] private TMP_Text m_moneyText;
         [SerializeField] private Button m_inventoryButton;
         [SerializeField] private Button m_rerollButton;
         [SerializeField] private Button m_passButton;
@@ -128,10 +129,12 @@ namespace com.game.ui
                 {
                     InvokeOnGet(item);
                     RefreshButtons();
+                    RefreshTexts();
                 };
             }
 
             RefreshButtons();
+            RefreshTexts();
 
             bool canAfford = m_money.CanAfford(REROLL_COST);
             string greenLabel = "green";
@@ -139,6 +142,11 @@ namespace com.game.ui
 
             RerollButton.Text = $"Reroll <color={colorLabel}>{REROLL_COST}$</color>";
             PassButton.Text = $"Pass <color={greenLabel}>+{m_passIncome}$</color>";
+        }
+
+        void RefreshTexts()
+        {
+            m_moneyText.text = $"Balance: {m_money.Money.ToString()}$";
         }
 
         private void InvokeOnGet(OrbItemProfile itemInContext)
