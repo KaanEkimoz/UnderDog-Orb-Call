@@ -5,9 +5,11 @@ using com.game.itemsystem.scriptables;
 using com.game.player;
 using com.game.player.itemsystemextensions;
 using com.game.shopsystem;
+using com.game.statsystem;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,18 +22,25 @@ namespace com.game.ui
         [SerializeField] private Button m_inventoryButton;
         [SerializeField] private Button m_rerollButton;
         [SerializeField] private Button m_proceedButton;
+        [SerializeField] private TMP_Text m_statText;
         [SerializeField, InlineEditor] private ItemDisplay m_itemDisplayPrefab;
 
         public event Action<PlayerItemProfile> OnItemBoughtOneShot;
 
         IShop<PlayerItemProfile> m_shop;
+        PlayerStats m_stats;
+        PlayerMoneyLogic m_money;
+        PlayerInventory m_inventory;
 
         List<ItemDisplay> m_currentDisplays = new();
 
         private void Start()
         {
             m_shop = Player.Instance.Hub.Shop;
+            m_stats = Player.Instance.Hub.Stats;
             m_shop.OnReroll += OnShopReroll;
+            m_inventory = Player.Instance.Hub.Inventory;
+            m_money = Player.Instance.Hub.Money;
 
             Hide(true);
             SetupButton(m_rerollButton, SoftReroll);
@@ -78,8 +87,9 @@ namespace com.game.ui
                 display.SetButtonText(GetItemButtonText(item), true);
                 display.onButtonClick += OnDisplayBuyButtonClicked;
                 display.buttonInteractabilityProvider = CanDisplayBuyButtonBeClicked;
-                display.Refresh();
             }
+
+            RefreshAll();
         }
 
         private bool CanDisplayBuyButtonBeClicked(ItemDisplay display)
@@ -99,21 +109,52 @@ namespace com.game.ui
             if (item is not PlayerItemProfile playerItem)
                 return;
 
-            Player.Instance.Hub.Money.Spend(playerItem.Price);
-            Player.Instance.Hub.Inventory.Add(ItemObject.Create(item));
+            m_money.Spend(playerItem.Price);
+            m_inventory.Add(ItemObject.Create(item));
             display.buttonInteractabilityProvider = (_) => false;
             display.CanvasGroup.alpha = 0f;
 
-            RefreshAll();
             InvokeOnItemBought(playerItem);
+            RefreshAll();
         }
 
-        private static string GetItemButtonText(PlayerItemProfile item)
+        private void RefreshStatText()
+        {
+            StringBuilder sb = new();
+            m_stats.Manipulator.ForAllStatEntries((key, value) =>
+            {
+                float diff = value;
+                float refinedValue = m_stats.GetStat(key);
+
+                float refinedDiff = refinedValue;
+                string colorName;
+
+                if (diff > 0f) colorName = "green";
+                else if (diff == 0f) colorName = "white";
+                else colorName = "red";
+
+                string valueLabel = utilities.Helpers.Text.Colorize(value.ToString("0"), colorName);
+
+                if (refinedDiff > 0f) colorName = "green";
+                else if (refinedDiff == 0f) colorName = "white";
+                else colorName = "red";
+
+                string refinedValueLabel = utilities.Helpers.Text.Colorize($" ({refinedValue.ToString("0.00")})", colorName);
+
+                sb.Append(utilities.Helpers.Text.Bold($"{StatSystemHelpers.Text.GetDisplayName(key, true)}: " +
+                valueLabel + refinedValueLabel));
+                sb.Append("\n");
+            });
+
+            m_statText.text = sb.ToString();
+        }
+
+        private string GetItemButtonText(PlayerItemProfile item)
         {
             StringBuilder sb = new("Buy ");
 
             int price = item.Price;
-            bool canAfford = Player.Instance.Hub.Money.CanAfford(price);
+            bool canAfford = m_money.CanAfford(price);
             string colorLabel = canAfford ? "white" : "red";
 
             sb.Append("<color=");
@@ -157,6 +198,8 @@ namespace com.game.ui
                 display.SetButtonText(GetItemButtonText(display.Profile as PlayerItemProfile), true);
                 display.Refresh();
             }
+
+            RefreshStatText();
         }
 
         public void Clear()

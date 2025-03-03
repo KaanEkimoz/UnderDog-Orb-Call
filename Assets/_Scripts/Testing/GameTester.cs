@@ -135,7 +135,8 @@ namespace com.game.testing
         private void PassOrbUpgrades()
         {
             m_levelsGained = 0;
-            EnterOrbInventory();
+            if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) EnterOrbInventory();
+            else EnterShop();
         }
 
         void OnOrbUpgradeBought(OrbItemProfile profile)
@@ -145,8 +146,10 @@ namespace com.game.testing
 
             if (m_levelsGained > 0)
                 EnterLevelUpMenu();
-            else
+            else if (m_orbUpgradeCache.Count > 0) 
                 EnterOrbInventory();
+            else 
+                EnterShop();
         }
 
         private void EnterOrbInventory()
@@ -171,6 +174,7 @@ namespace com.game.testing
 
         private void EnterShop()
         {
+            m_orbShopUI.Hide(true);
             m_playerShopUI.Show(true);
             m_playerShopUI.SetupButtons(EnterOrbInventoryTemporarily, ExitShop);
         }
