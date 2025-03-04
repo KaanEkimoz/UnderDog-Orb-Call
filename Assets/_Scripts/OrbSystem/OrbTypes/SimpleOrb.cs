@@ -210,13 +210,18 @@ public class SimpleOrb : MonoBehaviour
         transform.position = collision.contacts[0].point;
         Stick(collision.transform);
 
-        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
-        {
-            damageable.OnTakeDamage += GiveDamage;
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
-            damageable.OnTakeDamage -= GiveDamage;
-        }
-
+        ApplyCollisionEffects(collision);
+    }
+    protected virtual void ApplyCollisionEffects(Collision collisionObject)
+    {
+        if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
+            ApplyCombatEffects(damageable);
+    }
+    protected virtual void ApplyCombatEffects(IDamageable damageableObject)
+    {
+        damageableObject.OnTakeDamage += GiveDamage;
+        damageableObject.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+        damageableObject.OnTakeDamage -= GiveDamage;
     }
     private void GiveDamage(float damage)
     {
@@ -258,20 +263,4 @@ public class SimpleOrb : MonoBehaviour
         yield return new WaitForSeconds(duration);
         movementSpeed -= speedIncrease;
     }
-    /*
-    
-    [Header("Orb Sway")]
-    [SerializeField] private float swayRange = 0.1f;
-    [SerializeField] private float swayOffset;
-    [SerializeField] private float swaySpeed = 2f; 
-     
-    private void Sway()
-    {
-        Vector3 basePosition = currentTargetPos;
-        float sway = Mathf.Sin(Time.time * swaySpeed + swayOffset) * swayRange;
-        Vector3 swayPosition = new Vector3(basePosition.x, basePosition.y + sway, basePosition.z);
-
-        transform.localPosition = Vector3.Lerp(transform.localPosition, swayPosition, Time.deltaTime * movementSpeed);
-    }
-    */
 }

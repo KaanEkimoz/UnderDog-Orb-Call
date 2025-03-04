@@ -164,8 +164,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_displayUnpaused: 1
+  m_displayPaused: 0
   m_parryDisplay: {fileID: 1351729384}
   m_parry: {fileID: 4416926083347132241}
+  m_orbShopUI: {fileID: 0}
+  m_playerShopUI: {fileID: 0}
+  m_orbContainerUI: {fileID: 0}
 --- !u!1 &59184530
 GameObject:
   m_ObjectHideFlags: 0

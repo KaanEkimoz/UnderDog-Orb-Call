@@ -52,7 +52,7 @@ namespace com.game.enemysystem
                 _health = 0;
                 Die();
             }
-            enemy.ApplySlowForOrbs(GetOrbsCountOnEnemy());
+            enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
             OnTakeDamage?.Invoke(realDamage);
         }
 

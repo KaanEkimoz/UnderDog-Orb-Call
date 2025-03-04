@@ -208,7 +208,7 @@ public class OrbController : MonoBehaviour
 
     public void AddOrb()
     {
-        SimpleOrb newOrb = objectPool.GetPooledObject(3).GetComponent<SimpleOrb>();
+        SimpleOrb newOrb = objectPool.GetPooledObject(4).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
         newOrb.AssignPlayerStats(_playerStats);
 
