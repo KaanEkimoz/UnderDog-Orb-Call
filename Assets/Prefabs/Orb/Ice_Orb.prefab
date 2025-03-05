@@ -5141,11 +5141,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &-8477115736559109764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5192,7 +5192,7 @@ MonoBehaviour:
   _sphereCollider: {fileID: 3125970163809097519}
   _renderer: {fileID: 3888179991362403223}
   slowPercent: 100
-  slowDurationOnSeconds: 1
+  slowDurationInSeconds: 1
   slowRadius: 2.5
 --- !u!114 &7841533525167026272
 MonoBehaviour:
