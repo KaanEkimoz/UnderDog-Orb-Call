@@ -1,6 +1,7 @@
 using com.game.enemysystem.statsystemextensions;
 using com.game.player.statsystemextensions;
 using System;
+using System.Collections;
 using UnityEngine;
 using Zenject;
 
@@ -50,6 +51,22 @@ namespace com.game.player
                 Die();
             }
             OnTakeDamage?.Invoke(damage);
+        }
+        public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
+        {
+            StartCoroutine(TakeDamageOverTime(damage, durationInSeconds, intervalInSeconds));
+        }
+        private IEnumerator TakeDamageOverTime(float damage, float durationInSeconds, float intervalInSeconds)
+        {
+            float elapsedTime = 0f;
+            float damageDivider = durationInSeconds / intervalInSeconds;
+
+            while (elapsedTime < durationInSeconds)
+            {
+                TakeDamage(damage / damageDivider);
+                elapsedTime += intervalInSeconds;
+                yield return new WaitForSeconds(intervalInSeconds);
+            }
         }
         public void HealWithLifeSteal(float amount)
         {

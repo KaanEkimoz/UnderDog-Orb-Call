@@ -3,14 +3,16 @@ namespace com.game
 {
     public class IceOrb : SimpleOrb, IElemental
     {
+        [Space]
+        [Header("Slow")]
         [Range(0f, 100f)]
         [SerializeField] float slowPercent = 100f;
-        [SerializeField] float slowDurationOnSeconds = 1f;
+        [SerializeField] float slowDurationInSeconds = 1f;
         [SerializeField] float slowRadius = 10f;
 
-        protected override void ApplyCombatEffects(IDamageable damageable)
+        protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
-            base.ApplyCombatEffects(damageable);
+            base.ApplyCombatEffects(damageable, damage);
         }
         protected override void ApplyCollisionEffects(Collision collisionObject)
         {
@@ -23,7 +25,7 @@ namespace com.game
             foreach (var hitCollider in hitColliders)
             {
                 if (hitCollider.gameObject.TryGetComponent(out Enemy hitEnemy))
-                    hitEnemy.ApplySlowForSeconds(slowPercent, slowDurationOnSeconds);
+                    hitEnemy.ApplySlowForSeconds(slowPercent, slowDurationInSeconds);
             }
         }
 

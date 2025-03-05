@@ -215,12 +215,12 @@ public class SimpleOrb : MonoBehaviour
     protected virtual void ApplyCollisionEffects(Collision collisionObject)
     {
         if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
-            ApplyCombatEffects(damageable);
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
     }
-    protected virtual void ApplyCombatEffects(IDamageable damageableObject)
+    protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
     {
         damageableObject.OnTakeDamage += GiveDamage;
-        damageableObject.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+        damageableObject.TakeDamage(damage);
         damageableObject.OnTakeDamage -= GiveDamage;
     }
     private void GiveDamage(float damage)
