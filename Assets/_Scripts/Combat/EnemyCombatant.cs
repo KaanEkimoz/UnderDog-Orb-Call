@@ -54,13 +54,12 @@ namespace com.game.enemysystem
                 Die();
             }
             enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
-            OnTakeDamage?.Invoke(realDamage);
+            _playerCombatant.OnLifeSteal(realDamage);
         }
         public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
         {
             StartCoroutine(TakeDamageOverTime(damage, durationInSeconds, intervalInSeconds));
         }
-
         private IEnumerator TakeDamageOverTime(float damage, float durationInSeconds, float intervalInSeconds)
         {
             float elapsedTime = 0f;

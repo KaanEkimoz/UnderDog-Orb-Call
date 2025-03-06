@@ -212,7 +212,6 @@ public class OrbController : MonoBehaviour
         newOrb.transform.position = ellipseCenterTransform.position;
         newOrb.AssignPlayerStats(_playerStats);
 
-        newOrb.OnDamageGiven += (float damage) => OnDamageGiven?.Invoke(damage);
         activeOrbCount++;
         OrbsOnEllipse.Add(newOrb);
         CalculateAngleStep();

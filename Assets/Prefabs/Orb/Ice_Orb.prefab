@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7629989404533047297}
   - component: {fileID: 9063377286570890414}
   - component: {fileID: 4585441880087601957}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: IceOrb_Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4930,7 +4930,7 @@ GameObject:
   - component: {fileID: 3091805566841115467}
   - component: {fileID: 3403944461487821518}
   - component: {fileID: 451852885698576326}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: IceOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5020,7 +5020,7 @@ GameObject:
   - component: {fileID: -5482772027941943934}
   - component: {fileID: -8477115736559109764}
   - component: {fileID: 7841533525167026272}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ice_Orb
   m_TagString: Untagged
   m_Icon: {fileID: 0}

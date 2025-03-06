@@ -4844,7 +4844,7 @@ GameObject:
   - component: {fileID: 540255180875367085}
   - component: {fileID: 4737273869688168256}
   - component: {fileID: 4898730289488628358}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9739,7 +9739,7 @@ GameObject:
   - component: {fileID: 3958211570668759935}
   - component: {fileID: -7323817676200136362}
   - component: {fileID: -8209655953048531298}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fire_Orb
   m_TagString: Untagged
   m_Icon: {fileID: 0}

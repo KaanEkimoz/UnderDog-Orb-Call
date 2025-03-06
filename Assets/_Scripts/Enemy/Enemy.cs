@@ -65,6 +65,9 @@ public class Enemy : MonoBehaviour
     public void ApplySlowForOrbsOnEnemy(int orbCount)
     {
         currentSlowAmount = slowPercentPerOrb * orbCount;
+
+        if (currentSlowAmount > 100)
+            currentSlowAmount = 100;
     }
     private IEnumerator SlowForSeconds(float slowPercent, float duration)
     {

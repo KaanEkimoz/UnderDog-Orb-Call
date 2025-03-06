@@ -12,7 +12,6 @@ public enum OrbState
     Throwing,
     Returning
 }
-
 [RequireComponent(typeof(Rigidbody), typeof(SphereCollider), typeof(MeshRenderer))]
 public class SimpleOrb : MonoBehaviour
 {
@@ -57,7 +56,6 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnCalled;
     public event Action OnStuck;
     public event Action OnReachedToEllipse;
-    public event Action<float> OnDamageGiven;
     public event Action<OrbState> OnStateChanged;
 
     public void AssignPlayerStats(PlayerStats playerStats)
@@ -219,13 +217,7 @@ public class SimpleOrb : MonoBehaviour
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
     {
-        damageableObject.OnTakeDamage += GiveDamage;
         damageableObject.TakeDamage(damage);
-        damageableObject.OnTakeDamage -= GiveDamage;
-    }
-    private void GiveDamage(float damage)
-    {
-        OnDamageGiven?.Invoke(damage);
     }
     private void Stick(Transform stickTransform)
     {
@@ -244,11 +236,9 @@ public class SimpleOrb : MonoBehaviour
 
         if (other.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            damageable.OnTakeDamage += GiveDamage;
             damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
-            damageable.OnTakeDamage -= GiveDamage;
 
-            if(other.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            if (other.gameObject.TryGetComponent(out Enemy hittedEnemy))
                 hittedEnemy.ApplySlowForSeconds(100f,2f);
         }
             

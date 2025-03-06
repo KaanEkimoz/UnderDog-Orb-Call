@@ -31,10 +31,8 @@ namespace com.game.player
 
             _maxHealth = _playerStats.GetStat(PlayerStatType.Health);
             _health = _maxHealth;
-            _orbController.OnDamageGiven += OnLifeSteal;
-            Debug.Log("Player Health: " + _health);
         }
-        private void OnLifeSteal(float amount)
+        public void OnLifeSteal(float amount)
         {
             Heal(amount * (_playerStats.GetStat(PlayerStatType.LifeSteal) / 100));
         }
