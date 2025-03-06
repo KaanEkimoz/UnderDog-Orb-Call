@@ -15,7 +15,7 @@ public class MeleeEnemy : Enemy
     {
         navMeshAgent.SetDestination(target.transform.position);
 
-        if (CheckDistanceToPlayer() && canAttack)
+        if (GetDistanceToPlayer() && canAttack)
         {
             Attack();
         }

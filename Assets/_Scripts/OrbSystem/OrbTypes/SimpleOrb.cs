@@ -35,9 +35,6 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private SphereCollider _sphereCollider;
     [SerializeField] private Renderer _renderer;
 
-
-    private PlayerStats _playerStats;
-
     //Movement
     private Transform startParent;
     private Vector3 startScale;
@@ -49,7 +46,9 @@ public class SimpleOrb : MonoBehaviour
     private float distanceTraveled;
     private Vector3 throwStartPosition;
 
+    //Stats
     public OrbStats Stats => orbStats;
+    private PlayerStats _playerStats;
 
     //Events
     public event Action OnThrown;
@@ -64,10 +63,9 @@ public class SimpleOrb : MonoBehaviour
     }
     private void OnEnable()
     {
-        currentState = OrbState.OnEllipse;
-        CheckStartVariables();
+        Reset();
     }
-    private void Start()
+    private void Reset()
     {
         currentState = OrbState.OnEllipse;
         CheckStartVariables();
@@ -88,13 +86,17 @@ public class SimpleOrb : MonoBehaviour
     }
     private void Update()
     {
-        HandleTransformMovement();
-
+        HandleStateBehaviours();
+    }
+    private void HandleStateBehaviours()
+    {
+        if (currentState == OrbState.Returning || currentState == OrbState.OnEllipse)
+            MoveToTargetPosition();
         if (currentState == OrbState.Throwing)
         {
             CalculateDistanceTraveled();
             if (distanceTraveled >= maxDistance + _playerStats.GetStat(PlayerStatType.Range))
-                Stick(startParent);
+                StickToTransform(startParent);
         }
         if (currentState == OrbState.Returning && hasReachedTargetPos)
         {
@@ -105,38 +107,25 @@ public class SimpleOrb : MonoBehaviour
             OnStateChanged?.Invoke(currentState);
         }
     }
-    private void HandleTransformMovement()
-    {
-        if (currentState == OrbState.Returning || currentState == OrbState.OnEllipse)
-            MoveTargetPos();
-    }
     public void Disable()
     {
         gameObject.SetActive(false);
     }
-    public void Return()
+    public void ReturnToPosition(Vector3 returnPosition)
     {
         currentState = OrbState.Returning;
 
-        distanceTraveled = 0;
-        _sphereCollider.isTrigger = true;
-        _rigidBody.isKinematic = true;
-        ResetParent();
-
-        OnCalled?.Invoke();
-        OnStateChanged?.Invoke(currentState);
-    }
-    public void Return(Vector3 returnPosition)
-    {
-        currentState = OrbState.Returning;
-
-        _sphereCollider.isTrigger = true;
-        _rigidBody.isKinematic = true;
+        SetTrigger(true);
         SetNewDestination(returnPosition);
         ResetParent();
 
         OnCalled?.Invoke();
         OnStateChanged?.Invoke(currentState);
+    }
+    private void SetTrigger(bool isEnabled)
+    {
+        _sphereCollider.isTrigger = isEnabled;
+        _rigidBody.isKinematic = isEnabled;
     }
     public void ResetParent()
     {
@@ -159,16 +148,17 @@ public class SimpleOrb : MonoBehaviour
         throwStartPosition = transform.position;
         distanceTraveled = 0;
 
-        //Enable Collision and Physics
-        _rigidBody.isKinematic = false;
-        _sphereCollider.isTrigger = false;
-
-        Vector3 force = forceDirection * (((orbStats.GetStat(OrbStatType.Speed) / 10)) * ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
-
-        _rigidBody.AddForce(force, ForceMode.Impulse);
-
+        SetTrigger(false);
+        ApplyForce(forceDirection);
+        
         OnThrown?.Invoke();
         OnStateChanged?.Invoke(currentState);
+    }
+    private void ApplyForce(Vector3 direction)
+    {
+        Vector3 force = direction * (((orbStats.GetStat(OrbStatType.Speed) / 10)) * ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
+
+        _rigidBody.AddForce(force, ForceMode.Impulse);
     }
     private void CalculateDistanceTraveled()
     {
@@ -183,7 +173,7 @@ public class SimpleOrb : MonoBehaviour
         currentTargetPos = newPos;
         speedMultiplier = multiplier;
     }
-    private void MoveTargetPos()
+    private void MoveToTargetPosition()
     {
         float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
 
@@ -206,7 +196,7 @@ public class SimpleOrb : MonoBehaviour
 
         //Disable Physics and Stick to Surface
         transform.position = collision.contacts[0].point;
-        Stick(collision.transform);
+        StickToTransform(collision.transform);
 
         ApplyCollisionEffects(collision);
     }
@@ -219,7 +209,7 @@ public class SimpleOrb : MonoBehaviour
     {
         damageableObject.TakeDamage(damage);
     }
-    private void Stick(Transform stickTransform)
+    private void StickToTransform(Transform stickTransform)
     {
         currentState = OrbState.Sticked;
         _rigidBody.isKinematic = true;

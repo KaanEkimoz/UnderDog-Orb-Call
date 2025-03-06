@@ -22,7 +22,7 @@ public class ExploderEnemy : Enemy
     {
         navMeshAgent.SetDestination(target.transform.position);
 
-        if (CheckDistanceToPlayer()) //dusman karaktere yeterince yakinsa
+        if (GetDistanceToPlayer()) //dusman karaktere yeterince yakinsa
         {
             if (isPreparingToExplode == false) //ve halihazirda patlamaya hazirlanmiyorsa
             {
@@ -46,7 +46,7 @@ public class ExploderEnemy : Enemy
 
         while(elapsedTime < preperationTime) //patlama suresi dolmadigi surece
         {
-            if (!CheckDistanceToPlayer()) //karakter dusmandan uzaklasirsa
+            if (!GetDistanceToPlayer()) //karakter dusmandan uzaklasirsa
             {
                 isPreparingToExplode = false; //patlama hazirligini iptal et
                 explosiveEnemyRenderer.material.color = defaultColor;

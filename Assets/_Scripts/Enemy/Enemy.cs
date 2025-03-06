@@ -43,7 +43,10 @@ public class Enemy : MonoBehaviour
 
         navMeshAgent.SetDestination(target.transform.position);
     }
-
+    public void AdjustSpeed(float newSpeed)
+    {
+        navMeshAgent.speed = newSpeed;
+    }
     protected virtual void Update()
     {
         if (target == null) return;
@@ -54,10 +57,7 @@ public class Enemy : MonoBehaviour
         CustomUpdate();
     }
     protected virtual void CustomUpdate() { }
-    public void AdjustSpeed(float newSpeed)
-    {
-        navMeshAgent.speed = newSpeed;
-    }
+    
     public void ApplySlowForSeconds(float slowPercent, float duration)
     {
         StartCoroutine(SlowForSeconds(slowPercent, duration));
@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(duration);
         currentSlowAmount = 0;
     }
-    protected bool CheckDistanceToPlayer() //dusmanin playera uzakligini dondur
+    protected bool GetDistanceToPlayer()
     {
         return Vector3.Distance(transform.position, target.transform.position) <= enemyMovementData.stoppingDistance;
     }

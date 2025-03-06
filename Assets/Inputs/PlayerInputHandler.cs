@@ -1,6 +1,7 @@
 using com.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 public class PlayerInputHandler : MonoBehaviour
 {
     #region Singleton
@@ -115,6 +116,18 @@ public class PlayerInputHandler : MonoBehaviour
     {
         Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
     }
+    public Vector3 GetMouseWorldPosition(LayerMask cursorDetectMask)
+    {
+        if (Camera.main == null)
+            return Vector3.zero;
+
+        var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, cursorDetectMask))
+            return hitInfo.point;
+
+        return Vector3.zero;
+    }
+
     #endregion
 
     #region Input Functions

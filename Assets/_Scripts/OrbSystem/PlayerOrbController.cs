@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
-
 public class OrbController : MonoBehaviour
 {
     [Header("Orb Count")]
@@ -31,7 +30,6 @@ public class OrbController : MonoBehaviour
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private GameObject ghostOrbPrefab;
     
-
     //Orb Types
     public const int SIMPLE_ORB_INDEX = 7;
     public const int FIRE_ORB_INDEX = 8;
@@ -125,7 +123,7 @@ public class OrbController : MonoBehaviour
     private void CallOrb(SimpleOrb orb)
     {
         if (orb.currentState != OrbState.Sticked) return;
-        orb.Return(firePointTransform.position);
+        orb.ReturnToPosition(firePointTransform.position);
         Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();
     }
@@ -196,7 +194,7 @@ public class OrbController : MonoBehaviour
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
         isAiming = false;
 
-        Vector3 throwDirection = GetMouseWorldPosition() - firePointTransform.position;
+        Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(cursorDetectMask) - firePointTransform.position;
         throwDirection.y = 0;
         orbToThrow.Throw(throwDirection.normalized);
 
@@ -313,13 +311,5 @@ public class OrbController : MonoBehaviour
     private void CalculateAngleStep()
     {
         angleStep = 360f / activeOrbCount;
-    }
-    private Vector3 GetMouseWorldPosition()
-    {
-        var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, cursorDetectMask))
-            return hitInfo.point;
-
-        return Vector3.zero;
     }
 }
