@@ -12,6 +12,8 @@ namespace com.game
         event Action OnDie;
 
         void TakeDamage(float damage);
+
+        void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds);
         void Die();
     }
 }

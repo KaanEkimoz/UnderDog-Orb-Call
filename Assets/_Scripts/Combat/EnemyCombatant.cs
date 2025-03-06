@@ -7,6 +7,7 @@ using com.game.generics.interfaces;
 using com.game.generics;
 using Zenject;
 using com.game.player;
+using System.Collections;
 
 namespace com.game.enemysystem
 {
@@ -52,8 +53,25 @@ namespace com.game.enemysystem
                 _health = 0;
                 Die();
             }
-            enemy.ApplySlowForOrbs(GetOrbsCountOnEnemy());
+            enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
             OnTakeDamage?.Invoke(realDamage);
+        }
+        public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
+        {
+            StartCoroutine(TakeDamageOverTime(damage, durationInSeconds, intervalInSeconds));
+        }
+
+        private IEnumerator TakeDamageOverTime(float damage, float durationInSeconds, float intervalInSeconds)
+        {
+            float elapsedTime = 0f;
+            float damageDivider = durationInSeconds / intervalInSeconds;
+
+            while (elapsedTime < durationInSeconds)
+            {
+                TakeDamage(damage / damageDivider);
+                elapsedTime += intervalInSeconds;
+                yield return new WaitForSeconds(intervalInSeconds);
+            }
         }
 
         public void Die()

@@ -5,28 +5,35 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
-    public EnemyMovementData enemyMovementData;
-    public float slowPercentPerOrb = 25f;
-    protected GameObject target;
+    [Header("Movement")]
+    [SerializeField] private EnemyMovementData enemyMovementData;
+    [Header("Slow")]
+    [SerializeField] public float slowPercentPerOrb = 25f;
+    [Header("Stats")]
     [SerializeField] protected EnemyStats enemyStats;
+
+    //AI
     protected NavMeshAgent navMeshAgent;
-    float defaultSpeed;
-    private float slowAmount = 0;
+    protected GameObject target;
 
-    protected virtual void Awake()
-    {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-    }
+    //Movement
+    private float defaultSpeed;
 
+    //Slow
+    private float currentSlowAmount = 0;
     protected virtual void Start()
-    {  
-        target = GameObject.FindWithTag("Player");
+    {
+        if(navMeshAgent == null)
+            navMeshAgent = GetComponent<NavMeshAgent>();
+
+        if (target == null)
+            target = GameObject.FindWithTag("Player");
 
         if (enemyStats == null)
             GetComponent<EnemyStats>();
 
-        defaultSpeed = enemyMovementData.speed;
 
+        defaultSpeed = enemyMovementData.speed;
         navMeshAgent.updateRotation = false;
 
         AdjustSpeed(defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed));
@@ -41,12 +48,11 @@ public class Enemy : MonoBehaviour
     {
         if (target == null) return;
 
-        AdjustSpeed((defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * (1 - (slowAmount/100)));
+        AdjustSpeed((defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * (1 - (currentSlowAmount/100)));
         
         RotateTowardsTarget();
         CustomUpdate();
     }
-
     protected virtual void CustomUpdate() { }
     public void AdjustSpeed(float newSpeed)
     {
@@ -56,17 +62,16 @@ public class Enemy : MonoBehaviour
     {
         StartCoroutine(SlowForSeconds(slowPercent, duration));
     }
-    public void ApplySlowForOrbs(int orbCount)
+    public void ApplySlowForOrbsOnEnemy(int orbCount)
     {
-        slowAmount = slowPercentPerOrb * orbCount;
+        currentSlowAmount = slowPercentPerOrb * orbCount;
     }
     private IEnumerator SlowForSeconds(float slowPercent, float duration)
     {
-        slowAmount = slowPercent;
+        currentSlowAmount = slowPercent;
         yield return new WaitForSeconds(duration);
-        slowAmount = 0;
+        currentSlowAmount = 0;
     }
-    
     protected bool CheckDistanceToPlayer() //dusmanin playera uzakligini dondur
     {
         return Vector3.Distance(transform.position, target.transform.position) <= enemyMovementData.stoppingDistance;

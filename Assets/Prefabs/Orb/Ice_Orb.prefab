@@ -5186,11 +5186,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxDistance: 20
-  orbStats: {fileID: 0}
+  orbStats: {fileID: 7841533525167026272}
   startMaterial: {fileID: 2100000, guid: 652dbcfe3814521498b87d4ec4e4a300, type: 2}
-  _rigidBody: {fileID: 0}
-  _sphereCollider: {fileID: 0}
-  _renderer: {fileID: 0}
+  _rigidBody: {fileID: -5482772027941943934}
+  _sphereCollider: {fileID: 3125970163809097519}
+  _renderer: {fileID: 3888179991362403223}
+  slowPercent: 100
+  slowDurationOnSeconds: 1
+  slowRadius: 2.5
 --- !u!114 &7841533525167026272
 MonoBehaviour:
   m_ObjectHideFlags: 0
