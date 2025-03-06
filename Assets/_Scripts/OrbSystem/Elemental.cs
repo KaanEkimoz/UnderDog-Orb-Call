@@ -3,6 +3,7 @@
 /// </summary>
 public enum ElementalType
 {
+    None,
     /// <summary>
     /// Electric Orb:
     /// - Sticks to an enemy and jumps to nearby enemies as an electric current.

@@ -30,6 +30,13 @@ public class OrbController : MonoBehaviour
     [Header("Orb Materials")]
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private GameObject ghostOrbPrefab;
+    
+
+    //Orb Types
+    public const int SIMPLE_ORB_INDEX = 7;
+    public const int FIRE_ORB_INDEX = 8;
+    public const int ICE_ORB_INDEX = 9;
+    public const int ELECTRIC_ORB_INDEX = 10;
 
     // Events
     public event Action OnOrbThrowed;
@@ -206,9 +213,25 @@ public class OrbController : MonoBehaviour
             throwCooldownTimer -= Time.deltaTime * ((_playerStats.GetStat(PlayerStatType.AttackSpeed) / 10) + 1);
     }
 
-    public void AddOrb()
+    public void AddOrb(ElementalType elemantalType = ElementalType.None)
     {
-        SimpleOrb newOrb = objectPool.GetPooledObject(4).GetComponent<SimpleOrb>();
+        int spawnIndex;
+        switch (elemantalType)
+        {
+            case ElementalType.Fire:
+                spawnIndex = FIRE_ORB_INDEX;
+                break;
+            case ElementalType.Ice:
+                spawnIndex = ICE_ORB_INDEX;
+                break;
+            case ElementalType.Electric:
+                spawnIndex = ELECTRIC_ORB_INDEX;
+                break;
+            default:
+                spawnIndex = SIMPLE_ORB_INDEX;
+                break;
+        }
+        SimpleOrb newOrb = objectPool.GetPooledObject(spawnIndex).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
         newOrb.AssignPlayerStats(_playerStats);
 
