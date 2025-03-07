@@ -242,7 +242,6 @@ public class OrbController : MonoBehaviour
         newOrb.transform.position = ellipseCenterTransform.position;
         newOrb.AssignPlayerStats(_playerStats);
 
-        SimpleOrb newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
         InitializeOrbForController(newOrb);
         activeOrbCount++;
         OrbsOnEllipse.Add(newOrb);
@@ -283,7 +282,7 @@ public class OrbController : MonoBehaviour
         target.transform.position = ellipseCenterTransform.position;
         target.AssignPlayerStats(_playerStats);
 
-        target.OnDamageGiven += (float damage) => OnDamageGiven?.Invoke(damage);
+        //target.OnDamageGiven += (float damage) => OnDamageGiven?.Invoke(damage);
     }
 
     public void AddOrbToList(SimpleOrb orb)

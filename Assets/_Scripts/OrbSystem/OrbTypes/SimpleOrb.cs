@@ -40,7 +40,7 @@ public class SimpleOrb : MonoBehaviour
     private Vector3 startScale;
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
-    private const float ellipseReachThreshold = 0.15f;
+    private const float ellipseReachThreshold = 0.2f;
 
     //Throw
     private float distanceTraveled;
