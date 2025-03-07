@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe543c3788e85049bbb2bfc8ab3b032, type: 3}
-  m_Name: Orb Upgrade - Fast Orb
+  m_Name: Orb Upgrade - Electric Orb
   m_EditorClassIdentifier: 
-  Guid: 4b4d04d3-3544-4b8c-afb8-d0fd6ad27c88
-  Icon: {fileID: 21300000, guid: 751aa1b6637101946b2fdbb7aa27d6ad, type: 3}
-  DisplayName: Fast Orb
+  Guid: d8106ece-32bb-48e8-9cfc-5ebd5869b182
+  Icon: {fileID: 21300000, guid: ff7bfa7addf40784d86f62b8e4a034a6, type: 3}
+  DisplayName: Electric Orb
   Description: 
   CustomActions: []
+  m_prefab: {fileID: 5172868601544928626, guid: 5a71e4b2ee5b54b408611eef2fa7c0ee, type: 3}
   m_orbStatOverrides: []
   m_orbStatModifications: []
   m_orbStatCaps: []

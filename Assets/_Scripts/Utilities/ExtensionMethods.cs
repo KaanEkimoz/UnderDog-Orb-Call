@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.game.utilities
@@ -22,6 +23,19 @@ namespace com.game.utilities
         public static Vector3 ProjectZX(this Vector2 target)
         {
             return new Vector3(target.y, 0f, target.x);
+        }
+
+        public static bool ChangeKey<TKey, TValue>(this IDictionary<TKey, TValue> dict,
+                                           TKey oldKey, TKey newKey)
+        {
+            if (!dict.Remove(oldKey, out TValue value))
+                return false;
+
+            if (dict.ContainsKey(newKey))
+                return false;
+
+            dict.Add(newKey, value);
+            return true;
         }
     }
 }

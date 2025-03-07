@@ -38,7 +38,7 @@ namespace com.game.player
         [SerializeField, Min(0), EndFoldoutGroup()] private float m_halfVisionRadiusMultiplier;
 
         PlayerStats m_playerStats;
-        PlayerOrbHandler_Test m_orbHandler;
+        PlayerOrbHandler m_orbHandler;
         int m_orbsInHand;
         float m_rawLightStat;
         float m_generalCoefficient;

@@ -33,6 +33,7 @@ namespace com.game.ui
 
         ItemObject m_object;
         ItemProfileBase m_profile;
+        float m_nonInteractableAlpha = 0.5f;
 
         public ItemObject Target => m_object;
         public ItemProfileBase Profile => m_profile;
@@ -81,6 +82,11 @@ namespace com.game.ui
             Redraw();
         }
 
+        public void SetNonInteractableAlpha(float newValue)
+        {
+            m_nonInteractableAlpha = newValue;
+        }
+
         public void Refresh()
         {
             Redraw();
@@ -95,7 +101,8 @@ namespace com.game.ui
 
             if (!m_interactable)
             {
-                m_canvasGroup.alpha = 0.5f;
+                m_canvasGroup.alpha = m_nonInteractableAlpha;
+                m_canvasGroup.interactable = false;
                 UnlockOutline();
                 SetOutlineVisibility(false);
                 LockOutline();
@@ -104,6 +111,7 @@ namespace com.game.ui
             else
             {
                 m_canvasGroup.alpha = 1f;
+                m_canvasGroup.interactable = true;
                 UnlockOutline();
             }
         }

@@ -35,25 +35,74 @@ namespace com.game.ui
         [SerializeField] private float m_diameter;
         [SerializeField] private bool m_constantDescription;
 
+        public ButtonHandle ResetButton => m_resetButtonHandle;
+        public ButtonHandle BackButton => m_backButtonHandle;
+        public ButtonHandle ConfirmButton => m_confirmButtonHandle;
+
         PlayerOrbContainer m_container;
         Dictionary<SimpleOrb, OrbDisplay> m_displays = new();
         List<ItemDisplay> m_upgradeDisplays = new();
-
         ItemDisplay m_hoveredUpgradeDisplay;
         ItemDisplay m_selectedUpgradeDisplay;
-
         SimpleOrb m_hoveredOrb;
-
         bool m_undoable;
+
+        ButtonHandle m_resetButtonHandle;
+        ButtonHandle m_backButtonHandle;
+        ButtonHandle m_confirmButtonHandle;
 
         private void Start()
         {
             m_container = Player.Instance.Hub.OrbContainer;
             if (!m_constantDescription) InitializeDescriptionPanel(null);
 
+            CacheButtons();
+
             Hide(true);
-            SetupButton(m_confirmButton, ConfirmChanges);
-            SetupButton(m_resetButton, ResetChanges);
+        } 
+
+        void CacheButtons()
+        {
+            m_backButtonHandle = new ButtonHandle(m_backButton);
+            m_resetButtonHandle = new ButtonHandle(m_resetButton);
+            m_confirmButtonHandle = new ButtonHandle(m_confirmButton);
+
+            BackButton.Visibility = () => !HasCacheOrUndo();
+            ResetButton.Visibility = HasCacheOrUndo;
+            ConfirmButton.Visibility = HasCacheOrUndo;
+            ResetButton.Interactability = HasUndo;
+        }
+
+        void ResetButtons()
+        {
+            BackButton.ClearClickCallbacks();
+            ConfirmButton.ClearClickCallbacks();
+            ResetButton.ClearClickCallbacks();
+
+            ResetButton.OnClick += ResetChanges;
+            ConfirmButton.OnClick += ConfirmChanges;
+        }
+
+        void RefreshButtons()
+        {
+            BackButton.Refresh();
+            ConfirmButton.Refresh();
+            ResetButton.Refresh();
+        }
+
+        bool HasCacheOrUndo()
+        {
+            return HasCache() || HasUndo();
+        }
+
+        bool HasCache()
+        {
+            return m_container.UpgradeCache != null && m_container.UpgradeCache.Count > 0;
+        }
+
+        bool HasUndo()
+        {
+            return m_undoable;
         }
 
         public void SetUpgradeCache(IEnumerable<OrbItemProfile> enumerable)
@@ -64,9 +113,7 @@ namespace com.game.ui
         public void SetVisibility(bool visibility)
         {
             m_panel.SetActive(visibility);
-            SetupButtons(null, null);
-            SetupButton(m_confirmButton, ConfirmChanges);
-            RefreshButtonStates();
+            ResetButtons();
         }
 
         public void Show(bool refresh = false)
@@ -75,28 +122,10 @@ namespace com.game.ui
             SetVisibility(true);
         }
 
-        void RefreshButtonStates()
-        {
-            m_resetButton.gameObject.SetActive(m_container.UpgradeCache != null);
-            m_confirmButton.gameObject.SetActive(m_container.UpgradeCache != null);
-            m_resetButton.interactable = m_undoable;
-        }
-
         public void Hide(bool clear = false)
         {
             SetVisibility(false);
             if (clear) Clear();
-        }
-
-        public void SetupButtons(Action backButton, Action confirmButton)
-        {
-            SetupButton(m_backButton, backButton);
-            SetupButton(m_confirmButton, confirmButton);
-        }
-
-        public void SetupButtons(Action backButton)
-        {
-            SetupButton(m_backButton, backButton);
         }
 
         public void SoftRedraw()
@@ -110,7 +139,7 @@ namespace com.game.ui
             }
 
             InitializeDescriptionPanel(m_hoveredOrb);
-            RefreshButtonStates();
+            RefreshButtons();
         }
 
         public void HardRedraw()
@@ -118,7 +147,7 @@ namespace com.game.ui
             Clear();
             DrawOrbs();
             DrawUpgradeCache();
-            RefreshButtonStates();
+            RefreshButtons();
         }
 
         void DrawOrbs()
@@ -171,7 +200,7 @@ namespace com.game.ui
 
             UnselectCurrentUpgrade(true);
 
-            RefreshButtonStates();
+            RefreshButtons();
             InitializeDescriptionPanel(orb);
         }
 
@@ -191,7 +220,7 @@ namespace com.game.ui
             m_undoable = false;
             m_container.UndoAll();
 
-            RefreshButtonStates();
+            RefreshButtons();
             if (m_hoveredOrb != null) InitializeDescriptionPanel(m_hoveredOrb);
 
             UnselectCurrentUpgrade(false);
@@ -283,7 +312,7 @@ namespace com.game.ui
         void ConfirmChanges()
         {
             m_undoable = false;
-            m_container.ClearUndoHistory();
+            m_container.IrreversiblyApplyUndoCache();
         }
 
         void InitializeDescriptionPanel(SimpleOrb orb)

@@ -1,10 +1,9 @@
-using com.game.player;
 using com.game.player.scriptables;
 using UnityEngine;
 
-namespace com.game.testing
+namespace com.game.player
 {
-    public class PlayerOrbHandler_Test : MonoBehaviour
+    public class PlayerOrbHandler : MonoBehaviour
     {
         int m_orbsInHand;
         int m_maxOrbsInHand;
@@ -20,8 +19,8 @@ namespace com.game.testing
         private void Awake()
         {
             m_characterProfile = Player.Instance.CharacterProfile;
-            m_maxOrbsInHand = m_characterProfile.OrbCount;
-            m_orbsInHand = m_maxOrbsInHand;
+            m_orbsInHand = m_characterProfile.OrbCount;
+            m_maxOrbsInHand = Constants.Gameplay.MAX_ORBS_CAN_BE_HELD;
         }
 
         public void AddOrb()
