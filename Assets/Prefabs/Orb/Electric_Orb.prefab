@@ -157,16 +157,37 @@ MonoBehaviour:
   speedMultiplier: 1
   movementCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxDistance: 20
-  orbStats: {fileID: 0}
-  startMaterial: {fileID: 0}
-  _rigidBody: {fileID: 0}
-  _sphereCollider: {fileID: 0}
-  _renderer: {fileID: 0}
+  orbStats: {fileID: -7261617665073162034}
+  startMaterial: {fileID: 2100000, guid: 0a6a2c6a42b1c804a894a4137823582e, type: 2}
+  _rigidBody: {fileID: -8391953842116617128}
+  _sphereCollider: {fileID: 8268028412932555204}
+  _renderer: {fileID: 4106319513204084605}
+  onEllipseLifetime: 0.1
+  normalLifetime: 0.5
+  trailParticle: {fileID: 5112996817047285831}
   electricEffectDurationInSeconds: 0
   electrictEffectIntervalInSeconds: 0
   maxElectricBounceCount: 3

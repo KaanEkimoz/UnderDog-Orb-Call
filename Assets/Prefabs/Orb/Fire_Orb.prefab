@@ -9904,11 +9904,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxDistance: 20
-  orbStats: {fileID: 0}
-  startMaterial: {fileID: 0}
-  _rigidBody: {fileID: 0}
-  _sphereCollider: {fileID: 0}
-  _renderer: {fileID: 0}
+  orbStats: {fileID: -8209655953048531298}
+  startMaterial: {fileID: 2100000, guid: d7806691bf465c646b72b7d813169213, type: 2}
+  _rigidBody: {fileID: 3958211570668759935}
+  _sphereCollider: {fileID: 179486433590174850}
+  _renderer: {fileID: 6338541844397458439}
+  onEllipseLifetime: 0.1
+  normalLifetime: 0.5
+  trailParticle: {fileID: 1929282375273034525}
   fireDurationInSeconds: 1
   fireDamageIntervalInSeconds: 100
   fireDamageRadius: 10

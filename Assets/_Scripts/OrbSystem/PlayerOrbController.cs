@@ -41,9 +41,9 @@ public class OrbController : MonoBehaviour
     
     //Orb Types
     public const int SIMPLE_ORB_INDEX = 7;
-    public const int FIRE_ORB_INDEX = 8;
-    public const int ICE_ORB_INDEX = 9;
-    public const int ELECTRIC_ORB_INDEX = 10;
+    public const int FIRE_ORB_INDEX = 9;
+    public const int ICE_ORB_INDEX = 10;
+    public const int ELECTRIC_ORB_INDEX = 11;
 
     // Events
     public event Action OnOrbThrowed;
@@ -183,7 +183,7 @@ public class OrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb();
+            AddOrb(ElementalType.Fire);
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
