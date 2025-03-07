@@ -34,15 +34,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7892791133856918113, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.80686605
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7892791133856918113, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.80686605
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7892791133856918113, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.80686605
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7892791133856918113, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9134454142794667705, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -110,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyMovementData: {fileID: 11400000, guid: e5b2f0a111d087b4197a2780bff9ef50, type: 2}
+  slowPercentPerOrb: 25
   enemyStats: {fileID: 8405162856804353120}
   meleeAttackDelay: 2
   attackingCooldown: 2
