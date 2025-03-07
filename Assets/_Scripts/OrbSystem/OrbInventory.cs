@@ -13,12 +13,14 @@ namespace com.game.orbsystem
     [System.Serializable]
     public class OrbInventory : IInventory<ItemObject>
     {
+        public ItemObject CurrentItem => m_currentItem;
+        public OrbItemProfile CastedProfile => m_itemProfile;
+
         ItemObject m_currentItem;
         OrbStats m_stats;
 
         List<ModifierObject<OrbStatType>> m_modifiers;
-
-        public ItemObject CurrentItem => m_currentItem;
+        OrbItemProfile m_itemProfile;
 
         public OrbInventory(OrbStats stats)
         {
@@ -34,6 +36,7 @@ namespace com.game.orbsystem
             if (m_currentItem == null)
             {
                 m_currentItem = target;
+                m_itemProfile = profile;
                 ApplyStatModifiers(target, profile);
                 return true;
             }
@@ -47,6 +50,7 @@ namespace com.game.orbsystem
             RemoveCurrentElement();
 
             m_currentItem = ItemObject.Create(resultProfile);
+            m_itemProfile = resultProfile;
             ApplyStatModifiers(m_currentItem, resultProfile);
             return true;
         }
@@ -96,6 +100,7 @@ namespace com.game.orbsystem
 
             RevertCurrentModifiers();
             m_currentItem = null;
+            m_itemProfile = null;
         }
 
         public Sprite GetIcon()

@@ -1,7 +1,7 @@
 using com.game.itemsystem;
 using com.game.orbsystem;
 using com.game.orbsystem.itemsystemextensions;
-using System;
+using com.game.utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,7 +65,7 @@ namespace com.game.player
             if (!m_orbInventoryEntries.TryGetValue(target, out OrbInventory inventory))
                 return false;
 
-            OrbInventoryChange undo = new OrbInventoryAddItemChange(target, inventory);
+            OrbInventoryChange undo = new OrbInventoryAddItemChange(target, inventory, this);
             bool success = inventory.Add(ItemObject.Create(upgrade));
 
             if (success)
@@ -75,6 +75,28 @@ namespace com.game.player
             }
 
             return success;
+        }
+
+        public void IrreversiblyApplyUndoCache()
+        {
+            while (m_undoCache.TryPop(out OrbInventoryChange lastChange))
+            {
+                lastChange.Dispose();
+            }
+
+            ClearUndoHistory();
+        }
+
+        public bool SwapOrb(SimpleOrb target, SimpleOrb prefab)
+        {
+            bool result = m_targetController.SwapOrb(target, prefab, out SimpleOrb newOrb);
+
+            if (!result)
+                return false;
+
+            m_orbInventoryEntries.ChangeKey(target, newOrb);
+
+            return result;
         }
 
         public void ClearUndoHistory()

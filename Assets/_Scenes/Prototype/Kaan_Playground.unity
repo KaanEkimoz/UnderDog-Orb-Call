@@ -3387,17 +3387,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1284514659 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
-  m_PrefabInstance: {fileID: 5412284127006876646}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daf597b150ca24d46b9b01462e4bcda0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1284514660 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1786420952185557320, guid: eaac9086d8a94064c82406555006661b, type: 3}
@@ -4794,6 +4783,17 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 6628f1c6eaba347408e177c3a199fc6b, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &1792406521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+  m_PrefabInstance: {fileID: 5412284127006876646}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf597b150ca24d46b9b01462e4bcda0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1815993592
 GameObject:
   m_ObjectHideFlags: 0
@@ -5533,7 +5533,7 @@ PrefabInstance:
     - target: {fileID: 624608683657201586, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: objectPool
       value: 
-      objectReference: {fileID: 1284514659}
+      objectReference: {fileID: 1792406521}
     - target: {fileID: 2059313747511272117, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5822,7 +5822,7 @@ PrefabInstance:
     - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: pools.Array.data[4].objectPrefab
       value: 
-      objectReference: {fileID: 8886230964089384064, guid: 48afa4b6fa4d16341b1ce23285df9391, type: 3}
+      objectReference: {fileID: 8886230964089384064, guid: 5a71e4b2ee5b54b408611eef2fa7c0ee, type: 3}
     - target: {fileID: 7441109518502746199, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: m_Name
       value: ObjectPool
