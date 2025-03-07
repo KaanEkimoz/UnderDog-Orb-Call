@@ -8,7 +8,7 @@ namespace com.game.player
     public class PlayerComponentHub : MonoBehaviour
     {
         [SerializeField] private PlayerStats m_stats;
-        [SerializeField] private PlayerOrbHandler_Test m_orbHandler;
+        [SerializeField] private PlayerOrbHandler m_orbHandler;
         [SerializeField] private PlayerOrbContainer m_orbContainer;
         [SerializeField] private PlayerInventory m_inventory;
         [SerializeField] private PlayerLevelingLogic m_leveling;
@@ -19,7 +19,7 @@ namespace com.game.player
 
         public PlayerStats Stats => m_stats;
         public PlayerOrbContainer OrbContainer => m_orbContainer;
-        public PlayerOrbHandler_Test OrbHandler => m_orbHandler;
+        public PlayerOrbHandler OrbHandler => m_orbHandler;
         public PlayerInventory Inventory => m_inventory;
         public PlayerLevelingLogic Leveling => m_leveling;
         public PlayerMoneyLogic Money => m_money;

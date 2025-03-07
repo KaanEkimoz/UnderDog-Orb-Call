@@ -1061,7 +1061,9 @@ MonoBehaviour:
   m_iconImage: {fileID: 2542916945007389935}
   m_nameText: {fileID: 4692956916967022201}
   m_typeText: {fileID: 3409059233569783573}
+  m_descriptionPanel: {fileID: 0}
   m_descriptionText: {fileID: 6641161602396391962}
+  m_outline: {fileID: 0}
   m_canvasGroup: {fileID: 9040297652921272444}
   m_buyButton: {fileID: 2338685289799936562}
   m_buyButtonText: {fileID: 5078953936666443628}

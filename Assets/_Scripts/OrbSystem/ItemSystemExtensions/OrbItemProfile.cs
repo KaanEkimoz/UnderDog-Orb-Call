@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.attributes.experimental;
 using com.game.itemsystem;
 using com.game.itemsystem.scriptables;
 using com.game.orbsystem.statsystemextensions;
@@ -12,11 +13,17 @@ namespace com.game.orbsystem.itemsystemextensions
     [CreateAssetMenu(fileName = "New Orb Item", menuName = "Game/Item System/ Orb Item Profile", order = int.MinValue)]
     public class OrbItemProfile : ItemProfileBase
     {
+        [Space, Header3("Orb Logic")]
+
+        [SerializeField, Required, InlineEditor] private SimpleOrb m_prefab;
+
         [Space, Header3("Effects on Orb Stats")]
 
         [SerializeField] private List<OrbStatOverride> m_orbStatOverrides;
         [SerializeField] private List<OrbStatModification> m_orbStatModifications;
         [SerializeField] private List<OrbStatCap> m_orbStatCaps;
+
+        public SimpleOrb Prefab => m_prefab;
 
         public List<OrbStatOverride> StatOverrides => m_orbStatOverrides;
         public List<OrbStatModification> StatModifications => m_orbStatModifications;

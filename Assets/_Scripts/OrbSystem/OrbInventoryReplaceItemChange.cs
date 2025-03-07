@@ -1,4 +1,5 @@
 using com.game.itemsystem;
+using com.game.player;
 
 namespace com.game.orbsystem
 {
@@ -6,9 +7,14 @@ namespace com.game.orbsystem
     {
         ItemObject m_itemRemoved;
 
-        public OrbInventoryReplaceItemChange(SimpleOrb orb, OrbInventory inventory, ItemObject itemRemoved) : base(orb, inventory)
+        public OrbInventoryReplaceItemChange(SimpleOrb orb, OrbInventory inventory, ItemObject itemRemoved, PlayerOrbContainer master) : base(orb, inventory, master)
         {
             m_itemRemoved = itemRemoved;
+        }
+
+        public override void Dispose()
+        {
+            // swap orb prefab.
         }
 
         public override void Undo()

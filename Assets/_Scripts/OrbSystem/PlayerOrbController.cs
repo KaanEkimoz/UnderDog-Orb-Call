@@ -6,8 +6,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
+
 public class OrbController : MonoBehaviour
 {
+    public static readonly Dictionary<Type, int> OrbTypePoolIndexDict = new Dictionary<Type, int>()
+    {
+        { typeof(SimpleOrb), 0 },
+        { typeof(FireOrb), 2 },
+        { typeof(IceOrb), 3 },
+        { typeof(ElectricOrb), 4 },
+    };
+
     [Header("Orb Count")]
     [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
     [Range(0, 10)][SerializeField] private int orbCountAtStart;
@@ -233,6 +242,8 @@ public class OrbController : MonoBehaviour
         newOrb.transform.position = ellipseCenterTransform.position;
         newOrb.AssignPlayerStats(_playerStats);
 
+        SimpleOrb newOrb = objectPool.GetPooledObject(0).GetComponent<SimpleOrb>();
+        InitializeOrbForController(newOrb);
         activeOrbCount++;
         OrbsOnEllipse.Add(newOrb);
         CalculateAngleStep();
@@ -241,6 +252,38 @@ public class OrbController : MonoBehaviour
 
         Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbAdded?.Invoke(newOrb);
+    }
+
+    public bool SwapOrb(SimpleOrb target, SimpleOrb prefab, out SimpleOrb newOrb)
+    {
+        newOrb = null;
+        if (!OrbsOnEllipse.Contains(target))
+            return false;
+
+        if (OrbTypePoolIndexDict.TryGetValue(prefab.GetType(), out int poolIndex))
+        {
+            newOrb = objectPool.GetPooledObject(poolIndex).GetComponent<SimpleOrb>();
+        }
+
+        else
+        {
+            newOrb = Instantiate(prefab);
+        }
+
+        InitializeOrbForController(newOrb);
+
+        newOrb.transform.position = target.transform.position;
+        OrbsOnEllipse[OrbsOnEllipse.IndexOf(target)] = newOrb;
+
+        return true;
+    }
+
+    void InitializeOrbForController(SimpleOrb target)
+    {
+        target.transform.position = ellipseCenterTransform.position;
+        target.AssignPlayerStats(_playerStats);
+
+        target.OnDamageGiven += (float damage) => OnDamageGiven?.Invoke(damage);
     }
 
     public void AddOrbToList(SimpleOrb orb)
