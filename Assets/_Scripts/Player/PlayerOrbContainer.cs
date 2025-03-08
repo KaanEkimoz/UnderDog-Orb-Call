@@ -66,7 +66,7 @@ namespace com.game.player
                 return false;
 
             OrbInventoryChange undo = new OrbInventoryAddItemChange(target, inventory, this);
-            bool success = inventory.Add(ItemObject.Create(upgrade));
+            bool success = inventory.Add(new ItemObject<OrbItemProfile>(upgrade));
 
             if (success)
             {

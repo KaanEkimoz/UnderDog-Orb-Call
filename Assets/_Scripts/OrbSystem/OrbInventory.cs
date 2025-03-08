@@ -11,12 +11,12 @@ using UnityEngine;
 namespace com.game.orbsystem
 {
     [System.Serializable]
-    public class OrbInventory : IInventory<ItemObject>
+    public class OrbInventory : IInventory<OrbItemProfile>, IInventory<ItemObject<OrbItemProfile>>
     {
-        public ItemObject CurrentItem => m_currentItem;
+        public ItemObject<OrbItemProfile> CurrentItem => m_currentItem;
         public OrbItemProfile CastedProfile => m_itemProfile;
 
-        ItemObject m_currentItem;
+        ItemObject<OrbItemProfile> m_currentItem;
         OrbStats m_stats;
 
         List<ModifierObject<OrbStatType>> m_modifiers;
@@ -29,15 +29,16 @@ namespace com.game.orbsystem
             m_currentItem = null;
         }
 
-        public bool Add(ItemObject target)
+        public bool Add(OrbItemProfile profile)
         {
-            if (target.Profile is not OrbItemProfile profile) return false;
+            if (profile == null)
+                return false;
 
             if (m_currentItem == null)
             {
-                m_currentItem = target;
+                m_currentItem = new(profile);
                 m_itemProfile = profile;
-                ApplyStatModifiers(target, profile);
+                ApplyStatModifiers(m_currentItem);
                 return true;
             }
 
@@ -49,14 +50,72 @@ namespace com.game.orbsystem
 
             RemoveCurrentElement();
 
-            m_currentItem = ItemObject.Create(resultProfile);
+            m_currentItem = new(resultProfile);
             m_itemProfile = resultProfile;
-            ApplyStatModifiers(m_currentItem, resultProfile);
+            ApplyStatModifiers(m_currentItem);
             return true;
         }
 
-        private void ApplyStatModifiers(ItemObject targetItem, OrbItemProfile profile)
+        public bool Add(ItemObject<OrbItemProfile> target)
         {
+            if (target == null)
+                return false;
+
+            if (m_currentItem == null)
+            {
+                m_currentItem = target;
+                m_itemProfile = target.Profile;
+                ApplyStatModifiers(m_currentItem);
+                return true;
+            }
+
+            if (!ItemRecipeManager.Exists(m_currentItem.Profile, target.Profile, out ItemRecipeProfile recipeProfile))
+                return false;
+
+            if (ItemManager.GetItem(recipeProfile.ResultGuid) is not OrbItemProfile resultProfile)
+                return false;
+
+            RemoveCurrentElement();
+
+            m_currentItem = new(resultProfile);
+            m_itemProfile = resultProfile;
+            ApplyStatModifiers(m_currentItem);
+            return true;
+        }
+
+        /// <summary>
+        /// Use <see cref="RemoveCurrentElement"/> instead.
+        /// </summary>
+        /// <param name="target"></param>
+        [Obsolete]
+        public void Remove(ItemObject<OrbItemProfile> target)
+        {
+            
+        }
+
+        /// <summary>
+        /// Use <see cref="RemoveCurrentElement"/> instead.
+        /// </summary>
+        [Obsolete]
+        public void Remove(OrbItemProfile target)
+        {
+            RemoveCurrentElement();
+        }
+
+        public void RemoveCurrentElement()
+        {
+            if (m_currentItem == null)
+                return;
+
+            RevertCurrentModifiers();
+            m_currentItem = null;
+            m_itemProfile = null;
+        }
+
+        private void ApplyStatModifiers(ItemObject<OrbItemProfile> targetItem)
+        {
+            OrbItemProfile profile = targetItem.Profile;
+
             profile.StatModifications.ForEach(mod =>
             {
                 m_modifiers.Add(m_stats.Manipulator.ModifyWith(mod));
@@ -75,7 +134,7 @@ namespace com.game.orbsystem
             ItemActionDispatcher.DispatchAll(targetItem);
         }
 
-        void RevertCurrentModifiers() 
+        void RevertCurrentModifiers()
         {
             m_modifiers.ForEach(mod =>
             {
@@ -85,22 +144,6 @@ namespace com.game.orbsystem
             m_modifiers.Clear();
 
             // simply can not revert overrides, so...
-        }
-
-        [Obsolete]
-        public void Remove(ItemObject target)
-        {
-            RemoveCurrentElement();
-        }
-
-        public void RemoveCurrentElement()
-        {
-            if (m_currentItem == null)
-                return;
-
-            RevertCurrentModifiers();
-            m_currentItem = null;
-            m_itemProfile = null;
         }
 
         public Sprite GetIcon()

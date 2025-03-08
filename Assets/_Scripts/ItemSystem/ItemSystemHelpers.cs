@@ -32,14 +32,31 @@ namespace com.game.itemsystem
 
                 if (itemObject != null)
                 {
-                    string dataDesc = null;
-                    if (itemObject.CustomData.TryGetValue(ItemBehaviour.CustomDataKey, out object value))
+                    foreach (ItemBehaviour bhv in itemObject.Behaviours)
                     {
-                        dataDesc =  (value as ItemBehaviour).GenerateDataDescription(richText);
+                        sb.Append(bhv.GenerateDataDescription(richText));
                     }
-
-                    if (dataDesc != null) sb.Append(dataDesc);
                 }
+
+                return sb.ToString();
+            }
+
+            private static string GenerateCustomActionDescription_Internal(ItemObject context, ItemProfileBase profile, bool richText)
+            {
+                StringBuilder sb = new();
+
+                ItemBehaviour bhv = profile.Behaviour;
+                if (bhv != null)
+                {
+                    sb.Append(bhv.GenerateActionDescription(richText));
+                    sb.Append("\n");
+                }
+
+                profile.CustomActions.ForEach(act =>
+                {
+                    sb.Append(GenerateDescription_Internal(context, act, richText));
+                    sb.Append("\n");
+                });
 
                 return sb.ToString();
             }
@@ -47,19 +64,6 @@ namespace com.game.itemsystem
             private static string GenerateDescription_Internal(ItemObject context, ItemCustomAction action, bool richText)
             {
                 return action.ItemBehaviour.GenerateActionDescription(richText);
-            }
-
-            private static string GenerateCustomActionDescription_Internal(ItemObject context, ItemProfileBase profile, bool richText)
-            {
-                StringBuilder sb = new();
-
-                profile.CustomActions.ForEach(act =>
-                {
-                    sb.Append(ItemSystemHelpers.Text.GenerateDescription_Internal(context, act, richText));
-                    sb.Append("\n");
-                });
-
-                return sb.ToString();
             }
         }
     }

@@ -1,3 +1,4 @@
+using com.absence.utilities;
 using com.game.player;
 using DG.Tweening;
 using System;
@@ -7,6 +8,7 @@ using Zenject;
 
 namespace com.game.ui
 {
+    [DefaultExecutionOrder(100)]
     public class OrbUIUpdater : MonoBehaviour
     {
         [SerializeField] private float m_diameter;
@@ -18,6 +20,7 @@ namespace com.game.ui
         [SerializeField] private OrbDisplayGP m_prefab;
 
         OrbController m_orbController;
+        PlayerOrbContainer m_orbContainer;
         List<OrbDisplayGP> m_orbDisplays;
         int m_orbCount;
         float m_stepAngle;
@@ -34,6 +37,8 @@ namespace com.game.ui
 
         private void Start()
         {
+            m_orbContainer = Player.Instance.Hub.OrbContainer;
+
             SubscribeToEvents();
             FetchVariables();
 
@@ -80,21 +85,27 @@ namespace com.game.ui
 
             for (int i = 0; i < m_orbCount; i++)
             {
+                SimpleOrb orb = m_orbController.OrbsOnEllipse[i];
+
+                if (orb == null)
+                    continue;
+
                 float totalAngle = i * m_stepAngle;
                 float cos = Mathf.Cos(totalAngle * Mathf.Deg2Rad);
                 float sin = Mathf.Sin(totalAngle * Mathf.Deg2Rad);
                 Vector2 direction = new Vector2(sin, cos);
                 Vector2 position = direction * m_diameter;
 
+                if (i == 0) 
+                    m_orbSelectionBorder.localPosition = position;
+
                 OrbDisplayGP orbDisplay = Instantiate(m_prefab);
                 orbDisplay.transform.SetParent(m_pivot, false);
                 orbDisplay.transform.localPosition = position;
-
-                orbDisplay.Initialize(m_orbController.OrbsOnEllipse[i]);
+                
+                orbDisplay.Initialize(orb, m_orbContainer);
 
                 m_orbDisplays.Add(orbDisplay);
-
-                if (i == 0) m_orbSelectionBorder.localPosition = position;
             }
 
             m_orbSelectionBorder.SetAsFirstSibling();
@@ -132,6 +143,20 @@ namespace com.game.ui
             //m_orbDisplays[m_selectedOrbIndex].SetSelected(true);
 
             UpdateArrangement();
+        }
+
+        public void Redraw()
+        {
+            m_pivot.transform.eulerAngles = Vector3.zero;
+            m_pivot.DestroyChildren();
+            CreateOrbDisplays();
+
+            foreach (OrbDisplayGP display in m_orbDisplays)
+            {
+                display.Refresh();
+            }
+
+            SelectOrb(m_orbController.SelectedOrbIndex);
         }
 
         public void UpdateArrangement()
