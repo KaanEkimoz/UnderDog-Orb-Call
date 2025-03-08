@@ -8,10 +8,12 @@ using UnityEngine;
 public enum OrbState
 {
     OnEllipse,
+    OnEllipseMovement,
     Sticked,
     Throwing,
     Returning
 }
+
 [RequireComponent(typeof(Rigidbody), typeof(SphereCollider), typeof(MeshRenderer))]
 public class SimpleOrb : MonoBehaviour
 {
@@ -34,6 +36,11 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private Rigidbody _rigidBody;
     [SerializeField] private SphereCollider _sphereCollider;
     [SerializeField] private Renderer _renderer;
+    [Space]
+    [Header("Orb Effects")]
+    [SerializeField] private float onEllipseLifetime = 0.1f;
+    [SerializeField] private float normalLifetime = 0.5f;
+    [SerializeField] private ParticleSystem trailParticle;
 
     //Movement
     private Transform startParent;
@@ -68,6 +75,7 @@ public class SimpleOrb : MonoBehaviour
     private void Reset()
     {
         currentState = OrbState.OnEllipse;
+        trailParticle.startLifetime = onEllipseLifetime;
         CheckStartVariables();
     }
     private void CheckStartVariables()
@@ -101,6 +109,7 @@ public class SimpleOrb : MonoBehaviour
         if (currentState == OrbState.Returning && hasReachedTargetPos)
         {
             _sphereCollider.isTrigger = false;
+            trailParticle.startLifetime = onEllipseLifetime;
             currentState = OrbState.OnEllipse;
 
             OnReachedToEllipse?.Invoke();
@@ -148,6 +157,7 @@ public class SimpleOrb : MonoBehaviour
         throwStartPosition = transform.position;
         distanceTraveled = 0;
 
+        trailParticle.startLifetime = normalLifetime;
         SetTrigger(false);
         ApplyForce(forceDirection);
         
