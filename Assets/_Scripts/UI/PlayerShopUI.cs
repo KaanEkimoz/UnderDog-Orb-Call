@@ -148,7 +148,7 @@ namespace com.game.ui
                 return;
 
             m_money.Spend(playerItem.Price);
-            m_inventory.Add(ItemObject.Create(item));
+            m_inventory.Add(playerItem);
             display.Interactable = false;
 
             InvokeOnItemBought(playerItem);

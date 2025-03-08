@@ -4,17 +4,16 @@ using com.game.player.statsystemextensions;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 public class OrbController : MonoBehaviour
 {
     public static readonly Dictionary<Type, int> OrbTypePoolIndexDict = new Dictionary<Type, int>()
     {
-        { typeof(SimpleOrb), 0 },
-        { typeof(FireOrb), 2 },
-        { typeof(IceOrb), 3 },
-        { typeof(ElectricOrb), 4 },
+        { typeof(SimpleOrb), SIMPLE_ORB_INDEX },
+        { typeof(FireOrb), FIRE_ORB_INDEX },
+        { typeof(IceOrb), ICE_ORB_INDEX },
+        { typeof(ElectricOrb), ELECTRIC_ORB_INDEX },
     };
 
     [Header("Orb Count")]
@@ -65,6 +64,8 @@ public class OrbController : MonoBehaviour
     private int activeOrbCount = 0;
     private int selectedOrbIndex = 0;
     private float angleStep; // The angle between orbs
+
+    public int SelectedOrbIndex => selectedOrbIndex;
 
     private PlayerStats _playerStats;
 

@@ -1,13 +1,14 @@
 using com.game.itemsystem;
+using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
 
 namespace com.game.orbsystem
 {
     public class OrbInventoryReplaceItemChange : OrbInventoryChange
     {
-        ItemObject m_itemRemoved;
+        ItemObject<OrbItemProfile> m_itemRemoved;
 
-        public OrbInventoryReplaceItemChange(SimpleOrb orb, OrbInventory inventory, ItemObject itemRemoved, PlayerOrbContainer master) : base(orb, inventory, master)
+        public OrbInventoryReplaceItemChange(SimpleOrb orb, OrbInventory inventory, ItemObject<OrbItemProfile> itemRemoved, PlayerOrbContainer master) : base(orb, inventory, master)
         {
             m_itemRemoved = itemRemoved;
         }

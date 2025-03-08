@@ -39,6 +39,7 @@ namespace com.game.testing
         [SerializeField] OrbShopUI m_orbShopUI;
         [SerializeField] PlayerShopUI m_playerShopUI;
         [SerializeField] OrbContainerUI m_orbContainerUI;
+        [SerializeField] OrbUIUpdater m_orbUIUpdater;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
@@ -183,6 +184,8 @@ namespace com.game.testing
             m_pausedGame = true;
             m_passGUI = false;
             Game.Resume();
+
+            m_orbUIUpdater.Redraw();
         }
 
         private void Update()

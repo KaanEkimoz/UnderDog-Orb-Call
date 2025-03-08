@@ -946,6 +946,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341764067}
   m_CullTransparentMesh: 1
+--- !u!114 &355569671 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6289971877785400172, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
+  m_PrefabInstance: {fileID: 5428897805632023883}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6e6e3a8430a6e24bae4971f6575b488, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &374574694 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8731156883271716163, guid: 3111c9a7df1eeb544ac82f1d6dafaf46, type: 3}
@@ -5502,6 +5513,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 339635027}
     - target: {fileID: 3034433305378757382, guid: 21afb11011fcddd4f8fe9acc07770c5a, type: 3}
+      propertyPath: m_orbUIUpdater
+      value: 
+      objectReference: {fileID: 355569671}
+    - target: {fileID: 3034433305378757382, guid: 21afb11011fcddd4f8fe9acc07770c5a, type: 3}
       propertyPath: m_parryDisplay
       value: 
       objectReference: {fileID: 940577380}
@@ -5578,7 +5593,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerContainer
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4514606277654219830, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

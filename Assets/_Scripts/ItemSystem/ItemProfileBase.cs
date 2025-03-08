@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.attributes.experimental;
 using com.absence.utilities.experimental.databases;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,8 +27,9 @@ namespace com.game.itemsystem.scriptables
         [Multiline, Tooltip("Description of this item. It <b>MUST NOT</b> contain the stat modification log of the item.")] 
         public string Description;
 
-        [Space, Header3("Custom")]
+        [Space, Header3("Actions and Behaviour")]
         public List<ItemCustomAction> CustomActions = new();
+        [InlineEditor] public ItemBehaviour Behaviour;
 
         [Button("Generate Description")]
         protected void PrintFullDescription()

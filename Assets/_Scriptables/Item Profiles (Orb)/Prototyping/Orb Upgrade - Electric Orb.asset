@@ -16,6 +16,7 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: ff7bfa7addf40784d86f62b8e4a034a6, type: 3}
   DisplayName: Electric Orb
   Description: 
+  Behaviour: {fileID: 5413943036052786957, guid: a5df528c5b7446b438ed06048db5cdd6, type: 3}
   CustomActions: []
   m_prefab: {fileID: 5172868601544928626, guid: 5a71e4b2ee5b54b408611eef2fa7c0ee, type: 3}
   m_orbStatOverrides: []

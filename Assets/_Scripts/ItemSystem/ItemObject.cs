@@ -4,45 +4,77 @@ using System.Collections.Generic;
 
 namespace com.game.itemsystem
 {
-    /// <summary>
-    /// The reference type used for holding runtime data of an item instance.
-    /// </summary>
     [System.Serializable]
-    public class ItemObject : IDisposable
+    public abstract class ItemObject : IDisposable
     {
-        public ItemProfileBase Profile;
+        public static ItemObject<T> Create<T>(T profile) where T : ItemProfileBase
+        {
+            return new ItemObject<T>(profile);
+        }
+
+        public static ItemObject<T> Create<T>(string guid) where T : ItemProfileBase
+        {
+            return new ItemObject<T>(guid);
+        }
+
+        public ItemProfileBase Profile { get; }
+        public List<ItemBehaviour> Behaviours { get; protected set; }
         public Dictionary<string, object> CustomData = new();
 
         public event Action OnDispose = null;
 
-        public static ItemObject Create(ItemProfileBase profile)
+        public ItemObject(ItemProfileBase profile)
         {
-            return new ItemObject()
-            {
-                Profile = profile,
-                CustomData = new(),
-            };
+            Profile = profile;
+            Behaviours = new();
         }
 
-        public static ItemObject Create(string guid)
+        public ItemObject(string guid)
         {
-            ItemProfileBase profile = ItemManager.GetItem(guid);
+            Profile = ItemManager.GetItem(guid);
+            Behaviours = new();
+        }
+
+        protected void InvokeOnDispose()
+        {
+            OnDispose?.Invoke();
+        }
+        public abstract void Dispose();
+    }
+
+    /// <summary>
+    /// The reference type used for holding runtime data of an item instance.
+    /// </summary>
+    [System.Serializable]
+    public class ItemObject<T> : ItemObject where T : ItemProfileBase
+    {
+        public new T Profile { get; private set; }
+
+        public ItemObject(T profile) : base(profile)
+        {
+            if (profile == null)
+                throw new Exception("Provided item profile for ItemObject is null.");
+
+            Profile = profile;
+            CustomData = new();
+        }
+
+        public ItemObject(string guid) : base(guid)
+        {
+            T profile = ItemManager.GetItem<T>(guid);
 
             if (profile == null)
-                return null; 
+                throw new Exception("Provided item profile for ItemObject is null.");
 
-            return new ItemObject()
-            {
-                Profile = profile,
-                CustomData = new(),
-            };
+            Profile = profile;
+            CustomData = new();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Profile = null;
             CustomData = null;
-            OnDispose?.Invoke();
+            InvokeOnDispose();
         }
     }
 }
