@@ -18,6 +18,7 @@ namespace com.game.itemsystem
         }
 
         public ItemProfileBase Profile { get; }
+        public List<ItemBehaviour> Behaviours { get; protected set; }
         public Dictionary<string, object> CustomData = new();
 
         public event Action OnDispose = null;
@@ -25,11 +26,13 @@ namespace com.game.itemsystem
         public ItemObject(ItemProfileBase profile)
         {
             Profile = profile;
+            Behaviours = new();
         }
 
         public ItemObject(string guid)
         {
             Profile = ItemManager.GetItem(guid);
+            Behaviours = new();
         }
 
         protected void InvokeOnDispose()

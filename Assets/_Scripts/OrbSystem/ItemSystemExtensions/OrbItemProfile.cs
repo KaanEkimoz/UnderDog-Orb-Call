@@ -13,8 +13,6 @@ namespace com.game.orbsystem.itemsystemextensions
     [CreateAssetMenu(fileName = "New Orb Item", menuName = "Game/Item System/ Orb Item Profile", order = int.MinValue)]
     public class OrbItemProfile : ItemProfileBase
     {
-        [Space, Header3("Orb Logic")]
-
         [SerializeField, InlineEditor] private SimpleOrb m_prefab;
 
         [Space, Header3("Effects on Orb Stats")]
