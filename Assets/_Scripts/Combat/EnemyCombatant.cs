@@ -54,6 +54,8 @@ namespace com.game.enemysystem
                 Die();
             }
             enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
+
+            OnTakeDamage?.Invoke(damage);
             _playerCombatant.OnLifeSteal(realDamage);
         }
         public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
