@@ -1,4 +1,5 @@
 using com.game.itemsystem;
+using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
 using UnityEngine;
 
@@ -15,7 +16,12 @@ namespace com.game.orbsystem
 
         public override void Dispose()
         {
-            bool result = m_master.SwapOrb(m_target, m_inventory.CastedProfile.Prefab);
+            SimpleOrb prefab = m_inventory.CastedProfile.Prefab;
+
+            if (prefab == null)
+                return;
+
+            bool result = m_master.SwapOrb(m_target, prefab);
             if (result) GameObject.Destroy(m_target.gameObject);
         }
 
