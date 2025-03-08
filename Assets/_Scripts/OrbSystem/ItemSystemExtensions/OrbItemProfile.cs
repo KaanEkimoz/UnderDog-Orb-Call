@@ -15,7 +15,7 @@ namespace com.game.orbsystem.itemsystemextensions
     {
         [Space, Header3("Orb Logic")]
 
-        [SerializeField, Required, InlineEditor] private SimpleOrb m_prefab;
+        [SerializeField, InlineEditor] private SimpleOrb m_prefab;
 
         [Space, Header3("Effects on Orb Stats")]
 

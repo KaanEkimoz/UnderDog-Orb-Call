@@ -3,18 +3,19 @@ using com.game.player.itemsystemextensions;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace com.game.player
 {
-    public class PlayerInventory : MonoBehaviour, IInventory<ItemObject>
+    public class PlayerInventory : MonoBehaviour, IInventory<PlayerItemProfile>
     {
         //[SerializeField] private List<PlayerItemProfile> m_itemBank = new();
 
-        [SerializeField] private List<ItemObject> m_items = new();
+        [SerializeField] private List<ItemObject<PlayerItemProfile>> m_items = new();
 
         [SerializeField]
-        private Dictionary<ItemObject, List<ModifierObject<PlayerStatType>>>
+        private Dictionary<ItemObject<PlayerItemProfile>, List<ModifierObject<PlayerStatType>>>
             m_itemModifierEntries = new();
 
         string m_labelText = "No items selected.\n\nSelect an item to display its description here.";
@@ -28,26 +29,33 @@ namespace com.game.player
             //m_itemBank = ItemManager.GetItemsOfType<PlayerItemProfile>().ToList();
         }
 
-        public bool Add(ItemObject itemToAdd)
+        public bool Add(PlayerItemProfile itemProfile)
         {
-            if (itemToAdd.Profile is not PlayerItemProfile profile) return false;
+            if (itemProfile == null)
+                return false;
 
-            ApplyItemModifiers(itemToAdd, profile);
+            ItemObject<PlayerItemProfile> itemToAdd = new(itemProfile);
+
+            ApplyItemModifiers(itemToAdd, itemToAdd.Profile);
             m_items.Add(itemToAdd);
 
             return true;
         }
 
-        public void Remove(ItemObject itemToRemove)
+        public void Remove(PlayerItemProfile itemProfile)
         {
-            if (!m_items.Contains(itemToRemove)) return;
+            ItemObject<PlayerItemProfile> itemToRemove = 
+                m_items.FirstOrDefault(item => item.Profile.Equals(itemProfile));
+
+            if (itemToRemove == null)
+                return;
 
             m_items.Remove(itemToRemove);
             RevertItemModifiers(itemToRemove);
             itemToRemove.Dispose();
         }
 
-        void ApplyItemModifiers(ItemObject targetItem, PlayerItemProfile profile)
+        void ApplyItemModifiers(ItemObject<PlayerItemProfile> targetItem, PlayerItemProfile profile)
         {
             List<ModifierObject<PlayerStatType>> modifiers = new();
 
@@ -70,7 +78,7 @@ namespace com.game.player
             ItemActionDispatcher.DispatchAll(targetItem);
         }
 
-        void RevertItemModifiers(ItemObject targetItem)
+        void RevertItemModifiers(ItemObject<PlayerItemProfile> targetItem)
         {
             List<ModifierObject<PlayerStatType>> modifiers = m_itemModifierEntries[targetItem];
 

@@ -1,3 +1,4 @@
+using com.game.player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,16 +17,23 @@ namespace com.game.ui
         [SerializeField] private Transform m_swayPivot;
         [SerializeField] private float m_swayMagnitude;
 
+        Sprite m_initialSprite;
         bool m_isRotating = false;
         SimpleOrb m_orb;
+        PlayerOrbContainer m_container;
 
         private void Start()
         {
             SetDisplay(OrbState.OnEllipse);
         }
 
-        public void Initialize(SimpleOrb orb)
+        public void Initialize(SimpleOrb orb, PlayerOrbContainer container)
         {
+            if (orb == null)
+                throw new System.Exception("You can't initialize a gameplay orb display with a null orb reference.");
+
+            m_initialSprite = m_image.sprite;
+
             if (m_orb != null && m_orb != orb)
             {
                 m_orb.OnStateChanged -= OnOrbStateChanged;
@@ -33,6 +41,18 @@ namespace com.game.ui
 
             m_orb = orb;
             m_orb.OnStateChanged += OnOrbStateChanged;
+            m_container = container;
+
+            OnOrbStateChanged(m_orb.currentState);
+        }
+
+        public void Refresh()
+        {
+            if (m_orb == null)
+                return;
+
+            Sprite iconFound = m_container.OrbInventoryEntries[m_orb].GetIcon();
+            m_image.sprite = iconFound != null ? iconFound : m_initialSprite;
         }
 
         private void OnOrbStateChanged(OrbState state)
@@ -49,6 +69,12 @@ namespace com.game.ui
         public void SetRotating(bool rotating)
         {
             m_isRotating = rotating;
+        }
+
+        private void OnDestroy()
+        {
+            if (m_orb != null)
+                m_orb.OnStateChanged -= OnOrbStateChanged;
         }
 
         void SetDisplay(OrbState state)

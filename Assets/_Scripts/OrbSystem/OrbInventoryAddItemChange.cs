@@ -7,7 +7,7 @@ namespace com.game.orbsystem
 {
     public class OrbInventoryAddItemChange : OrbInventoryChange
     {
-        ItemObject m_previousItem;
+        ItemObject<OrbItemProfile> m_previousItem;
 
         public OrbInventoryAddItemChange(SimpleOrb orb, OrbInventory inventory, PlayerOrbContainer master) : base(orb, inventory, master)
         {
