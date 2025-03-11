@@ -10,7 +10,7 @@ namespace com.game
 {
     public class ItemRecipeManager
     {
-        public const bool ENABLED = true;
+        public const bool ENABLED = false;
         public const string ITEM_PROFILE_TAG = "recipe-profile";
 
 #if !(DEVELOPMENT_BUILD || UNITY_EDITOR)

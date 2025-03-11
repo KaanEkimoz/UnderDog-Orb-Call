@@ -67,7 +67,7 @@ public class RangedEnemy : Enemy
     }
     private EnemyProjectile CreateProjectile()
     {
-        EnemyProjectile projectile = _objectPool.GetPooledObject(1).GetComponent<EnemyProjectile>();
+        EnemyProjectile projectile = _objectPool.GetPooledObject(6).GetComponent<EnemyProjectile>();
         projectile.transform.position = firePoint.transform.position;
         projectile.SetDamage(enemyStats.GetStat(EnemyStatType.Damage));
 

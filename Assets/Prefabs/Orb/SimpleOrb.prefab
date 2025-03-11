@@ -193,6 +193,9 @@ MonoBehaviour:
   _rigidBody: {fileID: 4581226788505073321}
   _sphereCollider: {fileID: 3939961923203656775}
   _renderer: {fileID: 7423161256905524677}
+  onEllipseLifetime: 0.1
+  normalLifetime: 0.5
+  trailParticle: {fileID: 98057579503599703}
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,6 +269,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+--- !u!198 &98057579503599703 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3116474077841614375, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+  m_PrefabInstance: {fileID: 3054476768895215216}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &916647770219169639 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2799893417125994775, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
