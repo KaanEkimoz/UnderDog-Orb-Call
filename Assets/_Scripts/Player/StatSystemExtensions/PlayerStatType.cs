@@ -21,5 +21,7 @@
         CrowdControl,
         OrbThrowSpeed,
         OrbRecallSpeed,
+        OrbThrowDamage,
+        OrbRecallDamage,
     }
 }

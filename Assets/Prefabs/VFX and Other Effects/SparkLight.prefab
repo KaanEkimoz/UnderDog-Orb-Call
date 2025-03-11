@@ -47,7 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_startOnAwake: 1
   m_destroyOnEnd: 0
-  m_light: {fileID: 8997752854358287740}
+  m_lights:
+  - {fileID: 8997752854358287740}
   m_ease: 16
   m_durationRange: {x: 0.1, y: 0.2}
   m_cooldownRange: {x: 4.343465, y: 5}

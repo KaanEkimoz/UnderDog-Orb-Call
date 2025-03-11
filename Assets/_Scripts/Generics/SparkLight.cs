@@ -1,6 +1,7 @@
 using com.absence.attributes;
 using com.absence.timersystem;
 using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.game.generics
@@ -9,7 +10,7 @@ namespace com.game.generics
     {
         [SerializeField] private bool m_startOnAwake;
         [SerializeField] private bool m_destroyOnEnd;
-        [SerializeField, Required] private Light m_light;
+        [SerializeField, Required] private List<Light> m_lights;
         [SerializeField] private Ease m_ease;
         [SerializeField, MinMaxSlider(0f, 1f)] private Vector2 m_durationRange;
         [SerializeField, MinMaxSlider(0f, 5f)] private Vector2 m_cooldownRange;
@@ -19,7 +20,7 @@ namespace com.game.generics
         public bool InCooldown => m_inCooldown;
 
         bool m_inCooldown;
-        Tween m_tween;
+        Sequence m_sequence;
         Timer m_cooldownTimer;
 
         private void Awake()
@@ -30,41 +31,48 @@ namespace com.game.generics
 
         public void Spark()
         {
-            if (m_tween != null)
+            if (m_sequence != null)
                 return;
 
             if (InCooldown)
                 return;
 
-            m_light.intensity = m_intensityRange.y;
-            m_tween = m_light.DOIntensity(m_intensityRange.x, Random.Range(m_durationRange.x, m_durationRange.y))
-                .SetLoops(m_loops, LoopType.Yoyo)
+            m_sequence = DOTween.Sequence();
+            foreach (Light light in m_lights)
+            {
+                light.intensity = m_intensityRange.y;
+                Tween tween = light.DOIntensity(m_intensityRange.x, Random.Range(m_durationRange.x, m_durationRange.y));
+                m_sequence.Insert(0f, tween);
+            }
+
+            m_sequence
                 .SetEase(m_ease)
-                .OnComplete(OnTweenComplete)
-                .OnKill(OnTweenKill);
+                .SetLoops(m_loops, LoopType.Yoyo)
+                .OnComplete(OnSequenceComplete)
+                .OnKill(OnSequenceKill);
         }
 
         public void ForceStop()
         {
-            if (m_tween != null)
-                m_tween.Kill();
+            if (m_sequence != null)
+                m_sequence.Kill();
 
             if (InCooldown)
                 return;
 
-            m_light.intensity = 0f;
+            ResetAllLights();
         }
 
-        void OnTweenKill()
+        void OnSequenceKill()
         {
-            m_light.intensity = 0f;
-            m_tween = null;
+            ResetAllLights();
+            m_sequence = null;
         }
 
-        void OnTweenComplete()
+        void OnSequenceComplete()
         {
-            m_light.intensity = 0f;
-            m_tween = null;
+            ResetAllLights();
+            m_sequence = null;
 
             if (m_destroyOnEnd)
             {
@@ -77,10 +85,28 @@ namespace com.game.generics
             m_cooldownTimer.Start();
         }
 
+        void ResetAllLights()
+        {
+            foreach (Light light in m_lights)
+            {
+                ResetLight(light);
+            }
+        }
+
+        void ResetLight(Light target)
+        {
+            target.intensity = m_intensityRange.x;
+        }
+
         private void OnTimerComplete(TimerCompletionContext context)
         {
             m_cooldownTimer = null;
             m_inCooldown = false;
+        }
+
+        private void OnDestroy()
+        {
+            m_sequence?.Kill();
         }
     }
 }
