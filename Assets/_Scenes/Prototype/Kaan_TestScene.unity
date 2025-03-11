@@ -170,6 +170,7 @@ MonoBehaviour:
   m_orbShopUI: {fileID: 0}
   m_playerShopUI: {fileID: 0}
   m_orbContainerUI: {fileID: 0}
+  m_orbUIUpdater: {fileID: 0}
 --- !u!1 &59184530
 GameObject:
   m_ObjectHideFlags: 0
@@ -3622,6 +3623,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5186698659966051619, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.288
+      objectReference: {fileID: 0}
     - target: {fileID: 5895881473504401873, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3671,6 +3676,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+--- !u!4 &6049935697521339335 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5186698659966051619, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+  m_PrefabInstance: {fileID: 6049935697521339334}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6729136524546348393
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3732,21 +3742,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1886567772}
     - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
+      propertyPath: returnPointTransform
+      value: 
+      objectReference: {fileID: 6049935697521339335}
+    - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
       propertyPath: ellipseCenterTransform
       value: 
       objectReference: {fileID: 878954946}
-    - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
-      propertyPath: cooldownBetweenThrowsInSeconds
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 4548954406257375815, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
       propertyPath: m_Name
       value: OrbController
       objectReference: {fileID: 0}
-    - target: {fileID: 3632466980932172309, guid: 9f853b94f0a3d6d49a8225a4caa020a4, type: 3}
-      propertyPath: m_target
-      value: 
-      objectReference: {fileID: 878954946}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3991,6 +3997,10 @@ PrefabInstance:
     - target: {fileID: 5823711143753562362, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5878544681766094286, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1.4523926
       objectReference: {fileID: 0}
     - target: {fileID: 6210542738418727801, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
       propertyPath: m_AnchorMax.y

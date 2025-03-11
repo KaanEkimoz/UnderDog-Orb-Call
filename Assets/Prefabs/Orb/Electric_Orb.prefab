@@ -188,10 +188,12 @@ MonoBehaviour:
   onEllipseLifetime: 0.1
   normalLifetime: 0.5
   trailParticle: {fileID: 5112996817047285831}
-  electricEffectDurationInSeconds: 0
-  electrictEffectIntervalInSeconds: 0
   maxElectricBounceCount: 3
   electricBounceRadius: 15
+  electricEffectDurationInSeconds: 5
+  electrictEffectIntervalInSeconds: 1
+  lineRenderer: {fileID: 0}
+  lineDuration: 0.2
 --- !u!114 &-7261617665073162034
 MonoBehaviour:
   m_ObjectHideFlags: 0

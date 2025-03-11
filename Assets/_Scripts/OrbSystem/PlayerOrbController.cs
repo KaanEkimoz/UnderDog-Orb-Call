@@ -25,6 +25,7 @@ public class OrbController : MonoBehaviour
     [SerializeField] private LayerMask cursorDetectMask;
     [Header("Orb Recall")]
     [SerializeField] private float recallHoldTime = 0.2f;
+    [SerializeField] private Transform returnPointTransform;
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
     [SerializeField] private float ellipseXRadius = 0.5f;
@@ -133,7 +134,7 @@ public class OrbController : MonoBehaviour
     private void CallOrb(SimpleOrb orb)
     {
         if (orb.currentState != OrbState.Sticked) return;
-        orb.ReturnToPosition(firePointTransform.position);
+        orb.ReturnToPosition(returnPointTransform.position);
         Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();
     }
@@ -184,7 +185,7 @@ public class OrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb(ElementalType.None);
+            AddOrb(ElementalType.Electric);
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
@@ -347,7 +348,7 @@ public class OrbController : MonoBehaviour
             }
 
             if (OrbsOnEllipse[i].currentState == OrbState.Returning)
-                OrbsOnEllipse[i].SetNewDestination(firePointTransform.position);
+                OrbsOnEllipse[i].SetNewDestination(returnPointTransform.position);
         }
         UpdateSelectedOrbMaterial();
     }

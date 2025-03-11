@@ -85,6 +85,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 12544
   recallHoldTime: 0.2
+  returnPointTransform: {fileID: 0}
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
