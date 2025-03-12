@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace com.game
 {
     public class ElectricOrb : SimpleOrb, IElemental
@@ -10,12 +12,10 @@ namespace com.game
         [SerializeField] private float electricBounceRadius = 15f;
         [SerializeField] private float electricEffectDurationInSeconds = 5f;
         [SerializeField] private float electrictEffectIntervalInSeconds = 1f;
-        [Header("Electric Line")]
-        [SerializeField] private GameObject electricLine;
         [Space]
-        [Header("Line Renderer")]
-        [SerializeField] private LineRenderer lineRenderer;
-        [SerializeField] private float lineDuration = 0.2f;
+        [Header("Electric Line")]
+        [SerializeField] private GameObject electricLinePrefab; // Prefab for the electric line
+        [SerializeField] private float electricLineDuration = 0.2f;
 
         private List<IDamageable> affectedEnemies = new List<IDamageable>();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
@@ -30,41 +30,55 @@ namespace com.game
             int count = 0;
             foreach (var hitCollider in hitColliders)
             {
-                if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable) && count <= maxElectricBounceCount)
+                if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable) && count < maxElectricBounceCount)
                 {
                     hitDamageable.TakeDamageInSeconds(damage, electricEffectDurationInSeconds, electrictEffectIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                     count++;
                 }
             }
+
             DrawElectricLines();
         }
 
-
         private void DrawElectricLines()
         {
-            if (lineRenderer == null)
+            if (electricLinePrefab == null)
             {
-                Debug.LogWarning("LineRenderer is not assigned.");
+                Debug.LogWarning("ElectricLine prefab is not assigned.");
                 return;
             }
-            lineRenderer.positionCount = affectedEnemies.Count;
-            for (int i = 0; i < affectedEnemies.Count; i++)
+
+            // Draw lines between all affected enemies
+            for (int i = 0; i < affectedEnemies.Count - 1; i++)
             {
-                if (affectedEnemies[i] is Enemy enemy)
+                if (affectedEnemies[i] is Enemy startEnemy && affectedEnemies[i + 1] is Enemy endEnemy)
                 {
-                    lineRenderer.SetPosition(i, enemy.transform.position);
+                    // Instantiate the electric line prefab
+                    GameObject electricLineInstance = Instantiate(electricLinePrefab, transform.position, Quaternion.identity);
+
+                    // Get the ElectricLine component
+                    ElectricLine electricLine = electricLineInstance.GetComponent<ElectricLine>();
+
+                    if (electricLine != null)
+                    {
+                        // Set the start and end points
+                        electricLine.transformPointA = startEnemy.transform;
+                        electricLine.transformPointB = endEnemy.transform;
+
+                        // Destroy the electric line after a delay
+                        StartCoroutine(DestroyElectricLineAfterDelay(electricLineInstance, electricLineDuration));
+                    }
                 }
             }
-
-            StartCoroutine(ClearLineAfterDelay());
         }
 
-        private System.Collections.IEnumerator ClearLineAfterDelay()
+        private IEnumerator DestroyElectricLineAfterDelay(GameObject electricLineInstance, float delay)
         {
-            yield return new WaitForSeconds(lineDuration);
-            lineRenderer.positionCount = 0;
+            yield return new WaitForSeconds(delay);
+            Destroy(electricLineInstance);
         }
+
         protected override void ApplyCollisionEffects(Collision collisionObject)
         {
             base.ApplyCollisionEffects(collisionObject);
