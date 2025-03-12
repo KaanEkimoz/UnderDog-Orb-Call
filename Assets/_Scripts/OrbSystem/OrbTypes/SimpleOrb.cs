@@ -222,7 +222,6 @@ public class SimpleOrb : MonoBehaviour
             if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
         }
-
     }
     protected virtual void ApplyCollisionEffects(Collision collisionObject)
     {

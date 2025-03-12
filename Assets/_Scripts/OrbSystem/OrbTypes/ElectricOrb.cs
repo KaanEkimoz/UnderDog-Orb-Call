@@ -10,6 +10,8 @@ namespace com.game
         [SerializeField] private float electricBounceRadius = 15f;
         [SerializeField] private float electricEffectDurationInSeconds = 5f;
         [SerializeField] private float electrictEffectIntervalInSeconds = 1f;
+        [Header("Electric Line")]
+        [SerializeField] private GameObject electricLine;
         [Space]
         [Header("Line Renderer")]
         [SerializeField] private LineRenderer lineRenderer;
