@@ -21,8 +21,15 @@ public class Enemy : MonoBehaviour
 
     //Slow
     private float currentSlowAmount = 0;
+
+    //Dummy Mode
+    [Header("Dummy Mode")]
+    [SerializeField] protected bool isDummyModeActive = false;
+
     protected virtual void Start()
     {
+        if (isDummyModeActive) return;
+
         if(navMeshAgent == null)
             navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -49,7 +56,7 @@ public class Enemy : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (target == null) return;
+        if (isDummyModeActive || target == null) return;
 
         AdjustSpeed((defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * (1 - (currentSlowAmount/100)));
         
