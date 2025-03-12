@@ -26,6 +26,8 @@ public class RangedEnemy : Enemy
     }
     protected override void CustomUpdate()
     {
+        if (isDummyModeActive) return;
+
         navMeshAgent.SetDestination(target.transform.position);
 
         canSeePlayer = CanSeePlayer();

@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
@@ -10,13 +11,27 @@ public class EnemySpawner : MonoBehaviour
 
     private int enemyCount = 0;
 
+    private bool isCoroutineRunning;
+
     private void Start()
     {
         StartCoroutine(SpawnEnemies());
     }
 
+    private void Update() {
+
+        int EnemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
+        if (enemyCount < maxEnemyCount && !isCoroutineRunning)
+        {
+            StartCoroutine(SpawnEnemies());
+        }
+    }
+
     IEnumerator SpawnEnemies()
     {
+        isCoroutineRunning = true;
+
         while (enemyCount < maxEnemyCount)
         {
             int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
@@ -26,13 +41,13 @@ public class EnemySpawner : MonoBehaviour
             GameObject enemyPrefab = enemyPrefabs[randomEnemyIndex];
 
             Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-            enemyCount++;
+            //enemyCount++;
 
             yield return new WaitForSeconds(spawnDelay);
         }
+
+        isCoroutineRunning = false;
     }
-
-
 
 }
 
