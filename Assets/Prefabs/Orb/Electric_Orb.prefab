@@ -192,8 +192,8 @@ MonoBehaviour:
   electricBounceRadius: 15
   electricEffectDurationInSeconds: 5
   electrictEffectIntervalInSeconds: 1
-  lineRenderer: {fileID: 0}
-  lineDuration: 0.2
+  electricLineEffectPrefab: {fileID: 4255653483301192683, guid: b954bd2d90fa36542aa7568f516a286e, type: 3}
+  electricLineEffectDuration: 1
 --- !u!114 &-7261617665073162034
 MonoBehaviour:
   m_ObjectHideFlags: 0

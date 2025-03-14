@@ -4,8 +4,8 @@ using System.Collections;
 public class ElectricLine : MonoBehaviour
 {
     private LineRenderer lRend;
-    public Transform transformPointA;
-    public Transform transformPointB;
+    public Vector3 pointAposition;
+    public Vector3 pointBposition;
     private readonly int pointsCount = 5;
     private readonly int half = 2;
     private float randomness;
@@ -44,13 +44,13 @@ public class ElectricLine : MonoBehaviour
         {
             timer = 0;
 
-            points[pointIndexA] = transformPointA.position;
-            points[pointIndexE] = transformPointB.position;
+            points[pointIndexA] = pointAposition;
+            points[pointIndexE] = pointBposition;
             points[pointIndexC] = GetCenter(points[pointIndexA], points[pointIndexE]);
             points[pointIndexB] = GetCenter(points[pointIndexA], points[pointIndexC]);
             points[pointIndexD] = GetCenter(points[pointIndexC], points[pointIndexE]);
 
-            float distance = Vector3.Distance(transformPointA.position, transformPointB.position) / points.Length;
+            float distance = Vector3.Distance(pointAposition, pointBposition) / points.Length;
             mainTextureScale.x = distance;
             mainTextureOffset.x = Random.Range(-randomness, randomness);
             lRend.material.SetTextureScale(mainTexture, mainTextureScale);
