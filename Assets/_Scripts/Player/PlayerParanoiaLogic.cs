@@ -28,9 +28,12 @@ namespace com.game.player
             return SetToPercentage01(m_currentPercentage - percentage);
         }
 
-        public bool SetToSegment(int segment)
+        public bool SetToSegment(int segment, bool asIndex = false)
         {
             int max = Constants.Paranoia.PARANOIA_SEGMENT_COUNT;
+
+            if (asIndex) 
+                segment++;
 
             if (segment < 0 || segment > max)
                 return false;
