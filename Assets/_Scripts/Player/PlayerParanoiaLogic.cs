@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace com.game.player
@@ -11,6 +12,8 @@ namespace com.game.player
         public float TotalPercentage => m_currentPercentage * 100f;
         public int SegmentIndex => m_currentSegment;
         public int Segment => m_currentSegment + 1;
+
+        public event Action OnParanoiaSegmentChange = null;
 
         public bool Increase01(float percentage)
         {
@@ -71,7 +74,11 @@ namespace com.game.player
 
         void DoFetchSegment(float percentage, int max)
         {
+            int previousSegment = m_currentSegment;
             m_currentSegment = Mathf.FloorToInt(percentage * max);
+
+            if (previousSegment != m_currentSegment)
+                OnParanoiaSegmentChange?.Invoke();
         }
 
         private void OnValidate()
