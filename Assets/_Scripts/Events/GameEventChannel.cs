@@ -11,6 +11,8 @@ namespace com.game.events
         public static event Action OnWaveEnded;
         public static void CommitWaveEnd() => OnWaveEnded?.Invoke();
 
+        public static event Action OnGameStateChanged;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Reset()
         {

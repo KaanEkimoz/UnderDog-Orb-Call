@@ -32,10 +32,10 @@ namespace com.game.player
         {
             int max = Constants.Paranoia.PARANOIA_SEGMENT_COUNT;
 
-            if (segment < 1 || segment > max)
+            if (segment < 0 || segment > max)
                 return false;
 
-            return SetToPercentage01(segment / max);
+            return SetToPercentage01(segment / (float)max);
         }
 
         public bool SetToPercentage01(float percentage)
@@ -55,13 +55,20 @@ namespace com.game.player
             }
 
             m_currentPercentage = percentage;
+            Debug.Log(percentage);
+            FetchSegment();
 
             return result;
         }
 
         void FetchSegment()
         {
-            m_currentSegment = Mathf.FloorToInt(m_currentPercentage * Constants.Paranoia.PARANOIA_SEGMENT_COUNT);
+            DoFetchSegment(m_currentPercentage, Constants.Paranoia.PARANOIA_SEGMENT_COUNT);
+        }
+
+        void DoFetchSegment(float percentage, int max)
+        {
+            m_currentSegment = Mathf.FloorToInt(percentage * max);
         }
 
         private void OnValidate()
