@@ -27,5 +27,10 @@ namespace com.game
         {
             public const string RELEASE_BUILD_ASSET_LABEL = "release";
         }
+
+        public static class Placeholder
+        {
+            public static readonly UnityEngine.Vector3 AltarPosition = UnityEngine.Vector3.zero;
+        }
     }
 }

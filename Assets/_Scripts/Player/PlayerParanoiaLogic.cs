@@ -1,3 +1,4 @@
+using com.absence.attributes;
 using System;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace com.game.player
     public class PlayerParanoiaLogic : MonoBehaviour
     {
         [SerializeField, Range(0f, 1f)] float m_currentPercentage;
-        int m_currentSegment;
+        [SerializeField, Readonly] int m_currentSegment;
 
         public float TotalPercentage01 => m_currentPercentage;
         public float TotalPercentage => m_currentPercentage * 100f;
@@ -15,20 +16,20 @@ namespace com.game.player
 
         public event Action OnParanoiaSegmentChange = null;
 
-        public bool Increase01(float percentage)
+        public bool Increase(float percentage01)
         {
-            if (percentage < 0f)
-                return Decrease01(percentage);
+            if (percentage01 < 0f)
+                return Decrease(percentage01);
 
-            return SetToPercentage01(m_currentPercentage + percentage);
+            return SetToPercentage(m_currentPercentage + percentage01);
         }
 
-        public bool Decrease01(float percentage)
+        public bool Decrease(float percentage01)
         {
-            if (percentage < 0f)
-                return Increase01(percentage);
+            if (percentage01 < 0f)
+                return Increase(percentage01);
 
-            return SetToPercentage01(m_currentPercentage - percentage);
+            return SetToPercentage(m_currentPercentage - percentage01);
         }
 
         public bool SetToSegment(int segment, bool asIndex = false)
@@ -41,27 +42,26 @@ namespace com.game.player
             if (segment < 0 || segment > max)
                 return false;
 
-            return SetToPercentage01(segment / (float)max);
+            return SetToPercentage(segment / (float)max);
         }
 
-        public bool SetToPercentage01(float percentage)
+        public bool SetToPercentage(float percentage01)
         {
             bool result = true;
 
-            if (percentage < 0f)
+            if (percentage01 < 0f)
             {
-                percentage = 0f;
+                percentage01 = 0f;
                 result = false;
             }
 
-            else if (percentage > 1f)
+            else if (percentage01 > 1f)
             {
-                percentage = 1f;
+                percentage01 = 1f;
                 result = false;
             }
 
-            m_currentPercentage = percentage;
-            Debug.Log(percentage);
+            m_currentPercentage = percentage01;
             FetchSegment();
 
             return result;

@@ -5474,6 +5474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed09a95ae552a2943856f4bc90267ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_state: 0
   m_orbShopUI: {fileID: 339635027}
   m_playerShopUI: {fileID: 2106000671}
   m_orbContainerUI: {fileID: 374574694}

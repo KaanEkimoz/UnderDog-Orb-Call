@@ -11,13 +11,19 @@ namespace com.game.events
         public static event Action OnWaveEnded;
         public static void CommitWaveEnd() => OnWaveEnded?.Invoke();
 
+        public static event Action OnAltarCooldownEnded;
+        public static void CommitAltarCooldownEnd() => OnAltarCooldownEnded?.Invoke();
+
         public static event Action OnGameStateChanged;
+        public static void CommitGameStateChange() => OnGameStateChanged?.Invoke();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Reset()
         {
             OnWaveStarted = null;
             OnWaveEnded = null;
+            OnGameStateChanged = null;
+            OnAltarCooldownEnded = null;
         }
     }
 }
