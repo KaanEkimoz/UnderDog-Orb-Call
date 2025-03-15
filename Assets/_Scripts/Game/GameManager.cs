@@ -106,6 +106,7 @@ namespace com.game
 
         void DoNotStarted()
         {
+            m_orbUpgradeCache = new();
             m_levelsGained = 0;
             m_wavesEnded = 0;
 
