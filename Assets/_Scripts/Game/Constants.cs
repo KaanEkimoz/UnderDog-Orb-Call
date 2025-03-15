@@ -12,6 +12,11 @@ namespace com.game
             public const int MAX_ORBS_CAN_BE_HELD = 12;
         }
 
+        public static class Paranoia
+        {
+            public const int PARANOIA_SEGMENT_COUNT = 5;
+        }
+
         public static class Shopping
         {
             public const int PLAYER_SHOP_CAPACITY = 4;
