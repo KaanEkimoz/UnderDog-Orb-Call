@@ -1,3 +1,4 @@
+using com.game.events;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,6 +55,7 @@ namespace com.game.player
             m_currentLevel += amount;
             m_targetExperience = m_placeholder[m_currentLevel - 1];
             OnLevelUp?.Invoke(this);
+            PlayerEventChannel.CommitLevelUp(this);
         }
 
         public void LevelUp()
