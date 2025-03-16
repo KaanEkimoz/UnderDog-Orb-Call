@@ -14,9 +14,11 @@ namespace com.game
         [SerializeField] private float electricEffectDurationInSeconds = 5f;
         [SerializeField] private float electrictEffectIntervalInSeconds = 1f;
         [Space]
+        [Header("Collision Instant Electric Effect")]
+        [SerializeField] private GameObject electricEffectPrefab;
         [Header("Electric Line Effect")]
-        [SerializeField] private GameObject electricLineEffectPrefab; // Prefab for the electric line
-        [SerializeField] private float electricLineEffectDuration = 0.2f;
+        [SerializeField] private GameObject electricChainEffectPrefab; // Prefab for the electric line
+        [SerializeField] private float electricChainEffectDuration = 0.2f;
 
         private List<IDamageable> affectedEnemies = new List<IDamageable>();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
@@ -45,16 +47,16 @@ namespace com.game
             // Apply damage to the closest enemies
             foreach (var item in sortedDamageables)
             {
+                if (item.Collider.gameObject.CompareTag("Player"))
+                    continue;
+
                 if (item.Collider.gameObject.TryGetComponent(out IDamageable hitDamageable))
                 {
                     hitDamageable.TakeDamageInSeconds(damage, electricEffectDurationInSeconds, electrictEffectIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                 }
             }
-
-            
-
-            if (electricLineEffectPrefab == null)
+            if (electricChainEffectPrefab == null)
             {
                 Debug.LogWarning("ElectricLine prefab is not assigned.");
                 return;
@@ -68,14 +70,6 @@ namespace com.game
             }
 
             StartCoroutine(nameof(CreateChainElectricEffectWithIntervals));
-            DrawElectricLines();
-        }
-
-        private void DrawElectricLines()
-        {
-            
-
-            
         }
         private void CreateElectricLineBetweenInRangeEnemies()
         {
@@ -105,7 +99,7 @@ namespace com.game
         }
         private void CreateElectricLine(Vector3 startPos, Vector3 endPos)
         {
-            GameObject electricLineInstance = Instantiate(electricLineEffectPrefab, startPos, Quaternion.identity);
+            GameObject electricLineInstance = Instantiate(electricChainEffectPrefab, startPos, Quaternion.identity);
 
             // Get the ElectricLine component
             ElectricLine electricLine = electricLineInstance.GetComponent<ElectricLine>();
@@ -117,7 +111,7 @@ namespace com.game
                 electricLine.pointBposition = endPos;
 
                 // Destroy the electric line after a delay
-                StartCoroutine(DestroyElectricLineAfterDelay(electricLineInstance, electricLineEffectDuration));
+                StartCoroutine(DestroyElectricLineAfterDelay(electricLineInstance, electricChainEffectDuration));
             }
         }
         private IEnumerator DestroyElectricLineAfterDelay(GameObject electricLineInstance, float delay)
