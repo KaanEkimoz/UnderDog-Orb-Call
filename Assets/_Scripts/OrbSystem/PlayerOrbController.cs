@@ -185,7 +185,7 @@ public class OrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb(ElementalType.Electric);
+            AddOrb(ElementalType.Fire);
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
