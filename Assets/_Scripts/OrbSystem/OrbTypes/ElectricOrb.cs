@@ -52,11 +52,8 @@ namespace com.game
                 }
             }
 
-            DrawElectricLines();
-        }
+            
 
-        private void DrawElectricLines()
-        {
             if (electricLineEffectPrefab == null)
             {
                 Debug.LogWarning("ElectricLine prefab is not assigned.");
@@ -70,54 +67,64 @@ namespace com.game
                 return;
             }
 
-            // Get the first enemy (initial target)
-            MonoBehaviour firstEnemy = affectedEnemies[0] as MonoBehaviour;
-            if (firstEnemy == null)
-            {
-                Debug.LogWarning("First enemy is not a MonoBehaviour.");
-                return;
-            }
-
-            // Get the center position of the first enemy
-            Vector3 firstEnemyPosition = firstEnemy.GetComponentInChildren<MeshRenderer>().bounds.center;
-
-            // Draw lines from the first enemy to all other affected enemies
-            for (int i = 1; i < affectedEnemies.Count; i++)
-            {
-                MonoBehaviour currentEnemy = affectedEnemies[i] as MonoBehaviour;
-                if (currentEnemy == null)
-                {
-                    Debug.LogWarning($"Enemy at index {i} is not a MonoBehaviour.");
-                    continue;
-                }
-
-                // Get the center position of the current enemy
-                Vector3 currentEnemyPosition = currentEnemy.GetComponentInChildren<MeshRenderer>().bounds.center;
-
-                // Instantiate the electric line prefab
-                GameObject electricLineInstance = Instantiate(electricLineEffectPrefab, firstEnemyPosition, Quaternion.identity);
-
-                // Get the ElectricLine component
-                ElectricLine electricLine = electricLineInstance.GetComponent<ElectricLine>();
-
-                if (electricLine != null)
-                {
-                    // Set the start and end points
-                    electricLine.pointAposition = firstEnemyPosition;
-                    electricLine.pointBposition = currentEnemyPosition;
-
-                    // Destroy the electric line after a delay
-                    StartCoroutine(DestroyElectricLineAfterDelay(electricLineInstance, electricLineEffectDuration));
-                }
-            }
+            StartCoroutine(nameof(CreateChainElectricEffectWithIntervals));
+            DrawElectricLines();
         }
 
+        private void DrawElectricLines()
+        {
+            
+
+            
+        }
+        private void CreateElectricLineBetweenInRangeEnemies()
+        {
+            MonoBehaviour firstEnemy = affectedEnemies[0] as MonoBehaviour;
+            Vector3 firstEnemyPosition = firstEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; //Center Position
+
+            for (int i = 1; i < affectedEnemies.Count; i++)
+            {
+                MonoBehaviour nextEnemy = affectedEnemies[i] as MonoBehaviour;
+                
+                Vector3 nextEnemyPosition = nextEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; // Center Position
+
+                CreateElectricLine(firstEnemyPosition, nextEnemyPosition);
+            }
+        }
+        private IEnumerator CreateChainElectricEffectWithIntervals()
+        {
+            float elapsedTime = 0f;
+            float damageDivider = electricEffectDurationInSeconds / electrictEffectIntervalInSeconds;
+
+            while (elapsedTime < electricEffectDurationInSeconds)
+            {
+                CreateElectricLineBetweenInRangeEnemies();
+                elapsedTime += electrictEffectIntervalInSeconds;
+                yield return new WaitForSeconds(electrictEffectIntervalInSeconds);
+            }
+        }
+        private void CreateElectricLine(Vector3 startPos, Vector3 endPos)
+        {
+            GameObject electricLineInstance = Instantiate(electricLineEffectPrefab, startPos, Quaternion.identity);
+
+            // Get the ElectricLine component
+            ElectricLine electricLine = electricLineInstance.GetComponent<ElectricLine>();
+
+            if (electricLine != null)
+            {
+                // Set the start and end points
+                electricLine.pointAposition = startPos;
+                electricLine.pointBposition = endPos;
+
+                // Destroy the electric line after a delay
+                StartCoroutine(DestroyElectricLineAfterDelay(electricLineInstance, electricLineEffectDuration));
+            }
+        }
         private IEnumerator DestroyElectricLineAfterDelay(GameObject electricLineInstance, float delay)
         {
             yield return new WaitForSeconds(delay);
             Destroy(electricLineInstance);
         }
-
         protected override void ApplyCollisionEffects(Collision collisionObject)
         {
             base.ApplyCollisionEffects(collisionObject);

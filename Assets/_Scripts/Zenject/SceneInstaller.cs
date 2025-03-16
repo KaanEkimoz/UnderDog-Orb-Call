@@ -1,4 +1,5 @@
 using com.game.player;
+using UnityEngine;
 using Zenject;
 public class SceneInstaller : MonoInstaller
 {
@@ -8,5 +9,7 @@ public class SceneInstaller : MonoInstaller
         Container.Bind<SoundFXManager>().FromComponentInHierarchy().AsSingle();
         Container.Bind<OrbController>().FromComponentInHierarchy().AsSingle();
         Container.Bind<PlayerCombatant>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<ZenjectMemoryPool>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
+        //Container.BindMemoryPool<GameObject,ZenjectMemoryPool>
     }
 }
