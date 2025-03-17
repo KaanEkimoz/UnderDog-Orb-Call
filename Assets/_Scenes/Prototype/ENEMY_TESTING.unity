@@ -9657,10 +9657,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5186698659966051619, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.288
-      objectReference: {fileID: 0}
     - target: {fileID: 5895881473504401873, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -9783,10 +9779,6 @@ PrefabInstance:
       propertyPath: ellipseCenterTransform
       value: 
       objectReference: {fileID: 878954946}
-    - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
-      propertyPath: aimCursorDetectMask.m_Bits
-      value: 8449
-      objectReference: {fileID: 0}
     - target: {fileID: 4548954406257375815, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
       propertyPath: m_Name
       value: OrbController
