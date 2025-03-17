@@ -4,11 +4,11 @@ namespace com.game
     public class IceOrb : SimpleOrb, IElemental
     {
         [Space]
-        [Header("Slow")]
+        [Header("Ice")]
         [Range(0f, 100f)]
-        [SerializeField] float slowPercent = 100f;
-        [SerializeField] float slowDurationInSeconds = 1f;
-        [SerializeField] float slowRadius = 10f;
+        [SerializeField] float iceSlowPercent = 100f;
+        [SerializeField] float iceSlowDurationInSeconds = 1f;
+        [SerializeField] float iceSlowRadius = 10f;
 
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
@@ -21,11 +21,11 @@ namespace com.game
             //if(collisionObject.gameObject.TryGetComponent(out Enemy hitEnemy))
               //  hitEnemy.ApplySlowForSeconds(slowPercent, slowDurationOnSeconds);
 
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, slowRadius);
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
             foreach (var hitCollider in hitColliders)
             {
                 if (hitCollider.gameObject.TryGetComponent(out Enemy hitEnemy))
-                    hitEnemy.ApplySlowForSeconds(slowPercent, slowDurationInSeconds);
+                    hitEnemy.ApplySlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
             }
         }
 
@@ -38,7 +38,7 @@ namespace com.game
             if (currentState != OrbState.OnEllipse)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawSphere(transform.position, slowRadius);
+                Gizmos.DrawSphere(transform.position, iceSlowRadius);
             }
         }
 

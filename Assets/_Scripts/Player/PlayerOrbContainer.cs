@@ -37,7 +37,7 @@ namespace com.game.player
         public void Refresh()
         {
             Dictionary<SimpleOrb, OrbInventory> temp = new();
-            foreach (SimpleOrb orb in m_targetController.OrbsOnEllipse)
+            foreach (SimpleOrb orb in m_targetController.orbsOnEllipse)
             {
                 if (m_orbInventoryEntries.TryGetValue(orb, out OrbInventory inventory))
                     temp.Add(orb, inventory);

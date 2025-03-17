@@ -30,6 +30,7 @@ namespace com.game.enemysystem
         public event Action OnDie = delegate { };
 
         [Inject] PlayerCombatant _playerCombatant;
+        [Inject] OrbController _orbController;
 
         private void Start()
         {
