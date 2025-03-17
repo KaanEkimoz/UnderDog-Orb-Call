@@ -1318,7 +1318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_intensityRange.y
-      value: 0.37237275
+      value: 0.48498535
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_lights.Array.size

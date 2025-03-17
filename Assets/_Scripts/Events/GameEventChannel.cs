@@ -14,8 +14,8 @@ namespace com.game.events
         public static event Action OnAltarCooldownEnded;
         public static void CommitAltarCooldownEnd() => OnAltarCooldownEnded?.Invoke();
 
-        public static event Action OnGameStateChanged;
-        public static void CommitGameStateChange() => OnGameStateChanged?.Invoke();
+        public static event Action<GameState> OnGameStateChanged;
+        public static void CommitGameStateChange(GameState state) => OnGameStateChanged?.Invoke(state);
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Reset()

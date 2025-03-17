@@ -16,6 +16,11 @@ namespace com.game.player
 
         public event Action OnParanoiaSegmentChange = null;
 
+        //private void Start()
+        //{
+        //    OnParanoiaSegmentChange += () => Debug.Log(m_currentSegment);
+        //}
+
         public bool Increase(float percentage01)
         {
             if (percentage01 < 0f)

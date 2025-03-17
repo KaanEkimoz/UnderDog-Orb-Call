@@ -6,6 +6,7 @@ using com.game.orbsystem;
 using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
 using com.game.ui;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,8 +21,10 @@ namespace com.game
         [SerializeField] OrbContainerUI m_orbContainerUI;
         [SerializeField] OrbUIUpdater m_orbUIUpdater;
 
+        public GameState State => m_state;
         public int LevelsGainedCurrentWave => m_levelsGained;
         public int EndedWaveCount => m_wavesEnded;
+        public float StartTimeOfCurrentWave => m_waveStartTime;
 
         PlayerStats m_playerStats;
         PlayerInventory m_playerInventory;
@@ -33,6 +36,7 @@ namespace com.game
 
         int m_levelsGained;
         int m_wavesEnded;
+        float m_waveStartTime;
         List<OrbItemProfile> m_orbUpgradeCache;
 
         private void Start()
@@ -210,6 +214,8 @@ namespace com.game
             m_playerShopUI.Hide(true);
 
             Game.Resume();
+
+            m_waveStartTime = Time.time;
 
             m_orbUIUpdater.Redraw();
             m_playerParanoiaLogic.SetToSegment(m_wavesEnded);
