@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_formation: 1
   m_transitionEase: 15
-  m_scalingFactor: 0.4
+  m_scalingFactor: 0.6
   m_transitionDuration: 0.3
   m_orbSelectionBorder: {fileID: 71412345371158903}
   m_contentRoot: {fileID: 5112361784303128516}

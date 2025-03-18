@@ -1,4 +1,5 @@
 using com.game.enemysystem;
+using com.game.player;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,7 +39,8 @@ public class EnemySpawner : MonoBehaviour
             Transform spawnPoint = GetRandomSpawnPoint();
             GameObject enemyPrefab = GetRandomEnemyPrefab();
 
-            Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            enemy.GetComponentInChildren<EnemyCombatant>().ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
             enemyCount++;
 
             yield return new WaitForSeconds(spawnDelay);

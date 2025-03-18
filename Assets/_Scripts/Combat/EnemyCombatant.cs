@@ -30,7 +30,7 @@ namespace com.game.enemysystem
         public event Action<float> OnTakeDamage = delegate { };
         public event Action OnDie = delegate { };
 
-        [Inject] PlayerCombatant _playerCombatant;
+        PlayerCombatant _playerCombatant;
         [Inject] OrbController _orbController;
 
         private void Awake()
@@ -40,6 +40,10 @@ namespace com.game.enemysystem
 
             _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;
+        }
+        public void ProvidePlayerCombatant(PlayerCombatant playerCombatant)
+        {
+            _playerCombatant = playerCombatant;
         }
         public void TakeDamage(float damage)
         {

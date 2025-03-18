@@ -225,6 +225,37 @@ Transform:
   - {fileID: 8378299132602684338}
   m_Father: {fileID: 3844655614349922649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &632569209897761825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6087539927713434286}
+  m_Layer: 3
+  m_Name: PlayerReturnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6087539927713434286
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632569209897761825}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5895881473504401873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &789353723948150089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1908,6 +1939,7 @@ Transform:
   - {fileID: 3942785659931487991}
   - {fileID: 209215095016149368}
   - {fileID: 6217975671610255821}
+  - {fileID: 6087539927713434286}
   - {fileID: 3044074994272069983}
   - {fileID: 9207065407446957352}
   - {fileID: 3541386000058387830}
@@ -2364,6 +2396,7 @@ MonoBehaviour:
   m_playerShop: {fileID: 2931718653374058200}
   m_orbUpgradeShop: {fileID: 1493889740054554536}
   m_abilities: {fileID: 2814813539509469751}
+  m_combatant: {fileID: 421993215095397046}
   m_entity: {fileID: 0}
 --- !u!114 &6740164441137565520
 MonoBehaviour:

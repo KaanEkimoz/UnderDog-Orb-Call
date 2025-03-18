@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.game.player;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -90,6 +91,7 @@ namespace com.game.enemysystem
 
             GameObject enemy = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
             EnemyCombatant combatant = enemy.GetComponentInChildren<EnemyCombatant>();
+            combatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
 
             if (m_fakeMovementData != null) combatant.Owner.enemyMovementData = m_fakeMovementData;
             combatant.ReinitializeAsFake();

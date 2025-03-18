@@ -5946,10 +5946,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: HorizontalOrbUI
       objectReference: {fileID: 0}
-    - target: {fileID: 5596012284205037616, guid: 46123042dda93a44d99e23fee27ca5a5, type: 3}
-      propertyPath: m_scalingFactor
-      value: 0.6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
