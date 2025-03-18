@@ -125,13 +125,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6e6e3a8430a6e24bae4971f6575b488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_diameter: 125
-  m_rotationEase: 15
+  m_formation: 0
+  m_transitionEase: 15
   m_scalingFactor: 0.759
-  m_rotatingDuration: 0.3
+  m_transitionDuration: 0.3
   m_orbSelectionBorder: {fileID: 7347919946122538709}
-  m_pivot: {fileID: 7106016853750999003}
+  m_contentRoot: {fileID: 7106016853750999003}
   m_prefab: {fileID: 2008251729403273151, guid: 67d630058b23adc468744cf041c53ee2, type: 3}
+  m_diameter: 125
+  m_group: {fileID: 0}
 --- !u!1 &8134802101820398001
 GameObject:
   m_ObjectHideFlags: 0

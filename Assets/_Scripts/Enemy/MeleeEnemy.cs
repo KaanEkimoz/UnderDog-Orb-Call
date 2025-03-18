@@ -15,6 +15,9 @@ public class MeleeEnemy : Enemy
     {
         navMeshAgent.SetDestination(target.transform.position);
 
+        if (IsFake)
+            return;
+
         if (GetDistanceToPlayer() && canAttack)
         {
             Attack();

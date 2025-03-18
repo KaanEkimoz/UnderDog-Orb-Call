@@ -1,9 +1,11 @@
+using com.absence.attributes;
 using com.absence.utilities;
 using com.game.player;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace com.game.ui
@@ -11,13 +13,24 @@ namespace com.game.ui
     [DefaultExecutionOrder(100)]
     public class OrbUIUpdater : MonoBehaviour
     {
-        [SerializeField] private float m_diameter;
-        [SerializeField] private Ease m_rotationEase;
+        public enum Formation
+        {
+            Circular,
+            Horizontal,
+        }
+
+        [SerializeField] private Formation m_formation;
+        [SerializeField] private Ease m_transitionEase;
         [SerializeField] [Range(0.1f, 1f)] private float m_scalingFactor;
-        [SerializeField] [Min(0f)] private float m_rotatingDuration;
+        [SerializeField] [Min(0f)] private float m_transitionDuration;
         [SerializeField] private Transform m_orbSelectionBorder;
-        [SerializeField] private Transform m_pivot;
+        [SerializeField] private Transform m_contentRoot;
         [SerializeField] private OrbDisplayGP m_prefab;
+
+        [Space]
+
+        [SerializeField, ShowIf(nameof(m_formation), Formation.Circular)] private float m_diameter;
+        [SerializeField, ShowIf(nameof(m_formation), Formation.Horizontal)] private HorizontalLayoutGroup m_group;
 
         OrbController m_orbController;
         PlayerOrbContainer m_orbContainer;
@@ -27,7 +40,7 @@ namespace com.game.ui
         float m_realScalingFactor;
         int m_selectedOrbIndex;
         bool m_firstCreation = true;
-        Sequence m_rotatingSequence;
+        Sequence m_arrangementSequence;
 
         [Inject]
         void Initialize(OrbController orbController)
@@ -43,11 +56,6 @@ namespace com.game.ui
             FetchVariables();
 
             OnOrbCountChanged(m_orbCount);
-        }
-
-        private void Update()
-        {
-            //if (m_selectedOrbIndex != m_orbController.orb)
         }
 
         void SubscribeToEvents()
@@ -71,6 +79,28 @@ namespace com.game.ui
         }
 
         void CreateOrbDisplays()
+        {
+            switch (m_formation)
+            {
+                case Formation.Circular:
+                    CreateOrbDisplays_Circular();
+                    break;
+                case Formation.Horizontal:
+                    CreateOrbDisplays_Horizontal();
+                    break;
+                default:
+                    break;
+            }
+
+            UpdateArrangement();
+        }
+
+        void CreateOrbDisplays_Horizontal()
+        {
+
+        }
+
+        void CreateOrbDisplays_Circular()
         {
             if (m_orbDisplays == null) m_orbDisplays = new();
             else
@@ -96,13 +126,13 @@ namespace com.game.ui
                 Vector2 direction = new Vector2(sin, cos);
                 Vector2 position = direction * m_diameter;
 
-                if (i == 0) 
+                if (i == 0)
                     m_orbSelectionBorder.localPosition = position;
 
                 OrbDisplayGP orbDisplay = Instantiate(m_prefab);
-                orbDisplay.transform.SetParent(m_pivot, false);
+                orbDisplay.transform.SetParent(m_contentRoot, false);
                 orbDisplay.transform.localPosition = position;
-                
+
                 orbDisplay.Initialize(orb, m_orbContainer);
 
                 m_orbDisplays.Add(orbDisplay);
@@ -117,8 +147,6 @@ namespace com.game.ui
 
                 m_firstCreation = false;
             }
-
-            UpdateArrangement();
         }
 
         void SelectNextOrb()
@@ -147,8 +175,8 @@ namespace com.game.ui
 
         public void Redraw()
         {
-            m_pivot.transform.eulerAngles = Vector3.zero;
-            m_pivot.DestroyChildren();
+            m_contentRoot.transform.eulerAngles = Vector3.zero;
+            m_contentRoot.DestroyChildren();
             CreateOrbDisplays();
 
             foreach (OrbDisplayGP display in m_orbDisplays)
@@ -161,35 +189,42 @@ namespace com.game.ui
 
         public void UpdateArrangement()
         {
+            switch (m_formation)
+            {
+                case Formation.Circular:
+                    UpdateArrangement_Circular();
+                    break;
+                case Formation.Horizontal:
+                    UpdateArrangement_Horizontal();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void UpdateArrangement_Circular()
+        {
             float totalAngle = m_stepAngle * m_selectedOrbIndex;
 
             Vector3 endingRotation = new Vector3(0f, 0f, totalAngle);
 
-            if (m_rotatingSequence != null)
-                m_rotatingSequence.Kill();
+            if (m_arrangementSequence != null)
+                m_arrangementSequence.Kill();
 
-            m_rotatingSequence = DOTween.Sequence();
+            m_arrangementSequence = DOTween.Sequence();
 
-            var rotationTween = m_pivot.DORotate(endingRotation, m_rotatingDuration, RotateMode.Fast);
-            m_rotatingSequence.Insert(0f, rotationTween);
+            var rotationTween = m_contentRoot.DORotate(endingRotation, m_transitionDuration, RotateMode.Fast);
+            m_arrangementSequence.Insert(0f, rotationTween);
 
-            //for (int i = 0; i < m_orbCount; i++)
-            //{
-            //    OrbDisplayGP orbDisplay = m_orbDisplays[i];
-
-            //    int reversedIndex = m_orbCount - i;
-
-            //    int selectionDiff = Mathf.Abs(m_selectedOrbIndex - i);
-            //    int reversedSelectionDiff = Mathf.Abs(m_selectedOrbIndex - reversedIndex);
-            //    int minDiff = Mathf.Min(selectionDiff, reversedSelectionDiff);
-            //    var scalingTween = orbDisplay.transform.DOScale(1f - (m_realScalingFactor * minDiff), m_rotatingDuration);
-            //    m_rotatingSequence.Insert(0f, scalingTween);
-            //}
-
-            m_rotatingSequence.SetEase(m_rotationEase);
-            m_rotatingSequence.OnComplete(OnRotationEnds);
-            m_rotatingSequence.OnKill(OnRotationEnds);
+            m_arrangementSequence.SetEase(m_transitionEase);
+            m_arrangementSequence.OnComplete(OnRotationEnds);
+            m_arrangementSequence.OnKill(OnRotationEnds);
             m_orbDisplays.ForEach(display => display.SetRotating(true));
+        }
+
+        void UpdateArrangement_Horizontal()
+        {
+            // :")
         }
 
         private void OnRotationEnds()

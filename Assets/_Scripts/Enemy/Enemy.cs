@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private EnemyMovementData enemyMovementData;
+    [SerializeField] public EnemyMovementData enemyMovementData;
     [Header("Slow")]
     [SerializeField] public float slowPercentPerOrb = 25f;
     [Header("Stats")]
@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
 
     //Movement
     private float defaultSpeed;
+
+    public bool IsFake { get; set; } = false;
 
     //Slow
     private float currentSlowAmount = 0;
@@ -57,7 +59,8 @@ public class Enemy : MonoBehaviour
         CustomUpdate();
     }
     protected virtual void CustomUpdate() { }
-    
+    public virtual void Fakify() { }
+
     public void ApplySlowForSeconds(float slowPercent, float duration)
     {
         StartCoroutine(SlowForSeconds(slowPercent, duration));

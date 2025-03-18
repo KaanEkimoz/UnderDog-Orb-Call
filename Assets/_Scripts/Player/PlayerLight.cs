@@ -48,10 +48,8 @@ namespace com.game.player
         RaycastHit m_groundData;
         bool m_hasGround;
 
-#if UNITY_EDITOR
         int m_fullSeenCount;
         int m_halfSeenCount;
-#endif
 
         List<IVisible> m_halfVisibles;
         List<IVisible> m_fullVisibles;

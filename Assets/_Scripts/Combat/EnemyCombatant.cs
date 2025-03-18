@@ -19,19 +19,20 @@ namespace com.game.enemysystem
         [SerializeField] private Enemy enemy;
         public SparkLight Spark => m_sparkLight;
 
-        float _health;
-        float _maxHealth;
+        private float _health;
+        private float _maxHealth;
 
         public bool IsAlive => _health > 0;
-        public float Health => _health;
-        public float MaxHealth => _maxHealth;
+        public float Health { get => _health; set => _health = value; }
+        public float MaxHealth { get => _maxHealth; set => _maxHealth = value; }
+        public Enemy Owner => enemy;
 
         public event Action<float> OnTakeDamage = delegate { };
         public event Action OnDie = delegate { };
 
         [Inject] PlayerCombatant _playerCombatant;
 
-        private void Start()
+        private void Awake()
         {
             if(enemy == null)
                enemy = GetComponent<Enemy>();
@@ -77,6 +78,7 @@ namespace com.game.enemysystem
 
         public void Die()
         {
+            Debug.Log("difh");
             SimpleOrb[] orbsOnEnemy = GetOrbsOnEnemy();
 
             foreach (SimpleOrb orb in orbsOnEnemy)

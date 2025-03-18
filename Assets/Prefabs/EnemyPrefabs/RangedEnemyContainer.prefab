@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7c728b2a91714cd458b71defb51db6c2, type: 2}
+    - target: {fileID: 3701225131490053606, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 463920630172978688}
     - target: {fileID: 7298133027063933198, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_AngularSpeed
       value: 80

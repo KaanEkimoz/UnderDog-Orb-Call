@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2592178667866607631}
   - component: {fileID: 2543461384285703306}
+  - component: {fileID: 1686234130075004198}
   m_Layer: 0
   m_Name: EnemySpawnController
   m_TagString: Untagged
@@ -55,3 +56,19 @@ MonoBehaviour:
   - {fileID: 0}
   spawnDelay: 1
   maxEnemyCount: 10
+--- !u!114 &1686234130075004198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5331071310023750704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9160589c4a96cd4d9c0b4cd46c5ef01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_owner: {fileID: 2543461384285703306}
+  m_fakeMovementData: {fileID: 11400000, guid: 60474108630ee3446a829520a9c59e00, type: 2}
+  m_spawnDelay: 1
+  m_maxFakeEnemyCount: 10

@@ -1,3 +1,4 @@
+using com.game.enemysystem;
 using System.Collections;
 using UnityEngine;
 public class EnemySpawner : MonoBehaviour
@@ -19,21 +20,31 @@ public class EnemySpawner : MonoBehaviour
     {
         while (enemyCount < maxEnemyCount)
         {
-            int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
-            GameObject spawnPoint = spawnPoints[randomSpawnPoint];
+            Transform spawnPoint = GetRandomSpawnPoint();
+            GameObject enemyPrefab = GetRandomEnemyPrefab();
 
-            int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
-            GameObject enemyPrefab = enemyPrefabs[randomEnemyIndex];
-
-            Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+            Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
             enemyCount++;
 
             yield return new WaitForSeconds(spawnDelay);
         }
     }
 
+    public GameObject GetRandomEnemyPrefab()
+    {
+        int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
+        GameObject enemyPrefab = enemyPrefabs[randomEnemyIndex];
 
+        return enemyPrefab;
+    }
 
+    public Transform GetRandomSpawnPoint()
+    {
+        int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
+        GameObject spawnPoint = spawnPoints[randomSpawnPoint];
+
+        return spawnPoint.transform;
+    }
 }
 
 

@@ -30,9 +30,8 @@ public class RangedEnemy : Enemy
 
         canSeePlayer = CanSeePlayer();
 
-        if (canShoot && GetDistanceToPlayer() && CanSeePlayer())
+        if ((!IsFake) && canShoot && GetDistanceToPlayer() && CanSeePlayer())
             Shoot();
-
     }
     
     private bool CanSeePlayer()

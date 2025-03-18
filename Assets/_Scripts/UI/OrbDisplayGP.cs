@@ -14,8 +14,8 @@ namespace com.game.ui
         }
 
         [SerializeField] private Image m_image;
-        [SerializeField] private Transform m_swayPivot;
-        [SerializeField] private float m_swayMagnitude;
+
+        public Image Image => m_image;
 
         Sprite m_initialSprite;
         bool m_isRotating = false;

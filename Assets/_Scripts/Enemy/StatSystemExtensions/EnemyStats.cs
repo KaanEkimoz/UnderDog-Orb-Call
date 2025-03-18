@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace com.game.enemysystem
 {
+    [DefaultExecutionOrder(-100)]
     public class EnemyStats : MonoBehaviour, IStats<EnemyStatType>
     {
         [Header("Utilities")]
