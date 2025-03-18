@@ -153,7 +153,7 @@ namespace com.game.ui
         {
             for (int i = 0; i < m_orbCount; i++)
             {
-                SimpleOrb orb = m_orbController.OrbsOnEllipse[i];
+                SimpleOrb orb = m_orbController.orbsOnEllipse[i];
 
                 if (orb == null)
                     continue;

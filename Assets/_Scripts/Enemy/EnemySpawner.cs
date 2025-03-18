@@ -1,5 +1,6 @@
 using com.game.enemysystem;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
@@ -11,13 +12,27 @@ public class EnemySpawner : MonoBehaviour
 
     private int enemyCount = 0;
 
+    private bool isCoroutineRunning;
+
     private void Start()
     {
         StartCoroutine(SpawnEnemies());
     }
 
+    private void Update() {
+
+        int EnemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
+        if (enemyCount < maxEnemyCount && !isCoroutineRunning)
+        {
+            StartCoroutine(SpawnEnemies());
+        }
+    }
+
     IEnumerator SpawnEnemies()
     {
+        isCoroutineRunning = true;
+
         while (enemyCount < maxEnemyCount)
         {
             Transform spawnPoint = GetRandomSpawnPoint();
@@ -28,6 +43,8 @@ public class EnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(spawnDelay);
         }
+
+        isCoroutineRunning = false;
     }
 
     public GameObject GetRandomEnemyPrefab()

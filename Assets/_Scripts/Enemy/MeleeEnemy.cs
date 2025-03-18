@@ -13,6 +13,8 @@ public class MeleeEnemy : Enemy
 
     protected override void CustomUpdate()
     {
+        if (isDummyModeActive) return;
+
         navMeshAgent.SetDestination(target.transform.position);
 
         if (IsFake)

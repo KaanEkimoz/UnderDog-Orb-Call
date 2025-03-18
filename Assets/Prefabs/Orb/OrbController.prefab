@@ -81,10 +81,11 @@ MonoBehaviour:
   orbCountAtStart: 5
   cooldownBetweenThrowsInSeconds: 0.2
   firePointTransform: {fileID: 0}
-  cursorDetectMask:
+  aimCursorDetectMask:
     serializedVersion: 2
-    m_Bits: 12544
-  recallHoldTime: 0.2
+    m_Bits: 8449
+  recallButtonHoldTime: 0.2
+  returnPointTransform: {fileID: 0}
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
@@ -93,8 +94,7 @@ MonoBehaviour:
   objectPool: {fileID: 0}
   highlightMaterial: {fileID: 2100000, guid: c68fd06015cbabc4e831614559451308, type: 2}
   ghostOrbPrefab: {fileID: 8886230964089384064, guid: 3ac12e18f03e79d40b774a17a4df6ba3, type: 3}
-  OrbsOnEllipse: []
-  isAiming: 0
+  orbsOnEllipse: []
 --- !u!114 &794347696325058884
 MonoBehaviour:
   m_ObjectHideFlags: 0

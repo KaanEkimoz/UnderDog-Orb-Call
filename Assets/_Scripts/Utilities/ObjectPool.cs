@@ -26,7 +26,7 @@ public class ObjectPool : MonoBehaviour
 
             for (int i = 0; i <  pools[j].poolSize; i++)
             {
-                GameObject obj = Instantiate( pools[j].objectPrefab);
+                GameObject obj = Instantiate(pools[j].objectPrefab);
                 obj.transform.SetParent(transform);
                 obj.SetActive(false);
             

@@ -214,9 +214,27 @@ public class SimpleOrb : MonoBehaviour
 
         ApplyCollisionEffects(collision);
     }
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (currentState != OrbState.Returning)
+            return;
+
+        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+        {
+            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+
+            if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
+                hittedEnemy.ApplySlowForSeconds(100f, 2f);
+        }
+    }
     protected virtual void ApplyCollisionEffects(Collision collisionObject)
     {
         if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+    }
+    protected virtual void ApplyTriggerEffects(Collider collider)
+    {
+        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
@@ -233,20 +251,7 @@ public class SimpleOrb : MonoBehaviour
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (currentState != OrbState.Returning)
-            return;
-
-        if (other.gameObject.TryGetComponent(out IDamageable damageable))
-        {
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
-
-            if (other.gameObject.TryGetComponent(out Enemy hittedEnemy))
-                hittedEnemy.ApplySlowForSeconds(100f,2f);
-        }
-            
-    }
+    
     public void IncreaseSpeedForSeconds(float speedIncrease, float duration)
     {
         StartCoroutine(IncreaseSpeed(speedIncrease, duration));
