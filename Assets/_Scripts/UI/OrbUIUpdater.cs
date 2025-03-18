@@ -41,8 +41,11 @@ namespace com.game.ui
         float m_realScalingFactor;
         float m_prefabWidth;
         int m_middleIndex;
+        int m_initialPadding;
         int m_selectedOrbIndex;
         bool m_firstCreation = true;
+        bool m_nextFlag;
+        bool m_previousFlag;
         Sequence m_arrangementSequence;
         Tween m_virtualTween;
 
@@ -115,12 +118,7 @@ namespace com.game.ui
             m_orbSelectionBorder.SetAsFirstSibling();
 
             if (m_firstCreation)
-            {
-                m_selectedOrbIndex = -1;
-                SelectNextOrb();
-
                 m_firstCreation = false;
-            }
 
             UpdateArrangement();
         }
@@ -128,6 +126,7 @@ namespace com.game.ui
         void CreateOrbDisplays_Horizontal()
         {
             m_middleIndex = Mathf.Max(0, (m_orbCount - 1) / 2);
+            m_initialPadding = -Mathf.FloorToInt(m_middleIndex * (m_prefabWidth + m_horizontalLayoutGroup.spacing));
             for (int i = 0; i < m_orbCount; i++)
             {
                 int realIndex = i - m_middleIndex;
@@ -174,25 +173,25 @@ namespace com.game.ui
 
                 m_orbDisplays.Add(orbDisplay);
             }
+
+            if (m_firstCreation)
+            {
+                m_selectedOrbIndex = -1;
+                SelectNextOrb();
+            }
         }
 
         void SelectNextOrb()
         {
-            if (m_formation == Formation.Horizontal)
-            {
-                m_contentRoot.GetChild(0).SetAsLastSibling();
-            }
-
+            m_nextFlag = true;
+            m_previousFlag = false;
             SelectOrb(m_selectedOrbIndex + 1);
         }
 
         void SelectPreviousOrb()
         {
-            if (m_formation == Formation.Horizontal)
-            {
-                m_contentRoot.GetChild(m_orbCount - 1).SetAsFirstSibling();
-            }
-
+            m_nextFlag = false;
+            m_previousFlag = true;
             SelectOrb(m_selectedOrbIndex - 1);
         }
 
@@ -260,24 +259,35 @@ namespace com.game.ui
 
         void UpdateArrangement_Horizontal()
         {
-            //if (m_virtualTween != null)
-            //    m_virtualTween.Kill();
+            if (m_virtualTween != null)
+                m_virtualTween.Kill();
 
-            //int targetPadding = -Mathf.FloorToInt((m_selectedOrbIndex + m_middleIndex) * (m_prefabWidth + m_horizontalLayoutGroup.spacing));
+            if (m_nextFlag)
+                m_contentRoot.GetChild(0).SetAsLastSibling();
 
-            //m_virtualTween = DOVirtual.Int(m_horizontalLayoutGroup.padding.left, 
-            //    targetPadding, m_transitionDuration, (i) =>
-            //{
-            //    m_horizontalLayoutGroup.padding.left = i;
-            //    LayoutRebuilder.ForceRebuildLayoutImmediate(m_horizontalLayoutGroup.GetComponent<RectTransform>());
-            //}).SetEase(m_transitionEase)
-            //.OnComplete(OnVirtualTweenEnds)
-            //.OnKill(OnVirtualTweenEnds);
+            if (m_previousFlag)
+                m_contentRoot.GetChild(m_orbCount - 1).SetAsFirstSibling();
+
+            int shift = 0;
+            shift += m_nextFlag ? 1 : 0;
+            shift += m_previousFlag ? -1 : 0;
+            int simulatedPadding = m_initialPadding + Mathf.FloorToInt(shift * (m_prefabWidth + m_horizontalLayoutGroup.spacing));
+
+            m_virtualTween = DOVirtual.Int(simulatedPadding,
+                m_initialPadding, m_transitionDuration, (i) =>
+            {
+                m_horizontalLayoutGroup.padding.left = i;
+                LayoutRebuilder.ForceRebuildLayoutImmediate(m_horizontalLayoutGroup.GetComponent<RectTransform>());
+            }).SetEase(m_transitionEase)
+            .OnComplete(OnVirtualTweenEnds)
+            .OnKill(OnVirtualTweenEnds);
         }
 
         private void OnVirtualTweenEnds()
         {
             m_virtualTween = null;
+            m_horizontalLayoutGroup.padding.left = m_initialPadding;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_horizontalLayoutGroup.GetComponent<RectTransform>());
         }
 
         private void OnArrangementSequenceEnds()
