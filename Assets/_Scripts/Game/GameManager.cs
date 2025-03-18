@@ -20,6 +20,7 @@ namespace com.game
         [SerializeField] PlayerShopUI m_playerShopUI;
         [SerializeField] OrbContainerUI m_orbContainerUI;
         [SerializeField] OrbUIUpdater m_orbUIUpdater;
+        [SerializeField] OrbUIUpdater m_orbUIUpdater2;
 
         public GameState State => m_state;
         public int LevelsGainedCurrentWave => m_levelsGained;
@@ -218,6 +219,7 @@ namespace com.game
             m_waveStartTime = Time.time;
 
             m_orbUIUpdater.Refresh();
+            m_orbUIUpdater2.Refresh();
             m_playerParanoiaLogic.SetToSegment(m_wavesEnded);
         }
 

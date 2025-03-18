@@ -22,7 +22,7 @@ namespace com.game.ui
 
         [SerializeField] private Formation m_formation;
         [SerializeField] private Ease m_transitionEase;
-        [SerializeField] [Range(0.1f, 1f)] private float m_scalingFactor;
+        [SerializeField] [Range(0f, 1f)] private float m_scalingFactor;
         [SerializeField] [Min(0f)] private float m_transitionDuration;
         [SerializeField] private Transform m_orbSelectionBorder;
         [SerializeField] private Transform m_contentRoot;
@@ -63,6 +63,11 @@ namespace com.game.ui
         private void Start()
         {
             m_orbContainer = Player.Instance.Hub.OrbContainer;
+
+            Vector3 selectorScale = m_orbSelectionBorder.transform.localScale;
+            selectorScale.x *= 1f + m_scalingFactor;
+            selectorScale.y *= 1f + m_scalingFactor;
+            m_orbSelectionBorder.transform.localScale = selectorScale;
 
             SubscribeToEvents();
             FetchVariables();
@@ -142,12 +147,6 @@ namespace com.game.ui
 
                 m_orbDisplays.Add(orbDisplay);
             }
-
-            Vector3 selectorScale = m_orbSelectionBorder.transform.localScale;
-            selectorScale.x *= 1f + m_scalingFactor;
-            selectorScale.y *= 1f + m_scalingFactor;
-
-            m_orbSelectionBorder.transform.localScale = selectorScale;
         }
 
         void CreateOrbDisplays_Circular()
@@ -223,6 +222,8 @@ namespace com.game.ui
                 display.Refresh();
             }
 
+            m_nextFlag = false;
+            m_previousFlag = false;
             SelectOrb(m_orbController.SelectedOrbIndex);
         }
 

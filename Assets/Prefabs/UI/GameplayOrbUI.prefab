@@ -127,13 +127,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_formation: 0
   m_transitionEase: 15
-  m_scalingFactor: 0.759
+  m_scalingFactor: 0
   m_transitionDuration: 0.3
   m_orbSelectionBorder: {fileID: 7347919946122538709}
   m_contentRoot: {fileID: 7106016853750999003}
   m_prefab: {fileID: 2008251729403273151, guid: 67d630058b23adc468744cf041c53ee2, type: 3}
   m_diameter: 125
-  m_group: {fileID: 0}
+  m_horizontalLayoutGroup: {fileID: 0}
 --- !u!1 &8134802101820398001
 GameObject:
   m_ObjectHideFlags: 0
