@@ -1884,6 +1884,7 @@ GameObject:
   - component: {fileID: 210113340321595825}
   - component: {fileID: 2353888567497166380}
   - component: {fileID: 4040944181606278680}
+  - component: {fileID: 2814813539509469751}
   m_Layer: 3
   m_Name: MainPlayer
   m_TagString: Player
@@ -2362,6 +2363,7 @@ MonoBehaviour:
   m_money: {fileID: 1725904696649751435}
   m_playerShop: {fileID: 2931718653374058200}
   m_orbUpgradeShop: {fileID: 1493889740054554536}
+  m_abilities: {fileID: 2814813539509469751}
   m_entity: {fileID: 0}
 --- !u!114 &6740164441137565520
 MonoBehaviour:
@@ -2556,6 +2558,18 @@ MonoBehaviour:
   m_target: {fileID: 1020411334301909070}
   m_strength: 0.00006
   m_startTimeInSeconds: 10
+--- !u!114 &2814813539509469751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338948318937879419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2ff264ef62cdf458b30df638333995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6471623629219604031
 GameObject:
   m_ObjectHideFlags: 0

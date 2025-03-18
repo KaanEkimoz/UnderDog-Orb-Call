@@ -4,6 +4,7 @@ using com.game.orbsystem;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
+using com.game.ui;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,6 @@ namespace com.game.testing
 
         [SerializeField] private bool m_displayUnpaused = false;
         [SerializeField] private bool m_displayPaused = false;
-        [SerializeField] private AbilityDisplayGP m_parryDisplay;
         [SerializeField] private Parry m_parry;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
@@ -41,6 +41,7 @@ namespace com.game.testing
         PlayerInventory m_playerInventory;
         PlayerLevelingLogic m_playerLevelingLogic;
         PlayerOrbContainer m_orbContainer;
+        PlayerAbilitySet m_playerAbilitySet;
         OrbShop m_orbShop;
         PlayerShop m_playerShop;
 
@@ -56,6 +57,7 @@ namespace com.game.testing
             m_playerStats = Player.Instance.Hub.Stats;
             m_playerInventory = Player.Instance.Hub.Inventory;
             m_playerLevelingLogic = Player.Instance.Hub.Leveling;
+            m_playerAbilitySet = Player.Instance.Hub.Abilities;
             m_orbShop = Player.Instance.Hub.OrbShop;
             m_playerShop = Player.Instance.Hub.Shop;
             m_orbContainer = Player.Instance.Hub.OrbContainer;
@@ -66,7 +68,7 @@ namespace com.game.testing
             m_additionButtonAmount = k_initialAdditionButtonAmount;
             m_percentageButtonAmount = k_initialPercentageButtonAmount;
 
-            m_parryDisplay.Initialize(m_parry);
+            m_playerAbilitySet.Ability1 = m_parry;
         }
 
         private void Update()

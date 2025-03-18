@@ -15,6 +15,7 @@ namespace com.game.player
         [SerializeField] private PlayerMoneyLogic m_money;
         [SerializeField] private PlayerShop m_playerShop;
         [SerializeField] private OrbShop m_orbUpgradeShop;
+        [SerializeField] private PlayerAbilitySet m_abilities;
         [SerializeField] private Entity m_entity;
 
         public PlayerStats Stats => m_stats;
@@ -26,5 +27,6 @@ namespace com.game.player
         public PlayerMoneyLogic Money => m_money;
         public PlayerShop Shop => m_playerShop;
         public OrbShop OrbShop => m_orbUpgradeShop;
+        public PlayerAbilitySet Abilities => m_abilities;
     }
 }
