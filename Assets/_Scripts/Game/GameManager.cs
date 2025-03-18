@@ -217,7 +217,7 @@ namespace com.game
 
             m_waveStartTime = Time.time;
 
-            m_orbUIUpdater.Redraw();
+            m_orbUIUpdater.Refresh();
             m_playerParanoiaLogic.SetToSegment(m_wavesEnded);
         }
 

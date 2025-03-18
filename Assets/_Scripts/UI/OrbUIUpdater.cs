@@ -5,6 +5,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 using Zenject;
 
@@ -30,7 +31,7 @@ namespace com.game.ui
         [Space]
 
         [SerializeField, ShowIf(nameof(m_formation), Formation.Circular)] private float m_diameter;
-        [SerializeField, ShowIf(nameof(m_formation), Formation.Horizontal)] private HorizontalLayoutGroup m_group;
+        [SerializeField, ShowIf(nameof(m_formation), Formation.Horizontal)] private HorizontalLayoutGroup m_horizontalLayoutGroup;
 
         OrbController m_orbController;
         PlayerOrbContainer m_orbContainer;
@@ -38,14 +39,22 @@ namespace com.game.ui
         int m_orbCount;
         float m_stepAngle;
         float m_realScalingFactor;
+        float m_prefabWidth;
+        int m_middleIndex;
         int m_selectedOrbIndex;
         bool m_firstCreation = true;
         Sequence m_arrangementSequence;
+        Tween m_virtualTween;
 
         [Inject]
         void Initialize(OrbController orbController)
         {
             m_orbController = orbController;
+        }
+
+        private void Awake()
+        {
+            m_prefabWidth = m_prefab.GetComponent<RectTransform>().rect.width;
         }
 
         private void Start()
@@ -80,6 +89,17 @@ namespace com.game.ui
 
         void CreateOrbDisplays()
         {
+            if (m_orbDisplays == null) m_orbDisplays = new();
+            else
+            {
+                for (int i = 0; i < m_orbDisplays.Count; i++)
+                {
+                    Destroy(m_orbDisplays[i]);
+                }
+
+                m_orbDisplays.Clear();
+            }
+
             switch (m_formation)
             {
                 case Formation.Circular:
@@ -92,27 +112,44 @@ namespace com.game.ui
                     break;
             }
 
+            m_orbSelectionBorder.SetAsFirstSibling();
+
+            if (m_firstCreation)
+            {
+                m_selectedOrbIndex = -1;
+                SelectNextOrb();
+
+                m_firstCreation = false;
+            }
+
             UpdateArrangement();
         }
 
         void CreateOrbDisplays_Horizontal()
         {
+            m_middleIndex = Mathf.Max(0, (m_orbCount - 1) / 2);
+            for (int i = 0; i < m_orbCount; i++)
+            {
+                int realIndex = i - m_middleIndex;
 
+                if (realIndex < 0) 
+                    realIndex += m_orbCount;
+
+                SimpleOrb orb = m_orbController.OrbsOnEllipse[realIndex];
+
+                if (orb == null)
+                    continue;
+
+                OrbDisplayGP orbDisplay = Instantiate(m_prefab, m_contentRoot);
+
+                orbDisplay.Initialize(orb, m_orbContainer);
+
+                m_orbDisplays.Add(orbDisplay);
+            }
         }
 
         void CreateOrbDisplays_Circular()
         {
-            if (m_orbDisplays == null) m_orbDisplays = new();
-            else
-            {
-                for (int i = 0; i < m_orbDisplays.Count; i++)
-                {
-                    Destroy(m_orbDisplays[i]);
-                }
-
-                m_orbDisplays.Clear();
-            }
-
             for (int i = 0; i < m_orbCount; i++)
             {
                 SimpleOrb orb = m_orbController.OrbsOnEllipse[i];
@@ -137,25 +174,25 @@ namespace com.game.ui
 
                 m_orbDisplays.Add(orbDisplay);
             }
-
-            m_orbSelectionBorder.SetAsFirstSibling();
-
-            if (m_firstCreation)
-            {
-                m_selectedOrbIndex = -1;
-                SelectNextOrb();
-
-                m_firstCreation = false;
-            }
         }
 
         void SelectNextOrb()
         {
+            if (m_formation == Formation.Horizontal)
+            {
+                m_contentRoot.GetChild(0).SetAsLastSibling();
+            }
+
             SelectOrb(m_selectedOrbIndex + 1);
         }
 
         void SelectPreviousOrb()
         {
+            if (m_formation == Formation.Horizontal)
+            {
+                m_contentRoot.GetChild(m_orbCount - 1).SetAsFirstSibling();
+            }
+
             SelectOrb(m_selectedOrbIndex - 1);
         }
 
@@ -173,7 +210,7 @@ namespace com.game.ui
             UpdateArrangement();
         }
 
-        public void Redraw()
+        public void Refresh()
         {
             m_contentRoot.transform.eulerAngles = Vector3.zero;
             m_contentRoot.DestroyChildren();
@@ -189,6 +226,14 @@ namespace com.game.ui
 
         public void UpdateArrangement()
         {
+            if (m_arrangementSequence != null)
+                m_arrangementSequence.Kill();
+
+            m_arrangementSequence = DOTween.Sequence();
+            m_arrangementSequence.SetEase(m_transitionEase);
+            m_arrangementSequence.OnComplete(OnArrangementSequenceEnds);
+            m_arrangementSequence.OnKill(OnArrangementSequenceEnds);
+
             switch (m_formation)
             {
                 case Formation.Circular:
@@ -205,29 +250,37 @@ namespace com.game.ui
         void UpdateArrangement_Circular()
         {
             float totalAngle = m_stepAngle * m_selectedOrbIndex;
-
             Vector3 endingRotation = new Vector3(0f, 0f, totalAngle);
-
-            if (m_arrangementSequence != null)
-                m_arrangementSequence.Kill();
-
-            m_arrangementSequence = DOTween.Sequence();
 
             var rotationTween = m_contentRoot.DORotate(endingRotation, m_transitionDuration, RotateMode.Fast);
             m_arrangementSequence.Insert(0f, rotationTween);
 
-            m_arrangementSequence.SetEase(m_transitionEase);
-            m_arrangementSequence.OnComplete(OnRotationEnds);
-            m_arrangementSequence.OnKill(OnRotationEnds);
             m_orbDisplays.ForEach(display => display.SetRotating(true));
         }
 
         void UpdateArrangement_Horizontal()
         {
-            // :")
+            //if (m_virtualTween != null)
+            //    m_virtualTween.Kill();
+
+            //int targetPadding = -Mathf.FloorToInt((m_selectedOrbIndex + m_middleIndex) * (m_prefabWidth + m_horizontalLayoutGroup.spacing));
+
+            //m_virtualTween = DOVirtual.Int(m_horizontalLayoutGroup.padding.left, 
+            //    targetPadding, m_transitionDuration, (i) =>
+            //{
+            //    m_horizontalLayoutGroup.padding.left = i;
+            //    LayoutRebuilder.ForceRebuildLayoutImmediate(m_horizontalLayoutGroup.GetComponent<RectTransform>());
+            //}).SetEase(m_transitionEase)
+            //.OnComplete(OnVirtualTweenEnds)
+            //.OnKill(OnVirtualTweenEnds);
         }
 
-        private void OnRotationEnds()
+        private void OnVirtualTweenEnds()
+        {
+            m_virtualTween = null;
+        }
+
+        private void OnArrangementSequenceEnds()
         {
             m_orbDisplays.ForEach(display => display.SetRotating(false));
         }
