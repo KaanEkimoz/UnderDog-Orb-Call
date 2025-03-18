@@ -129,10 +129,7 @@ namespace com.game.ui
             m_initialPadding = -Mathf.FloorToInt(m_middleIndex * (m_prefabWidth + m_horizontalLayoutGroup.spacing));
             for (int i = 0; i < m_orbCount; i++)
             {
-                int realIndex = i - m_middleIndex;
-
-                if (realIndex < 0) 
-                    realIndex += m_orbCount;
+                int realIndex = GetRealIndex(i);
 
                 SimpleOrb orb = m_orbController.OrbsOnEllipse[realIndex];
 
@@ -145,6 +142,12 @@ namespace com.game.ui
 
                 m_orbDisplays.Add(orbDisplay);
             }
+
+            Vector3 selectorScale = m_orbSelectionBorder.transform.localScale;
+            selectorScale.x *= 1f + m_scalingFactor;
+            selectorScale.y *= 1f + m_scalingFactor;
+
+            m_orbSelectionBorder.transform.localScale = selectorScale;
         }
 
         void CreateOrbDisplays_Circular()
@@ -281,6 +284,15 @@ namespace com.game.ui
             }).SetEase(m_transitionEase)
             .OnComplete(OnVirtualTweenEnds)
             .OnKill(OnVirtualTweenEnds);
+
+            for (int i = 0; i < m_orbCount; i++)
+            {
+                int realIndex = GetRealIndex(i);
+
+                float scale = realIndex == m_selectedOrbIndex ? (1f + m_scalingFactor) : 1f;
+                Tweener tween = m_orbDisplays[i].Image.transform.DOScale(scale, m_transitionDuration);
+                m_arrangementSequence.Insert(0, tween);
+            }
         }
 
         private void OnVirtualTweenEnds()
@@ -292,7 +304,17 @@ namespace com.game.ui
 
         private void OnArrangementSequenceEnds()
         {
+            m_arrangementSequence = null;
             m_orbDisplays.ForEach(display => display.SetRotating(false));
+        }
+
+        int GetRealIndex(int index)
+        {
+            int realIndex = index - m_middleIndex;
+            if (realIndex < 0)
+                realIndex += m_orbCount;
+
+            return realIndex;
         }
     }
 }
