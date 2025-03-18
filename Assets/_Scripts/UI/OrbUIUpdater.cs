@@ -136,7 +136,7 @@ namespace com.game.ui
             {
                 int realIndex = GetRealIndex(i);
 
-                SimpleOrb orb = m_orbController.OrbsOnEllipse[realIndex];
+                SimpleOrb orb = m_orbController.orbsOnEllipse[realIndex];
 
                 if (orb == null)
                     continue;
