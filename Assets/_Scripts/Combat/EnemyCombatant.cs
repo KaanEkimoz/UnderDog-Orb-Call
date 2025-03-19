@@ -8,6 +8,7 @@ using com.game.generics;
 using Zenject;
 using com.game.player;
 using System.Collections;
+using com.game.effects;
 
 namespace com.game.enemysystem
 {
@@ -53,6 +54,9 @@ namespace com.game.enemysystem
             float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
 
             _health -= realDamage;
+            PopupManager.Instance.CreateDamagePopup(realDamage, transform.position 
+                + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
+                + ((Vector3)UnityEngine.Random.insideUnitCircle * 0.1f));
 
             if (_health <= 0)
             {

@@ -23,7 +23,7 @@ TagManager:
   - Ground
   - Development
   - Obstacle
-  - 
+  - Popup
   - 
   - 
   - 
@@ -42,6 +42,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Popup
+    uniqueID: 3782389303
     locked: 0
   m_RenderingLayers:
   - Default
