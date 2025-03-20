@@ -7,14 +7,15 @@ namespace com.game.effects
     {
         [SerializeField] private PopupBehaviour m_damagePopupPrefab;
 
-        public void CreateDamagePopup(float damage, Vector3 hitPoint)
+        public void CreateDamagePopup(float damage, Vector3 hitPoint, bool displayPercentages = false)
         {
             PopupBehaviour popup = Create(m_damagePopupPrefab, hitPoint, Vector3.zero);
             popup.AutoStartFadeOut = true;
             popup.MoveUpDuringFadeOut = true;
             popup.DestroyAfterFadeOut = true;
 
-            popup.SetText(damage.ToString("0"));
+            string mask = displayPercentages ? "" : "0";
+            popup.SetText(damage.ToString(mask));
         }
 
         T Create<T>(T prefab, Vector3 position, Vector3 eulerAngles) where T : PopupBehaviour

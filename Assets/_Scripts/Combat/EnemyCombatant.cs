@@ -14,6 +14,7 @@ namespace com.game.enemysystem
 {
     public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
     {
+        private const float k_popupPositionRandomization = 0.3f;
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
         [SerializeField] private SparkLight m_sparkLight;
@@ -56,7 +57,8 @@ namespace com.game.enemysystem
             _health -= realDamage;
             PopupManager.Instance.CreateDamagePopup(realDamage, transform.position 
                 + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
-                + ((Vector3)UnityEngine.Random.insideUnitCircle * 0.1f));
+                + ((Vector3)UnityEngine.Random.insideUnitCircle * k_popupPositionRandomization)
+                , true); // !!!
 
             if (_health <= 0)
             {
