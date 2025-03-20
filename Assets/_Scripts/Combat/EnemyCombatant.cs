@@ -8,13 +8,16 @@ using com.game.generics;
 using Zenject;
 using com.game.player;
 using System.Collections;
-using com.game.effects;
+using com.game.miscs;
 
 namespace com.game.enemysystem
 {
     public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
     {
         private const float k_popupPositionRandomization = 0.3f;
+        private const float k_dropSpawnForceMagnitude = 2f;
+        private const float k_dropSpawnForceYAddition = 0.1f;
+
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
         [SerializeField] private SparkLight m_sparkLight;
@@ -98,6 +101,14 @@ namespace com.game.enemysystem
                 orb.ResetParent();
             }
 
+            // !!!
+
+            DropManager.Instance.SpawnExperienceDrop(1, transform.position)
+                .SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude);
+
+            DropManager.Instance.SpawnMoneyDrop(1, transform.position)
+                .SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude);
+
             TestEventChannel.ReceiveEnemyKill();
             if (m_container != null) Destroy(m_container);
             else Destroy(gameObject);
@@ -111,6 +122,13 @@ namespace com.game.enemysystem
         public SimpleOrb[] GetOrbsOnEnemy()
         {
             return GetComponentsInChildren<SimpleOrb>();
+        }
+
+        Vector3 GetRandomDirectionForDrop(float yAddition = k_dropSpawnForceYAddition)
+        {
+            Vector2 randomUnitCircle = UnityEngine.Random.insideUnitCircle;
+            Vector3 result = new Vector3(randomUnitCircle.x, yAddition, randomUnitCircle.y);
+            return result;
         }
     }
 }

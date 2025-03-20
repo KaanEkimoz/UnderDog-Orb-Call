@@ -3,7 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace com.game.effects
+namespace com.game.miscs
 {
     public class PopupBehaviour : MonoBehaviour
     {
