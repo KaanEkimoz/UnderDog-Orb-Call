@@ -15,6 +15,7 @@ namespace com.game.generics
                 return;
             }
 
+            transform.localScale *= 1 + ((Amount - 1) / 10);
             base.Start();
         }
 

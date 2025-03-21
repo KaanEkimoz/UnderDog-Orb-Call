@@ -1,4 +1,5 @@
 using com.absence.utilities;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.game.miscs
@@ -20,6 +21,38 @@ namespace com.game.miscs
             DropBehaviour drop = Create(m_experienceDropBehaviour, position, Vector3.zero);
             drop.Amount = amount;
             return drop;
+        }
+
+        public List<DropBehaviour> SpawnIndividualMoneyDrops(int amount, Vector3 initialPosition)
+        {
+            List<DropBehaviour> result = new();
+            for (int i = 0; i < amount; i++) 
+            {
+                result.Add(SpawnMoneyDrop(1, initialPosition));
+            }
+
+            return result;
+        }
+
+        public List<DropBehaviour> SpawnIndividualExperienceDrops(int amount, Vector3 initialPosition)
+        {
+            List<DropBehaviour> result = new();
+            for (int i = 0; i < amount; i++)
+            {
+                result.Add(SpawnExperienceDrop(amount, initialPosition));
+            }
+
+            return result;
+        }
+
+        public void SpawnRandomlySeperatedMoneyDrops(int amount, Vector3 initialPosition, int maxPieceAmount = -1)
+        {
+            throw new System.Exception("This method is not implemented yet.");
+        }
+
+        public void SpawnRandomlySeperatedExperienceDrops(int amount, Vector3 initialPosition, int maxPieceAmount = -1)
+        {
+            throw new System.Exception("This method is not implemented yet.");
         }
 
         T Create<T>(T prefab, Vector3 position, Vector3 eulerAngles) where T : DropBehaviour

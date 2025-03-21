@@ -18,6 +18,9 @@ namespace com.game.enemysystem
         private const float k_dropSpawnForceMagnitude = 2f;
         private const float k_dropSpawnForceYAddition = 0.1f;
 
+        private const int k_maxMoneyDropAmount = 5;
+        private const int k_maxExperienceDropAmount = 2;
+
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
         [SerializeField] private SparkLight m_sparkLight;
@@ -103,11 +106,13 @@ namespace com.game.enemysystem
 
             // !!!
 
-            DropManager.Instance.SpawnExperienceDrop(1, transform.position)
-                .SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude);
+            int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
+            DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position)
+                .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
 
-            DropManager.Instance.SpawnMoneyDrop(1, transform.position)
-                .SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude);
+            int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
+            DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position)
+                .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
 
             TestEventChannel.ReceiveEnemyKill();
             if (m_container != null) Destroy(m_container);
