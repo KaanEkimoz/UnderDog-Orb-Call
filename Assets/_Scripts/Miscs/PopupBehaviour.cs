@@ -19,6 +19,7 @@ namespace com.game.miscs
 
         [SerializeField] private Ease m_fadeOutEase;
         [SerializeField] private float m_fadeOutDuration;
+        [SerializeField] private float m_fadeOutDelay;
 
         [Space(5), SerializeField] 
         private bool m_moveUpDuringFadeOut;
@@ -91,13 +92,16 @@ namespace com.game.miscs
 
             m_sequence = DOTween.Sequence();
 
-            Tween fadeTween = m_group.DOFade(FADE_OUT_ALPHA, m_fadeOutDuration);
+            Tween fadeTween = m_group.DOFade(FADE_OUT_ALPHA, m_fadeOutDuration)
+                .SetDelay(m_fadeOutDelay);
+
             m_sequence.Insert(0, fadeTween);
 
             if (m_moveUpDuringFadeOut)
             {
                 Tween moveUpTween = m_moveUpTarget.DOLocalMoveY(
-                    m_moveUpTarget.transform.localPosition.y + m_moveUpMagnitude, m_fadeOutDuration);
+                    m_moveUpTarget.transform.localPosition.y + m_moveUpMagnitude, m_fadeOutDuration)
+                        .SetDelay(m_fadeOutDelay);
 
                 m_sequence.Insert(0, moveUpTween);
             }

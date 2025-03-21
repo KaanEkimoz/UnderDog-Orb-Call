@@ -1,4 +1,5 @@
 using com.absence.utilities;
+using System.Text;
 using UnityEngine;
 
 namespace com.game.miscs
@@ -6,6 +7,8 @@ namespace com.game.miscs
     public class PopupManager : Singleton<PopupManager>
     {
         [SerializeField] private PopupBehaviour m_damagePopupPrefab;
+        [SerializeField] private PopupBehaviour m_experiencePopupPrefab;
+        [SerializeField] private PopupBehaviour m_moneyPopupPrefab;
 
         public PopupBehaviour CreateDamagePopup(float damage, Vector3 hitPoint, bool displayPercentages = false)
         {
@@ -16,6 +19,37 @@ namespace com.game.miscs
 
             string mask = displayPercentages ? "" : "0";
             popup.SetText(damage.ToString(mask));
+
+            return popup;
+        }
+
+        public PopupBehaviour CreateExperiencePopup(int amount, Vector3 position)
+        {
+            PopupBehaviour popup = Create(m_experiencePopupPrefab, position, Vector3.zero);
+            popup.AutoStartFadeOut = true;
+            popup.MoveUpDuringFadeOut = true;
+            popup.DestroyAfterFadeOut = true;
+
+            StringBuilder sb = new("+");
+            sb.Append(amount);
+
+            popup.SetText(sb.ToString());
+
+            return popup;
+        }
+
+        public PopupBehaviour CreateMoneyPopup(int amount, Vector3 position)
+        {
+            PopupBehaviour popup = Create(m_moneyPopupPrefab, position, Vector3.zero);
+            popup.AutoStartFadeOut = true;
+            popup.MoveUpDuringFadeOut = true;
+            popup.DestroyAfterFadeOut = true;
+
+            StringBuilder sb = new("+");
+            sb.Append(amount);
+            sb.Append("$");
+
+            popup.SetText(sb.ToString());
 
             return popup;
         }

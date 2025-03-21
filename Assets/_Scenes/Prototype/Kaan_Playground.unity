@@ -5015,7 +5015,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6cd78150024d854c8b30e2bc10bec86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damagePopupPrefab: {fileID: 5772126129644323332, guid: 62cff5e8223dd644da04009211706580, type: 3}
+  m_damagePopupPrefab: {fileID: 8557023159533547398, guid: 74293e18f1ec4804ab285595bcfb79fa, type: 3}
+  m_experiencePopupPrefab: {fileID: 4148754327059600704, guid: 4ed8ec3cbf65935479e0aeff88e55d59, type: 3}
+  m_moneyPopupPrefab: {fileID: 4268396832577013735, guid: 55192d1852ae3e64982acbddc41ff965, type: 3}
 --- !u!1 &1920444224
 GameObject:
   m_ObjectHideFlags: 0

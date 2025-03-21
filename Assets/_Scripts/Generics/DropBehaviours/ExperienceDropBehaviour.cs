@@ -21,6 +21,7 @@ namespace com.game.generics
         protected override bool OnGather(IGatherer sender)
         {
             Player.Instance.Hub.Leveling.GainExperience(Amount);
+            PopupManager.Instance.CreateExperiencePopup(Amount, transform.position);
             return true;
         }
     }

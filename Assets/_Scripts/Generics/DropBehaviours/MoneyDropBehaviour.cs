@@ -21,6 +21,7 @@ namespace com.game.generics
         protected override bool OnGather(IGatherer sender)
         {
             Player.Instance.Hub.Money.Gain(Amount);
+            PopupManager.Instance.CreateMoneyPopup(Amount, transform.position);
             return true;
         }
     }
