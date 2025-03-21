@@ -2375,13 +2375,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_order: 0
   m_statEntries:
-  - TargetStat: 12
-    Coefficient: 1
   - TargetStat: 2
     Coefficient: -1
   - TargetStat: 15
-    Coefficient: 1
-  - TargetStat: 16
     Coefficient: 1
   - TargetStat: 6
     Coefficient: -1
@@ -2577,7 +2573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7abf800dd0e58f243b953bb281fd18eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_placeholder: 0a000000140000001e00000028000000320000003c00000046000000500000005a000000640000006e00000078000000820000008c00000096000000
+  m_placeholder: 0f0000001e0000002d0000003c0000004b0000005a00000069000000780000008700000096000000a5000000b4000000c3000000d2000000e1000000
 --- !u!114 &1020411334301909070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2641,8 +2637,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_coefficient: 0.0002
-  m_minDistance: 5.64
+  m_coefficient: 0.0001
+  m_minDistance: 6.39
   m_maxDistance: 49.85
 --- !u!114 &4040944181606278680
 MonoBehaviour:

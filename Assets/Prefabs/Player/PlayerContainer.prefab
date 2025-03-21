@@ -138,50 +138,6 @@ PrefabInstance:
       propertyPath: m_container
       value: 
       objectReference: {fileID: 7922492431965004093}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[0].TargetStat
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[1].TargetStat
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[2].TargetStat
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[3].TargetStat
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[4].TargetStat
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[0].Coefficient
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[1].Coefficient
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[2].Coefficient
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[3].Coefficient
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2054258118291943059, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
-      propertyPath: m_statEntries.Array.data[4].Coefficient
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3688062287412388757, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_targetController
       value: 
