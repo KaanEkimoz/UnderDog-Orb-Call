@@ -3024,8 +3024,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1686234130075004198, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
+      propertyPath: m_spawnDelay
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1686234130075004198, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: m_maxFakeEnemyCount
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: spawnDelay
@@ -3033,7 +3037,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: maxEnemyCount
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2543461384285703306, guid: 30af6aa7664beb34dbac1cc23fd0d694, type: 3}
       propertyPath: spawnPoints.Array.size
