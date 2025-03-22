@@ -5,7 +5,6 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 using Zenject;
 
@@ -20,6 +19,7 @@ namespace com.game.ui
             Horizontal,
         }
 
+        [SerializeField] private bool m_scaleSelectionBorder = true;
         [SerializeField] private Formation m_formation;
         [SerializeField] private Ease m_transitionEase;
         [SerializeField] [Range(0f, 1f)] private float m_scalingFactor;
@@ -64,10 +64,13 @@ namespace com.game.ui
         {
             m_orbContainer = Player.Instance.Hub.OrbContainer;
 
-            Vector3 selectorScale = m_orbSelectionBorder.transform.localScale;
-            selectorScale.x *= 1f + m_scalingFactor;
-            selectorScale.y *= 1f + m_scalingFactor;
-            m_orbSelectionBorder.transform.localScale = selectorScale;
+            if (m_scaleSelectionBorder)
+            {
+                Vector3 selectorScale = m_orbSelectionBorder.transform.localScale;
+                selectorScale.x *= 1f + m_scalingFactor;
+                selectorScale.y *= 1f + m_scalingFactor;
+                m_orbSelectionBorder.transform.localScale = selectorScale;
+            }
 
             SubscribeToEvents();
             FetchVariables();
@@ -291,7 +294,7 @@ namespace com.game.ui
                 int realIndex = GetRealIndex(i);
 
                 float scale = realIndex == m_selectedOrbIndex ? (1f + m_scalingFactor) : 1f;
-                Tweener tween = m_orbDisplays[i].Image.transform.DOScale(scale, m_transitionDuration);
+                Tweener tween = m_orbDisplays[i].Image.rectTransform.DOScale(scale, m_transitionDuration);
                 m_arrangementSequence.Insert(0, tween);
             }
         }
