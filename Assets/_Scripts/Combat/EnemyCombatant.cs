@@ -36,6 +36,7 @@ namespace com.game.enemysystem
         public Enemy Owner => enemy;
 
         public event Action<float> OnTakeDamage = delegate { };
+        public event Action<float> OnHeal = delegate { };
         public event Action OnDie = delegate { };
 
         PlayerCombatant _playerCombatant;
@@ -99,6 +100,15 @@ namespace com.game.enemysystem
                 elapsedTime += intervalInSeconds;
                 yield return new WaitForSeconds(intervalInSeconds);
             }
+        }
+
+        public void Heal(float amount)
+        {
+            if (amount == 0f)
+                return;
+
+            _health += amount;
+            OnHeal?.Invoke(amount);
         }
 
         public void Die()

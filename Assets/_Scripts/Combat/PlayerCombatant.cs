@@ -20,6 +20,7 @@ namespace com.game.player
         public float MaxHealth => _maxHealth;
 
         public event Action<float> OnTakeDamage = delegate { };
+        public event Action<float> OnHeal = delegate { };
         public event Action OnDie = delegate { };
 
         [Inject] OrbController _orbController;
@@ -70,12 +71,14 @@ namespace com.game.player
         {
             Heal(amount * (_playerStats.GetStat(PlayerStatType.LifeSteal) / 100));
         }
-        public void Heal(float healAmount)
+        public void Heal(float amount)
         {
-            _health += healAmount;
+            _health += amount;
 
             if (_health > _maxHealth)
                 _health = _maxHealth;
+
+            OnHeal?.Invoke(amount);
         }
         public void Die()
         {

@@ -100,6 +100,7 @@ namespace com.game
             }
 
             m_target.OnTakeDamage += OnTakeDamage;
+            m_target.OnHeal += OnTakeDamage;
             m_target.OnDie += OnDie;
 
             Refresh();
