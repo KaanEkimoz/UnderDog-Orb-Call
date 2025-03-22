@@ -68,7 +68,7 @@ namespace com.game.testing
             m_additionButtonAmount = k_initialAdditionButtonAmount;
             m_percentageButtonAmount = k_initialPercentageButtonAmount;
 
-            m_playerAbilitySet.Ability1 = m_parry;
+            if (m_parry != null) m_playerAbilitySet.Ability1 = m_parry;
         }
 
         private void Update()

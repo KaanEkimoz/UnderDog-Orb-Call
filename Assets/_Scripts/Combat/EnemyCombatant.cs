@@ -49,6 +49,10 @@ namespace com.game.enemysystem
             _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;
         }
+        private void Start()
+        {
+            if (_playerCombatant == null) ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
+        }
         public void ProvidePlayerCombatant(PlayerCombatant playerCombatant)
         {
             _playerCombatant = playerCombatant;
@@ -61,10 +65,14 @@ namespace com.game.enemysystem
             float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
 
             _health -= realDamage;
-            PopupManager.Instance.CreateDamagePopup(realDamage, transform.position 
-                + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
-                + ((Vector3)UnityEngine.Random.insideUnitCircle * k_popupPositionRandomization)
-                , true); // !!!
+
+            if (PopupManager.Instance != null)
+            {
+                PopupManager.Instance.CreateDamagePopup(realDamage, transform.position
+                    + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
+                    + ((Vector3)UnityEngine.Random.insideUnitCircle * k_popupPositionRandomization)
+                    , true); // !!!
+            }
 
             if (_health <= 0)
             {
@@ -106,15 +114,18 @@ namespace com.game.enemysystem
 
             // !!!
 
-            if ((!enemy.IsFake)  || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)))
+            if (DropManager.Instance != null)
             {
-                int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
-                DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position)
-                    .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                if ((!enemy.IsFake) || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)))
+                {
+                    int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
+                    DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position)
+                        .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
 
-                int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
-                DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position)
-                    .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                    int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
+                    DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position)
+                        .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                }
             }
 
             TestEventChannel.ReceiveEnemyKill();

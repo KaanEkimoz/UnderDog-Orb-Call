@@ -218,8 +218,8 @@ namespace com.game
 
             m_waveStartTime = Time.time;
 
-            m_orbUIUpdater.Refresh();
-            m_orbUIUpdater2.Refresh();
+            if (m_orbUIUpdater != null) m_orbUIUpdater.Refresh();
+            if (m_orbUIUpdater2 != null) m_orbUIUpdater2.Refresh();
             m_playerParanoiaLogic.SetToSegment(m_wavesEnded);
         }
 
