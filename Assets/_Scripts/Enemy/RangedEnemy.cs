@@ -57,7 +57,7 @@ public class RangedEnemy : Enemy
     {   
         canShoot = false;
        
-        Vector3 shootingDirection = (target.transform.position - transform.position);
+        Vector3 shootingDirection = (target.transform.position - firePoint.position);
         shootingDirection.y = 0f;
         shootingDirection = shootingDirection.normalized; //projectile yonu
 

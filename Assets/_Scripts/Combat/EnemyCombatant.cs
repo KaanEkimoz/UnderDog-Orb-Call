@@ -19,7 +19,7 @@ namespace com.game.enemysystem
         private const float k_dropSpawnForceYAddition = 0.1f;
 
         private const int k_maxMoneyDropAmount = 5;
-        private const int k_maxExperienceDropAmount = 2;
+        private const int k_maxExperienceDropAmount = 4;
 
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;

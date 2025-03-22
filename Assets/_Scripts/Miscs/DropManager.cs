@@ -39,7 +39,7 @@ namespace com.game.miscs
             List<DropBehaviour> result = new();
             for (int i = 0; i < amount; i++)
             {
-                result.Add(SpawnExperienceDrop(amount, initialPosition));
+                result.Add(SpawnExperienceDrop(1, initialPosition));
             }
 
             return result;
