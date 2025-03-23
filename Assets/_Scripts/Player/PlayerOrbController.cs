@@ -37,7 +37,9 @@ public class OrbController : MonoBehaviour
     [Header("Orb Materials")]
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private GameObject ghostOrbPrefab;
-    
+    [Space, Header("Extensions")]
+    [SerializeField] private List<PlayerOrbControllerExtensionBase> m_extensions = new();
+
     //Orb Types
     public const int SIMPLE_ORB_INDEX = 7;
     public const int FIRE_ORB_INDEX = 9;
@@ -148,6 +150,12 @@ public class OrbController : MonoBehaviour
 
         Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
         throwDirection.y = 0;
+
+        foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
+        {
+            throwDirection = extension.ConvertAimDirection(throwDirection);
+        }
+
         orbToThrow.Throw(throwDirection.normalized);
 
         orbToThrow.ResetMaterial();
