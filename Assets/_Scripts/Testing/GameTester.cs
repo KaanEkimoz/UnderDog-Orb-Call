@@ -90,7 +90,7 @@ namespace com.game.testing
 
         private void OnDestroy()
         {
-            PlayerStatPipelineComponentBase rawComponent = m_playerStats.Pipeline.Query.
+            StatPipelineComponentBase<PlayerStatType> rawComponent = m_playerStats.Pipeline.Query.
                 FirstOrDefault(comp => comp is PlayerStatPipelineOrbCountEffect);
 
             bool exists = rawComponent != null;

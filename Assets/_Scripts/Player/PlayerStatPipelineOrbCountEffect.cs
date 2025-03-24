@@ -2,11 +2,12 @@ using com.game.player.statsystemextensions;
 using UnityEngine;
 using System.Collections.Generic;
 using com.game.testing;
+using com.game.statsystem;
 
 namespace com.game.player
 {
     [DisallowMultipleComponent]
-    public class PlayerStatPipelineOrbCountEffect : PlayerStatPipelineComponentBase
+    public class PlayerStatPipelineOrbCountEffect : StatPipelineComponentBase<PlayerStatType>
     {
         const float k_guiWidth = 540f;
 

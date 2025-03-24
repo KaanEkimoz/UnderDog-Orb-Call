@@ -1,21 +1,21 @@
 using com.absence.attributes;
-using com.game.player.statsystemextensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace com.game.player
+namespace com.game.statsystem
 {
-    public class PlayerStatPipeline : MonoBehaviour
+    public abstract class StatPipeline<T> : MonoBehaviour where T : Enum
     {
-        [SerializeField, Readonly] private List<PlayerStatPipelineComponentBase> m_pipelineComponentList;
+        [SerializeField, Readonly] private List<StatPipelineComponentBase<T>> m_pipelineComponentList;
 
-        public List<PlayerStatPipelineComponentBase> Query => m_pipelineComponentList;
+        public List<StatPipelineComponentBase<T>> Query => m_pipelineComponentList;
 
-        public float Process(PlayerStatType statType, float rawValue)
+        public float Process(T statType, float rawValue)
         {
             float value = rawValue;
-            for (int i = 0; i < m_pipelineComponentList.Count; i++) 
+            for (int i = 0; i < m_pipelineComponentList.Count; i++)
             {
                 value = m_pipelineComponentList[i].Process(statType, value);
             }
@@ -31,8 +31,12 @@ namespace com.game.player
         [Button("Refresh Pipeline Component List")]
         public void Refresh()
         {
-            m_pipelineComponentList = GetComponents<PlayerStatPipelineComponentBase>().ToList().
+            m_pipelineComponentList = GetComponents<StatPipelineComponentBase<T>>().ToList().
                 OrderBy(comp => comp.Order).ToList();
+
+#if UNITY_EDITOR
+
+#endif
 
             m_pipelineComponentList.ForEach(comp => comp.Initialize());
         }

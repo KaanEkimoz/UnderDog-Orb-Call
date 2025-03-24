@@ -7,6 +7,10 @@ namespace com.game.statsystem
         /// </summary>
         IStatManipulator<T> Manipulator { get; }
         /// <summary>
+        /// Pipeline responsible for applying external effects to stats.
+        /// </summary>
+        public StatPipeline<T> Pipeline { get; }
+        /// <summary>
         /// Use to get a stat.
         /// </summary>
         /// <param name="targetStat">Target stat.</param>

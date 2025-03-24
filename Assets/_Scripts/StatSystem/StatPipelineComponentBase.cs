@@ -1,20 +1,18 @@
 using com.absence.attributes;
-using com.game.player.statsystemextensions;
-using System;
 using System.Collections.Generic;
 using System.Text;
+using System;
 using UnityEngine;
 
-namespace com.game.player
+namespace com.game.statsystem
 {
-    [RequireComponent(typeof(PlayerStatPipeline))]
-    public abstract class PlayerStatPipelineComponentBase : MonoBehaviour
+    public abstract class StatPipelineComponentBase<T> : MonoBehaviour where T : Enum
     {
         [SerializeField] protected int m_order = 0;
         [Space, SerializeField]
-        protected List<PlayerStatPipelineStatEntry> m_statEntries = new();
+        protected List<StatPipelineStatEntry<T>> m_statEntries = new();
 
-        Dictionary<PlayerStatType, float> m_coefficientPairs;
+        Dictionary<T, float> m_coefficientPairs;
 
         public int Order => m_order;
 
@@ -24,16 +22,25 @@ namespace com.game.player
             Initialize_Internal();
         }
 
-        public float Process(PlayerStatType statType, float rawValue)
+        public float Process(T statType, float rawValue)
         {
-            if (!m_coefficientPairs.TryGetValue(statType, out float statCoefficient))
+            float statCoefficient = 1f;
+#if !UNITY_EDITOR
+            if (!m_coefficientPairs.TryGetValue(statType, out statCoefficient))
                 return rawValue;
+#else
+            StatPipelineStatEntry<T> entry = m_statEntries.Find(eny => eny.TargetStat.Equals(statType));
+            if (entry == null)
+                return rawValue;
+            else
+                statCoefficient = entry.Coefficient;
+#endif
 
             return Process_Internal(statType, statCoefficient, rawValue);
         }
 
         protected abstract void Initialize_Internal();
-        protected abstract float Process_Internal(PlayerStatType statType, float statCoefficient, float rawValue);
+        protected abstract float Process_Internal(T statType, float statCoefficient, float rawValue);
 
         public virtual void OnTestGUI()
         {
@@ -45,13 +52,13 @@ namespace com.game.player
             StringBuilder sb = new("Result of the validation:\n\n");
 
             bool error = false;
-            foreach(PlayerStatType enumValue in Enum.GetValues(typeof(PlayerStatType)))
+            foreach (T enumValue in Enum.GetValues(typeof(T)))
             {
-                List<PlayerStatPipelineStatEntry> entryList = 
+                List<StatPipelineStatEntry<T>> entryList =
                     m_statEntries.FindAll(entry => entry.TargetStat.Equals(enumValue));
 
                 int count = entryList.Count;
-                    
+
                 if (count > 1)
                 {
                     sb.Append($"There are multiple ({count}) entries of the stat: '{enumValue}' found.\n");
@@ -74,11 +81,14 @@ namespace com.game.player
             if (!Application.isPlaying) return;
 
             m_coefficientPairs = new();
+
+#if !UNITY_EDITOR
             m_statEntries.ForEach(entry =>
             {
                 if (!m_coefficientPairs.ContainsKey(entry.TargetStat))
                     m_coefficientPairs.Add(entry.TargetStat, entry.Coefficient);
             });
+#endif
         }
     }
 }
