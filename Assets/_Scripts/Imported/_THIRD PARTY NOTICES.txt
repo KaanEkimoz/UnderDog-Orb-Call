@@ -1,0 +1,1 @@
+(Unlicense) Unity Serializable Interfaces - git-amend - https://github.com/adammyhre/Unity-Serialized-Interface?tab=readme-ov-file
