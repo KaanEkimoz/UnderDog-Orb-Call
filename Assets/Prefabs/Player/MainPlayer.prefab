@@ -2461,6 +2461,7 @@ MonoBehaviour:
   m_orbUpgradeShop: {fileID: 1493889740054554536}
   m_abilities: {fileID: 2814813539509469751}
   m_combatant: {fileID: 421993215095397046}
+  m_light: {fileID: 0}
   m_entity: {fileID: 0}
 --- !u!114 &6740164441137565520
 MonoBehaviour:
@@ -2588,6 +2589,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_currentPercentage: 0
   m_currentSegment: 0
+  m_affections:
+  - Target:
+      rid: -2
+    Mode: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    PerSegmentList: []
+    OverallMultiplier: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &210113340321595825
 MonoBehaviour:
   m_ObjectHideFlags: 0

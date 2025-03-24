@@ -46,6 +46,11 @@ namespace com.game.enemysystem
             }
         }
 
+        private void Awake()
+        {
+            ResetTimer();
+        }
+
         private void Update()
         {
             if (!m_enabled)
