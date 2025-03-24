@@ -126,15 +126,18 @@ namespace com.game.enemysystem
 
             if (DropManager.Instance != null)
             {
-                if ((!enemy.IsFake) || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)))
+                if (!enemy.IsVirtual)
                 {
-                    int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
-                    DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position)
-                        .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                    if ((!enemy.IsFake) || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)))
+                    {
+                        int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
+                        DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position)
+                            .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
 
-                    int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
-                    DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position)
-                        .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                        int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
+                        DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position)
+                            .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                    }
                 }
             }
 

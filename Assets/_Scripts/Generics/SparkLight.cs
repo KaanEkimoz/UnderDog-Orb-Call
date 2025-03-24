@@ -1,6 +1,7 @@
 using com.absence.attributes;
 using com.absence.timersystem;
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace com.game.generics
         [SerializeField, MinMaxSlider(0f, 10f)] private Vector2 m_intensityRange;
 
         public bool InCooldown => m_inCooldown;
+
+        public event Action OnSparkEnds;
 
         bool m_inCooldown;
         Sequence m_sequence;
@@ -41,7 +44,7 @@ namespace com.game.generics
             foreach (Light light in m_lights)
             {
                 light.intensity = m_intensityRange.y;
-                Tween tween = light.DOIntensity(m_intensityRange.x, Random.Range(m_durationRange.x, m_durationRange.y));
+                Tween tween = light.DOIntensity(m_intensityRange.x, UnityEngine.Random.Range(m_durationRange.x, m_durationRange.y));
                 m_sequence.Insert(0f, tween);
             }
 
@@ -67,6 +70,8 @@ namespace com.game.generics
         {
             ResetAllLights();
             m_sequence = null;
+
+            OnSparkEnds?.Invoke();
         }
 
         void OnSequenceComplete()
@@ -81,8 +86,10 @@ namespace com.game.generics
             }
 
             m_inCooldown = true;
-            m_cooldownTimer = Timer.Create(Random.Range(m_cooldownRange.x, m_cooldownRange.y), null, OnTimerComplete);
+            m_cooldownTimer = Timer.Create(UnityEngine.Random.Range(m_cooldownRange.x, m_cooldownRange.y), null, OnTimerComplete);
             m_cooldownTimer.Start();
+
+            OnSparkEnds?.Invoke();
         }
 
         void ResetAllLights()
@@ -107,6 +114,7 @@ namespace com.game.generics
         private void OnDestroy()
         {
             m_sequence?.Kill();
+            m_cooldownTimer?.Fail();
         }
     }
 }

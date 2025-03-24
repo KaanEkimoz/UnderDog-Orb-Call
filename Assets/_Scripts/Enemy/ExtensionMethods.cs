@@ -17,7 +17,7 @@ namespace com.game.enemysystem
         public static void ReinitializeAsFake(this Enemy enemy)
         {
             enemy.IsFake = true;
-            enemy.Fakify();
+            Enemy.DoFakify(enemy);
         }
     }
 }
