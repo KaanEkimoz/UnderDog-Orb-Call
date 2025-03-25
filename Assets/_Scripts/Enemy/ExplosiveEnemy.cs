@@ -24,6 +24,9 @@ public class ExploderEnemy : Enemy
 
         navMeshAgent.SetDestination(target.transform.position);
 
+        if (IsFake)
+            return;
+
         if (GetDistanceToPlayer()) //dusman karaktere yeterince yakinsa
         {
             if (isPreparingToExplode == false) //ve halihazirda patlamaya hazirlanmiyorsa

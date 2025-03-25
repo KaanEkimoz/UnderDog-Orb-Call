@@ -24,6 +24,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7c728b2a91714cd458b71defb51db6c2, type: 2}
+    - target: {fileID: 3701225131490053606, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 3642404789856939474}
+    - target: {fileID: 6836446959609869726, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: m_enemy
+      value: 
+      objectReference: {fileID: 3642404789856939474}
     - target: {fileID: 7298133027063933198, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_AngularSpeed
       value: 120
@@ -137,6 +145,7 @@ MonoBehaviour:
   enemyMovementData: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
   slowPercentPerOrb: 25
   enemyStats: {fileID: 635029754020833559}
+  isDummyModeActive: 0
   explosionDamage: 30
   preperationTime: 1.5
   explosionRadius: 5

@@ -1,12 +1,10 @@
 using com.game.abilitysystem.ui;
-using com.game.enemysystem;
+using com.game.events;
 using com.game.orbsystem;
-using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
 using com.game.player.statsystemextensions;
 using com.game.statsystem;
 using com.game.ui;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,12 +32,7 @@ namespace com.game.testing
 
         [SerializeField] private bool m_displayUnpaused = false;
         [SerializeField] private bool m_displayPaused = false;
-        [SerializeField] private AbilityDisplayGP m_parryDisplay;
         [SerializeField] private Parry m_parry;
-        [SerializeField] OrbShopUI m_orbShopUI;
-        [SerializeField] PlayerShopUI m_playerShopUI;
-        [SerializeField] OrbContainerUI m_orbContainerUI;
-        [SerializeField] OrbUIUpdater m_orbUIUpdater;
 
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_additionalDict = new();
         Dictionary<PlayerStatType, ModifierObject<PlayerStatType>> m_percentageDict = new();
@@ -48,6 +41,7 @@ namespace com.game.testing
         PlayerInventory m_playerInventory;
         PlayerLevelingLogic m_playerLevelingLogic;
         PlayerOrbContainer m_orbContainer;
+        PlayerAbilitySet m_playerAbilitySet;
         OrbShop m_orbShop;
         PlayerShop m_playerShop;
 
@@ -56,25 +50,17 @@ namespace com.game.testing
         float m_additionButtonAmount;
         float m_percentageButtonAmount;
         bool m_pausedGame;
-        bool m_passGUI;
-
-        int m_levelsGained;
-        List<OrbItemProfile> m_orbUpgradeCache;
+        bool p_passGUI => (!m_pausedGame) && Game.Paused;
 
         private void Start()
         {
-            m_passGUI = false;
-            m_levelsGained = 0;
-            m_orbUpgradeCache = new();
-
             m_playerStats = Player.Instance.Hub.Stats;
             m_playerInventory = Player.Instance.Hub.Inventory;
             m_playerLevelingLogic = Player.Instance.Hub.Leveling;
+            m_playerAbilitySet = Player.Instance.Hub.Abilities;
             m_orbShop = Player.Instance.Hub.OrbShop;
             m_playerShop = Player.Instance.Hub.Shop;
             m_orbContainer = Player.Instance.Hub.OrbContainer;
-
-            m_playerLevelingLogic.OnLevelUp += OnPlayerLevelUp;
 
             m_additionButtonWidth = k_totalButtonAreaWidth * 2 / 5 / 2;
             m_percentageButtonWidth = k_totalButtonAreaWidth * 3 / 5 / 2;
@@ -82,130 +68,29 @@ namespace com.game.testing
             m_additionButtonAmount = k_initialAdditionButtonAmount;
             m_percentageButtonAmount = k_initialPercentageButtonAmount;
 
-            m_parryDisplay.Initialize(m_parry);
-        }
-
-        private void OnPlayerLevelUp(PlayerLevelingLogic logic)
-        {
-            m_levelsGained++;
-        }
-
-        private void OnWaveEnd()
-        {
-            m_pausedGame = false;
-            Game.Pause();
-
-            foreach (EnemyCombatant enemy in GameObject.FindObjectsByType<EnemyCombatant>(
-                FindObjectsInactive.Exclude, FindObjectsSortMode.None))
-            {
-                enemy.Die();
-            }
-
-            m_orbShopUI.Hide(true);
-            m_orbContainerUI.Hide(true);
-            m_playerShopUI.Hide(true);
-
-            m_orbContainerUI.SoftRefresh();
-
-            m_passGUI = true;
-            if (m_levelsGained > 0) EnterLevelUpMenu();
-            else if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) EnterOrbInventory();
-            else EnterShop();
-        }
-
-        void EnterLevelUpMenu(bool reroll = true)
-        {
-            m_orbShopUI.Show(reroll);
-            m_orbShopUI.Title.text = m_levelsGained > 1 ? $"Level Up! ({m_levelsGained})" : "Level Up!";
-            m_orbShopUI.InventoryButton.OnClick += EnterOrbInventoryTemporarily;
-            m_orbShopUI.PassButton.OnClick += PassOrbUpgrades;
-            m_orbShopUI.OnItemBought -= OnOrbUpgradeBought;
-            m_orbShopUI.OnItemBought += OnOrbUpgradeBought;
-        }
-
-        private void EnterOrbInventoryTemporarily()
-        {
-            m_orbContainerUI.Show(false);
-            m_orbContainerUI.BackButton.OnClick += () => m_orbContainerUI.Hide(false);
-            m_orbContainerUI.ConfirmButton.OnClick += OnConfirmUpgrades;
-        }
-
-        private void PassOrbUpgrades()
-        {
-            m_levelsGained = 0;
-            if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) EnterOrbInventory();
-            else EnterShop();
-        }
-
-        void OnOrbUpgradeBought(OrbItemProfile profile)
-        {
-            m_orbUpgradeCache.Add(profile);
-            m_levelsGained--;
-
-            if (m_levelsGained > 0)
-                EnterLevelUpMenu();
-            else if (m_orbUpgradeCache.Count > 0) 
-                EnterOrbInventory();
-            else 
-                EnterShop();
-        }
-
-        private void EnterOrbInventory()
-        {
-            m_orbShopUI.Hide(true);
-            m_orbContainerUI.SetUpgradeCache(m_orbUpgradeCache);
-            m_orbContainerUI.Show(true);
-            m_orbContainerUI.ConfirmButton.OnClick += () =>
-            {
-                OnConfirmUpgrades();
-                EnterShop();
-            };
-        }
-
-        private void OnConfirmUpgrades()
-        {
-            m_orbUpgradeCache = new(m_orbContainer.UpgradeCache);
-            m_orbContainerUI.SoftRefresh();
-            m_orbContainerUI.Hide(false);
-        }
-
-        private void EnterShop()
-        {
-            m_orbShopUI.Hide(true);
-            m_playerShopUI.Show(true);
-            m_playerShopUI.InventoryButton.OnClick += EnterOrbInventoryTemporarily;
-            m_playerShopUI.ProceedButton.OnClick += ExitShop;
-        }
-
-        private void ExitShop()
-        {
-            m_playerShopUI.Hide(true);
-
-            m_pausedGame = true;
-            m_passGUI = false;
-            Game.Resume();
-
-            m_orbUIUpdater.Redraw();
+            if (m_parry != null) m_playerAbilitySet.Ability1 = m_parry;
         }
 
         private void Update()
         {
             if (!Keyboard.current.escapeKey.wasPressedThisFrame) return;
 
-            if (Game.Paused)
+            if (Game.Paused && m_pausedGame)
             {
-                if (m_pausedGame) Game.Resume();
+                Game.Resume();
+                m_pausedGame = false;
             }
-            else 
+
+            else if ((!Game.Paused) && (!m_pausedGame))
             {
-                m_pausedGame = true;
                 Game.Pause();
+                m_pausedGame = true;
             }
         }
 
         private void OnDestroy()
         {
-            PlayerStatPipelineComponentBase rawComponent = m_playerStats.Pipeline.Query.
+            StatPipelineComponentBase<PlayerStatType> rawComponent = m_playerStats.Pipeline.Query.
                 FirstOrDefault(comp => comp is PlayerStatPipelineOrbCountEffect);
 
             bool exists = rawComponent != null;
@@ -227,7 +112,7 @@ namespace com.game.testing
 
         private void OnGUI()
         {
-            if (m_passGUI)
+            if (p_passGUI)
                 return;
 
             if (!Game.Paused)
@@ -418,7 +303,10 @@ namespace com.game.testing
 
             if (GUILayout.Button("End Wave"))
             {
-                OnWaveEnd();
+                Game.Resume();
+                m_pausedGame = false;
+
+                GameEventChannel.CommitWaveEnd();
             }
 
             GUILayout.EndVertical();

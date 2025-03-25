@@ -19,6 +19,7 @@ namespace com.game.orbsystem.statsystemextensions
         Dictionary<OrbStatType, float> m_defaultValues;
 
         public IStatManipulator<OrbStatType> Manipulator => m_statHolder;
+        public StatPipeline<OrbStatType> Pipeline => null;
         public Dictionary<OrbStatType, float> DefaultValues => m_defaultValues;
 
         private void Awake()
@@ -40,6 +41,8 @@ namespace com.game.orbsystem.statsystemextensions
             FillDefaultValues();
 
             Debug.Log("OrbStats initialized.");
+
+            if (Pipeline != null) Pipeline.Refresh();
         }
 
         #endregion
@@ -56,7 +59,15 @@ namespace com.game.orbsystem.statsystemextensions
 
         public float GetStat(OrbStatType targetStat)
         {
-            return m_statHolder.GetStat(targetStat);
+            float rawStatValue = m_statHolder.GetStat(targetStat);
+
+            if (Pipeline == null)
+            {
+                Debug.LogWarning("Player stat pipeline is null.");
+                return rawStatValue;
+            }
+
+            return Pipeline.Process(targetStat, rawStatValue);
         }
     }
 }

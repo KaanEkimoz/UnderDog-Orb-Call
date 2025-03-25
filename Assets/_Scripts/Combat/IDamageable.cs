@@ -9,9 +9,11 @@ namespace com.game
         float MaxHealth { get; }
 
         event Action<float> OnTakeDamage;
+        event Action<float> OnHeal;
         event Action OnDie;
 
         void TakeDamage(float damage);
+        void Heal(float amount);
 
         void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds);
         void Die();

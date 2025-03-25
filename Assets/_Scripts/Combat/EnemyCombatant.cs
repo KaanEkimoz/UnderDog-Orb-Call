@@ -8,37 +8,55 @@ using com.game.generics;
 using Zenject;
 using com.game.player;
 using System.Collections;
+using com.game.miscs;
 
 namespace com.game.enemysystem
 {
     public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
     {
+        private const float k_popupPositionRandomization = 0.3f;
+        private const float k_dropSpawnForceMagnitude = 2f;
+        private const float k_dropSpawnForceYAddition = 0.1f;
+
+        private const int k_maxMoneyDropAmount = 5;
+        private const int k_maxExperienceDropAmount = 4;
+
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
         [SerializeField] private SparkLight m_sparkLight;
         [SerializeField] private Enemy enemy;
         public SparkLight Spark => m_sparkLight;
 
-        float _health;
-        float _maxHealth;
+        private float _health;
+        private float _maxHealth;
 
         public bool IsAlive => _health > 0;
-        public float Health => _health;
-        public float MaxHealth => _maxHealth;
+        public float Health { get => _health; set => _health = value; }
+        public float MaxHealth { get => _maxHealth; set => _maxHealth = value; }
+        public Enemy Owner => enemy;
 
         public event Action<float> OnTakeDamage = delegate { };
+        public event Action<float> OnHeal = delegate { };
         public event Action OnDie = delegate { };
 
-        [Inject] PlayerCombatant _playerCombatant;
+        PlayerCombatant _playerCombatant;
         [Inject] OrbController _orbController;
 
-        private void Start()
+        private void Awake()
         {
             if(enemy == null)
                enemy = GetComponent<Enemy>();
 
             _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;
+        }
+        private void Start()
+        {
+            if (_playerCombatant == null) ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
+        }
+        public void ProvidePlayerCombatant(PlayerCombatant playerCombatant)
+        {
+            _playerCombatant = playerCombatant;
         }
         public void TakeDamage(float damage)
         {
@@ -48,6 +66,14 @@ namespace com.game.enemysystem
             float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
 
             _health -= realDamage;
+
+            if (PopupManager.Instance != null)
+            {
+                PopupManager.Instance.CreateDamagePopup(realDamage, transform.position
+                    + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
+                    + ((Vector3)UnityEngine.Random.insideUnitCircle * k_popupPositionRandomization)
+                    , true); // !!!
+            }
 
             if (_health <= 0)
             {
@@ -76,6 +102,15 @@ namespace com.game.enemysystem
             }
         }
 
+        public void Heal(float amount)
+        {
+            if (amount == 0f)
+                return;
+
+            _health += amount;
+            OnHeal?.Invoke(amount);
+        }
+
         public void Die()
         {
             Debug.Log("test");
@@ -86,6 +121,25 @@ namespace com.game.enemysystem
             {
                 orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
                 orb.ResetParent();
+            }
+
+            // !!!
+
+            if (DropManager.Instance != null)
+            {
+                if (!enemy.IsVirtual)
+                {
+                    if ((!enemy.IsFake) || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)))
+                    {
+                        int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
+                        DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position)
+                            .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+
+                        int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
+                        DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position)
+                            .ForEach(d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                    }
+                }
             }
 
             TestEventChannel.ReceiveEnemyKill();
@@ -103,6 +157,13 @@ namespace com.game.enemysystem
         public SimpleOrb[] GetOrbsOnEnemy()
         {
             return GetComponentsInChildren<SimpleOrb>();
+        }
+
+        Vector3 GetRandomDirectionForDrop(float yAddition = k_dropSpawnForceYAddition)
+        {
+            Vector2 randomUnitCircle = UnityEngine.Random.insideUnitCircle;
+            Vector3 result = new Vector3(randomUnitCircle.x, yAddition, randomUnitCircle.y);
+            return result;
         }
     }
 }
