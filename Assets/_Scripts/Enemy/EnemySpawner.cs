@@ -40,7 +40,7 @@ public class EnemySpawner : MonoBehaviour
             EnemyCombatant enemyCombatant = enemy.GetComponent<EnemyCombatant>();
             enemyCombatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
             enemyCount++;
-            spawnedEnemies.Add(spawnedEnemy);
+            spawnedEnemies.Add(enemy);
             if (enemyCombatant != null)
             {
                 enemyCombatant.OnDie += OnEnemyDeath;
