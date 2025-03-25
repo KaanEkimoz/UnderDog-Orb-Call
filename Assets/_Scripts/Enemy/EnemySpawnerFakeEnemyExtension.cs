@@ -6,7 +6,7 @@ using UnityEngine;
 namespace com.game.enemysystem
 {
     [RequireComponent(typeof(EnemySpawner))]
-    public class EnemySpawnerFakeEnemyExtension : MonoBehaviour
+    public class EnemySpawnerFakeEnemyExtension : MonoBehaviour, IParanoiaTarget
     {
         public const bool BRUTE_FORCE = false;
 
@@ -118,9 +118,24 @@ namespace com.game.enemysystem
             }
         }
 
+        public void SetSpawnDelayWithoutTimerReset(float value)
+        {
+            m_spawnDelay = value;
+        }
+
         private void Reset()
         {
             m_owner = GetComponent<EnemySpawner>();
+        }
+
+        public void OnFetchParanoiaAffectionValue(float value)
+        {
+            SetSpawnDelayWithoutTimerReset(value);
+        }
+
+        public void OnParanoiaSegmentChange(int segmentIndex)
+        {
+            Enabled = segmentIndex >= Constants.Paranoia.PARANOIA_FAKE_ENEMY_START_SEGMENT;
         }
     }
 }

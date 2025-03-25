@@ -15,6 +15,8 @@ namespace com.game
         public static class Paranoia
         {
             public const int PARANOIA_SEGMENT_COUNT = 5;
+            public const int PARANOIA_VIRTUAL_ENEMY_START_SEGMENT = 1;
+            public const int PARANOIA_FAKE_ENEMY_START_SEGMENT = 1;
         }
 
         public static class Shopping

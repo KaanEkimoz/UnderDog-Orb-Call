@@ -39,9 +39,9 @@ namespace com.game.enemysystem
             switch (m_mode)
             {
                 case EffectMode.Curve:
-                    return (m_curve.Evaluate(paranoia.TotalPercentage01) * statCoefficient * rawValue) + m_overallShift;
+                    return (m_curve.Evaluate(paranoia.TotalPercentage01) * statCoefficient * m_overallMultiplier * rawValue) + m_overallShift;
                 case EffectMode.PerSegment:
-                    return (m_perSegmentList[paranoia.SegmentIndex] * statCoefficient * rawValue) + m_overallShift;
+                    return (m_perSegmentList[paranoia.SegmentIndex] * statCoefficient * m_overallMultiplier * rawValue) + m_overallShift;
                 default:
                     Debug.LogError("An error occurred while calculating paranoia affection amount. Returning NaN.");
                     return float.NaN;

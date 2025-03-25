@@ -6,7 +6,7 @@ using UnityEngine;
 namespace com.game.enemysystem
 {
     [RequireComponent(typeof(EnemySpawner))]
-    public class EnemySpawnerVirtualEnemyExtension : MonoBehaviour
+    public class EnemySpawnerVirtualEnemyExtension : MonoBehaviour, IParanoiaTarget
     {
         public const bool BRUTE_FORCE = false;
 
@@ -87,9 +87,24 @@ namespace com.game.enemysystem
             VirtualEnemy.KillAll();
         }
 
+        public void SetSpawnDelayWithoutTimerReset(float value)
+        {
+            m_spawnDelay = value;
+        }
+
         private void Reset()
         {
             m_owner = GetComponent<EnemySpawner>();
+        }
+
+        public void OnFetchParanoiaAffectionValue(float value)
+        {
+            SetSpawnDelayWithoutTimerReset(value);
+        }
+
+        public void OnParanoiaSegmentChange(int segmentIndex)
+        {
+            Enabled = segmentIndex >= Constants.Paranoia.PARANOIA_VIRTUAL_ENEMY_START_SEGMENT;
         }
     }
 }
