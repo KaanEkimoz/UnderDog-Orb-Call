@@ -1396,11 +1396,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_durationRange.x
-      value: 0.08986829
+      value: 0.2070142
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_durationRange.y
-      value: 0.20506586
+      value: 0.32221174
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_intensityRange.x

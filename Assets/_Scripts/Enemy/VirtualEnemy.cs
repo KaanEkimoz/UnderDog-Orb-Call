@@ -15,7 +15,8 @@ namespace com.game.enemysystem
             randomDirection.y = 0f;
             randomDirection.Normalize();
 
-            float randomDistance = Random.Range(light.HalfVisionRadius, light.FullVisionRadius);
+            //float randomDistance = Random.Range(light.HalfVisionRadius, light.FullVisionRadius);
+            float randomDistance = light.HalfVisionRadius;
 
             Vector3 lightPosition = light.transform.position;
             lightPosition.y = instance.transform.position.y;
