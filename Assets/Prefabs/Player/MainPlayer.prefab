@@ -2603,7 +2603,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_owner: {fileID: 1020411334301909070}
-  m_entries: []
+  m_entries:
+  - Target:
+      underlyingValue: {fileID: 0}
+    Mode: 2
+    OverallMultiplier: 1
+    OverallShift: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    PerSegmentList:
+    - 20
+    - 15
+    - 12
+    - 8
+    - 5
+    - 5
+  - Target:
+      underlyingValue: {fileID: 0}
+    Mode: 2
+    OverallMultiplier: 1
+    OverallShift: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    PerSegmentList:
+    - 20
+    - 15
+    - 12
+    - 8
+    - 5
+    - 5
 --- !u!114 &210113340321595825
 MonoBehaviour:
   m_ObjectHideFlags: 0
