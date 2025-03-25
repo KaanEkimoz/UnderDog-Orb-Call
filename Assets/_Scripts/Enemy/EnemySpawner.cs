@@ -22,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        //StartSpawning();
+        StartSpawning();
     }
 
     private void Update() {}
@@ -33,11 +33,13 @@ public class EnemySpawner : MonoBehaviour
 
         while (enemyCount < maxEnemyCount)
         {
+            yield return new WaitForSeconds(spawnDelay);
+
             Transform spawnPoint = GetRandomSpawnPoint();
             GameObject enemyPrefab = GetRandomEnemyPrefab();
 
             GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-            EnemyCombatant enemyCombatant = enemy.GetComponent<EnemyCombatant>();
+            EnemyCombatant enemyCombatant = enemy.GetComponentInChildren<EnemyCombatant>();
             enemyCombatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
             enemyCount++;
             spawnedEnemies.Add(enemy);
@@ -45,8 +47,6 @@ public class EnemySpawner : MonoBehaviour
             {
                 enemyCombatant.OnDie += OnEnemyDeath;
             }
-
-            yield return new WaitForSeconds(spawnDelay);
         }
 
         isCoroutineRunning = false;

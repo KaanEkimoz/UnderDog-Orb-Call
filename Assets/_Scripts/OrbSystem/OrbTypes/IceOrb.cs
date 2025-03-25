@@ -44,8 +44,7 @@ namespace com.game
                 if (hitCollider.gameObject.CompareTag("Player"))
                     continue;
 
-                affectedEnemies.Add(hitDamageable);
-
+                //affectedEnemies.Add(hitDamageable);
             }
             if (continuosIceEffect == null)
             {
