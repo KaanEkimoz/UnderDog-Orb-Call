@@ -113,7 +113,8 @@ namespace com.game.enemysystem
 
         public void Die()
         {
-            Debug.Log("difh");
+            Debug.Log("test");
+
             SimpleOrb[] orbsOnEnemy = GetOrbsOnEnemy();
 
             foreach (SimpleOrb orb in orbsOnEnemy)
@@ -146,6 +147,8 @@ namespace com.game.enemysystem
             else Destroy(gameObject);
 
             OnDie?.Invoke();
+
+            Debug.Log("Dusman bayildi");
         }
         public int GetOrbsCountOnEnemy()
         {
