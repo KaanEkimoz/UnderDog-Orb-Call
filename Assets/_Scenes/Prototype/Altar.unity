@@ -933,6 +933,10 @@ PrefabInstance:
       propertyPath: m_entries.Array.data[1].Target.underlyingValue
       value: 
       objectReference: {fileID: 1812771221}
+    - target: {fileID: 2019759119449363392, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_altarSystem
+      value: 
+      objectReference: {fileID: 251994210}
     - target: {fileID: 2059313747511272117, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
