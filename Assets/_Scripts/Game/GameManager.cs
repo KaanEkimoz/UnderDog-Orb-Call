@@ -2,6 +2,7 @@ using com.absence.attributes;
 using com.absence.utilities;
 using com.game.enemysystem;
 using com.game.events;
+using com.game.miscs;
 using com.game.orbsystem;
 using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
@@ -131,7 +132,9 @@ namespace com.game
             foreach (EnemyCombatant enemy in GameObject.FindObjectsByType<EnemyCombatant>(
                 FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
+                DropManager.Instance.Enabled = false;
                 enemy.Die();
+                DropManager.Instance.Enabled = true;
             }
 
             m_orbShopUI.Hide(true);
