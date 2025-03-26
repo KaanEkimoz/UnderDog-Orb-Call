@@ -1,3 +1,4 @@
+using com.game;
 using com.game.enemysystem;
 using com.game.player;
 using System.Collections;
@@ -67,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
 
         return spawnPoint.transform;
     }
-    private void OnEnemyDeath()
+    private void OnEnemyDeath(DeathCause cause)
     {
         enemyCount--;
         Debug.Log("dusman oldu");

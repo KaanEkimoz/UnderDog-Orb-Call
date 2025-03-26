@@ -63,7 +63,7 @@ namespace com.game.enemysystem
 
         private void Dispose()
         {
-            m_instance.Combatant.Die();
+            m_instance.Combatant.Die(DeathCause.Internal);
         }
     }
 }
