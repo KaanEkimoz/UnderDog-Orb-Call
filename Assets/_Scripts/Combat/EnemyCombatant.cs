@@ -14,8 +14,10 @@ namespace com.game.enemysystem
 {
     public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
     {
+        private const bool k_randomizeDropDirections = false;
+
         private const float k_popupPositionRandomization = 0.3f;
-        private const float k_dropSpawnForceMagnitude = 2f;
+        private const float k_dropSpawnForceMagnitude = 4f;
         private const float k_dropSpawnForceYAddition = 0.1f;
 
         private const int k_maxMoneyDropAmount = 5;
@@ -37,7 +39,7 @@ namespace com.game.enemysystem
 
         public event Action<float> OnTakeDamage = delegate { };
         public event Action<float> OnHeal = delegate { };
-        public event Action OnDie = delegate { };
+        public event Action<DeathCause> OnDie = delegate { };
 
         PlayerCombatant _playerCombatant;
         [Inject] OrbController _orbController;
@@ -78,7 +80,12 @@ namespace com.game.enemysystem
             if (_health <= 0)
             {
                 _health = 0;
-                Die();
+
+                DeathCause deathCause = DeathCause.Internal;
+                if (Game.Event == Event.OrbThrow) deathCause = DeathCause.OrbThrow;
+                else if (Game.Event == Event.OrbCall) deathCause = DeathCause.OrbCall;
+
+                Die(deathCause);
             }
             enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
 
@@ -111,7 +118,7 @@ namespace com.game.enemysystem
             OnHeal?.Invoke(amount);
         }
 
-        public void Die()
+        public void Die(DeathCause cause)
         {
             Debug.Log("test");
 
@@ -133,11 +140,11 @@ namespace com.game.enemysystem
                     {
                         int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
                         DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position,
-                            d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                            d => d.SetSpawnForce(GetRandomDirectionForDrop(cause), k_dropSpawnForceMagnitude));
 
                         int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
                         DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position,
-                            d => d.SetSpawnForce(GetRandomDirectionForDrop(), k_dropSpawnForceMagnitude));
+                            d => d.SetSpawnForce(GetRandomDirectionForDrop(cause), k_dropSpawnForceMagnitude));
                     }
                 }
             }
@@ -146,7 +153,7 @@ namespace com.game.enemysystem
             if (m_container != null) Destroy(m_container);
             else Destroy(gameObject);
 
-            OnDie?.Invoke();
+            OnDie?.Invoke(cause);
 
             Debug.Log("Dusman bayildi");
         }
@@ -159,11 +166,33 @@ namespace com.game.enemysystem
             return GetComponentsInChildren<SimpleOrb>();
         }
 
-        Vector3 GetRandomDirectionForDrop(float yAddition = k_dropSpawnForceYAddition)
+        Vector3 GetRandomDirectionForDrop(DeathCause deathCause, float yAddition = k_dropSpawnForceYAddition)
         {
+            Vector3 playerPosition = Vector3.zero;
+            Vector3 initialVector = Vector3.zero;
+
+            if (Player.Instance != null) 
+                playerPosition = Player.Instance.transform.position;
+
+            if (deathCause == DeathCause.OrbThrow) 
+                initialVector = transform.position - playerPosition;
+            else if (deathCause == DeathCause.OrbCall) 
+                initialVector = playerPosition - transform.position;
+
+            initialVector.Normalize();
+
+            Vector3 resultVector = initialVector;
             Vector2 randomUnitCircle = UnityEngine.Random.insideUnitCircle;
-            Vector3 result = new Vector3(randomUnitCircle.x, yAddition, randomUnitCircle.y);
-            return result;
+            Vector3 random = new Vector3(randomUnitCircle.x, yAddition, randomUnitCircle.y);
+
+#pragma warning disable CS0162 // Unreachable code detected
+            if (k_randomizeDropDirections)
+                resultVector += random;
+#pragma warning restore CS0162 // Unreachable code detected
+
+            resultVector.Normalize();
+
+            return resultVector;
         }
     }
 }

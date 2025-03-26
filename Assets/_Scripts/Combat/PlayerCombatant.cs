@@ -21,7 +21,7 @@ namespace com.game.player
 
         public event Action<float> OnTakeDamage = delegate { };
         public event Action<float> OnHeal = delegate { };
-        public event Action OnDie = delegate { };
+        public event Action<DeathCause> OnDie = delegate { };
 
         [Inject] OrbController _orbController;
 
@@ -47,7 +47,7 @@ namespace com.game.player
             if (_health <= 0)
             {
                 _health = 0;
-                Die();
+                Die(DeathCause.Default);
             }
             OnTakeDamage?.Invoke(damage);
         }
@@ -80,12 +80,12 @@ namespace com.game.player
 
             OnHeal?.Invoke(amount);
         }
-        public void Die()
+        public void Die(DeathCause cause)
         {
             if (m_container != null) Destroy(m_container);
             else Destroy(gameObject);
 
-            OnDie?.Invoke();
+            OnDie?.Invoke(cause);
         }
     }
 }

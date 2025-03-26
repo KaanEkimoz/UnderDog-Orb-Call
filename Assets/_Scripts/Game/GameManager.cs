@@ -133,7 +133,7 @@ namespace com.game
                 FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
                 DropManager.Instance.Enabled = false;
-                enemy.Die();
+                enemy.Die(DeathCause.Internal);
                 DropManager.Instance.Enabled = true;
             }
 

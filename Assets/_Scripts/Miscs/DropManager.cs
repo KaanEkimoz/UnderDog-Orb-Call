@@ -34,7 +34,7 @@ namespace com.game.miscs
             return drop;
         }
 
-        public List<DropBehaviour> SpawnIndividualMoneyDrops(int amount, Vector3 initialPosition, Action<DropBehaviour> onSpawnForEach)
+        public List<DropBehaviour> SpawnIndividualMoneyDrops(int amount, Vector3 initialPosition, Action<DropBehaviour> onSpawnForEach = null)
         {
             List<DropBehaviour> result = new();
             for (int i = 0; i < amount; i++) 
@@ -49,11 +49,11 @@ namespace com.game.miscs
 
                 onSpawnForEach?.Invoke(drop);
             }
-
+             
             return result;
         }
 
-        public List<DropBehaviour> SpawnIndividualExperienceDrops(int amount, Vector3 initialPosition, Action<DropBehaviour> onSpawnForEach)
+        public List<DropBehaviour> SpawnIndividualExperienceDrops(int amount, Vector3 initialPosition, Action<DropBehaviour> onSpawnForEach = null)
         {
             List<DropBehaviour> result = new();
             for (int i = 0; i < amount; i++)
