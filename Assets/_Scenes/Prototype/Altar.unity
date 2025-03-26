@@ -500,8 +500,8 @@ Transform:
   m_GameObject: {fileID: 148211347}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4.96}
-  m_LocalScale: {x: 10, y: 4, z: 1}
+  m_LocalPosition: {x: 0.0342, y: 0, z: -5.3072}
+  m_LocalScale: {x: 12.209457, y: 4, z: 1.6943957}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 570285514}
@@ -858,9 +858,9 @@ MonoBehaviour:
   safeZoneTimer: 20
   maxSafeZoneEntries: 4
   difficultyIncreaseTime: 5
-  safeZoneEntryCount: 0
   maxEnemyIncrease: 10
   currentDifficultyLevel: 0
+  safeZoneEntryCount: 0
   safeZoneBoundaries: {fileID: 570285513}
   safeZoneArea: {fileID: 1383029551}
   enemySpawner: {fileID: 1812771219}
@@ -1565,7 +1565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &570285514
 Transform:
   m_ObjectHideFlags: 0
@@ -2509,8 +2509,8 @@ Transform:
   m_GameObject: {fileID: 1200162878}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5.43}
-  m_LocalScale: {x: 10, y: 4, z: 1}
+  m_LocalPosition: {x: 0.6409, y: -0, z: 5.658}
+  m_LocalScale: {x: 11.282001, y: 4, z: 1.456}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 570285514}
@@ -2807,8 +2807,8 @@ Transform:
   m_GameObject: {fileID: 1301254800}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.51, y: 0, z: 0.38}
-  m_LocalScale: {x: 10, y: 4, z: 1}
+  m_LocalPosition: {x: -5.7102, y: 0, z: 1.0025}
+  m_LocalScale: {x: 11.245001, y: 4, z: 1.4004}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 570285514}
@@ -2915,8 +2915,8 @@ Transform:
   m_GameObject: {fileID: 1317056605}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 5.52, y: 0, z: 0.22}
-  m_LocalScale: {x: 10, y: 4, z: 1}
+  m_LocalPosition: {x: 5.6548, y: 0, z: 0.22}
+  m_LocalScale: {x: 10, y: 4, z: 1.2696}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 570285514}
@@ -3161,8 +3161,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2, y: 4.119837, z: 1.2}
-  m_Center: {x: 0, y: 1.5599184, z: 0}
+  m_Size: {x: 1.2044767, y: 4.119837, z: 1.1441467}
+  m_Center: {x: -0.006232689, y: 1.5599184, z: -0.012806759}
 --- !u!114 &1383029557
 MonoBehaviour:
   m_ObjectHideFlags: 0
