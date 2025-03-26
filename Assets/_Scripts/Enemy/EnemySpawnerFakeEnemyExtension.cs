@@ -64,6 +64,11 @@ namespace com.game.enemysystem
             }
         }
 
+        private void Awake()
+        {
+            m_owner.OnEnemiesCleared += KillAll;
+        }
+
         private void Update()
         {
             if (!m_enabled) 
@@ -107,6 +112,14 @@ namespace com.game.enemysystem
         public void ResetTimer()
         {
             m_timer = m_spawnDelay;
+        }
+
+        public void KillAll()
+        {
+            int max = m_maxFakeEnemyCount;
+            m_maxFakeEnemyCount = 0;
+            TrimExcessEnemies();
+            m_maxFakeEnemyCount = max;
         }
 
         public void TrimExcessEnemies()

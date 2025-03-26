@@ -1,10 +1,11 @@
 using com.game;
 using com.game.enemysystem;
 using com.game.player;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject[] enemyPrefabs;
@@ -20,6 +21,8 @@ public class EnemySpawner : MonoBehaviour
     private bool isCoroutineRunning;
 
     private Coroutine spawnCoroutine;
+
+    public event Action OnEnemiesCleared;
 
     public bool IsSpawning => spawnCoroutine != null;
 
@@ -57,7 +60,7 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject GetRandomEnemyPrefab()
     {
-        int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
+        int randomEnemyIndex = UnityEngine.Random.Range(0, enemyPrefabs.Length);
         GameObject enemyPrefab = enemyPrefabs[randomEnemyIndex];
 
         return enemyPrefab;
@@ -65,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
 
     public Transform GetRandomSpawnPoint()
     {
-        int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
+        int randomSpawnPoint = UnityEngine.Random.Range(0, spawnPoints.Length);
         GameObject spawnPoint = spawnPoints[randomSpawnPoint];
 
         return spawnPoint.transform;
@@ -109,7 +112,9 @@ public class EnemySpawner : MonoBehaviour
         }
 
         spawnedEnemies.Clear();
-        enemyCount = 0;       
+        enemyCount = 0;
+
+        OnEnemiesCleared?.Invoke();
     }
 }
 

@@ -855,7 +855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90e73f8e5a00bd449f23f9584e7aaa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  safeZoneTimer: 20
+  safeZoneTimer: 2
   maxSafeZoneEntries: 4
   difficultyIncreaseTime: 5
   maxEnemyIncrease: 10
