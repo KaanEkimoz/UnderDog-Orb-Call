@@ -4,6 +4,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using com.game.testing;
+using com.game.enemysystem;
+using com.game.miscs;
 public class ExploderEnemy : Enemy
 {
     [Header("Explosion Settings")]
@@ -87,10 +89,7 @@ public class ExploderEnemy : Enemy
             orb.ResetParent();
         }
 
-        //TestEventChannel.ReceiveEnemyKill();
-
-        if (container != null) Destroy(container);
-        else Destroy(gameObject);
+        GetComponentInChildren<EnemyCombatant>().Die(DeathCause.Self);
     }
 
     private void CancelPreparation()

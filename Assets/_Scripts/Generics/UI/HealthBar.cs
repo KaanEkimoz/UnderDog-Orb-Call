@@ -107,7 +107,7 @@ namespace com.game
             if (m_hideAutomatically) m_graphic.alpha = 0f; 
         }
 
-        private void OnDie()
+        private void OnDie(DeathCause cause)
         {
             if (m_destroyOnDeath)
             {

@@ -34,7 +34,7 @@ namespace com.game.generics
 
         void Apply(GameObject other)
         {
-            if (other.TryGetComponent(out IDamageable damageable)) damageable.Die();
+            if (other.TryGetComponent(out IDamageable damageable)) damageable.Die(DeathCause.Default);
             else Destroy(other);
         }
     }

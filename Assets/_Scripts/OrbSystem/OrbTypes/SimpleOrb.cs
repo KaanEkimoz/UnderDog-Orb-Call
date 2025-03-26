@@ -206,6 +206,8 @@ public class SimpleOrb : MonoBehaviour
         if(currentState != OrbState.Throwing)
             return;
 
+        Game.Event = com.game.GameRuntimeEvent.OrbThrow;
+
         currentState = OrbState.Sticked;
 
         //Disable Physics and Stick to Surface
@@ -213,11 +215,15 @@ public class SimpleOrb : MonoBehaviour
         StickToTransform(collision.transform);
 
         ApplyCollisionEffects(collision);
+
+        Game.Event = com.game.GameRuntimeEvent.Null;
     }
     private void OnTriggerEnter(Collider collider)
     {
         if (currentState != OrbState.Returning)
             return;
+
+        Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
         if (collider.gameObject.TryGetComponent(out IDamageable damageable))
         {
@@ -226,6 +232,8 @@ public class SimpleOrb : MonoBehaviour
             if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
         }
+
+        Game.Event = com.game.GameRuntimeEvent.Null;
     }
     protected virtual void ApplyCollisionEffects(Collision collisionObject)
     {

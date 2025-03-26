@@ -96,7 +96,7 @@ namespace com.game.enemysystem
             if (m_fakeMovementData != null) combatant.Owner.enemyMovementData = m_fakeMovementData;
             combatant.ReinitializeAsFake();
 
-            combatant.OnDie += () => m_instances.Remove(combatant);
+            combatant.OnDie += (_) => m_instances.Remove(combatant);
 
             m_instances.Add(combatant);
         }
@@ -114,7 +114,7 @@ namespace com.game.enemysystem
                     continue;
 
                 EnemyCombatant combatant = m_instances[i];
-                combatant.Die();
+                combatant.Die(DeathCause.Internal);
             }
         }
 
