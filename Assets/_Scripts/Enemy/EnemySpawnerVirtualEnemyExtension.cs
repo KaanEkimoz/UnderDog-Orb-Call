@@ -48,6 +48,7 @@ namespace com.game.enemysystem
 
         private void Awake()
         {
+            m_owner.OnEnemiesCleared += KillAll;
             ResetTimer();
         }
 

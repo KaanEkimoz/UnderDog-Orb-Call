@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class AltarSystemController : MonoBehaviour
 {
@@ -27,7 +28,6 @@ public class AltarSystemController : MonoBehaviour
     [SerializeField] private bool canEnterSafeZone = true;
     [SerializeField] private bool isTimerActive = false;
     
-
     [Header("UI")]
     public TextMeshProUGUI timerText;
 
