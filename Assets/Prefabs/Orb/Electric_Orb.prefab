@@ -187,13 +187,15 @@ MonoBehaviour:
   _renderer: {fileID: 4106319513204084605}
   onEllipseLifetime: 0.1
   normalLifetime: 0.5
+  m_light: {fileID: 0}
   trailParticle: {fileID: 5112996817047285831}
   maxElectricBounceCount: 3
   electricBounceRadius: 15
   electricEffectDurationInSeconds: 5
   electrictEffectIntervalInSeconds: 1
-  electricLineEffectPrefab: {fileID: 4255653483301192683, guid: b954bd2d90fa36542aa7568f516a286e, type: 3}
-  electricLineEffectDuration: 0.2
+  electricEffectPrefab: {fileID: 0}
+  electricChainEffectPrefab: {fileID: 4255653483301192683, guid: b954bd2d90fa36542aa7568f516a286e, type: 3}
+  electricChainEffectDuration: 0.2
 --- !u!114 &-7261617665073162034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718416fd39ef1514f891d915b465e6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_defaultStats: {fileID: 11400000, guid: 8f2c4f0c5f0e5ca4ebf9c85fa7c23861, type: 2}
+  m_defaultStats: {fileID: 11400000, guid: f1f914d3fa1dbb54bb4ccea58128b424, type: 2}
   m_statHolder:
     m_stats: []
     m_enumValues: 

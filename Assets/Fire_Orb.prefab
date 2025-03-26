@@ -9911,6 +9911,7 @@ MonoBehaviour:
   _renderer: {fileID: 6338541844397458439}
   onEllipseLifetime: 0.1
   normalLifetime: 0.5
+  m_light: {fileID: 0}
   trailParticle: {fileID: 1929282375273034525}
   fireDurationInSeconds: 3
   fireDamageIntervalInSeconds: 0.2
@@ -9930,7 +9931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718416fd39ef1514f891d915b465e6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_defaultStats: {fileID: 11400000, guid: 8f2c4f0c5f0e5ca4ebf9c85fa7c23861, type: 2}
+  m_defaultStats: {fileID: 11400000, guid: 8c4d674bac0c0134e912b3a5539df3be, type: 2}
   m_statHolder:
     m_stats: []
     m_enumValues: 

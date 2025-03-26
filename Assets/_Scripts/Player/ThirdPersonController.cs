@@ -31,9 +31,6 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Acceleration")]
     [Tooltip("Acceleration and deceleration")]
     [SerializeField] private float speedChangeRate = 10.0f;
-    [Header("Audio Clips")]
-    [SerializeField] private AudioClip[] footstepAudioClips;
-    [Range(0, 1)][SerializeField] private float footstepAudioVolume = 0.5f;
 
     //player
     private float _currentHorizontalSpeed;
@@ -52,10 +49,12 @@ public class ThirdPersonController : MonoBehaviour
     public int DashCount => _dashCount;
 
     //animation
-    private bool _hasAnimator;
     private float _horizontalSpeedAnimationBlend;
     private int _animIDSpeed;
     private int _animIDMotionSpeed;
+    private int _animIDDashTrigger;
+    private int _animIDAttackTrigger;
+    private int _animIDDeathTrigger;
 
     //components
     private Animator _animator;
@@ -85,7 +84,7 @@ public class ThirdPersonController : MonoBehaviour
     }
     private void Start()
     {
-        _hasAnimator = TryGetComponent(out _animator);
+        _animator = GetComponent<Animator>();
         _controller = GetComponent<CharacterController>();
         _input = GetComponent<PlayerInputHandler>();
 
@@ -153,18 +152,15 @@ public class ThirdPersonController : MonoBehaviour
 
         return targetSpeedThisFrame;
     }
-
     private float CalculateAnimationBlend(float targetSpeed)
     {
         float blend = Mathf.Lerp(_horizontalSpeedAnimationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
         return blend < 0.01f ? 0f : blend;
     }
-
     private Vector3 GetInputDirection()
     {
         return new Vector3(_input.MovementInput.x, 0.0f, _input.MovementInput.y).normalized;
     }
-
     private float CalculateTargetRotation(Vector3 inputDirection)
     {
         if (_input.MovementInput == Vector2.zero )
@@ -172,7 +168,6 @@ public class ThirdPersonController : MonoBehaviour
 
         return Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
     }
-
     private void ApplyRotation(float targetRotation)
     {
         if (PlayerInputHandler.Instance.AttackButtonHeld)
@@ -187,7 +182,6 @@ public class ThirdPersonController : MonoBehaviour
 
         transform.rotation = rotationQuat;
     }
-
     private Vector3 CalculateTargetDirection(float targetRotation)
     {
         return Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
@@ -217,6 +211,7 @@ public class ThirdPersonController : MonoBehaviour
         _dashCount--;
         _dashDurationTimer = dashDurationInSeconds;
         _dashCooldownTimer = dashCooldownInSeconds + dashDurationInSeconds;
+        _animator.SetTrigger(_animIDDashTrigger);
     }
     private void HandleDashTimers()
     {
@@ -233,14 +228,14 @@ public class ThirdPersonController : MonoBehaviour
     {
         _animIDSpeed = Animator.StringToHash("Speed");
         _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        _animIDDashTrigger = Animator.StringToHash("Dash");
+        _animIDDeathTrigger = Animator.StringToHash("Death");
+        _animIDAttackTrigger = Animator.StringToHash("Attack");
     }
     private void UpdateAnimator()
     {
-        if (_hasAnimator)
-        {
-            _animator.SetFloat(_animIDSpeed, _horizontalSpeedAnimationBlend);
-            _animator.SetFloat(_animIDMotionSpeed, _input.analogMovement ? _input.MovementInput.magnitude : 1f);
-        }
+        _animator.SetFloat(_animIDSpeed, _horizontalSpeedAnimationBlend);
+        _animator.SetFloat(_animIDMotionSpeed, _input.analogMovement ? _input.MovementInput.magnitude : 1f);
     }
     #endregion
 
