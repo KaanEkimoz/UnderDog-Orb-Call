@@ -9,6 +9,8 @@ using Zenject;
 using com.game.player;
 using System.Collections;
 using com.game.miscs;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace com.game.enemysystem
 {
@@ -132,21 +134,23 @@ namespace com.game.enemysystem
 
             // !!!
 
-            if (DropManager.Instance != null)
+            List<bool> conditions = new()
             {
-                if (!enemy.IsVirtual)
-                {
-                    if ((!enemy.IsFake) || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)))
-                    {
-                        int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
-                        DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position,
-                            d => d.SetSpawnForce(GetRandomDirectionForDrop(cause), k_dropSpawnForceMagnitude));
+                DropManager.Instance != null,
+                cause != DeathCause.Self,
+                !enemy.IsVirtual,
+                (!enemy.IsFake) || (enemy.IsFake && (!InternalSettings.FAKE_ENEMIES_DONT_DROP)),
+            };
 
-                        int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
-                        DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position,
-                            d => d.SetSpawnForce(GetRandomDirectionForDrop(cause), k_dropSpawnForceMagnitude));
-                    }
-                }
+            if (conditions.All(c => c))
+            {
+                int experienceAmount = UnityEngine.Random.Range(1, k_maxExperienceDropAmount + 1);
+                DropManager.Instance.SpawnIndividualExperienceDrops(experienceAmount, transform.position,
+                    d => d.SetSpawnForce(GetRandomDirectionForDrop(cause), k_dropSpawnForceMagnitude));
+
+                int moneyAmount = UnityEngine.Random.Range(1, k_maxMoneyDropAmount + 1);
+                DropManager.Instance.SpawnIndividualMoneyDrops(moneyAmount, transform.position,
+                    d => d.SetSpawnForce(GetRandomDirectionForDrop(cause), k_dropSpawnForceMagnitude));
             }
 
             TestEventChannel.ReceiveEnemyKill();

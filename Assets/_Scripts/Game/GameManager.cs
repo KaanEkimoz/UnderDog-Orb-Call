@@ -132,9 +132,9 @@ namespace com.game
             foreach (EnemyCombatant enemy in GameObject.FindObjectsByType<EnemyCombatant>(
                 FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
-                DropManager.Instance.Enabled = false;
+                if (DropManager.Instance != null) DropManager.Instance.Enabled = false;
                 enemy.Die(DeathCause.Internal);
-                DropManager.Instance.Enabled = true;
+                if (DropManager.Instance != null) DropManager.Instance.Enabled = true;
             }
 
             m_orbShopUI.Hide(true);
