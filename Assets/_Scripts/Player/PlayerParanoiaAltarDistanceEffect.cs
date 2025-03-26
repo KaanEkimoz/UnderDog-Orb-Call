@@ -39,7 +39,7 @@ namespace com.game.player
         // !!!
         Vector3 GetAltarPosition()
         {
-            return Constants.Placeholder.AltarPosition;
+            return GameManager.Instance.AltarTransform.position;
         }
     }
 }

@@ -7,8 +7,8 @@ namespace com.game.player
     public class PlayerParanoiaWaveDurationEffect : MonoBehaviour
     {
         [SerializeField] private PlayerParanoiaLogic m_target;
+        [SerializeField] private AltarSystemController m_altarSystem;
         [SerializeField] private float m_strength;
-        [SerializeField] private float m_startTimeInSeconds;
 
         float m_timer = float.NaN;
         bool m_enabled = false;
@@ -42,7 +42,7 @@ namespace com.game.player
             if (!m_enabled)
                 return;
 
-            if (m_timer >= m_startTimeInSeconds)
+            if (m_timer >= m_altarSystem.safeZoneTimer)
             {
                 m_target.Increase(m_strength);
             }

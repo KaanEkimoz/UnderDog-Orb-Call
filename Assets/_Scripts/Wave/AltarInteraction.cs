@@ -1,3 +1,4 @@
+using com.game;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,7 +32,7 @@ public class AltarInteraction : MonoBehaviour
 
     void Interact()
     {
-        //GameManager.Instance.SetState(GameState.BetweenWaves);
+        GameManager.Instance.SetState(GameState.BetweenWaves);
         Debug.Log("shop acildi");
     }
 }
