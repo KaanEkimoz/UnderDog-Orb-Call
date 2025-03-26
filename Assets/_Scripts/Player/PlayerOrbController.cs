@@ -92,7 +92,6 @@ public class OrbController : MonoBehaviour
         HandleCooldowns();
         UpdateOrbEllipsePositions();
     }
-
     private void HandleInput()
     {
         if (PlayerInputHandler.Instance.AttackButtonPressed)
@@ -115,7 +114,7 @@ public class OrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb(ElementalType.None);
+            AddOrb(ElementalType.Fire);
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }

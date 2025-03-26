@@ -10,7 +10,9 @@ public class AltarSystemController : MonoBehaviour
     public float difficultyIncreaseTime = 30f;
     public int safeZoneEntryCount = 0;
     public int maxEnemyIncrease = 10;
+    [SerializeField]
     private int currentDifficultyLevel = 0;
+    private float timer;
 
     [Header("Refeences")]
     public GameObject safeZoneBoundaries;
@@ -19,11 +21,10 @@ public class AltarSystemController : MonoBehaviour
     public CheckSafeZone checkSafeZone;
 
     [Header("Bools")]
-    [SerializeField]
-    private bool isPlayerInSafeZone = true;
-    private bool canEnterSafeZone = true;
-    private bool isTimerActive = false;
-    private float timer;
+    [SerializeField] private bool isPlayerInSafeZone = true;
+    [SerializeField] private bool canEnterSafeZone = true;
+    [SerializeField] private bool isTimerActive = false;
+    
 
     [Header("UI")]
     public TextMeshProUGUI timerText;
@@ -102,6 +103,8 @@ public class AltarSystemController : MonoBehaviour
 
     public void PlayerExitedSafeZone()
     {
+        canEnterSafeZone = false;
+
         if (!isTimerActive)
         {
             StartTimer();
