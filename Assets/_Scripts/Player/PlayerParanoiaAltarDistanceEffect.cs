@@ -27,7 +27,9 @@ namespace com.game.player
 
         private void OnDrawGizmosSelected()
         {
-            Vector3 altarPosition = GetAltarPosition();
+            Vector3 altarPosition = Vector3.zero;
+            if (!Application.isPlaying) altarPosition = transform.position;
+            else altarPosition = GetAltarPosition();
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(altarPosition, m_minDistance);
@@ -39,7 +41,7 @@ namespace com.game.player
         // !!!
         Vector3 GetAltarPosition()
         {
-            return Constants.Placeholder.AltarPosition;
+            return GameManager.Instance.AltarTransform.position;
         }
     }
 }

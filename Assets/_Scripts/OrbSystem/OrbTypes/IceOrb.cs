@@ -28,6 +28,9 @@ namespace com.game
 
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
 
+            GameRuntimeEvent evt = Game.Event;
+            Game.Event = GameRuntimeEvent.Null;
+
             foreach (var hitCollider in hitColliders)
                 if (hitCollider.gameObject.TryGetComponent(out Enemy hitEnemy))
                     hitEnemy.ApplySlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
@@ -44,7 +47,9 @@ namespace com.game
                 if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable))
                     affectedEnemies.Add(hitDamageable);
             }
-                
+
+            Game.Event = evt;
+
             if (continuosIceEffect == null)
             {
                 Debug.LogWarning("IceEffect prefab is not assigned.");

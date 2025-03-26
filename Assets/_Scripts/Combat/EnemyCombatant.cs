@@ -83,7 +83,7 @@ namespace com.game.enemysystem
             {
                 _health = 0;
 
-                DeathCause deathCause = DeathCause.Internal;
+                DeathCause deathCause = DeathCause.Default;
                 if (Game.Event == GameRuntimeEvent.OrbThrow) deathCause = DeathCause.OrbThrow;
                 else if (Game.Event == GameRuntimeEvent.OrbCall) deathCause = DeathCause.OrbCall;
 
@@ -190,7 +190,7 @@ namespace com.game.enemysystem
             Vector3 random = new Vector3(randomUnitCircle.x, yAddition, randomUnitCircle.y);
 
 #pragma warning disable CS0162 // Unreachable code detected
-            if (k_randomizeDropDirections)
+            if (k_randomizeDropDirections || deathCause == DeathCause.Default)
                 resultVector += random;
 #pragma warning restore CS0162 // Unreachable code detected
 
