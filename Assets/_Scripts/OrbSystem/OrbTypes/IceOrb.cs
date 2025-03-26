@@ -26,15 +26,12 @@ namespace com.game
         {
             base.ApplyCollisionEffects(collisionObject);
 
-            //if(collisionObject.gameObject.TryGetComponent(out Enemy hitEnemy))
-              //  hitEnemy.ApplySlowForSeconds(slowPercent, slowDurationOnSeconds);
-
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
+
             foreach (var hitCollider in hitColliders)
-            {
                 if (hitCollider.gameObject.TryGetComponent(out Enemy hitEnemy))
                     hitEnemy.ApplySlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
-            }
+
             affectedEnemies.Clear();
             GameObject instantEffect = Instantiate(instantIceEffect, transform.position, Quaternion.identity);
             StartCoroutine(DestroyIceEffectAfterDelay(instantEffect, 0.3f));
@@ -44,8 +41,10 @@ namespace com.game
                 if (hitCollider.gameObject.CompareTag("Player"))
                     continue;
 
-                //affectedEnemies.Add(hitDamageable);
+                if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable))
+                    affectedEnemies.Add(hitDamageable);
             }
+                
             if (continuosIceEffect == null)
             {
                 Debug.LogWarning("IceEffect prefab is not assigned.");
