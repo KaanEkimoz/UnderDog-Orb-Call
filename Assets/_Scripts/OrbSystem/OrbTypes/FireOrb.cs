@@ -19,18 +19,14 @@ namespace com.game
         [SerializeField] private GameObject continuosFireEffect; // Prefab for the electric line
         [SerializeField] private float fireEffectDurationInSeconds = 0.2f;
 
-
         private List<IDamageable> affectedEnemies = new List<IDamageable>();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
             damageable.TakeDamageInSeconds(damage, fireDurationInSeconds, fireDamageIntervalInSeconds);
 
-            // Find all colliders within the electric bounce radius
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, fireDamageRadius);
 
-            // Clear the list of affected enemies and add the initial target
             affectedEnemies.Clear();
-            //affectedEnemies.Add(damageable);
             GameObject instantEffect = Instantiate(instantFireEffectPrefab, transform.position, Quaternion.identity);
             StartCoroutine(DestroyFireEffectAfterDelay(instantEffect, 0.3f));
 
@@ -48,7 +44,7 @@ namespace com.game
             }
             if (continuosFireEffect == null)
             {
-                Debug.LogWarning("ElectricLine prefab is not assigned.");
+                Debug.LogWarning("FireEffect prefab is not assigned.");
                 return;
             }
 
@@ -82,20 +78,32 @@ namespace com.game
         {
             GameObject fireEffectInstance = Instantiate(continuosFireEffect, effectPos, Quaternion.identity);
 
-            // Get the ElectricLine component
-            //ElectricLine electricLine = electricLineInstance.GetComponent<ElectricLine>();
-
-
             StartCoroutine(DestroyFireEffectAfterDelay(fireEffectInstance, fireEffectDurationInSeconds));
         }
-        private IEnumerator DestroyFireEffectAfterDelay(GameObject electricLineInstance, float delay)
+        private IEnumerator DestroyFireEffectAfterDelay(GameObject fireEffectInstance, float delay)
         {
             yield return new WaitForSeconds(delay);
-            Destroy(electricLineInstance);
+            Destroy(fireEffectInstance);
         }
         protected override void ApplyCollisionEffects(Collision collisionObject)
         {
             base.ApplyCollisionEffects(collisionObject);
         }
+
+#if UNITY_EDITOR
+
+        private void OnDrawGizmos()
+        {
+            // Draw the slow radius in the editor
+
+            if (currentState != OrbState.OnEllipse)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(transform.position, fireDamageRadius);
+            }
+        }
+
+#endif
+
     }
 }

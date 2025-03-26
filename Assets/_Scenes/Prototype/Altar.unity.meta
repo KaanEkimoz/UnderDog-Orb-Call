@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/_Scenes/Prototype/DGDK.unity.meta
+guid: bd2aa53a944d0ba449cddddcea0ca9c5
+========
 guid: f2f82777df6891341afc69fea20acb17
+>>>>>>>> main:Assets/_Scenes/Prototype/Sunak.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

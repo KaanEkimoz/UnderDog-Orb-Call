@@ -32,9 +32,8 @@ public class RangedEnemy : Enemy
 
         canSeePlayer = CanSeePlayer();
 
-        if (canShoot && GetDistanceToPlayer() && CanSeePlayer())
+        if ((!IsFake) && canShoot && GetDistanceToPlayer() && CanSeePlayer())
             Shoot();
-
     }
     
     private bool CanSeePlayer()
@@ -58,7 +57,7 @@ public class RangedEnemy : Enemy
     {   
         canShoot = false;
        
-        Vector3 shootingDirection = (target.transform.position - transform.position);
+        Vector3 shootingDirection = (target.transform.position - firePoint.position);
         shootingDirection.y = 0f;
         shootingDirection = shootingDirection.normalized; //projectile yonu
 

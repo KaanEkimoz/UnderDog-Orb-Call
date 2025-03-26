@@ -35,7 +35,7 @@ namespace com.game.player
 
         public IStatManipulator<PlayerStatType> Manipulator => m_statHolder;
 
-        public PlayerStatPipeline Pipeline => m_statPipeline;
+        public StatPipeline<PlayerStatType> Pipeline => m_statPipeline;
         public Dictionary<PlayerStatType, float> DefaultValues => m_defaultValues;
 
         private void Awake()
@@ -43,7 +43,7 @@ namespace com.game.player
             Initialize(m_defaultStats);
             if (m_debugMode) ApplyCharacterProfile(m_defaultCharacterProfile);
 
-            if (m_statPipeline != null) m_statPipeline.Refresh();
+            if (Pipeline != null) Pipeline.Refresh();
         }
 
         #region Public API
@@ -76,13 +76,13 @@ namespace com.game.player
         {
             float rawStatValue = m_statHolder.GetStat(targetStat);
 
-            if (m_statPipeline == null)
+            if (Pipeline == null)
             {
                 Debug.LogWarning("Player stat pipeline is null.");
                 return rawStatValue;
             }
 
-            return m_statPipeline.Process(targetStat, rawStatValue);
+            return Pipeline.Process(targetStat, rawStatValue);
         }
 
         public PlayerStatHolder GetRawStatHolder()

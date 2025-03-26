@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace com.game.enemysystem
 {
+    [DefaultExecutionOrder(-100)]
     public class EnemyStats : MonoBehaviour, IStats<EnemyStatType>
     {
         [Header("Utilities")]
@@ -15,12 +16,18 @@ namespace com.game.enemysystem
         [Header("Stats")]
         [SerializeField, Readonly] private EnemyStatHolder m_statHolder;
 
+        [SerializeField]
+        private EnemyStatPipeline m_statPipeline;
+
         public IStatManipulator<EnemyStatType> Manipulator => m_statHolder;
+        public StatPipeline<EnemyStatType> Pipeline => m_statPipeline;
 
         private void Awake()
         {
             Initialize(m_defaultStats);
             //if (m_debugMode) ApplyCharacterProfile(m_defaultCharacterProfile);
+
+            if (Pipeline != null) Pipeline.Refresh();
         }
 
         #region Public API
@@ -37,7 +44,15 @@ namespace com.game.enemysystem
 
         public float GetStat(EnemyStatType targetStat)
         {
-            return m_statHolder.GetStat(targetStat);
+            float rawStatValue = m_statHolder.GetStat(targetStat);
+
+            if (Pipeline == null)
+            {
+                Debug.LogWarning("Player stat pipeline is null.");
+                return rawStatValue;
+            }
+
+            return Pipeline.Process(targetStat, rawStatValue);
         }
 
         #endregion

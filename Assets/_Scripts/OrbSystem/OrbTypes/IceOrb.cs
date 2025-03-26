@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 namespace com.game
 {
@@ -9,7 +11,13 @@ namespace com.game
         [SerializeField] float iceSlowPercent = 100f;
         [SerializeField] float iceSlowDurationInSeconds = 1f;
         [SerializeField] float iceSlowRadius = 10f;
+        [Header("Collision Instant Ice Effect")]
+        [SerializeField] private GameObject instantIceEffect;
+        [Header("Continuos Ice Effect")]
+        [SerializeField] private GameObject continuosIceEffect; // Prefab for the electric line
+        [SerializeField] private float iceEffectDurationInSeconds = 0.2f;
 
+        private List<IDamageable> affectedEnemies = new List<IDamageable>();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
             base.ApplyCombatEffects(damageable, damage);
@@ -27,6 +35,52 @@ namespace com.game
                 if (hitCollider.gameObject.TryGetComponent(out Enemy hitEnemy))
                     hitEnemy.ApplySlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
             }
+            affectedEnemies.Clear();
+            GameObject instantEffect = Instantiate(instantIceEffect, transform.position, Quaternion.identity);
+            StartCoroutine(DestroyIceEffectAfterDelay(instantEffect, 0.3f));
+
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.gameObject.CompareTag("Player"))
+                    continue;
+
+                //affectedEnemies.Add(hitDamageable);
+            }
+            if (continuosIceEffect == null)
+            {
+                Debug.LogWarning("IceEffect prefab is not assigned.");
+                return;
+            }
+
+            CreateIceEffectOnEnemiesInRange();
+        }
+        private void CreateIceEffectOnEnemiesInRange()
+        {
+
+            for (int i = 0; i < affectedEnemies.Count; i++)
+            {
+                MonoBehaviour currentEnemy = affectedEnemies[i] as MonoBehaviour;
+
+                Vector3 topPos = currentEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; // Top Position
+
+                CreateIceEffect(topPos);
+            }
+        }
+        private IEnumerator CreateIceEffectWithIntervals()
+        {
+            CreateIceEffectOnEnemiesInRange();
+            yield return new WaitForSeconds(iceEffectDurationInSeconds);
+        }
+        private void CreateIceEffect(Vector3 effectPos)
+        {
+            GameObject fireEffectInstance = Instantiate(continuosIceEffect, effectPos, Quaternion.identity);
+
+            StartCoroutine(DestroyIceEffectAfterDelay(fireEffectInstance, iceEffectDurationInSeconds));
+        }
+        private IEnumerator DestroyIceEffectAfterDelay(GameObject fireEffectInstance, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            Destroy(fireEffectInstance);
         }
 
 #if UNITY_EDITOR

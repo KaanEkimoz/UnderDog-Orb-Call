@@ -28,6 +28,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7c728b2a91714cd458b71defb51db6c2, type: 2}
+    - target: {fileID: 3701225131490053606, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 5254133707734902772}
+    - target: {fileID: 6836446959609869726, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: m_enemy
+      value: 
+      objectReference: {fileID: 5254133707734902772}
     - target: {fileID: 7298133027063933198, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_AngularSpeed
       value: 120
@@ -116,6 +124,7 @@ MonoBehaviour:
   enemyMovementData: {fileID: 11400000, guid: e5b2f0a111d087b4197a2780bff9ef50, type: 2}
   slowPercentPerOrb: 25
   enemyStats: {fileID: 8405162856804353120}
+  isDummyModeActive: 0
   meleeAttackDelay: 2
   attackingCooldown: 2
 --- !u!114 &8405162856804353120 stripped

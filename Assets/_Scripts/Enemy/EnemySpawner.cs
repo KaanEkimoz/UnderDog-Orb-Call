@@ -1,4 +1,5 @@
 using com.game.enemysystem;
+using com.game.player;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -21,7 +22,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        //StartSpawning();
+        StartSpawning();
     }
 
     private void Update() {}
@@ -32,31 +33,40 @@ public class EnemySpawner : MonoBehaviour
 
         while (enemyCount < maxEnemyCount)
         {
-            int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
-            GameObject spawnPoint = spawnPoints[randomSpawnPoint];
+            yield return new WaitForSeconds(spawnDelay);
 
-            int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
-            GameObject enemyPrefab = enemyPrefabs[randomEnemyIndex];
+            Transform spawnPoint = GetRandomSpawnPoint();
+            GameObject enemyPrefab = GetRandomEnemyPrefab();
 
-            GameObject spawnedEnemy = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-            
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            EnemyCombatant enemyCombatant = enemy.GetComponentInChildren<EnemyCombatant>();
+            enemyCombatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
             enemyCount++;
-            spawnedEnemies.Add(spawnedEnemy);
-
-            EnemyCombatant enemyCombatant = spawnedEnemy.GetComponent<EnemyCombatant>();
-            
+            spawnedEnemies.Add(enemy);
             if (enemyCombatant != null)
             {
                 enemyCombatant.OnDie += OnEnemyDeath;
-                
             }
-
-            yield return new WaitForSeconds(spawnDelay);
         }
 
         isCoroutineRunning = false;
     }
 
+    public GameObject GetRandomEnemyPrefab()
+    {
+        int randomEnemyIndex = Random.Range(0, enemyPrefabs.Length);
+        GameObject enemyPrefab = enemyPrefabs[randomEnemyIndex];
+
+        return enemyPrefab;
+    }
+
+    public Transform GetRandomSpawnPoint()
+    {
+        int randomSpawnPoint = Random.Range(0, spawnPoints.Length);
+        GameObject spawnPoint = spawnPoints[randomSpawnPoint];
+
+        return spawnPoint.transform;
+    }
     private void OnEnemyDeath()
     {
         enemyCount--;

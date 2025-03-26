@@ -9,10 +9,12 @@ namespace com.game.abilitysystem.ui
     {
         public const bool COOLDOWN_FILL = false;
 
+        [SerializeField] private bool m_cooldownFill;
         [SerializeField] private CanvasGroup m_graphic;
         [SerializeField] private GameObject m_cooldownPanel;
         [SerializeField] private Image m_semiCooldownFillImage;
         [SerializeField] private Image m_cooldownFillImage;
+        [SerializeField] private TMP_Text m_nameText;
         [SerializeField] private TMP_Text m_useCountText;
         [SerializeField] private TMP_Text m_cooldownText;
 
@@ -72,9 +74,13 @@ namespace com.game.abilitysystem.ui
 
         private void Update()
         {
-            if (m_ability == null) return;
+            if (m_ability == null) 
+                return;
 
             float timerValue = m_ability.CooldownLeft;
+
+            if (m_nameText != null)
+                m_nameText.text = "ABILITY_NAME";
 
             if (m_useCountText != null && !m_stackable)
                 m_useCountText.text = m_ability.CurrentStack.ToString();
@@ -103,7 +109,7 @@ namespace com.game.abilitysystem.ui
                 return;
             }
 
-            if (COOLDOWN_FILL && m_cooldownFillImage != null) 
+            if (COOLDOWN_FILL && m_cooldownFill && m_cooldownFillImage != null) 
                 m_cooldownFillImage.fillAmount = timerValue / m_totalCooldown;
 
             if (m_cooldownText != null)

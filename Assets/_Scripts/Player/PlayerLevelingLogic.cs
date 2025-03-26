@@ -1,3 +1,4 @@
+using com.game.events;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace com.game.player
         public int CurrentExperience => m_currentExperience;
         public int ExperienceNeededForNextLevel => m_targetExperience;
         public float CurrentExperienceRatio => m_currentExperience / m_targetExperience;
+        public int LastLevelGain => m_lastLevelGain;
 
         public event Action<PlayerLevelingLogic> OnLevelUp;
         public event Action<int> OnGainExperience;
@@ -19,6 +21,7 @@ namespace com.game.player
         int m_currentLevel;
         int m_currentExperience;
         int m_targetExperience;
+        int m_lastLevelGain;
 
         private void Awake()
         {
@@ -51,9 +54,11 @@ namespace com.game.player
             if (amount <= 0)
                 return;
 
+            m_lastLevelGain = amount;
             m_currentLevel += amount;
             m_targetExperience = m_placeholder[m_currentLevel - 1];
             OnLevelUp?.Invoke(this);
+            PlayerEventChannel.CommitLevelUp(this);
         }
 
         public void LevelUp()

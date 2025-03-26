@@ -12,6 +12,13 @@ namespace com.game
             public const int MAX_ORBS_CAN_BE_HELD = 12;
         }
 
+        public static class Paranoia
+        {
+            public const int PARANOIA_SEGMENT_COUNT = 5;
+            public const int PARANOIA_VIRTUAL_ENEMY_START_SEGMENT = 1;
+            public const int PARANOIA_FAKE_ENEMY_START_SEGMENT = 1;
+        }
+
         public static class Shopping
         {
             public const int PLAYER_SHOP_CAPACITY = 4;
@@ -21,6 +28,11 @@ namespace com.game
         public static class AssetManagement
         {
             public const string RELEASE_BUILD_ASSET_LABEL = "release";
+        }
+
+        public static class Placeholder
+        {
+            public static readonly UnityEngine.Vector3 AltarPosition = UnityEngine.Vector3.zero;
         }
     }
 }

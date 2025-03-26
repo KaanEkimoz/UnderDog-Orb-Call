@@ -5,8 +5,19 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
+    public static void DoFakify(Enemy target)
+    {
+        target.Fakify();
+    }
+
+    public static void DoVirtualize(Enemy target)
+    {
+        target.IsVirtual = true;
+        target.enabled = false;
+    }
+
     [Header("Movement")]
-    [SerializeField] private EnemyMovementData enemyMovementData;
+    [SerializeField] public EnemyMovementData enemyMovementData;
     [Header("Slow")]
     [SerializeField] public float slowPercentPerOrb = 25f;
     [Header("Stats")]
@@ -18,6 +29,9 @@ public class Enemy : MonoBehaviour
 
     //Movement
     private float defaultSpeed;
+
+    public bool IsFake { get; set; } = false;
+    public bool IsVirtual { get; protected set; } = false;
 
     //Slow
     private float currentSlowAmount = 0;
@@ -64,7 +78,8 @@ public class Enemy : MonoBehaviour
         CustomUpdate();
     }
     protected virtual void CustomUpdate() { }
-    
+    protected virtual void Fakify() { }
+
     public void ApplySlowForSeconds(float slowPercent, float duration)
     {
         StartCoroutine(SlowForSeconds(slowPercent, duration));

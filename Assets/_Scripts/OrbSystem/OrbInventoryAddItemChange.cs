@@ -22,7 +22,7 @@ namespace com.game.orbsystem
                 return;
 
             bool result = m_master.SwapOrb(m_target, prefab);
-            if (result) GameObject.Destroy(m_target.gameObject);
+            if (result) m_target.gameObject.SetActive(false);
         }
 
         public override void Undo()

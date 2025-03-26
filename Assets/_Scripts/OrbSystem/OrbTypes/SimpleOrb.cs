@@ -40,6 +40,7 @@ public class SimpleOrb : MonoBehaviour
     [Header("Orb Effects")]
     [SerializeField] private float onEllipseLifetime = 0.1f;
     [SerializeField] private float normalLifetime = 0.5f;
+    [SerializeField] private GameObject m_light;
     [SerializeField] private ParticleSystem trailParticle;
 
     //Movement
@@ -75,6 +76,7 @@ public class SimpleOrb : MonoBehaviour
     private void Reset()
     {
         currentState = OrbState.OnEllipse;
+        if (m_light != null) m_light.SetActive(false);
         trailParticle.startLifetime = onEllipseLifetime;
         CheckStartVariables();
     }
@@ -109,6 +111,7 @@ public class SimpleOrb : MonoBehaviour
         if (currentState == OrbState.Returning && hasReachedTargetPos)
         {
             _sphereCollider.isTrigger = false;
+            if (m_light != null) m_light.SetActive(false);
             trailParticle.startLifetime = onEllipseLifetime;
             currentState = OrbState.OnEllipse;
 
@@ -157,6 +160,7 @@ public class SimpleOrb : MonoBehaviour
         throwStartPosition = transform.position;
         distanceTraveled = 0;
 
+        if (m_light != null) m_light.SetActive(true);
         trailParticle.startLifetime = normalLifetime;
         SetTrigger(false);
         ApplyForce(forceDirection);

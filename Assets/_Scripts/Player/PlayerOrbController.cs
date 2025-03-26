@@ -1,0 +1,343 @@
+﻿using com.game;
+using com.game.player;
+using com.game.player.statsystemextensions;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Zenject;
+public class OrbController : MonoBehaviour
+{
+    public static readonly Dictionary<Type, int> OrbTypePoolIndexDict = new Dictionary<Type, int>()
+    {
+        { typeof(SimpleOrb), SIMPLE_ORB_INDEX },
+        { typeof(FireOrb), FIRE_ORB_INDEX },
+        { typeof(IceOrb), ICE_ORB_INDEX },
+        { typeof(ElectricOrb), ELECTRIC_ORB_INDEX },
+    };
+
+    [Header("Orb Count")]
+    [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
+    [Range(0, 10)][SerializeField] private int orbCountAtStart = 5;
+    [Header("Orb Throw")]
+    [SerializeField] private float cooldownBetweenThrowsInSeconds = 0f;
+    [SerializeField] private Transform firePointTransform;
+    [SerializeField] private LayerMask aimCursorDetectMask;
+    [Header("Orb Recall")]
+    [SerializeField] private float recallButtonHoldTime = 0.2f;
+    [SerializeField] private Transform returnPointTransform;
+    [Header("Ellipse Creation")]
+    [SerializeField] private Transform ellipseCenterTransform;
+    [SerializeField] private float ellipseXRadius = 0.5f;
+    [SerializeField] private float ellipseYRadius = 0.75f;
+    [Header("Ellipse Movement")]
+    [SerializeField] private float ellipseMovementSpeed = 1.5f;
+    [SerializeField] private float ellipseRotationSpeed = 5f;
+    [Header("Components")]
+    [SerializeField] private ObjectPool objectPool;
+    [Header("Orb Materials")]
+    [SerializeField] private Material highlightMaterial;
+    [SerializeField] private GameObject ghostOrbPrefab;
+    [Space, Header("Extensions")]
+    [SerializeField] private List<PlayerOrbControllerExtensionBase> m_extensions = new();
+
+    //Orb Types
+    public const int SIMPLE_ORB_INDEX = 7;
+    public const int FIRE_ORB_INDEX = 9;
+    public const int ICE_ORB_INDEX = 10;
+    public const int ELECTRIC_ORB_INDEX = 11;
+
+    // Events
+    public event Action OnOrbThrowed;
+    public event Action OnOrbCalled;
+    public event Action<float> OnDamageGiven;
+    public event Action<int> OnOrbCountChanged;
+    public event Action OnAllOrbsCalled;
+    public event Action OnNextOrbSelected;
+    public event Action OnPreviousOrbSelected;
+    public event Action OnSelectedOrbChanged;
+    public event Action<SimpleOrb> OnOrbAdded;
+
+    public List<SimpleOrb> orbsOnEllipse = new();
+    private List<GhostOrb> ghostOrbs = new();
+    private SimpleOrb orbToThrow;
+    private float throwCooldownTimer;
+    private int activeOrbCount = 0;
+    private int selectedOrbIndex = 0;
+    private float angleStep; // The angle between orbs
+    private PlayerStats _playerStats;
+    public bool IsAiming { get; private set; } = false;
+    public int SelectedOrbIndex => selectedOrbIndex;
+
+    [Inject]
+    private void ZenjectSetup(PlayerStats playerStats)
+    {
+        _playerStats = playerStats;
+    }
+    private void Start()
+    {
+        orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
+
+        if (objectPool == null)
+            objectPool = FindAnyObjectByType<ObjectPool>();
+
+        InitializeGhostOrbs();
+        InitializeOrbs();
+        CalculateAngleStep();
+    }
+    private void Update()
+    {
+        if (Game.Paused) return;
+
+        HandleInput();
+        HandleCooldowns();
+        UpdateOrbEllipsePositions();
+    }
+
+    private void HandleInput()
+    {
+        if (PlayerInputHandler.Instance.AttackButtonPressed)
+            StartAiming();
+        else if (PlayerInputHandler.Instance.AttackButtonReleased)
+            ThrowOrb();
+
+        if(PlayerInputHandler.Instance.RecallButtonPressed)
+            CallOrb(orbsOnEllipse[selectedOrbIndex]);
+        if(PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(recallButtonHoldTime))
+            CallAllOrbs();
+
+        if (PlayerInputHandler.Instance.NextChooseButtonPressed)
+            SelectNextOrb();
+        else if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
+            SelectPreviousOrb();  
+    }
+    private void InitializeOrbs()
+    {
+        if (orbCountAtStart <= 0) return;
+
+        for (int i = 0; i < orbCountAtStart; i++)
+            AddOrb(ElementalType.None);
+
+        OnOrbCountChanged?.Invoke(orbCountAtStart);
+    }
+    private void InitializeGhostOrbs()
+    {
+        for (int i = 0; i < maximumOrbCount; i++)
+        {
+            var ghostOrb = Instantiate(ghostOrbPrefab, transform);
+            ghostOrb.SetActive(false);
+            ghostOrbs.Add(ghostOrb.GetComponent<GhostOrb>());
+        }
+    }
+    private void StartAiming()
+    {
+        foreach (SimpleOrb orb in orbsOnEllipse)
+        {
+            if (orb.currentState == OrbState.Returning)
+                return;
+        }
+
+        if (orbToThrow != null || orbsOnEllipse.Count == 0 || throwCooldownTimer > 0 || orbsOnEllipse[selectedOrbIndex].currentState != OrbState.OnEllipse) return;
+
+        IsAiming = true;
+        orbToThrow = orbsOnEllipse[selectedOrbIndex];
+    }
+    private void ThrowOrb()
+    {
+        if (orbToThrow == null || !IsAiming) return;
+
+        throwCooldownTimer = cooldownBetweenThrowsInSeconds;
+        IsAiming = false;
+
+        Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
+        throwDirection.y = 0;
+
+        foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
+        {
+            throwDirection = extension.ConvertAimDirection(throwDirection);
+        }
+
+        orbToThrow.Throw(throwDirection.normalized);
+
+        orbToThrow.ResetMaterial();
+        orbToThrow = null;
+
+        Player.Instance.Hub.OrbHandler.RemoveOrb();
+        OnOrbThrowed?.Invoke();
+    }
+    
+    private void CallOrb(SimpleOrb orb)
+    {
+        if (orb.currentState != OrbState.Sticked) return;
+
+        orb.ReturnToPosition(returnPointTransform.position);
+        Player.Instance.Hub.OrbHandler.AddOrb();
+        OnOrbCalled?.Invoke();
+    }
+    private void CallAllOrbs()
+    {
+        foreach (var orb in orbsOnEllipse)
+        {
+            if (orb.currentState == OrbState.Sticked)
+                CallOrb(orb);
+        }
+        OnAllOrbsCalled?.Invoke();
+    }
+    private void SelectNextOrb()
+    {
+        if (orbsOnEllipse.Count <= 1) return;
+
+        selectedOrbIndex = (selectedOrbIndex + 1) % orbsOnEllipse.Count;
+        ShiftOrbs();
+        UpdateOrbEllipsePositions();
+        OnNextOrbSelected?.Invoke();
+    }
+    private void SelectPreviousOrb()
+    {
+        if (orbsOnEllipse.Count <= 1) return;
+
+        selectedOrbIndex = (selectedOrbIndex - 1 + orbsOnEllipse.Count) % orbsOnEllipse.Count;
+        ShiftOrbs();
+        UpdateOrbEllipsePositions();
+        OnPreviousOrbSelected?.Invoke();
+    }
+    private void ShiftOrbs()
+    {
+        List<SimpleOrb> shiftedOrbs = new();
+
+        for (int i = 0; i < orbsOnEllipse.Count; i++)
+        {
+            int newIndex = (i + selectedOrbIndex) % orbsOnEllipse.Count;
+            shiftedOrbs.Add(orbsOnEllipse[newIndex]);
+        }
+
+        orbsOnEllipse = shiftedOrbs;
+        selectedOrbIndex = 0; 
+    }
+    private void UpdateOrbEllipsePositions()
+    {
+        if (orbsOnEllipse.Count == 0) return;
+
+        float angleOffset = 90f;
+
+        for (int i = 0; i < orbsOnEllipse.Count; i++)
+        {
+            float angle = angleOffset + i * -angleStep;
+            float angleInRadians = angle * Mathf.Deg2Rad;
+
+            float localX = Mathf.Cos(angleInRadians) * ellipseXRadius;
+            float localY = Mathf.Sin(angleInRadians) * ellipseYRadius;
+
+            Vector3 localPosition = new Vector3(localX, localY, 0f);
+            Vector3 targetPosition = ellipseCenterTransform.position + (ellipseCenterTransform.rotation * localPosition);
+
+            if (orbsOnEllipse[i] == orbToThrow)
+            {
+                orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
+                orbToThrow.SetNewDestination(firePointTransform.position);
+            }
+            else if (ghostOrbs[i] != null)
+            {
+                if (orbsOnEllipse[i].currentState != OrbState.OnEllipse)
+                {
+                    if (ghostOrbs[i].gameObject.activeSelf == false)
+                        ghostOrbs[i].gameObject.SetActive(true);
+
+                    ghostOrbs[i].SetNewDestination(targetPosition);
+                }
+                else
+                {
+                    if (ghostOrbs[i].gameObject.activeSelf == true)
+                        ghostOrbs[i].gameObject.SetActive(false);
+
+                    orbsOnEllipse[i]?.SetNewDestination(targetPosition);
+                }
+            }
+
+            if (orbsOnEllipse[i].currentState == OrbState.Returning)
+                orbsOnEllipse[i].SetNewDestination(returnPointTransform.position);
+
+        }
+        UpdateSelectedOrbMaterial();
+    }
+    private void UpdateSelectedOrbMaterial()
+    {
+        for (int i = 0; i < orbsOnEllipse.Count; i++)
+        {
+            if (i == selectedOrbIndex)
+                orbsOnEllipse[i].SetMaterial(highlightMaterial);
+            else
+                orbsOnEllipse[i].ResetMaterial();
+        }
+    }
+    private void HandleCooldowns()
+    {
+        if (throwCooldownTimer > 0)
+            throwCooldownTimer -= Time.deltaTime * ((_playerStats.GetStat(PlayerStatType.AttackSpeed) / 10) + 1);
+    }
+
+    public void AddOrb(ElementalType elementalType = ElementalType.None)
+    {
+        int spawnIndex = elementalType switch
+        {
+            ElementalType.Fire => FIRE_ORB_INDEX,
+            ElementalType.Ice => ICE_ORB_INDEX,
+            ElementalType.Electric => ELECTRIC_ORB_INDEX,
+            _ => SIMPLE_ORB_INDEX,
+        };
+
+        SimpleOrb newOrb = objectPool.GetPooledObject(spawnIndex).GetComponent<SimpleOrb>();
+        newOrb.transform.position = ellipseCenterTransform.position;
+        newOrb.AssignPlayerStats(_playerStats);
+
+        InitializeOrb(newOrb);
+        activeOrbCount++;
+        orbsOnEllipse.Add(newOrb);
+        CalculateAngleStep();
+
+        UpdateOrbEllipsePositions();
+
+        Player.Instance.Hub.OrbHandler.AddOrb();
+        OnOrbAdded?.Invoke(newOrb);
+    }
+
+    public bool SwapOrb(SimpleOrb target, SimpleOrb prefab, out SimpleOrb newOrb)
+    {
+        newOrb = null;
+        if (!orbsOnEllipse.Contains(target))
+            return false;
+
+        if (OrbTypePoolIndexDict.TryGetValue(prefab.GetType(), out int poolIndex))
+            newOrb = objectPool.GetPooledObject(poolIndex).GetComponent<SimpleOrb>();
+        else
+            newOrb = Instantiate(prefab);
+
+        InitializeOrb(newOrb);
+        newOrb.transform.position = target.transform.position;
+        orbsOnEllipse[orbsOnEllipse.IndexOf(target)] = newOrb;
+
+        return true;
+    }
+    void InitializeOrb(SimpleOrb orb)
+    {
+        orb.transform.position = ellipseCenterTransform.position;
+        orb.AssignPlayerStats(_playerStats);
+    }
+    public void RemoveOrbFromEllipse(SimpleOrb orb)
+    {
+        orbsOnEllipse.Remove(orb);
+        activeOrbCount--;
+        UpdateOrbEllipsePositions();
+    }
+    public void RemoveOrb()
+    {
+        int indexToRemove = orbsOnEllipse.Count - 1;
+        orbsOnEllipse.RemoveAt(indexToRemove);
+        activeOrbCount--;
+        CalculateAngleStep();
+        UpdateOrbEllipsePositions();
+    }
+    private void CalculateAngleStep()
+    {
+        angleStep = 360f / activeOrbCount;
+    }
+}

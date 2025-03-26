@@ -123,5 +123,21 @@ namespace com.game
         {
             base.ApplyCollisionEffects(collisionObject);
         }
+
+#if UNITY_EDITOR
+
+        private void OnDrawGizmos()
+        {
+            // Draw the slow radius in the editor
+
+            if (currentState != OrbState.OnEllipse)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawSphere(transform.position, electricBounceRadius);
+            }
+        }
+
+#endif
+
     }
 }
