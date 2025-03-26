@@ -69,6 +69,9 @@ namespace com.game.enemysystem
             if (!m_enabled) 
                 return;
 
+            if (!m_owner.IsSpawning)
+                return;
+
             if ((!BRUTE_FORCE) && m_spawnDelay <= 0f)
             {
                 Debug.LogWarning("Spawn delay can not be 0 or lower!");

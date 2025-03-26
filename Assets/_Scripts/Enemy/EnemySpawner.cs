@@ -21,6 +21,8 @@ public class EnemySpawner : MonoBehaviour
 
     private Coroutine spawnCoroutine;
 
+    public bool IsSpawning => spawnCoroutine != null;
+
     private void Start()
     {
         StartSpawning();
