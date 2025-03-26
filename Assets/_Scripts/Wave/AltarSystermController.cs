@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 
-public class SunakSystemController : MonoBehaviour
+public class AltarSystemController : MonoBehaviour
 {
     [Header("Sunak System Settings")]
     public float safeZoneTimer = 120f;
@@ -10,11 +10,13 @@ public class SunakSystemController : MonoBehaviour
     public float difficultyIncreaseTime = 30f;
     public int safeZoneEntryCount = 0;
     public int maxEnemyIncrease = 10;
+    private int currentDifficultyLevel = 0;
 
     [Header("Refeences")]
     public GameObject safeZoneBoundaries;
     public GameObject safeZoneArea;
     public EnemySpawner enemySpawner;
+    public CheckSafeZone checkSafeZone;
 
     [Header("Bools")]
     [SerializeField]
@@ -31,10 +33,6 @@ public class SunakSystemController : MonoBehaviour
         safeZoneBoundaries.SetActive(false);
         ResetTimer();
 
-        if (isPlayerInSafeZone)
-        {
-            safeZoneEntryCount++;
-        }
     }
 
     private void Update()
@@ -57,8 +55,15 @@ public class SunakSystemController : MonoBehaviour
 
     public void SetDifficulty(int difficulty)
     {
-        enemySpawner.maxEnemyCount += maxEnemyIncrease * difficulty;
-        
+        if (difficulty > currentDifficultyLevel)
+        {
+            int difficultyIncrease = difficulty - currentDifficultyLevel;
+            enemySpawner.maxEnemyCount = Mathf.Min(enemySpawner.maxEnemyCount + (maxEnemyIncrease * difficultyIncrease), 100);
+
+            currentDifficultyLevel = difficulty;
+        }
+
+
         switch (difficulty) 
         {
             case 0:
@@ -82,16 +87,13 @@ public class SunakSystemController : MonoBehaviour
     }
     public void PlayerEnteredSafeZone()
     {
-        if (isPlayerInSafeZone) return;
-
-        isPlayerInSafeZone = true;
-
-        if (!canEnterSafeZone) return;
-
         enemySpawner.ClearEnemies();
+        enemySpawner.StopSpawning();
         safeZoneEntryCount++;
+        ResetTimer();
+        UpdateTimerUI();
 
-        if (safeZoneEntryCount >= maxSafeZoneEntries) 
+        if (safeZoneEntryCount >= maxSafeZoneEntries)
         {
             Debug.Log("Boss geliyor!");
         }
@@ -102,9 +104,7 @@ public class SunakSystemController : MonoBehaviour
     {
         if (!isTimerActive)
         {
-            isPlayerInSafeZone = false;
-            StartTimer();         
-            canEnterSafeZone = false;
+            StartTimer();
             safeZoneBoundaries.SetActive(true);
             enemySpawner.StartSpawning();
         }
