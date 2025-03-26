@@ -82,8 +82,8 @@ namespace com.game.enemysystem
                 _health = 0;
 
                 DeathCause deathCause = DeathCause.Internal;
-                if (Game.Event == Event.OrbThrow) deathCause = DeathCause.OrbThrow;
-                else if (Game.Event == Event.OrbCall) deathCause = DeathCause.OrbCall;
+                if (Game.Event == GameRuntimeEvent.OrbThrow) deathCause = DeathCause.OrbThrow;
+                else if (Game.Event == GameRuntimeEvent.OrbCall) deathCause = DeathCause.OrbCall;
 
                 Die(deathCause);
             }

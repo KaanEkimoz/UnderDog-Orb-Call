@@ -1,6 +1,6 @@
 namespace com.game
 {
-    public enum Event
+    public enum GameRuntimeEvent
     {
         Null,
         OrbThrow,

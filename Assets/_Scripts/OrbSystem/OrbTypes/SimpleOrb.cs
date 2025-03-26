@@ -206,7 +206,7 @@ public class SimpleOrb : MonoBehaviour
         if(currentState != OrbState.Throwing)
             return;
 
-        Game.Event = com.game.Event.OrbThrow;
+        Game.Event = com.game.GameRuntimeEvent.OrbThrow;
 
         currentState = OrbState.Sticked;
 
@@ -216,14 +216,14 @@ public class SimpleOrb : MonoBehaviour
 
         ApplyCollisionEffects(collision);
 
-        Game.Event = com.game.Event.Null;
+        Game.Event = com.game.GameRuntimeEvent.Null;
     }
     private void OnTriggerEnter(Collider collider)
     {
         if (currentState != OrbState.Returning)
             return;
 
-        Game.Event = com.game.Event.OrbCall;
+        Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
         if (collider.gameObject.TryGetComponent(out IDamageable damageable))
         {
@@ -233,7 +233,7 @@ public class SimpleOrb : MonoBehaviour
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
         }
 
-        Game.Event = com.game.Event.Null;
+        Game.Event = com.game.GameRuntimeEvent.Null;
     }
     protected virtual void ApplyCollisionEffects(Collision collisionObject)
     {

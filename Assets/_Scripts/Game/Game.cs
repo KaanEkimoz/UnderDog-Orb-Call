@@ -8,7 +8,7 @@ namespace com.game
         public static bool Paused { get; private set; }
         public static bool Initialized { get; set; }
 
-        public static Event Event { get; set; } = Event.Null;
+        public static GameRuntimeEvent Event { get; set; } = GameRuntimeEvent.Null;
 
         public static event Action OnPause = null;
         public static event Action OnResume = null;
