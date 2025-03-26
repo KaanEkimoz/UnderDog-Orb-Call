@@ -33,10 +33,6 @@ public class AltarSystemController : MonoBehaviour
         safeZoneBoundaries.SetActive(false);
         ResetTimer();
 
-        if (isPlayerInSafeZone)
-        {
-            safeZoneEntryCount++;
-        }
     }
 
     private void Update()
@@ -92,6 +88,7 @@ public class AltarSystemController : MonoBehaviour
     public void PlayerEnteredSafeZone()
     {
         enemySpawner.ClearEnemies();
+        enemySpawner.StopSpawning();
         safeZoneEntryCount++;
         ResetTimer();
         UpdateTimerUI();

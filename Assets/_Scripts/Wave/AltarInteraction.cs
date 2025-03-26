@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AltarInteraction : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class AltarInteraction : MonoBehaviour
 
     void Update()
     {
-        if (canInteract && Input.GetKeyDown(KeyCode.H))
+        if (canInteract && Keyboard.current.fKey.wasPressedThisFrame)
         {
             Interact();
         }
