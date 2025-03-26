@@ -63,7 +63,7 @@ public class ThirdPersonController : MonoBehaviour
     private PlayerInputHandler _input;
     private GameObject _mainCamera;
 
-    //Extras (Events, SFX, VFX, Achievements)
+    //extras (Events, SFX, VFX, Achievements)
     private PlayerStats _playerStats;
     private SoundFXManager _soundFXManager;
 
@@ -248,13 +248,11 @@ public class ThirdPersonController : MonoBehaviour
     private void OnFootstep(AnimationEvent animationEvent)
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
-        {
-            if (footstepAudioClips.Length > 0)
-            {
-                var index = Random.Range(0, footstepAudioClips.Length);
-                _soundFXManager.PlayRandomSoundFXAtPosition(footstepAudioClips, transform, footstepAudioVolume);
-            }
-        }
+            _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.walkOnGrassEffects, transform);
+    }
+    private void OnDashStart(AnimationEvent animationEvent)
+    {
+        _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.dashSoundEffects, transform);
     }
     #endregion
 }
