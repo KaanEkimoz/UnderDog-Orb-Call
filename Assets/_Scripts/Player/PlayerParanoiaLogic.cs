@@ -16,15 +16,10 @@ namespace com.game.player
 
         public event Action OnParanoiaSegmentChange = null;
 
-        //private void Start()
-        //{
-        //    OnParanoiaSegmentChange += () => Debug.Log(m_currentSegment);
-        //}
-
         public bool Increase(float percentage01)
         {
             if (percentage01 < 0f)
-                return Decrease(percentage01);
+                return Decrease(-percentage01);
 
             return SetToPercentage(m_currentPercentage + percentage01);
         }
@@ -32,9 +27,14 @@ namespace com.game.player
         public bool Decrease(float percentage01)
         {
             if (percentage01 < 0f)
-                return Increase(percentage01);
+                return Increase(-percentage01);
 
             return SetToPercentage(m_currentPercentage - percentage01);
+        }
+
+        public bool Modify(float percentage01)
+        {
+            return SetToPercentage(m_currentPercentage + percentage01);
         }
 
         public bool SetToSegment(int segment, bool asIndex = false)

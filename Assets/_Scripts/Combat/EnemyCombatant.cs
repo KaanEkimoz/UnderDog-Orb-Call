@@ -11,6 +11,7 @@ using System.Collections;
 using com.game.miscs;
 using System.Collections.Generic;
 using System.Linq;
+using com.game.events;
 
 namespace com.game.enemysystem
 {
@@ -154,6 +155,10 @@ namespace com.game.enemysystem
             }
 
             TestEventChannel.ReceiveEnemyKill();
+
+            if (cause != DeathCause.Self || cause != DeathCause.Internal)
+                PlayerEventChannel.CommitEnemyKill();
+
             if (m_container != null) Destroy(m_container);
             else Destroy(gameObject);
 
