@@ -119,9 +119,9 @@ namespace com.game
             yield return new WaitForSeconds(delay);
             Destroy(electricLineInstance);
         }
-        protected override void ApplyOrbCollisionEffects(Collision collisionObject)
+        protected override void ApplyOrbThrowTriggerEffects(Collider collisionObject)
         {
-            base.ApplyOrbCollisionEffects(collisionObject);
+            base.ApplyOrbThrowTriggerEffects(collisionObject);
         }
 
 #if UNITY_EDITOR

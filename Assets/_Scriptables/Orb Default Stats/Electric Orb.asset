@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_defaultValues:
   - TargetStat: 0
-    Value: 2
+    Value: 0
   - TargetStat: 1
     Value: 150
   m_initialized: 1

@@ -22,9 +22,9 @@ namespace com.game
         {
             base.ApplyCombatEffects(damageable, damage);
         }
-        protected override void ApplyOrbCollisionEffects(Collision collisionObject)
+        protected override void ApplyOrbThrowTriggerEffects(Collider collisionObject)
         {
-            base.ApplyOrbCollisionEffects(collisionObject);
+            base.ApplyOrbThrowTriggerEffects(collisionObject);
 
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
 

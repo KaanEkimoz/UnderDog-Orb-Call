@@ -133,7 +133,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -170,10 +170,13 @@ MonoBehaviour:
   normalLifetime: 0.5
   m_light: {fileID: 4889231651571930717}
   trailParticle: {fileID: 98057579503599703}
-  electricEffectDurationInSeconds: 0
-  electrictEffectIntervalInSeconds: 0
   maxElectricBounceCount: 3
   electricBounceRadius: 15
+  electricEffectDurationInSeconds: 0
+  electrictEffectIntervalInSeconds: 0
+  electricEffectPrefab: {fileID: 0}
+  electricChainEffectPrefab: {fileID: 0}
+  electricChainEffectDuration: 0.2
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0

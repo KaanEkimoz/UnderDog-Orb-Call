@@ -13,7 +13,6 @@ public enum OrbState
     Throwing,
     Returning
 }
-
 [RequireComponent(typeof(Rigidbody), typeof(SphereCollider), typeof(MeshRenderer))]
 public class SimpleOrb : MonoBehaviour
 {
@@ -53,6 +52,7 @@ public class SimpleOrb : MonoBehaviour
     //Throw
     private float distanceTraveled;
     private Vector3 throwStartPosition;
+    private int penetrationCount = 0;
 
     //Stats
     public OrbStats Stats => orbStats;
@@ -72,6 +72,10 @@ public class SimpleOrb : MonoBehaviour
     private void OnEnable()
     {
         Reset();
+    }
+    private void OnDisable()
+    {
+        
     }
     private void Reset()
     {
@@ -110,7 +114,6 @@ public class SimpleOrb : MonoBehaviour
         }
         if (currentState == OrbState.Returning && hasReachedTargetPos)
         {
-            _sphereCollider.isTrigger = false;
             if (m_light != null) m_light.SetActive(false);
             trailParticle.startLifetime = onEllipseLifetime;
             currentState = OrbState.OnEllipse;
@@ -127,17 +130,12 @@ public class SimpleOrb : MonoBehaviour
     {
         currentState = OrbState.Returning;
 
-        SetTrigger(true);
+        //SetTrigger(true);
         SetNewDestination(returnPosition);
         ResetParent();
 
         OnCalled?.Invoke();
         OnStateChanged?.Invoke(currentState);
-    }
-    private void SetTrigger(bool isEnabled)
-    {
-        _sphereCollider.isTrigger = isEnabled;
-        _rigidBody.isKinematic = isEnabled;
     }
     public void ResetParent()
     {
@@ -162,7 +160,7 @@ public class SimpleOrb : MonoBehaviour
 
         if (m_light != null) m_light.SetActive(true);
         trailParticle.startLifetime = normalLifetime;
-        SetTrigger(false);
+        _rigidBody.isKinematic = false;
         ApplyForce(forceDirection);
         
         OnThrown?.Invoke();
@@ -201,6 +199,26 @@ public class SimpleOrb : MonoBehaviour
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
+    private void OnTriggerEnter(Collider triggerObject)
+    {
+        if (currentState == OrbState.Throwing)
+        {
+            Game.Event = com.game.GameRuntimeEvent.OrbThrow;
+
+            ApplyOrbThrowTriggerEffects(triggerObject);
+
+            Game.Event = com.game.GameRuntimeEvent.Null;
+        }
+        else if (currentState == OrbState.Returning)
+        {
+            Game.Event = com.game.GameRuntimeEvent.OrbCall;
+
+            ApplyOrbReturnTriggerEffects(triggerObject);
+
+            Game.Event = com.game.GameRuntimeEvent.Null;
+        }
+    }
+    /*
     private void OnCollisionEnter(Collision collisionObject)
     {
         if(currentState != OrbState.Throwing)
@@ -208,47 +226,45 @@ public class SimpleOrb : MonoBehaviour
 
         Game.Event = com.game.GameRuntimeEvent.OrbThrow;
 
+        //ApplyOrbCollisionEffects(collisionObject);
+
+        Game.Event = com.game.GameRuntimeEvent.Null;
+    }*/
+    private void Stick(Collider stickCollider)
+    {
         currentState = OrbState.Sticked;
 
+        //TO DO: FIND HOW TO GET FIRST TRIGGER CONTACT POINT
         //Disable Physics and Stick to Surface
-        transform.position = collisionObject.contacts[0].point;
-        StickToTransform(collisionObject.transform);
-
-        ApplyOrbCollisionEffects(collisionObject);
-
-        Game.Event = com.game.GameRuntimeEvent.Null;
+        transform.position = stickCollider.ClosestPoint(transform.position); // DOESN'T WORK
+        StickToTransform(stickCollider.transform);
     }
-    private void OnTriggerEnter(Collider triggerObject)
-    {
-        if (currentState != OrbState.Returning)
-            return;
-
-        Game.Event = com.game.GameRuntimeEvent.OrbCall;
-
-        ApplyOrbTriggerEffects(triggerObject);
-
-        Game.Event = com.game.GameRuntimeEvent.Null;
-    }
-    protected virtual void ApplyOrbCollisionEffects(Collision collision)
+    
+    protected virtual void ApplyOrbThrowTriggerEffects(Collider collision)
     {
         if (collision.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            if (penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration))
+                Stick(collision);
+
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
 
             if (collision.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
                 hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
             }
-                
+
+            penetrationCount++;
         }
-            
+        else
+            Stick(collision);
     }
-    protected virtual void ApplyOrbTriggerEffects(Collider trigger)
+    protected virtual void ApplyOrbReturnTriggerEffects(Collider trigger)
     {
         if (trigger.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbRecallDamage));
 
             if (trigger.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
@@ -266,7 +282,7 @@ public class SimpleOrb : MonoBehaviour
     {
         currentState = OrbState.Sticked;
         _rigidBody.isKinematic = true;
-        _sphereCollider.isTrigger = true;
+        //_sphereCollider.isTrigger = true;
         transform.SetParent(stickTransform);
 
         OnStuck?.Invoke();
