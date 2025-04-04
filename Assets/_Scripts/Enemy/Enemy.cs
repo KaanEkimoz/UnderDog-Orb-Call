@@ -1,5 +1,6 @@
 using com.game.enemysystem;
 using com.game.enemysystem.statsystemextensions;
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -83,6 +84,17 @@ public class Enemy : MonoBehaviour
     public void ApplySlowForSeconds(float slowPercent, float duration)
     {
         StartCoroutine(SlowForSeconds(slowPercent, duration));
+    }
+    public void ApplyKnockbackForce(Vector3 orbPosition, float knocbackForce)
+    {
+        Vector3 forceDirection = new Vector3(transform.position.x - orbPosition.x, 0,transform.position.z - orbPosition.z).normalized;
+        Vector3 force = forceDirection * knocbackForce;
+        transform.DOMove(transform.position + force, 0.4f).SetEase(Ease.OutBack);
+    }
+    private IEnumerator StopKnockback()
+    {
+        yield return new WaitForSeconds(0.2f);
+        navMeshAgent.isStopped = false;
     }
     public void ApplySlowForOrbsOnEnemy(int orbCount)
     {

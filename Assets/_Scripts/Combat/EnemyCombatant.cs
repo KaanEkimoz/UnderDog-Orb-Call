@@ -90,9 +90,12 @@ namespace com.game.enemysystem
                 Die(deathCause);
             }
             enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
-
             OnTakeDamage?.Invoke(damage);
             _playerCombatant.OnLifeSteal(realDamage);
+        }
+        public void ApplyKnockback(Vector3 forceDirection, float forceMagnitude)
+        {
+            enemy.ApplyKnockbackForce(forceDirection, forceMagnitude);
         }
         public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
         {
@@ -110,7 +113,6 @@ namespace com.game.enemysystem
                 yield return new WaitForSeconds(intervalInSeconds);
             }
         }
-
         public void Heal(float amount)
         {
             if (amount == 0f)
@@ -119,7 +121,6 @@ namespace com.game.enemysystem
             _health += amount;
             OnHeal?.Invoke(amount);
         }
-
         public void Die(DeathCause cause)
         {
             Debug.Log("test");

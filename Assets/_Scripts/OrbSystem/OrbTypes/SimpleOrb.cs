@@ -201,7 +201,7 @@ public class SimpleOrb : MonoBehaviour
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collisionObject)
     {
         if(currentState != OrbState.Throwing)
             return;
@@ -211,39 +211,52 @@ public class SimpleOrb : MonoBehaviour
         currentState = OrbState.Sticked;
 
         //Disable Physics and Stick to Surface
-        transform.position = collision.contacts[0].point;
-        StickToTransform(collision.transform);
+        transform.position = collisionObject.contacts[0].point;
+        StickToTransform(collisionObject.transform);
 
-        ApplyCollisionEffects(collision);
+        ApplyOrbCollisionEffects(collisionObject);
 
         Game.Event = com.game.GameRuntimeEvent.Null;
     }
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider triggerObject)
     {
         if (currentState != OrbState.Returning)
             return;
 
         Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
-        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
-        {
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
-
-            if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
-                hittedEnemy.ApplySlowForSeconds(100f, 2f);
-        }
+        ApplyOrbTriggerEffects(triggerObject);
 
         Game.Event = com.game.GameRuntimeEvent.Null;
     }
-    protected virtual void ApplyCollisionEffects(Collision collisionObject)
+    protected virtual void ApplyOrbCollisionEffects(Collision collision)
     {
-        if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
+        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
+        {
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+
+            if (collision.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            {
+                hittedEnemy.ApplySlowForSeconds(100f, 2f);
+                hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+            }
+                
+        }
+            
     }
-    protected virtual void ApplyTriggerEffects(Collider collider)
+    protected virtual void ApplyOrbTriggerEffects(Collider trigger)
     {
-        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+        if (trigger.gameObject.TryGetComponent(out IDamageable damageable))
+        {
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+
+            if (trigger.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            {
+                hittedEnemy.ApplySlowForSeconds(100f, 2f);
+                hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+            }
+                
+        }
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
     {
