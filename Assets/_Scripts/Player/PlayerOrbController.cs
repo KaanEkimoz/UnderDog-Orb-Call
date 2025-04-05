@@ -14,7 +14,6 @@ public class OrbController : MonoBehaviour
         { typeof(IceOrb), ICE_ORB_INDEX },
         { typeof(ElectricOrb), ELECTRIC_ORB_INDEX },
     };
-
     [Header("Orb Count")]
     [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
     [Range(0, 10)][SerializeField] private int orbCountAtStart = 5;
@@ -37,7 +36,8 @@ public class OrbController : MonoBehaviour
     [Header("Orb Materials")]
     [SerializeField] private Material highlightMaterial;
     [SerializeField] private GameObject ghostOrbPrefab;
-    [Space, Header("Extensions")]
+    [Space]
+    [Header("Extensions")]
     [SerializeField] private List<PlayerOrbControllerExtensionBase> m_extensions = new();
 
     //Orb Types
@@ -103,6 +103,8 @@ public class OrbController : MonoBehaviour
             CallOrb(orbsOnEllipse[selectedOrbIndex]);
         if(PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(recallButtonHoldTime))
             CallAllOrbs();
+        if(PlayerInputHandler.Instance.ClosestRecallButtonPressed)
+            CallOrb(FindClosestOrb(orbsOnEllipse));
 
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
             SelectNextOrb();
@@ -114,7 +116,7 @@ public class OrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb(ElementalType.Electric);
+            AddOrb();
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
@@ -338,5 +340,28 @@ public class OrbController : MonoBehaviour
     private void CalculateAngleStep()
     {
         angleStep = 360f / activeOrbCount;
+    }
+    public SimpleOrb FindClosestOrb(List<SimpleOrb> orbList)
+    {
+        if (orbList == null || orbList.Count == 0 || returnPointTransform == null)
+            return null;
+
+        SimpleOrb closestOrb = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach(SimpleOrb orb in orbList)
+        {
+            if (orb.currentState != OrbState.Sticked) continue;
+
+            float distance = Vector3.Distance(returnPointTransform.position, orb.gameObject.transform.position);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestOrb = orb;
+            }
+        }
+
+        return closestOrb;
     }
 }

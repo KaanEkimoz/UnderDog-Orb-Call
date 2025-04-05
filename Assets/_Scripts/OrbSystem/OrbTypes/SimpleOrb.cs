@@ -52,6 +52,7 @@ public class SimpleOrb : MonoBehaviour
     //Throw
     private float distanceTraveled;
     private Vector3 throwStartPosition;
+    private Vector3 throwVector;
     private int penetrationCount = 0;
 
     //Stats
@@ -101,6 +102,11 @@ public class SimpleOrb : MonoBehaviour
     private void Update()
     {
         HandleStateBehaviours();
+    }
+    private void FixedUpdate()
+    {
+        if (currentState == OrbState.Throwing)
+            _rigidBody.MovePosition(transform.position + throwVector * Time.deltaTime);
     }
     private void HandleStateBehaviours()
     {
@@ -159,9 +165,12 @@ public class SimpleOrb : MonoBehaviour
         distanceTraveled = 0;
 
         if (m_light != null) m_light.SetActive(true);
+
+        throwVector = forceDirection * (((orbStats.GetStat(OrbStatType.Speed) / 10)) * ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
+
         trailParticle.startLifetime = normalLifetime;
         _rigidBody.isKinematic = false;
-        ApplyForce(forceDirection);
+        //ApplyForce(forceDirection);
         
         OnThrown?.Invoke();
         OnStateChanged?.Invoke(currentState);
@@ -230,7 +239,7 @@ public class SimpleOrb : MonoBehaviour
 
         Game.Event = com.game.GameRuntimeEvent.Null;
     }*/
-    private void Stick(Collider stickCollider, Vector3 stickPoint)
+    private void Stick(Collider stickCollider)
     {
         currentState = OrbState.Sticked;
 
@@ -243,38 +252,19 @@ public class SimpleOrb : MonoBehaviour
         //transform.position = point;
         //Debug.DrawRay(point, Vector3.up * 0.5f, Color.red, 2f);
         //transform.position = stickCollider.ClosestPoint(transform.position); // DOESN'T WORK
-        if (stickPoint != Vector3.zero)
-            transform.position = stickPoint;
-
+        transform.position = stickCollider.ClosestPointOnBounds(transform.position);
+        //transform.position = stickCollider.ClosestPoint(transform.position);
         StickToTransform(stickCollider.transform);
     }
     
     protected virtual void ApplyOrbThrowTriggerEffects(Collider collider)
     {
-        Vector3 hitPoint = Vector3.zero;
-
-        // orb’un geldiði yön
-        Vector3 direction = -_rigidBody.linearVelocity.normalized;
-
-        // merkezden ray baþlat (biraz dýþarýdan baþlatmak istersen offset ekleyebilirsin)
-        Vector3 rayStart = transform.position;
-
-        RaycastHit hit;
-        if (Physics.Raycast(rayStart, direction, out hit, 0.1f))
-        {
-            if (hit.collider == collider)
-            {
-                hitPoint = hit.point;
-                Debug.DrawRay(rayStart, direction * hit.distance, Color.green, 2f);
-                Debug.Log("Ýlk temas noktasý: " + hitPoint);
-            }
-        }
 
         // devam eden hasar iþlemleri
         if (collider.gameObject.TryGetComponent(out IDamageable damageable))
         {
             if (penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration))
-                Stick(collider, hitPoint);
+                Stick(collider);
 
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
 
@@ -287,7 +277,7 @@ public class SimpleOrb : MonoBehaviour
             penetrationCount++;
         }
         else
-            Stick(collider, hitPoint);
+            Stick(collider);
 
         /*Vector3 hitPoint = Vector3.zero;
         Vector3 direction = _rigidBody.linearVelocity.normalized;

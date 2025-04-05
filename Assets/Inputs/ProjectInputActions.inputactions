@@ -60,6 +60,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Closest Recall",
+                    "type": "Button",
+                    "id": "35231444-89a4-4440-a1e7-8d8b444ee257",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Next Choose",
                     "type": "Button",
                     "id": "460106cc-0247-4474-b5e3-28b29e7d8792",
@@ -338,6 +347,17 @@
                     "processors": "",
                     "groups": ";KeyboardMouse",
                     "action": "Parry",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a71f0150-cd25-448b-b8a9-6ea0cd1082ff",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardMouse",
+                    "action": "Closest Recall",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

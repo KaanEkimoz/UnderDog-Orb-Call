@@ -25,6 +25,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool NextChooseButtonPressed => _nextChooseButtonPressedThisFrame;
     public bool PreviousChooseButtonPressed => _previousChooseButtonPressedThisFrame;
     public bool SprintButtonHeld => _sprintButtonHeld;
+    public bool ClosestRecallButtonPressed => _closestRecallButtonPressedThisFrame;
+
     public Vector2 MovementInput => _moveInput;
     public Vector2 MouseInput => _mouseInput;
 
@@ -54,6 +56,9 @@ public class PlayerInputHandler : MonoBehaviour
     private bool _recallButtonHeld;
     private float _recallButtonHoldTime;
 
+    // Closest Recall - F Button
+    private bool _closestRecallButtonPressedThisFrame;
+
     // Choose - Q and E Keyboard Buttons
     private bool _nextChooseButtonPressedThisFrame;
     private bool _previousChooseButtonPressedThisFrame;
@@ -80,6 +85,7 @@ public class PlayerInputHandler : MonoBehaviour
         _previousChooseButtonPressedThisFrame = false;
         _parryButtonPressedThisFrame = false;
         _parryButtonReleasedThisFrame = false;
+        _closestRecallButtonPressedThisFrame = false;
     }
 
     #region Timers
@@ -149,9 +155,7 @@ public class PlayerInputHandler : MonoBehaviour
             _dashButtonHeld = true;
         }
         else if (context.canceled)
-        {
             _dashButtonHeld = false;
-        }
     }
 
     public void OnSprint(InputAction.CallbackContext context)
@@ -190,7 +194,11 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
     }
-
+    public void OnClosestRecall(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+            _closestRecallButtonPressedThisFrame = true;
+    }
     public void OnNextChoose(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
