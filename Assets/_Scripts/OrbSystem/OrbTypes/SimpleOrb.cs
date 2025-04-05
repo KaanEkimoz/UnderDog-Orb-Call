@@ -230,26 +230,55 @@ public class SimpleOrb : MonoBehaviour
 
         Game.Event = com.game.GameRuntimeEvent.Null;
     }*/
-    private void Stick(Collider stickCollider)
+    private void Stick(Collider stickCollider, Vector3 stickPoint)
     {
         currentState = OrbState.Sticked;
 
+        _rigidBody.linearVelocity = Vector3.zero;
+        _rigidBody.isKinematic = true;
         //TO DO: FIND HOW TO GET FIRST TRIGGER CONTACT POINT
         //Disable Physics and Stick to Surface
-        transform.position = stickCollider.ClosestPoint(transform.position); // DOESN'T WORK
+        //Vector3 point = GetComponent<Collider>().ClosestPoint(stickCollider.transform.position);
+        //Vector3 point = stickCollider.ClosestPoint(transform.position);
+        //transform.position = point;
+        //Debug.DrawRay(point, Vector3.up * 0.5f, Color.red, 2f);
+        //transform.position = stickCollider.ClosestPoint(transform.position); // DOESN'T WORK
+        if (stickPoint != Vector3.zero)
+            transform.position = stickPoint;
+
         StickToTransform(stickCollider.transform);
     }
     
-    protected virtual void ApplyOrbThrowTriggerEffects(Collider collision)
+    protected virtual void ApplyOrbThrowTriggerEffects(Collider collider)
     {
-        if (collision.gameObject.TryGetComponent(out IDamageable damageable))
+        Vector3 hitPoint = Vector3.zero;
+
+        // orb’un geldiði yön
+        Vector3 direction = -_rigidBody.linearVelocity.normalized;
+
+        // merkezden ray baþlat (biraz dýþarýdan baþlatmak istersen offset ekleyebilirsin)
+        Vector3 rayStart = transform.position;
+
+        RaycastHit hit;
+        if (Physics.Raycast(rayStart, direction, out hit, 0.1f))
+        {
+            if (hit.collider == collider)
+            {
+                hitPoint = hit.point;
+                Debug.DrawRay(rayStart, direction * hit.distance, Color.green, 2f);
+                Debug.Log("Ýlk temas noktasý: " + hitPoint);
+            }
+        }
+
+        // devam eden hasar iþlemleri
+        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
         {
             if (penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration))
-                Stick(collision);
+                Stick(collider, hitPoint);
 
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
 
-            if (collision.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            if (collider.TryGetComponent(out Enemy hittedEnemy))
             {
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
                 hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
@@ -258,7 +287,39 @@ public class SimpleOrb : MonoBehaviour
             penetrationCount++;
         }
         else
-            Stick(collision);
+            Stick(collider, hitPoint);
+
+        /*Vector3 hitPoint = Vector3.zero;
+        Vector3 direction = _rigidBody.linearVelocity.normalized;
+        Ray ray = new Ray(collider.transform.position, direction);
+        RaycastHit hit;
+
+        // Bu objenin collider'ý üzerinden ray atýyoruz
+        if (_sphereCollider.Raycast(ray, out hit, 2f))
+        {
+            hitPoint = hit.point;
+            Debug.Log("Raycast temas noktasý: " + hitPoint);
+            Debug.DrawRay(ray.origin, direction * hit.distance, Color.red, 2f);
+        }
+
+
+        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+        {
+            if (penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration))
+                Stick(collider,hitPoint);
+
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
+
+            if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            {
+                hittedEnemy.ApplySlowForSeconds(100f, 2f);
+                hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+            }
+
+            penetrationCount++;
+        }
+        else
+            Stick(collider, hitPoint);*/
     }
     protected virtual void ApplyOrbReturnTriggerEffects(Collider trigger)
     {
@@ -282,7 +343,6 @@ public class SimpleOrb : MonoBehaviour
     {
         currentState = OrbState.Sticked;
         _rigidBody.isKinematic = true;
-        //_sphereCollider.isTrigger = true;
         transform.SetParent(stickTransform);
 
         OnStuck?.Invoke();
