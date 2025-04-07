@@ -76,7 +76,7 @@ namespace com.game.generics
 
         void RefreshUIArrow(Vector3 directionXZ, float magnitude)
         {
-            float multiplier = Mathf.Min(1f, (magnitude - m_minDeadZone) / m_maxDeadZone);
+            float multiplier = Mathf.Min(1f, (magnitude - (m_minDeadZone * m_minDeadZone)) / (m_maxDeadZone * m_maxDeadZone));
 
             Vector2 normalizedUIPosition = CameraMatrix.MultiplyVector(new Vector2(directionXZ.x, directionXZ.z));
             Vector2 uiPosition = m_canvasRatio * normalizedUIPosition;

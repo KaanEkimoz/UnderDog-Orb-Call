@@ -4090,7 +4090,7 @@ MonoBehaviour:
   m_canvas: {fileID: 1644247976}
   m_genericDisplayerTarget: {fileID: 622478229}
   m_minDeadZone: 4
-  m_maxDeadZone: 45.12
+  m_maxDeadZone: 5
   m_arrowTransform: {fileID: 622478230}
   m_arrowRange: 400
   m_horizontalBounds: {x: -1920, y: 1920}
@@ -4321,6 +4321,7 @@ MonoBehaviour:
   - {fileID: 1459051811}
   - {fileID: 1846834455}
   - {fileID: 1696015929}
+  playerDistanceRange: {x: 31.9, y: 40.1}
   spawnDelay: 1
   maxEnemyCount: 10
 --- !u!4 &1812771220

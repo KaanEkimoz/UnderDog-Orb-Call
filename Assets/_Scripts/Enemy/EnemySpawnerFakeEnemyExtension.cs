@@ -94,10 +94,10 @@ namespace com.game.enemysystem
             if (m_instances.Count >= m_maxFakeEnemyCount)
                 return;
 
-            Transform spawnPoint = m_owner.GetRandomSpawnPoint();
+            Vector3 spawnPoint = m_owner.GetRandomSpawnPoint();
             GameObject enemyPrefab = m_owner.GetRandomEnemyPrefab();
 
-            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
             EnemyCombatant combatant = enemy.GetComponentInChildren<EnemyCombatant>();
             combatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
 

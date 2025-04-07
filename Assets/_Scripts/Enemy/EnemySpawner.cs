@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject[] enemyPrefabs;
     public GameObject[] spawnPoints;
 
+    public Vector2 playerDistanceRange;
     public float spawnDelay = 1f;
     public int maxEnemyCount = 30;
 
@@ -26,8 +27,12 @@ public class EnemySpawner : MonoBehaviour
 
     public bool IsSpawning => spawnCoroutine != null;
 
+    Player m_player;
+
     private void Start()
     {
+        m_player = Player.Instance;
+
         StartSpawning();
     }
 
@@ -41,10 +46,10 @@ public class EnemySpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnDelay);
 
-            Transform spawnPoint = GetRandomSpawnPoint();
+            Vector3 spawnPoint = GetRandomSpawnPoint();
             GameObject enemyPrefab = GetRandomEnemyPrefab();
 
-            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
             EnemyCombatant enemyCombatant = enemy.GetComponentInChildren<EnemyCombatant>();
             enemyCombatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
             enemyCount++;
@@ -66,12 +71,23 @@ public class EnemySpawner : MonoBehaviour
         return enemyPrefab;
     }
 
-    public Transform GetRandomSpawnPoint()
+    public Vector3 GetRandomSpawnPoint()
     {
+        if (m_player != null)
+        {
+            Vector3 randomXZ = UnityEngine.Random.insideUnitCircle;
+            randomXZ.z = randomXZ.y;
+            randomXZ.y = 0f;
+
+            float magnitude = UnityEngine.Random.Range(playerDistanceRange.x, playerDistanceRange.y);
+
+            return m_player.transform.position + (randomXZ * magnitude);
+        }
+
         int randomSpawnPoint = UnityEngine.Random.Range(0, spawnPoints.Length);
         GameObject spawnPoint = spawnPoints[randomSpawnPoint];
 
-        return spawnPoint.transform;
+        return spawnPoint.transform.position;
     }
     private void OnEnemyDeath(DeathCause cause)
     {
@@ -115,6 +131,15 @@ public class EnemySpawner : MonoBehaviour
         enemyCount = 0;
 
         OnEnemiesCleared?.Invoke();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, playerDistanceRange.x);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, playerDistanceRange.y);
     }
 }
 
