@@ -2779,12 +2779,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bca2a7178e420b488433cf46b3d9aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_magnetType: 0
   m_layerMask:
     serializedVersion: 2
     m_Bits: 131072
   m_forceMode: 0
-  m_maxAffectionRadius: 3.39
-  m_forceMagnitude: 0
+  m_ease: 11
+  m_minRadius: 1.12
+  m_maxAffectionRadius: 12.22
+  m_strength: 10.26
 --- !u!1 &8032555645561082200
 GameObject:
   m_ObjectHideFlags: 0

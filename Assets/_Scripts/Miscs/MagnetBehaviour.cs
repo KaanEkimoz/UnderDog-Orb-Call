@@ -1,13 +1,27 @@
+using com.absence.attributes;
+using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.game.miscs
 {
     public class MagnetBehaviour : MonoBehaviour
     {
+        public enum MagnetType
+        {
+            Physics,
+            [InspectorName("Virtual (DOTween)")] Virtual,
+        }
+
+        [SerializeField] private MagnetType m_magnetType = MagnetType.Physics;
         [SerializeField] private LayerMask m_layerMask;
-        [SerializeField] private ForceMode m_forceMode;
+        [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private ForceMode m_forceMode;
+        [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Virtual)] private Ease m_ease;
+        [SerializeField] private float m_minRadius;
         [SerializeField] private float m_maxAffectionRadius;
-        [SerializeField] private float m_forceMagnitude;
+        [SerializeField] private float m_strength;
+
+        Dictionary<Rigidbody, Tweener> m_followers = new();
 
         private void FixedUpdate()
         {
@@ -21,20 +35,62 @@ namespace com.game.miscs
                 if (!magnetable.IsMagnetable)
                     continue;
 
-                Rigidbody target = collider.attachedRigidbody;
-
-                Vector3 rawDirection = transform.position - target.transform.position;
-                //rawDirection.y = 0f;
-                Vector3 negGravityForce = (-Physics.gravity) * target.mass;
-                Vector3 forceDirection = (rawDirection).normalized;
-                float multiplier = 1 / Mathf.Pow(Vector2.Distance(transform.position, target.transform.position) + magnetable.MagnetResistance, 2);
-                target.AddForce(forceDirection * m_forceMagnitude * multiplier, m_forceMode);
-                //target.AddForce(negGravityForce, ForceMode.Force);
+                switch (m_magnetType)
+                {
+                    case MagnetType.Physics:
+                        ApplyPhysicsMagnet(collider.attachedRigidbody, magnetable);
+                        break;
+                    case MagnetType.Virtual:
+                        ApplyVirtualMagnet(collider.attachedRigidbody, magnetable);
+                        break;
+                    default:
+                        break;
+                }
             }
+
+            foreach (var follower in m_followers)
+            {
+                follower.Value.ChangeEndValue(transform.position, false);
+            }
+        }
+
+        void ApplyVirtualMagnet(Rigidbody rigidbody, IMagnetable magnetable)
+        {
+            if (m_followers.ContainsKey(rigidbody))
+                return;
+
+            Tweener tweener = rigidbody.DOMove(transform.position, 1 / (m_strength + 0.00001f))
+                .SetEase(m_ease)
+                .OnComplete(() => m_followers.Remove(rigidbody))
+                .OnKill(() => m_followers.Remove(rigidbody));
+
+            m_followers.Add(rigidbody, tweener);
+        }
+
+        void ApplyPhysicsMagnet(Rigidbody rigidbody, IMagnetable magnetable)
+        {
+            Vector3 rawDirection = transform.position - rigidbody.transform.position;
+            //rawDirection.y = 0f;
+            //Vector3 negGravityForce = (-Physics.gravity) * rigidbody.mass;
+            Vector3 forceDirection = (rawDirection).normalized;
+
+            float multiplier = 1 / 
+                Mathf.Pow(GetDistance(rigidbody.transform.position) + magnetable.MagnetResistance, 2);
+
+            rigidbody.AddForce(forceDirection * m_strength * multiplier, m_forceMode);
+            //target.AddForce(negGravityForce, ForceMode.Force);
+        }
+
+        float GetDistance(Vector3 position)
+        {
+            return Mathf.Max(m_minRadius, Vector3.Distance(transform.position, position));
         }
 
         private void OnDrawGizmosSelected()
         {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, m_minRadius);
+
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, m_maxAffectionRadius);
         }

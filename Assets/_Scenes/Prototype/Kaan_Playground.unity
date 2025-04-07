@@ -6165,10 +6165,6 @@ PrefabInstance:
       propertyPath: m_forceMagnitude
       value: 0.008
       objectReference: {fileID: 0}
-    - target: {fileID: 1438975964073265034, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: m_maxAffectionRadius
-      value: 3.99
-      objectReference: {fileID: 0}
     - target: {fileID: 2019759119449363392, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_Enabled
       value: 0
