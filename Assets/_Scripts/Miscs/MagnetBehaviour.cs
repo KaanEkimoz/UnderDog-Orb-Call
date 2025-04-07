@@ -24,10 +24,12 @@ namespace com.game.miscs
                 Rigidbody target = collider.attachedRigidbody;
 
                 Vector3 rawDirection = transform.position - target.transform.position;
-                rawDirection.y = 0f;
+                //rawDirection.y = 0f;
+                Vector3 negGravityForce = (-Physics.gravity) * target.mass;
                 Vector3 forceDirection = (rawDirection).normalized;
                 float multiplier = 1 / Mathf.Pow(Vector2.Distance(transform.position, target.transform.position) + magnetable.MagnetResistance, 2);
                 target.AddForce(forceDirection * m_forceMagnitude * multiplier, m_forceMode);
+                //target.AddForce(negGravityForce, ForceMode.Force);
             }
         }
 
