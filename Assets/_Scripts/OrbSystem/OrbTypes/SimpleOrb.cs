@@ -66,17 +66,28 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnReachedToEllipse;
     public event Action<OrbState> OnStateChanged;
 
+    //Effects
+    private SoundFXManager _soundFXManager;
+
     public void AssignPlayerStats(PlayerStats playerStats)
     {
         _playerStats = playerStats;
     }
+    public void AssingSoundFXManager(SoundFXManager soundFXManager)
+    {
+        _soundFXManager = soundFXManager;
+    }
     private void OnEnable()
     {
-        Reset();
+        OnThrown += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbThrowEffects, transform);
+        OnCalled += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbCallEffects, transform);
+        OnReachedToEllipse += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbReturnEffects, transform);
     }
     private void OnDisable()
     {
-        
+        OnThrown -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbThrowEffects, transform);
+        OnCalled -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbCallEffects, transform);
+        OnReachedToEllipse -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbReturnEffects, transform);
     }
     private void Reset()
     {

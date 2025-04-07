@@ -212,6 +212,7 @@ public class ThirdPersonController : MonoBehaviour
         _dashDurationTimer = dashDurationInSeconds;
         _dashCooldownTimer = dashCooldownInSeconds + dashDurationInSeconds;
         _animator.SetTrigger(_animIDDashTrigger);
+        //_soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.dashSoundEffects, transform);
     }
     private void HandleDashTimers()
     {
@@ -243,7 +244,10 @@ public class ThirdPersonController : MonoBehaviour
     private void OnFootstep(AnimationEvent animationEvent)
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
             _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.walkOnGrassEffects, transform);
+        }
+            
     }
     private void OnDashStart(AnimationEvent animationEvent)
     {

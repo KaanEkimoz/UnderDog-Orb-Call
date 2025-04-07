@@ -65,13 +65,15 @@ public class OrbController : MonoBehaviour
     private int selectedOrbIndex = 0;
     private float angleStep; // The angle between orbs
     private PlayerStats _playerStats;
+    private SoundFXManager _soundFXManager;
     public bool IsAiming { get; private set; } = false;
     public int SelectedOrbIndex => selectedOrbIndex;
 
     [Inject]
-    private void ZenjectSetup(PlayerStats playerStats)
+    private void ZenjectSetup(PlayerStats playerStats, SoundFXManager soundFXManager)
     {
         _playerStats = playerStats;
+        _soundFXManager = soundFXManager;
     }
     private void Start()
     {
@@ -289,6 +291,7 @@ public class OrbController : MonoBehaviour
         SimpleOrb newOrb = objectPool.GetPooledObject(spawnIndex).GetComponent<SimpleOrb>();
         newOrb.transform.position = ellipseCenterTransform.position;
         newOrb.AssignPlayerStats(_playerStats);
+        newOrb.AssingSoundFXManager(_soundFXManager);
 
         InitializeOrb(newOrb);
         activeOrbCount++;
