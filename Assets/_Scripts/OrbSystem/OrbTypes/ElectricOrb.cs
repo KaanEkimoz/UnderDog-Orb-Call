@@ -44,6 +44,9 @@ namespace com.game
                 .Take(maxElectricBounceCount) // Take the closest 'maxElectricBounceCount' enemies
                 .ToList();
 
+            GameRuntimeEvent evt = Game.Event;
+            Game.Event = GameRuntimeEvent.Null;
+
             // Apply damage to the closest enemies
             foreach (var item in sortedDamageables)
             {
@@ -56,6 +59,9 @@ namespace com.game
                     affectedEnemies.Add(hitDamageable);
                 }
             }
+
+            Game.Event = evt;
+
             if (electricChainEffectPrefab == null)
             {
                 Debug.LogWarning("ElectricLine prefab is not assigned.");

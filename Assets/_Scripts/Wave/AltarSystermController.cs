@@ -1,20 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class AltarSystemController : MonoBehaviour
 {
-    [Header("Sunak System Settings")]
+    [Header("Altar System Settings")]
     public float safeZoneTimer = 120f;
     public int maxSafeZoneEntries = 4;
-    public float difficultyIncreaseTime = 30f;
-    public int safeZoneEntryCount = 0;
+    public float difficultyIncreaseTime = 30f;  
     public int maxEnemyIncrease = 10;
+
+    [Header("Current System Values")]
     [SerializeField]
     private int currentDifficultyLevel = 0;
+    public int safeZoneEntryCount = 0;
     private float timer;
 
-    [Header("Refeences")]
+    [Header("References")]
     public GameObject safeZoneBoundaries;
     public GameObject safeZoneArea;
     public EnemySpawner enemySpawner;
@@ -25,7 +28,6 @@ public class AltarSystemController : MonoBehaviour
     [SerializeField] private bool canEnterSafeZone = true;
     [SerializeField] private bool isTimerActive = false;
     
-
     [Header("UI")]
     public TextMeshProUGUI timerText;
 

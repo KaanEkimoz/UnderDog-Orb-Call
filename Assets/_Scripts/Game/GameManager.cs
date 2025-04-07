@@ -23,10 +23,14 @@ namespace com.game
         [SerializeField] OrbUIUpdater m_orbUIUpdater;
         [SerializeField] OrbUIUpdater m_orbUIUpdater2;
 
+        [SerializeField] private Transform m_altar;
+
         public GameState State => m_state;
         public int LevelsGainedCurrentWave => m_levelsGained;
         public int EndedWaveCount => m_wavesEnded;
         public float StartTimeOfCurrentWave => m_waveStartTime;
+
+        public Transform AltarTransform => m_altar;
 
         PlayerStats m_playerStats;
         PlayerInventory m_playerInventory;

@@ -30,6 +30,9 @@ namespace com.game
             GameObject instantEffect = Instantiate(instantFireEffectPrefab, transform.position, Quaternion.identity);
             StartCoroutine(DestroyFireEffectAfterDelay(instantEffect, 0.3f));
 
+            GameRuntimeEvent evt = Game.Event;
+            Game.Event = GameRuntimeEvent.Null;
+
             foreach (var hitCollider in hitColliders)
             {
                 if(hitCollider.gameObject.CompareTag("Player"))
@@ -42,6 +45,9 @@ namespace com.game
                 }
 
             }
+
+            Game.Event = evt;
+
             if (continuosFireEffect == null)
             {
                 Debug.LogWarning("FireEffect prefab is not assigned.");
