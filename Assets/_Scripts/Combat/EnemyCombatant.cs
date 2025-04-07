@@ -28,9 +28,10 @@ namespace com.game.enemysystem
 
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
-        [SerializeField] private SparkLight m_sparkLight;
+        [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
         [SerializeField] private Enemy enemy;
-        public SparkLight Spark => m_sparkLight;
+
+        public ISpark Spark => m_spark.Value;
 
         private float _health;
         private float _maxHealth;

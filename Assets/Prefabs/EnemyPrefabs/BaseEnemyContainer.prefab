@@ -183,6 +183,7 @@ Transform:
   - {fileID: 7892791133856918113}
   - {fileID: 782513048736819641}
   - {fileID: 389924386728855505}
+  - {fileID: 4045625808674151776}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6836446959609869726
@@ -203,7 +204,8 @@ MonoBehaviour:
   m_body: {fileID: 3660124457791922965}
   m_stats: {fileID: 1072382937486459194}
   m_healthBar: {fileID: 283575652366040232}
-  m_sparkLight: {fileID: 5076795103391873241}
+  m_spark:
+    underlyingValue: {fileID: 8156995981169104547}
   m_colliders:
   - {fileID: 3794116278725284438}
 --- !u!1 &1792146226726642771
@@ -257,6 +259,57 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 1
+--- !u!1 &1915180863243622495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4045625808674151776}
+  - component: {fileID: 8156995981169104547}
+  m_Layer: 0
+  m_Name: EmissionSpark
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4045625808674151776
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915180863243622495}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9134454142794667705}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8156995981169104547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915180863243622495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b23d4d724711214cb6340f4e0b75254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_flashPhase: 0
+  m_enemyRenderer: {fileID: 391948113693585292}
+  m_emissionProperty: _Emission
+  m_maxEmissionValue: 0.005
+  m_flashDuration: 0.5
+  m_minTime: 2
+  m_maxTime: 5
 --- !u!1 &2144543076416177774
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +684,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_container: {fileID: 1615555516738219183}
   m_stats: {fileID: 1072382937486459194}
-  m_sparkLight: {fileID: 5076795103391873241}
+  m_spark:
+    underlyingValue: {fileID: 8156995981169104547}
   enemy: {fileID: 0}
 --- !u!114 &1072382937486459194
 MonoBehaviour:
@@ -1438,6 +1492,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SparkLight
       objectReference: {fileID: 0}
+    - target: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5095028827218751956, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_RenderingLayers
       value: 12
@@ -1536,17 +1594,6 @@ Light:
   m_CorrespondingSourceObject: {fileID: 8997752854358287740, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
   m_PrefabInstance: {fileID: 5290308576765447243}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5076795103391873241 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
-  m_PrefabInstance: {fileID: 5290308576765447243}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8688269652624818105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b85b4b77c663f9040a8cc94c52f5395d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8688269652624818105 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}

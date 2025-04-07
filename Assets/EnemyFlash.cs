@@ -1,82 +1,128 @@
+using com.absence.attributes;
+using com.game.generics;
+using System;
 using UnityEngine;
 
-namespace com.game
+namespace com.game.enemysystem
 {
-    public class EnemyFlash : MonoBehaviour
+    public class EnemyFlash : MonoBehaviour, ISpark
     {
+        public enum Phase
+        {
+            [InspectorName("Idle (Not Active)")] Idle,
+            Increasing,
+            Decreasing,
+        }
+
+        public static readonly string DefaultEmissionProperty = "_Emission";
+
         [Header("Emission Settings")]
-        [SerializeField] private Renderer enemyRenderer;
-        [SerializeField] private string emissionProperty = "_Emission";
-        [SerializeField] private float maxEmissionValue = 2f;
-        [SerializeField] private float flashDuration = 0.5f;
+        [SerializeField, Readonly] private Phase m_flashPhase;
+        [SerializeField] private Renderer m_enemyRenderer;
+        [SerializeField] private string m_emissionProperty = DefaultEmissionProperty;
+        [SerializeField] private float m_maxEmissionValue = 2f;
+        [SerializeField] private float m_flashDuration = 0.5f;
 
         [Header("Timer Settings")]
-        [SerializeField] private float minTime = 2f;
-        [SerializeField] private float maxTime = 5f;
+        [SerializeField] private float m_minTime = 2f;
+        [SerializeField] private float m_maxTime = 5f;
 
-        private Material material;
-        private float timer;
-        private bool isFlashing;
-        private float flashTimer;
-        private int flashPhase; // 0 = not flashing, 1 = increasing, 2 = decreasing
+        public event Action OnEnd;
+
+        Material m_material;
+        float m_timer;
+        bool m_isFlashing;
+        float m_flashTimer;
 
         private void Start()
         {
-            material = enemyRenderer.material;
-            timer = GetRandomTime();
+            m_material = m_enemyRenderer.material;
+            SetEmission(0f);
+
+            m_timer = GetRandomTime();
         }
 
         private void Update()
         {
-            if (isFlashing)
+            if (!m_isFlashing)
             {
-                HandleFlash();
+                if (m_timer > 0f) m_timer -= Time.deltaTime;
+                else m_timer = 0f;
+
+                return;
             }
-            else
-            {
-                timer -= Time.deltaTime;
-                if (timer <= 0f)
-                {
-                    StartFlash();
-                }
-            }
+
+            HandleFlash();
+        }
+
+        public void Spark()
+        {
+            if (m_isFlashing)
+                return;
+
+            if (m_timer > 0f)
+                return;
+
+            StartFlash();
+        }
+
+        public void ForceStop()
+        {
+            Stop();
         }
 
         private void StartFlash()
         {
-            isFlashing = true;
-            flashTimer = 0f;
-            flashPhase = 1; // Start increasing
+            m_isFlashing = true;
+            m_flashTimer = 0f;
+            m_flashPhase = Phase.Increasing; // Start increasing
         }
 
         private void HandleFlash()
         {
-            flashTimer += Time.deltaTime;
-            float t = flashTimer / (flashDuration / 2f);
+            m_flashTimer += Time.deltaTime;
+            float t = m_flashTimer / (m_flashDuration / 2f);
 
-            if (flashPhase == 1) // Increasing
+            if (m_flashPhase == Phase.Increasing) // Increasing
             {
-                material.SetFloat(emissionProperty, Mathf.Lerp(0, maxEmissionValue, t));
-                if (flashTimer >= flashDuration / 2f)
+                SetEmission(Mathf.Lerp(0, m_maxEmissionValue, t));
+                if (m_flashTimer >= m_flashDuration / 2f)
                 {
-                    flashPhase = 2;
-                    flashTimer = 0f;
+                    m_flashPhase = Phase.Decreasing;
+                    m_flashTimer = 0f;
                 }
             }
-            else if (flashPhase == 2) // Decreasing
+            else if (m_flashPhase == Phase.Decreasing) // Decreasing
             {
-                material.SetFloat(emissionProperty, Mathf.Lerp(maxEmissionValue, 0, t));
-                if (flashTimer >= flashDuration / 2f)
+                SetEmission(Mathf.Lerp(m_maxEmissionValue, 0, t));
+                if (m_flashTimer >= m_flashDuration / 2f)
                 {
-                    isFlashing = false;
-                    timer = GetRandomTime();
+                    Stop();
                 }
             }
         }
 
+        void Stop()
+        {
+            if (!m_isFlashing)
+                return;
+
+            m_isFlashing = false;
+            SetEmission(0f);
+
+            m_timer = GetRandomTime();
+
+            OnEnd?.Invoke();
+        }
+
+        void SetEmission(float value)
+        {
+            m_material.SetFloat(m_emissionProperty, value);
+        }
+
         private float GetRandomTime()
         {
-            return Random.Range(minTime, maxTime);
+            return UnityEngine.Random.Range(m_minTime, m_maxTime);
         }
     }
 }

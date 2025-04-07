@@ -13,7 +13,7 @@ namespace com.game.enemysystem
         [SerializeField] private GameObject m_body;
         [SerializeField] private EnemyStats m_stats;
         [SerializeField] private HealthBar m_healthBar;
-        [SerializeField] private SparkLight m_sparkLight;
+        [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
         [SerializeField] private List<Collider> m_colliders;
 
         public Enemy Enemy => m_enemy;
@@ -22,7 +22,7 @@ namespace com.game.enemysystem
         public GameObject Body => m_body;
         public EnemyStats Stats => m_stats;
         public HealthBar HealthBar => m_healthBar;
-        public SparkLight SparkLight => m_sparkLight;
+        public ISpark Spark => m_spark.Value;
         public List<Collider> Colliders => m_colliders;
 
         public void SetCollision(bool value, bool needsGravityDeactivation = false)

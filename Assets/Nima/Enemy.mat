@@ -40,7 +40,7 @@ Material:
     m_Floats:
     - _Edge_1: -1
     - _Edge_2: 1
-    - _Emission: 0.2
+    - _Emission: 0
     - _Emmision: 0
     - _Fresnel: 1
     - _Metalic: 0
