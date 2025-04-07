@@ -18,6 +18,7 @@ public class OrbController : MonoBehaviour
     [Header("Orb Count")]
     [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
     [Range(0, 10)][SerializeField] private int orbCountAtStart = 5;
+    [SerializeField] private bool autoSelectNextOrbOnShoot = false;
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 0f;
     [SerializeField] private Transform firePointTransform;
@@ -159,6 +160,9 @@ public class OrbController : MonoBehaviour
 
         orbToThrow.ResetMaterial();
         orbToThrow = null;
+
+        if (autoSelectNextOrbOnShoot)
+            SelectNextOrb();
 
         Player.Instance.Hub.OrbHandler.RemoveOrb();
         OnOrbThrowed?.Invoke();

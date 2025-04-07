@@ -43,6 +43,14 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private GameObject m_light;
     [SerializeField] private ParticleSystem trailParticle;
 
+    public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
+        _playerStats.GetStat(PlayerStatType.Damage) + 
+        _playerStats.GetStat(PlayerStatType.OrbThrowDamage);
+
+    public float RecallDamage => orbStats.GetStat(OrbStatType.Damage) +
+    _playerStats.GetStat(PlayerStatType.Damage) +
+    _playerStats.GetStat(PlayerStatType.OrbRecallDamage);
+
     //Movement
     private Transform startParent;
     private Vector3 startScale;
@@ -218,7 +226,7 @@ public class SimpleOrb : MonoBehaviour
 
         Game.Event = com.game.GameRuntimeEvent.Null;
     }
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerExit(Collider collider)
     {
         if (currentState != OrbState.Returning)
             return;
@@ -227,7 +235,7 @@ public class SimpleOrb : MonoBehaviour
 
         if (collider.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            damageable.TakeDamage(orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            damageable.TakeDamage(RecallDamage);
 
             if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
@@ -238,12 +246,12 @@ public class SimpleOrb : MonoBehaviour
     protected virtual void ApplyCollisionEffects(Collision collisionObject)
     {
         if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            ApplyCombatEffects(damageable, ThrowDamage);
     }
     protected virtual void ApplyTriggerEffects(Collider collider)
     {
         if (collider.gameObject.TryGetComponent(out IDamageable damageable))
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage));
+            ApplyCombatEffects(damageable, RecallDamage);
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
     {
