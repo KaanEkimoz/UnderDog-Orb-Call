@@ -221,15 +221,15 @@ public class SimpleOrb : MonoBehaviour
     }
     private void OnTriggerEnter(Collider triggerObject)
     {
-        if (currentState == OrbState.Throwing)
+        /*if (currentState == OrbState.Throwing)
         {
             Game.Event = com.game.GameRuntimeEvent.OrbThrow;
 
             ApplyOrbThrowTriggerEffects(triggerObject);
 
             Game.Event = com.game.GameRuntimeEvent.Null;
-        }
-        else if (currentState == OrbState.Returning)
+        }*/
+        if (currentState == OrbState.Returning)
         {
             Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
@@ -238,19 +238,18 @@ public class SimpleOrb : MonoBehaviour
             Game.Event = com.game.GameRuntimeEvent.Null;
         }
     }
-    /*
     private void OnCollisionEnter(Collision collisionObject)
     {
-        if(currentState != OrbState.Throwing)
-            return;
+        if (currentState == OrbState.Throwing)
+        {
+            Game.Event = com.game.GameRuntimeEvent.OrbThrow;
 
-        Game.Event = com.game.GameRuntimeEvent.OrbThrow;
+            ApplyOrbThrowCollisionEffects(collisionObject);
 
-        //ApplyOrbCollisionEffects(collisionObject);
-
-        Game.Event = com.game.GameRuntimeEvent.Null;
-    }*/
-    private void Stick(Collider stickCollider)
+            Game.Event = com.game.GameRuntimeEvent.Null;
+        }
+    }
+    private void Stick(Collision stickCollider)
     {
         currentState = OrbState.Sticked;
 
@@ -263,12 +262,12 @@ public class SimpleOrb : MonoBehaviour
         //transform.position = point;
         //Debug.DrawRay(point, Vector3.up * 0.5f, Color.red, 2f);
         //transform.position = stickCollider.ClosestPoint(transform.position); // DOESN'T WORK
-        transform.position = stickCollider.ClosestPointOnBounds(transform.position);
+        transform.position = stickCollider.contacts[0].point; // WORKS
         //transform.position = stickCollider.ClosestPoint(transform.position);
         StickToTransform(stickCollider.transform);
     }
     
-    protected virtual void ApplyOrbThrowTriggerEffects(Collider collider)
+    protected virtual void ApplyOrbThrowCollisionEffects(Collision collider)
     {
 
         // devam eden hasar iþlemleri
@@ -279,7 +278,7 @@ public class SimpleOrb : MonoBehaviour
 
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
 
-            if (collider.TryGetComponent(out Enemy hittedEnemy))
+            if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
                 hittedEnemy.ApplyKnockbackForce(transform.position, 1f);

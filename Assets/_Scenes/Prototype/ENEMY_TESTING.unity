@@ -5371,6 +5371,7 @@ MonoBehaviour:
   m_orbContainerUI: {fileID: 705935146}
   m_orbUIUpdater: {fileID: 1120980986}
   m_orbUIUpdater2: {fileID: 0}
+  m_altar: {fileID: 0}
 --- !u!1 &1238394341
 GameObject:
   m_ObjectHideFlags: 0
