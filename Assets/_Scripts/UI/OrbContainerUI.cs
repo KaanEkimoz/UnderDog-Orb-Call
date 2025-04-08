@@ -46,6 +46,7 @@ namespace com.game.ui
         ItemDisplay m_selectedUpgradeDisplay;
         SimpleOrb m_hoveredOrb;
         bool m_undoable;
+        bool m_temporary;
 
         ButtonHandle m_resetButtonHandle;
         ButtonHandle m_backButtonHandle;
@@ -67,7 +68,7 @@ namespace com.game.ui
             m_resetButtonHandle = new ButtonHandle(m_resetButton);
             m_confirmButtonHandle = new ButtonHandle(m_confirmButton);
 
-            BackButton.Visibility = () => !HasCacheOrUndo();
+            BackButton.Visibility = () => m_temporary;
             ResetButton.Visibility = HasCacheOrUndo;
             ConfirmButton.Visibility = HasCacheOrUndo;
             ResetButton.Interactability = HasUndo;
@@ -83,7 +84,7 @@ namespace com.game.ui
             ConfirmButton.OnClick += ConfirmChanges;
         }
 
-        void RefreshButtons()
+        public void RefreshButtons()
         {
             BackButton.Refresh();
             ConfirmButton.Refresh();
@@ -110,21 +111,23 @@ namespace com.game.ui
             m_container.SetUpgradeCache(enumerable);
         }
 
-        public void SetVisibility(bool visibility)
+        public void SetVisibility(bool visibility, bool temporarily = false)
         {
+            m_temporary = temporarily;
             m_panel.SetActive(visibility);
             ResetButtons();
         }
 
-        public void Show(bool refresh = false)
+        public void Show(bool refresh = false, bool temporarily = false)
         {
+            m_temporary = temporarily;
             if (refresh) SoftRefresh();
-            SetVisibility(true);
+            SetVisibility(true, temporarily);
         }
 
-        public void Hide(bool clear = false)
+        public void Hide(bool clear = false, bool temporarily = false)
         {
-            SetVisibility(false);
+            SetVisibility(false, temporarily);
             if (clear) Clear();
         }
 
@@ -317,7 +320,7 @@ namespace com.game.ui
 
         void InitializeDescriptionPanel(SimpleOrb orb)
         {
-            if (m_hoveredOrb != null)
+            if (m_hoveredOrb != null && m_displays.ContainsKey(m_hoveredOrb))
                 m_displays[m_hoveredOrb].SetOutlineVisibility(false);
 
             if (orb == null)

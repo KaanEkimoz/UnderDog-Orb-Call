@@ -133,6 +133,8 @@ namespace com.game
 
             Game.Pause();
 
+            m_orbUpgradeCache = m_orbContainer.UpgradeCache;
+
             foreach (EnemyCombatant enemy in GameObject.FindObjectsByType<EnemyCombatant>(
                 FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
@@ -147,9 +149,16 @@ namespace com.game
 
             m_orbContainerUI.SoftRefresh();
 
-            if (m_levelsGained > 0) EnterLevelUpMenu();
-            else if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) EnterOrbInventory();
-            else EnterShop();
+            if (m_levelsGained > 0)
+            {
+                EnterLevelUpMenu();
+                return;
+            }
+
+            EnterShop();
+
+            if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) 
+                EnterOrbInventoryTemporarily();
         }
         void EnterLevelUpMenu(bool reroll = true)
         {
@@ -162,38 +171,39 @@ namespace com.game
         }
         void EnterOrbInventoryTemporarily()
         {
-            m_orbContainerUI.Show(false);
+            m_orbContainerUI.Show(false, true);
+            m_orbContainerUI.RefreshButtons();
             m_orbContainerUI.BackButton.OnClick += () => m_orbContainerUI.Hide(false);
             m_orbContainerUI.ConfirmButton.OnClick += OnConfirmUpgrades;
         }
         void PassOrbUpgrades()
         {
             m_levelsGained = 0;
-            if (m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) EnterOrbInventory();
-            else EnterShop();
+
+            EnterShop();
+
+            if ((m_orbContainer.UpgradeCache != null && m_orbContainer.UpgradeCache.Count > 0) || 
+                (m_orbUpgradeCache != null && m_orbUpgradeCache.Count > 0))
+                EnterOrbInventoryTemporarily();
         }
         void OnOrbUpgradeBought(OrbItemProfile profile)
         {
+            if (m_orbUpgradeCache == null) m_orbUpgradeCache = new();
             m_orbUpgradeCache.Add(profile);
+            m_orbContainerUI.SetUpgradeCache(m_orbUpgradeCache);
+            m_orbContainerUI.SoftRefresh();
             m_levelsGained--;
 
             if (m_levelsGained > 0)
-                EnterLevelUpMenu();
-            else if (m_orbUpgradeCache.Count > 0)
-                EnterOrbInventory();
-            else
-                EnterShop();
-        }
-        void EnterOrbInventory()
-        {
-            m_orbShopUI.Hide(true);
-            m_orbContainerUI.SetUpgradeCache(m_orbUpgradeCache);
-            m_orbContainerUI.Show(true);
-            m_orbContainerUI.ConfirmButton.OnClick += () =>
             {
-                OnConfirmUpgrades();
-                EnterShop();
-            };
+                EnterLevelUpMenu();
+                return;
+            }
+
+            EnterShop();
+
+            if (m_orbUpgradeCache.Count > 0)
+                EnterOrbInventoryTemporarily();
         }
         void OnConfirmUpgrades()
         {

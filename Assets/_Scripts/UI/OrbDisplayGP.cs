@@ -14,6 +14,10 @@ namespace com.game.ui
         }
 
         [SerializeField] private Image m_image;
+        [SerializeField] private Color m_idleColor = Color.white;
+        [SerializeField] private Color m_throwingColor = Color.gray;
+        [SerializeField] private Color m_stickedColor = Color.gray;
+        [SerializeField] private Color m_returningColor = Color.gray;
 
         public Image Image => m_image;
 
@@ -82,16 +86,16 @@ namespace com.game.ui
             switch (state)
             {
                 case OrbState.OnEllipse:
-                    m_image.color = Color.cyan;
+                    m_image.color = m_idleColor;
                     break;
                 case OrbState.Throwing:
-                    m_image.color = Color.red;
+                    m_image.color = m_throwingColor;
                     break;
                 case OrbState.Sticked:
-                    m_image.color = Color.red;
+                    m_image.color = m_stickedColor;
                     break;
                 case OrbState.Returning:
-                    m_image.color = Color.magenta;
+                    m_image.color = m_returningColor;
                     break;
                 default:
                     break;
