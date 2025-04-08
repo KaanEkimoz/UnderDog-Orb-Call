@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Orb Upgrade - Electric Orb
   m_EditorClassIdentifier: 
   Guid: d8106ece-32bb-48e8-9cfc-5ebd5869b182
-  Icon: {fileID: 21300000, guid: ff7bfa7addf40784d86f62b8e4a034a6, type: 3}
+  Icon: {fileID: 1408500139, guid: 0f63e6a603fe9f143809feeca5394428, type: 3}
   DisplayName: Electric Orb
   Description: 
-  Behaviour: {fileID: 5413943036052786957, guid: a5df528c5b7446b438ed06048db5cdd6, type: 3}
   CustomActions: []
+  Behaviour: {fileID: 5413943036052786957, guid: a5df528c5b7446b438ed06048db5cdd6, type: 3}
   m_prefab: {fileID: 5172868601544928626, guid: 5a71e4b2ee5b54b408611eef2fa7c0ee, type: 3}
   m_orbStatOverrides: []
   m_orbStatModifications: []
