@@ -134,7 +134,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 257778473626880337, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8212083864065701789}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6869686565564379958, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8343042518145213273}
+    - targetCorrespondingSourceObject: {fileID: 6869686565564379958, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3493916966824599081}
   m_SourcePrefab: {fileID: 100100000, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
 --- !u!4 &3359666089064336989 stripped
 Transform:
@@ -146,6 +152,53 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4802346647703831612, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
   m_PrefabInstance: {fileID: 3246038314479699724}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8239961341572559930 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6869686565564379958, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
+  m_PrefabInstance: {fileID: 3246038314479699724}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8343042518145213273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8239961341572559930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48726c2cc8a8e894990c87d7c8c008ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_startOnAwake: 1
+  m_target: {fileID: 0}
+  m_ease: 4
+  m_startingShift: {x: 0, y: -0.5, z: 0}
+  m_magnitudePerAxis: {x: 0, y: 0.3, z: 0}
+  m_duration: 1.4
+  m_delay: 0
+  m_loops: -1
+--- !u!114 &3493916966824599081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8239961341572559930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c1e8ff5b2440743980a624436d7356, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gizmoRange: 1.54
+  m_startOnAwake: 1
+  m_target: {fileID: 0}
+  m_targetAxis: 0
+  m_ease: 4
+  m_startingAngleShift: 9
+  m_angle: 18
+  m_duration: 1.4
+  m_delay: 0.7
+  m_loops: -1
 --- !u!4 &8724010699054018176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6061237224606574988, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
