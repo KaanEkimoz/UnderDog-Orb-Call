@@ -1,26 +1,45 @@
-using com.game.orbsystem.statsystemextensions;
 using com.game;
 using System.Collections;
 using UnityEngine;
 using com.game.enemysystem.statsystemextensions;
+using com.absence.attributes;
 
 public class MeleeEnemy : Enemy
 {
+    [Header("Melee Enemy")]
+    public Transform attackingPoint;
+    [HideIf(nameof(attackingPoint), null)] public LayerMask attackLayerMask;
+    [HideIf(nameof(attackingPoint), null)] public float attackRadius;
+
+    [SerializeField] public bool canMoveDuringAttack;
+
     public float meleeAttackDelay = 2f;
     public float attackingCooldown = 2f;
     private bool canAttack = true;
 
+    bool insideDamagingFrames;
+    bool damageDone;
 
     protected override void CustomUpdate()
     {
-        if (isDummyModeActive) return;
+        if (isDummyModeActive) 
+            return;
+
+        if (IsAttacking)
+        {
+            if (insideDamagingFrames) 
+                DealDamage();
+
+            if (!canMoveDuringAttack)
+                return;
+        }
 
         navMeshAgent.SetDestination(target.transform.position);
 
         if (IsFake)
             return;
 
-        if (GetDistanceToPlayer() && canAttack)
+        if (GetDistanceToPlayer())
         {
             Attack();
         }
@@ -28,21 +47,83 @@ public class MeleeEnemy : Enemy
 
     private void Attack()
     {
+        if (!canAttack)
+            return;
+
+        if (IsAttacking)
+            return;
+
+        if (hasAttackAnimation)
+            IsAttacking = true;
+
         canAttack = false;
 
-        //HASAR VER
-        if (target.gameObject.TryGetComponent(out IDamageable damageable))
+        StartCoroutine(EnableCooldown());
+    }
+
+    public void DealDamage()
+    {
+        if (insideDamagingFrames && damageDone)
+            return;
+
+        if (attackingPoint == null)
+        {
+            DamageTarget(target.gameObject);
+        }
+        else
+        {
+            Collider[] result = Physics.OverlapSphere(attackingPoint.position, attackRadius,
+                attackLayerMask, QueryTriggerInteraction.UseGlobal);
+
+            foreach (Collider coll in result)
+            {
+                if (coll == null)
+                    continue;
+
+                if (coll.attachedRigidbody == null) DamageTarget(coll.gameObject);
+                else DamageTarget(coll.attachedRigidbody.gameObject);
+            }
+        }
+    }
+
+    void DamageTarget(GameObject t)
+    {
+        if (t.TryGetComponent(out IDamageable damageable))
+        {
             damageable.TakeDamage(enemyStats.GetStat(EnemyStatType.Damage));
 
-        Debug.Log("hasar verildi");
+            if (insideDamagingFrames)
+                damageDone = true;
+        }
+    }
 
-        StartCoroutine(EnableCooldown());
+    public void EnterDamagingFrames()
+    {
+        if (!IsAttacking)
+            return;
 
+        insideDamagingFrames = true;
+        damageDone = false;
+    }
+
+    public void ExitDamagingFrames()
+    {
+        insideDamagingFrames = false;
+        damageDone = false;
     }
 
     private IEnumerator EnableCooldown()
     {
         yield return new WaitForSeconds(attackingCooldown);
         canAttack = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (attackingPoint == null)
+            return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackingPoint.position, attackRadius);
     }
 }

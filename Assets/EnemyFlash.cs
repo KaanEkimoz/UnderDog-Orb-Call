@@ -14,12 +14,17 @@ namespace com.game.enemysystem
             Decreasing,
         }
 
-        public static readonly string DefaultEmissionProperty = "_Emission";
+        public static readonly string CustomEmissionProperty = "_Emission";
+        public static readonly string DefaultEmissionSwitchProperty = "_EMISSION";
+        public static readonly string DefaultEmissionValueProperty = "_EmissionColor";
 
         [Header("Emission Settings")]
         [SerializeField, Readonly] private Phase m_flashPhase;
         [SerializeField] private Renderer m_enemyRenderer;
-        [SerializeField] private string m_emissionProperty = DefaultEmissionProperty;
+        [SerializeField] private string m_emissionProperty = CustomEmissionProperty;
+        [SerializeField] private int m_materialIndex = 0;
+        [SerializeField] private bool m_defaultMaterialType = false;
+        [SerializeField] private float m_noEmissionValue = 0f;
         [SerializeField] private float m_maxEmissionValue = 2f;
         [SerializeField] private float m_flashDuration = 0.5f;
 
@@ -30,14 +35,22 @@ namespace com.game.enemysystem
         public event Action OnEnd;
 
         Material m_material;
+        Color m_emissionColor;
         float m_timer;
         bool m_isFlashing;
         float m_flashTimer;
 
         private void Start()
         {
-            m_material = m_enemyRenderer.material;
-            SetEmission(0f);
+            m_material = m_enemyRenderer.materials[m_materialIndex];
+
+            if (m_defaultMaterialType)
+            {
+                m_material.EnableKeyword(DefaultEmissionSwitchProperty);
+                m_emissionColor = m_material.GetColor(DefaultEmissionValueProperty);
+            }
+
+            SetEmission(m_noEmissionValue);
 
             m_timer = GetRandomTime();
         }
@@ -85,7 +98,7 @@ namespace com.game.enemysystem
 
             if (m_flashPhase == Phase.Increasing) // Increasing
             {
-                SetEmission(Mathf.Lerp(0, m_maxEmissionValue, t));
+                SetEmission(Mathf.Lerp(m_noEmissionValue, m_maxEmissionValue, t));
                 if (m_flashTimer >= m_flashDuration / 2f)
                 {
                     m_flashPhase = Phase.Decreasing;
@@ -94,12 +107,18 @@ namespace com.game.enemysystem
             }
             else if (m_flashPhase == Phase.Decreasing) // Decreasing
             {
-                SetEmission(Mathf.Lerp(m_maxEmissionValue, 0, t));
+                SetEmission(Mathf.Lerp(m_maxEmissionValue, m_noEmissionValue, t));
                 if (m_flashTimer >= m_flashDuration / 2f)
                 {
                     Stop();
                 }
             }
+        }
+
+        private void OnValidate()
+        {
+            if (m_defaultMaterialType)
+                m_emissionProperty = DefaultEmissionValueProperty;
         }
 
         void Stop()
@@ -108,7 +127,7 @@ namespace com.game.enemysystem
                 return;
 
             m_isFlashing = false;
-            SetEmission(0f);
+            SetEmission(m_noEmissionValue);
 
             m_timer = GetRandomTime();
 
@@ -117,7 +136,8 @@ namespace com.game.enemysystem
 
         void SetEmission(float value)
         {
-            m_material.SetFloat(m_emissionProperty, value);
+            if (m_defaultMaterialType) m_material.SetColor(DefaultEmissionValueProperty, m_emissionColor * value);
+            else m_material.SetFloat(m_emissionProperty, value);
         }
 
         private float GetRandomTime()

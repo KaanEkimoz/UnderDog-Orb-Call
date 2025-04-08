@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] public EnemyMovementData enemyMovementData;
+    [SerializeField] public bool hasAttackAnimation;
     [Header("Slow")]
     [SerializeField] public float slowPercentPerOrb = 25f;
     [Header("Stats")]
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
 
     public bool IsFake { get; set; } = false;
     public bool IsVirtual { get; protected set; } = false;
+    public bool IsAttacking { get; protected set; } = false;
 
     //Slow
     private float currentSlowAmount = 0;
@@ -115,5 +117,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void CommitEndOfAttack()
+    {
+        IsAttacking = false;
+    }
 }
 
