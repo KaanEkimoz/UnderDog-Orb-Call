@@ -6190,6 +6190,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1792406521}
     - target: {fileID: 1438975964073265034, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_magnetType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1438975964073265034, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_forceMagnitude
       value: 0.008
       objectReference: {fileID: 0}

@@ -20,7 +20,7 @@ namespace com.game.enemysystem
         private const bool k_randomizeDropDirections = false;
 
         private const float k_popupPositionRandomization = 0.3f;
-        private const float k_dropSpawnForceMagnitude = 4f;
+        private const float k_dropSpawnForceMagnitude = 4.2f;
         private const float k_dropSpawnForceYAddition = 0.1f;
 
         private const int k_maxMoneyDropAmount = 5;
@@ -45,6 +45,7 @@ namespace com.game.enemysystem
         public event Action<float> OnHeal = delegate { };
         public event Action<DeathCause> OnDie = delegate { };
 
+        bool _deathFlag;
         PlayerCombatant _playerCombatant;
         [Inject] OrbController _orbController;
 
@@ -124,7 +125,10 @@ namespace com.game.enemysystem
 
         public void Die(DeathCause cause)
         {
-            Debug.Log("test");
+            if (_deathFlag)
+                return;
+
+            _deathFlag = true;
 
             SimpleOrb[] orbsOnEnemy = GetOrbsOnEnemy();
 

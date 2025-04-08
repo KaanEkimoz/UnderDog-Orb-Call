@@ -11,10 +11,11 @@ namespace com.game.miscs
         {
             Physics,
             [InspectorName("Virtual (DOTween)")] Virtual,
+            Transform,
         }
 
         [SerializeField] private MagnetType m_magnetType = MagnetType.Physics;
-        [SerializeField] private LayerMask m_layerMask;
+        [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private LayerMask m_layerMask;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private ForceMode m_forceMode;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Virtual)] private Ease m_ease;
         [SerializeField] private float m_minRadius;
@@ -42,6 +43,9 @@ namespace com.game.miscs
                         break;
                     case MagnetType.Virtual:
                         ApplyVirtualMagnet(collider.attachedRigidbody, magnetable);
+                        break;
+                    case MagnetType.Transform:
+                        ApplyTransformMagnet(collider.attachedRigidbody.transform, magnetable);
                         break;
                     default:
                         break;
@@ -77,8 +81,20 @@ namespace com.game.miscs
             float multiplier = 1 / 
                 Mathf.Pow(GetDistance(rigidbody.transform.position) + magnetable.MagnetResistance, 2);
 
-            rigidbody.AddForce(forceDirection * m_strength * multiplier, m_forceMode);
-            //target.AddForce(negGravityForce, ForceMode.Force);
+            rigidbody.AddForce(forceDirection * m_strength * multiplier * Time.deltaTime, m_forceMode);
+        }
+
+        void ApplyTransformMagnet(Transform target, IMagnetable magnetable)
+        {
+            Vector3 rawDirection = transform.position - target.position;
+            //rawDirection.y = 0f;
+            //Vector3 negGravityForce = (-Physics.gravity) * rigidbody.mass;
+            Vector3 moveDirection = rawDirection.normalized;
+
+            float multiplier = 1 /
+                Mathf.Pow(GetDistance(target.position) + magnetable.MagnetResistance, 2);
+
+            target.Translate(multiplier * moveDirection * m_strength * Time.deltaTime, Space.World);
         }
 
         float GetDistance(Vector3 position)
