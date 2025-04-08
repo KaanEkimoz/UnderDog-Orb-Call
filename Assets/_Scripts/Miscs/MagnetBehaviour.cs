@@ -9,15 +9,17 @@ namespace com.game.miscs
     {
         public enum MagnetType
         {
-            Physics,
+            [InspectorName("Physics (Force)")] Physics,
             [InspectorName("Virtual (DOTween)")] Virtual,
-            Transform,
+            [InspectorName("Transform (Translate)")] Transform,
+            [InspectorName("Transform (Lerp)")] Lerp,
         }
 
         [SerializeField] private MagnetType m_magnetType = MagnetType.Physics;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private LayerMask m_layerMask;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private ForceMode m_forceMode;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Virtual)] private Ease m_ease;
+        [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Lerp)] private float m_smoothing;
         [SerializeField] private float m_minRadius;
         [SerializeField] private float m_maxAffectionRadius;
         [SerializeField] private float m_strength;
@@ -46,6 +48,9 @@ namespace com.game.miscs
                         break;
                     case MagnetType.Transform:
                         ApplyTransformMagnet(collider.attachedRigidbody.transform, magnetable);
+                        break;
+                    case MagnetType.Lerp:
+                        ApplyTransformMagnet(collider.attachedRigidbody.transform, magnetable, true);
                         break;
                     default:
                         break;
@@ -84,7 +89,7 @@ namespace com.game.miscs
             rigidbody.AddForce(forceDirection * m_strength * multiplier * Time.deltaTime, m_forceMode);
         }
 
-        void ApplyTransformMagnet(Transform target, IMagnetable magnetable)
+        void ApplyTransformMagnet(Transform target, IMagnetable magnetable, bool lerp = false)
         {
             Vector3 rawDirection = transform.position - target.position;
             //rawDirection.y = 0f;
@@ -94,7 +99,10 @@ namespace com.game.miscs
             float multiplier = 1 /
                 Mathf.Pow(GetDistance(target.position) + magnetable.MagnetResistance, 2);
 
-            target.Translate(multiplier * moveDirection * m_strength * Time.deltaTime, Space.World);
+            Vector3 delta = multiplier * moveDirection * m_strength;
+
+            if (lerp) target.position = Vector3.Lerp(target.position, target.position + delta, Time.deltaTime * m_smoothing);
+            else target.Translate(delta * Time.deltaTime, Space.World);
         }
 
         float GetDistance(Vector3 position)
