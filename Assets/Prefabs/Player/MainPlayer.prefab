@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 3266443062295838621}
   - component: {fileID: 5684851121412659886}
   - component: {fileID: 8658953852903097278}
-  m_Layer: 3
+  m_Layer: 2
   m_Name: PlayerGatherer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

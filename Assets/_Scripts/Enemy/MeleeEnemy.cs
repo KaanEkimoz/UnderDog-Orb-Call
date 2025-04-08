@@ -11,8 +11,6 @@ public class MeleeEnemy : Enemy
     [HideIf(nameof(attackingPoint), null)] public LayerMask attackLayerMask;
     [HideIf(nameof(attackingPoint), null)] public float attackRadius;
 
-    [SerializeField] public bool canMoveDuringAttack;
-
     public float meleeAttackDelay = 2f;
     public float attackingCooldown = 2f;
     private bool canAttack = true;

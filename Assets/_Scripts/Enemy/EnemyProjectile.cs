@@ -20,7 +20,7 @@ public class EnemyProjectile : MonoBehaviour
             if (other.gameObject.TryGetComponent(out IDamageable damageable))
                 damageable.TakeDamage(_damage);
 
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
     public void ApplyVelocity(Vector3 velocity)

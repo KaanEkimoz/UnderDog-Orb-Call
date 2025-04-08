@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     [Header("Movement")]
     [SerializeField] public EnemyMovementData enemyMovementData;
     [SerializeField] public bool hasAttackAnimation;
+    [SerializeField] protected bool canMoveDuringAttack;
     [Header("Slow")]
     [SerializeField] public float slowPercentPerOrb = 25f;
     [Header("Stats")]

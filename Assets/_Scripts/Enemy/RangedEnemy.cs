@@ -26,13 +26,20 @@ public class RangedEnemy : Enemy
     }
     protected override void CustomUpdate()
     {
-        if (isDummyModeActive) return;
+        if (isDummyModeActive) 
+            return;
+
+        if (IsAttacking)
+        {
+            if (!canMoveDuringAttack)
+                return;
+        }
 
         navMeshAgent.SetDestination(target.transform.position);
 
         canSeePlayer = CanSeePlayer();
 
-        if ((!IsFake) && canShoot && GetDistanceToPlayer() && CanSeePlayer())
+        if ((!IsFake) && GetDistanceToPlayer() && canSeePlayer)
             Shoot();
     }
     
@@ -54,18 +61,23 @@ public class RangedEnemy : Enemy
     }
 
     private void Shoot()
-    {   
-        canShoot = false;
-       
-        Vector3 shootingDirection = (target.transform.position - firePoint.position);
-        shootingDirection.y = 0f;
-        shootingDirection = shootingDirection.normalized; //projectile yonu
+    {
+        if (!canShoot)
+            return;
 
-        //projectile'i instantiate et
-        EnemyProjectile projectile = CreateProjectile();
-        projectile.ApplyVelocity(shootingDirection * projectileSpeed); //projectile'a hiz ver
-        StartCoroutine(EnableCooldown()); //saldiri cooldownunu baslat
+        if (IsAttacking)
+            return;
+
+        canShoot = false;
+
+        if (hasAttackAnimation)
+            IsAttacking = true;
+        else
+            SpawnProjectile();
+
+        StartCoroutine(EnableCooldown());
     }
+
     private EnemyProjectile CreateProjectile()
     {
         EnemyProjectile projectile = _objectPool.GetPooledObject(6).GetComponent<EnemyProjectile>();
@@ -74,6 +86,17 @@ public class RangedEnemy : Enemy
 
         return projectile;
     }
+
+    public void SpawnProjectile()
+    {
+        Vector3 shootingDirection = (target.transform.position - firePoint.position);
+        shootingDirection.y = 0f;
+        shootingDirection = shootingDirection.normalized;
+
+        EnemyProjectile projectile = CreateProjectile();
+        projectile.ApplyVelocity(shootingDirection * projectileSpeed);
+    }
+
     private IEnumerator EnableCooldown()
     {
         yield return new WaitForSeconds(shootingCooldown); 
