@@ -288,6 +288,22 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_emissionColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_emissionColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_emissionColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_emissionColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_emissionProperty
       value: _EmissionColor
       objectReference: {fileID: 0}
@@ -345,7 +361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6307766008950331458, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_Name
-      value: Enemy Container - Domesos
+      value: Enemy Container - Domestos
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8450261750710576827, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}

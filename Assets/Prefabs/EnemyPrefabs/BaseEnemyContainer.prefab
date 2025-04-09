@@ -268,6 +268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4045625808674151776}
+  - component: {fileID: 829367058371569714}
   - component: {fileID: 8156995981169104547}
   m_Layer: 0
   m_Name: EmissionSpark
@@ -291,6 +292,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9134454142794667705}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &829367058371569714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915180863243622495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fab889c0dda38a4c8d4c0ecce219494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_disableMode: 0
 --- !u!114 &8156995981169104547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,6 +320,10 @@ MonoBehaviour:
   m_flashPhase: 0
   m_enemyRenderer: {fileID: 391948113693585292}
   m_emissionProperty: _Emission
+  m_emissionColor: {r: 0, g: 0, b: 0, a: 0}
+  m_materialIndex: 0
+  m_defaultMaterialType: 0
+  m_noEmissionValue: 0
   m_maxEmissionValue: 0.005
   m_flashDuration: 0.5
   m_minTime: 2
@@ -1581,6 +1599,9 @@ PrefabInstance:
       addedObject: {fileID: 9025860173237272001}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1773591584662946544}
+    - targetCorrespondingSourceObject: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5827223572788674684}
   m_SourcePrefab: {fileID: 100100000, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
@@ -1599,6 +1620,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
   m_PrefabInstance: {fileID: 5290308576765447243}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1773591584662946544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8688269652624818105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fab889c0dda38a4c8d4c0ecce219494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_disableMode: 0
 --- !u!114 &5827223572788674684
 MonoBehaviour:
   m_ObjectHideFlags: 0

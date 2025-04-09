@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace com.game.generics
 {
+    [DefaultExecutionOrder(-1)]
     public class LightSystemDependent : MonoBehaviour
     {
         public enum DisableMode
@@ -13,7 +14,7 @@ namespace com.game.generics
 
         [SerializeField] private DisableMode m_disableMode = DisableMode.SetActive;
 
-        private void OnEnable()
+        private void Awake()
         {
             if (!Application.isPlaying)
                 return;

@@ -11,6 +11,7 @@ using UnityEngine;
 
 namespace com.game
 {
+    [DefaultExecutionOrder(-5)]
     public class SceneManager : Singleton<SceneManager>
     {
         public const FindObjectsInactive INCLUDE_INACTIVES_AUTO_FILL = FindObjectsInactive.Include;
@@ -296,7 +297,7 @@ namespace com.game
 #endif
         }
 
-        [Button("Toggle Light System Lights")]
+        [Button("Toggle Light System")]
         void ToggleLights()
         {
             if (Application.isPlaying)

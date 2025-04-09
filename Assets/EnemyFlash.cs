@@ -22,6 +22,7 @@ namespace com.game.enemysystem
         [SerializeField, Readonly] private Phase m_flashPhase;
         [SerializeField] private Renderer m_enemyRenderer;
         [SerializeField] private string m_emissionProperty = CustomEmissionProperty;
+        [SerializeField] private Color m_emissionColor;
         [SerializeField] private int m_materialIndex = 0;
         [SerializeField] private bool m_defaultMaterialType = false;
         [SerializeField] private float m_noEmissionValue = 0f;
@@ -35,7 +36,6 @@ namespace com.game.enemysystem
         public event Action OnEnd;
 
         Material m_material;
-        Color m_emissionColor;
         float m_timer;
         bool m_isFlashing;
         float m_flashTimer;
@@ -47,7 +47,6 @@ namespace com.game.enemysystem
             if (m_defaultMaterialType)
             {
                 m_material.EnableKeyword(DefaultEmissionSwitchProperty);
-                m_emissionColor = m_material.GetColor(DefaultEmissionValueProperty);
             }
 
             SetEmission(m_noEmissionValue);

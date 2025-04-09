@@ -208,6 +208,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4097871067843537171}
     - target: {fileID: 826275484712834041, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+      propertyPath: m_emissionColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 826275484712834041, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+      propertyPath: m_emissionColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 826275484712834041, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+      propertyPath: m_emissionColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 826275484712834041, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+      propertyPath: m_emissionColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 826275484712834041, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
       propertyPath: m_noEmissionValue
       value: 0
       objectReference: {fileID: 0}
