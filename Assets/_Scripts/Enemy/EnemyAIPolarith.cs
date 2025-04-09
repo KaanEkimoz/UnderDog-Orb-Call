@@ -6,7 +6,18 @@ namespace com.game.enemysystem.ai
     {
         public EnemyAIState State { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public EnemyMovementData MovementData => throw new System.NotImplementedException();
-        public bool Enabled { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public bool Enabled
+        {
+            get
+            {
+                return false;
+            }
+
+            set
+            {
+
+            }
+        }
         public float Speed { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public float DefaultSpeed => throw new System.NotImplementedException();
 

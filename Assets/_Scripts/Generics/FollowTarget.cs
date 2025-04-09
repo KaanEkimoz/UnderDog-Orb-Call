@@ -13,6 +13,7 @@ namespace com.game.generics
 
         [SerializeField] private FollowingType m_followingType = FollowingType.UpdateConstantly;
         [SerializeField] private Transform m_target;
+        [SerializeField] private bool m_alsoLockToRotation;
         [SerializeField] private bool m_keepStartingOffset;
         [SerializeField, HideIf(nameof(m_keepStartingOffset))] private Vector3 m_offset;
 
@@ -69,6 +70,7 @@ namespace com.game.generics
         public void RefreshPosition()
         {
             transform.position = m_target.position + m_realOffset;
+            if (m_alsoLockToRotation) transform.rotation = m_target.rotation;
         }
     }
 }

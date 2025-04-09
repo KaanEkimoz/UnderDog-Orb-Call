@@ -2,7 +2,6 @@ using com.game.enemysystem.ai;
 using com.game.generics;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace com.game.enemysystem
 {
@@ -10,7 +9,7 @@ namespace com.game.enemysystem
     {
         [SerializeField] private Enemy m_enemy;
         [SerializeField] private EnemyCombatant m_combatant;
-        [SerializeField] private InterfaceReference<IEnemyAI, Component> m_enemyAIScript;
+        [SerializeField] private EnemyAIBuitlInScriptSelector m_AIScriptSelector;
         [SerializeField] private GameObject m_body;
         [SerializeField] private EnemyStats m_stats;
         [SerializeField] private HealthBar m_healthBar;
@@ -19,7 +18,7 @@ namespace com.game.enemysystem
 
         public Enemy Enemy => m_enemy;
         public EnemyCombatant Combatant => m_combatant;
-        public IEnemyAI AI => m_enemyAIScript.Value;
+        public IEnemyAI AI => m_AIScriptSelector.Current;
         public GameObject Body => m_body;
         public EnemyStats Stats => m_stats;
         public HealthBar HealthBar => m_healthBar;

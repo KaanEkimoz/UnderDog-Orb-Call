@@ -1,5 +1,6 @@
 using com.absence.attributes;
 using com.absence.utilities;
+using com.game.ai;
 using com.game.enemysystem;
 using com.game.events;
 using com.game.miscs;
@@ -20,6 +21,7 @@ namespace com.game
 
         [Space, Header2("Settings")]
 
+        [SerializeField] private AISelection m_defaultAISelection;
         [SerializeField] private bool m_waveCycleEnabled;
         [SerializeField] private bool m_lightSystemEnabled;
 
@@ -37,6 +39,7 @@ namespace com.game
         public int LevelsGainedCurrentWave => m_levelsGained;
         public int EndedWaveCount => m_wavesEnded;
         public float StartTimeOfCurrentWave => m_waveStartTime;
+        public AISelection DefaultAISelection => m_defaultAISelection;
 
         public bool WaveCycleEnabled => m_waveCycleEnabled;
         public bool LightSystemInUse => m_lightSystemEnabled;

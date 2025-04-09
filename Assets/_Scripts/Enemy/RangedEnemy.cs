@@ -14,6 +14,7 @@ namespace com.game.enemysystem
         [Header("Projectile")]
         public float projectileSpeed = 5f;
         [Header("Raycast")]
+        public float visionError = 20f;
         public float rayDistance = 20f;
         public GameObject raySource;
         [SerializeField] LayerMask layerMask;
@@ -57,7 +58,7 @@ namespace com.game.enemysystem
             Vector3 rayDirection = transform.TransformDirection(Vector3.forward);
             Debug.DrawRay(raySource.transform.position, rayDirection * rayDistance, Color.blue); //ray'i default olarak mavi ciz
 
-            if (Physics.Raycast(raySource.transform.position, rayDirection, out RaycastHit hitInfo, rayDistance, layerMask)) //ray bir seye carpti mi?
+            if (Physics.SphereCast(raySource.transform.position, visionError, rayDirection, out RaycastHit hitInfo, rayDistance, layerMask)) //ray bir seye carpti mi?
             {
                 bool isPlayer = hitInfo.collider.CompareTag("Player"); //carpilan nesne player mi?
 

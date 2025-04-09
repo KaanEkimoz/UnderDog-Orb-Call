@@ -5418,6 +5418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292b3697a5270f4408cc63180d98a754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_defaultAISelection: 0
   m_waveCycleEnabled: 1
   m_lightSystemEnabled: 0
   m_orbShopUI: {fileID: 339635027}

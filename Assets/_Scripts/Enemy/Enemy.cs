@@ -19,7 +19,7 @@ namespace com.game.enemysystem
         }
 
         [Header("Movement")]
-        [SerializeField] protected InterfaceReference<IEnemyAI, Component> enemyAIScript;
+        [SerializeField] protected EnemyAIBuitlInScriptSelector enemyAISelector;
         [SerializeField] public bool hasAttackAnimation;
         [SerializeField] protected bool canMoveDuringAttack;
         [Header("Slow")]
@@ -38,6 +38,7 @@ namespace com.game.enemysystem
         public bool IsFake { get; set; } = false;
         public bool IsVirtual { get; protected set; } = false;
         public bool IsAttacking { get; protected set; } = false;
+        public IEnemyAI AI => ai;
         public virtual bool IsAILocked
         {
             get
@@ -69,7 +70,7 @@ namespace com.game.enemysystem
             if (enemyStats == null)
                 GetComponent<EnemyStats>();
 
-            ai = enemyAIScript.Value;
+            ai = enemyAISelector.Current;
             ai.Initialize(target.transform);
             ai.Speed = defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed);
         }
@@ -79,7 +80,7 @@ namespace com.game.enemysystem
                 return;
 
             ai.Speed = 
-                (enemyAIScript.Value.DefaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * 
+                (ai.DefaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * 
                 (1 - (currentSlowAmount / 100));
 
             if (!IsAILocked)

@@ -11,7 +11,6 @@ namespace com.game.enemysystem
         public float preperationTime = 2f;
         public float explosionRadius = 5f;
         public MeshRenderer explosiveEnemyRenderer;
-        public GameObject container;
         public Color explotionColor = Color.white;
         public Color defaultColor = Color.red;
 
