@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 019da50d397bae84cb02ca0aae2a2cc6
+timeCreated: 1505136891
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/AI Crossroads MainRoad.prefab
+  uploadId: 451093

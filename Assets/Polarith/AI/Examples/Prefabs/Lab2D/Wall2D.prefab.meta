@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 15515206f6b3d5649a9b7e96a04a8ce5
+timeCreated: 1504166174
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab2D/Wall2D.prefab
+  uploadId: 451093

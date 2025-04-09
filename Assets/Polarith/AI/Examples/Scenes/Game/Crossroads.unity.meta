@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2bfaa1d071442154c8fe0b2c813771a2
+timeCreated: 1507283478
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scenes/Game/Crossroads.unity
+  uploadId: 451093

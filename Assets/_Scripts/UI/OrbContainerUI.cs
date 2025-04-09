@@ -39,6 +39,8 @@ namespace com.game.ui
         public ButtonHandle BackButton => m_backButtonHandle;
         public ButtonHandle ConfirmButton => m_confirmButtonHandle;
 
+        public PlayerOrbContainer Container => m_container;
+
         PlayerOrbContainer m_container;
         Dictionary<SimpleOrb, OrbDisplay> m_displays = new();
         List<ItemDisplay> m_upgradeDisplays = new();

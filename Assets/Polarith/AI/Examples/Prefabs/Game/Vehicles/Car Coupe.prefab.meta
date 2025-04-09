@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3c7d1bfc97cf71b48857208a69ceaee8
+timeCreated: 1505115523
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/Car Coupe.prefab
+  uploadId: 451093

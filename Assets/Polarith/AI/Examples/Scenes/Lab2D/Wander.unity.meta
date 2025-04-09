@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 907656b8f55c47a4e896e868453998b6
+timeCreated: 1504193345
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scenes/Lab2D/Wander.unity
+  uploadId: 451093

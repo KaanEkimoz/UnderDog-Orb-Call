@@ -100,7 +100,7 @@ namespace com.game.generics
 
         Vector3 GetAltarPosition()
         {
-            return GameManager.Instance.AltarTransform.position;
+            return SceneManager.Instance.AltarTransform.position;
         }
     }
 }

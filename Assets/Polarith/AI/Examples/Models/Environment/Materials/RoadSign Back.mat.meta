@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 219163075bc6a1c4f8e5677f1fdcaf6e
+timeCreated: 1504879159
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Environment/Materials/RoadSign Back.mat
+  uploadId: 451093

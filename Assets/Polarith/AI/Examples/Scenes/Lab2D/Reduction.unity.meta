@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7eb1c20e7f187074e89e8450e6c262dc
+timeCreated: 1504184241
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scenes/Lab2D/Reduction.unity
+  uploadId: 451093

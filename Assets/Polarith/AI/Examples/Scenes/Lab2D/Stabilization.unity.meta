@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f5259ef9a3816ab4082a7da295da2ba4
+timeCreated: 1504189732
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scenes/Lab2D/Stabilization.unity
+  uploadId: 451093

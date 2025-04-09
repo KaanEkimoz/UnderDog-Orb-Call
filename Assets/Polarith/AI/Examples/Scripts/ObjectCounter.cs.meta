@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: cbd8dde212786694d8e12bea980a4832
+timeCreated: 1506077868
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scripts/ObjectCounter.cs
+  uploadId: 451093

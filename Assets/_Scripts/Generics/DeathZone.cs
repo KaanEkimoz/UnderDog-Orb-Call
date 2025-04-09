@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.game.generics.interfaces;
 using UnityEngine;
 
 namespace com.game.generics
@@ -35,6 +36,7 @@ namespace com.game.generics
         void Apply(GameObject other)
         {
             if (other.TryGetComponent(out IDamageable damageable)) damageable.Die(DeathCause.Default);
+            else if (other.TryGetComponent(out ICustomDestroy customDestroy)) customDestroy.CustomDestroy();
             else Destroy(other);
         }
     }

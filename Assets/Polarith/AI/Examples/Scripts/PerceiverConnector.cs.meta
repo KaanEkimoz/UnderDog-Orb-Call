@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 062b93510003cd048bb19cd0dc322ab9
+timeCreated: 1506603039
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scripts/PerceiverConnector.cs
+  uploadId: 451093

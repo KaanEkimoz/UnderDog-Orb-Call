@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1d2a49a98843a2947ae9dbccdded7ba2
+timeCreated: 1504881193
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Materials/Lab Ground.mat
+  uploadId: 451093

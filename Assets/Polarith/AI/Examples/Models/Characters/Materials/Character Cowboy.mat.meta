@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 022a2b4a7ddc85e45896d24ca6b5dc77
+timeCreated: 1453377200
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Characters/Materials/Character Cowboy.mat
+  uploadId: 451093

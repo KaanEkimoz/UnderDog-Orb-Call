@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a771f46186a302949a917d40c8eebe25
+timeCreated: 1506937383
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab/Agent Deadlock.prefab
+  uploadId: 451093

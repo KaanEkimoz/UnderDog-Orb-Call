@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c5ae8ca42d75a394ba1ba7dcb25354a3
+timeCreated: 1505060912
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Animation/Walk Cycle Simple.controller
+  uploadId: 451093

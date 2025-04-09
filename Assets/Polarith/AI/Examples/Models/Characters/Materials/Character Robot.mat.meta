@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0539cb79729d97f439f8eef69eeff41a
+timeCreated: 1449950061
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Characters/Materials/Character Robot.mat
+  uploadId: 451093

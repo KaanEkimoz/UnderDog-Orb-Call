@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 35121da8ef189d54abb0f3c382104db0
+timeCreated: 1504020436
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab2D/Agent2D Adjust.prefab
+  uploadId: 451093

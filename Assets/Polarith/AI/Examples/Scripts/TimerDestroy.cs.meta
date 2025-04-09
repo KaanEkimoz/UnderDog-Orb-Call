@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 1ff1f536b12c5e744b92e4689e561bd3
+timeCreated: 1504796953
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scripts/TimerDestroy.cs
+  uploadId: 451093

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6c3eb5e8c1fda6840bf10026e6dfafbf
+timeCreated: 1504874363
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Vehicles/Materials/Car Lights.mat
+  uploadId: 451093

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 032ce1fbf28bb5c4aad37d379b23abd3
+timeCreated: 1449950061
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Characters/Materials/Character Soldier.mat
+  uploadId: 451093

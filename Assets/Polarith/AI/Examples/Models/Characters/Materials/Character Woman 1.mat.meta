@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 78ca43db30d83f548b74cbf3dfb1e8aa
+timeCreated: 1449950061
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Characters/Materials/Character Woman
+    1.mat
+  uploadId: 451093

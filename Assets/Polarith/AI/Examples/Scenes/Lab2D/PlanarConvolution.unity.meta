@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bbfa3af33d2c46f46bffb29f38f5c984
+timeCreated: 1504097801
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scenes/Lab2D/PlanarConvolution.unity
+  uploadId: 451093

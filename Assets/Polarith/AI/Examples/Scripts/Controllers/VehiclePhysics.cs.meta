@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 38f1b897edb58474c829b7723253e9a1
+timeCreated: 1505120409
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scripts/Controllers/VehiclePhysics.cs
+  uploadId: 451093

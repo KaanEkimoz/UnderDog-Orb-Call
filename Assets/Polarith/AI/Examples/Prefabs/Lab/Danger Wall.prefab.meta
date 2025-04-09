@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4a54a2ebdf9a50f42ab549729a49d28d
+timeCreated: 1504538695
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab/Danger Wall.prefab
+  uploadId: 451093
