@@ -305,6 +305,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7464580247421513733}
     - target: {fileID: 3342991894426285698, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: visionError
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3342991894426285698, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: hasAttackAnimation
       value: 1
       objectReference: {fileID: 0}
