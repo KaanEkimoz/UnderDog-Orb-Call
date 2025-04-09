@@ -94,7 +94,7 @@ namespace com.game
                     DoNotStarted();
                     break;
                 case GameState.InWave:
-                    DoInWave();
+                    DoInWave(prevState);
                     break;
                 case GameState.BetweenWaves:
                     DoBetweenWaves();
@@ -240,7 +240,7 @@ namespace com.game
 
         #region State: In Wave
 
-        void DoInWave()
+        void DoInWave(GameState prevState)
         {
             Game.Resume();
             m_waveStartTime = Time.time;
@@ -248,7 +248,8 @@ namespace com.game
             if (!m_waveCycleEnabled)
                 return;
 
-            m_playerShopUI.Hide(true);
+            if (prevState == GameState.BetweenWaves)
+                m_playerShopUI.Hide(true);
 
             if (m_orbUIUpdater != null) m_orbUIUpdater.Refresh();
             if (m_orbUIUpdater2 != null) m_orbUIUpdater2.Refresh();
