@@ -1,102 +1,101 @@
 using com.game.enemysystem.statsystemextensions;
-using com.game;
-using System;
 using System.Collections;
 using UnityEngine;
-using com.game.testing;
-using com.game.enemysystem;
-using com.game.miscs;
-public class ExploderEnemy : Enemy
+
+namespace com.game.enemysystem
 {
-    [Header("Explosion Settings")]
-    public float explosionDamage = 30f;
-    public float preperationTime = 2f;
-    public float explosionRadius = 5f;
-    public MeshRenderer explosiveEnemyRenderer;
-    public GameObject container;
-    public Color explotionColor = Color.white;
-    public Color defaultColor = Color.red;
-
-    private bool isPreparingToExplode = false;
-    private Coroutine preparationCoroutine = null;
-
-    protected override void CustomUpdate()
+    public class ExploderEnemy : Enemy
     {
-        if (isDummyModeActive) return;
+        [Header("Explosion Settings")]
+        public float explosionDamage = 30f;
+        public float preperationTime = 2f;
+        public float explosionRadius = 5f;
+        public MeshRenderer explosiveEnemyRenderer;
+        public GameObject container;
+        public Color explotionColor = Color.white;
+        public Color defaultColor = Color.red;
 
-        navMeshAgent.SetDestination(target.transform.position);
+        private bool isPreparingToExplode = false;
+        private Coroutine preparationCoroutine = null;
 
-        if (IsFake)
-            return;
-
-        if (GetDistanceToPlayer()) //dusman karaktere yeterince yakinsa
+        protected override void CustomUpdate()
         {
-            if (isPreparingToExplode == false) //ve halihazirda patlamaya hazirlanmiyorsa
+            if (isDummyModeActive) 
+                return;
+
+            if (IsFake)
+                return;
+
+            if (GetDistanceToPlayer()) //dusman karaktere yeterince yakinsa
             {
-                preparationCoroutine = StartCoroutine(PrepareToExplode()); //patlamaya hazirlan
+                if (isPreparingToExplode == false) //ve halihazirda patlamaya hazirlanmiyorsa
+                {
+                    preparationCoroutine = StartCoroutine(PrepareToExplode()); //patlamaya hazirlan
+                }
+            }
+            else //dusman karaktere yeterince yakin degilse
+            {
+                if (isPreparingToExplode == true) //ve halihazirda patlamaya hazirlaniyorsa
+                {
+                    CancelPreparation(); //hazirligi iptal et
+                }
             }
         }
-        else //dusman karaktere yeterince yakin degilse
+        private IEnumerator PrepareToExplode()
         {
-            if (isPreparingToExplode == true) //ve halihazirda patlamaya hazirlaniyorsa
-            {
-                CancelPreparation(); //hazirligi iptal et
-            }
-        }
-    }
-    private IEnumerator PrepareToExplode() 
-    {
-        isPreparingToExplode = true;
-        float elapsedTime = 0f;
+            isPreparingToExplode = true;
+            float elapsedTime = 0f;
 
-        explosiveEnemyRenderer.material.color = explotionColor;
+            explosiveEnemyRenderer.material.color = explotionColor;
 
-        while(elapsedTime < preperationTime) //patlama suresi dolmadigi surece
-        {
-            if (!GetDistanceToPlayer()) //karakter dusmandan uzaklasirsa
+            while (elapsedTime < preperationTime) //patlama suresi dolmadigi surece
             {
-                isPreparingToExplode = false; //patlama hazirligini iptal et
-                explosiveEnemyRenderer.material.color = defaultColor;
-                yield break;
+                if (!GetDistanceToPlayer()) //karakter dusmandan uzaklasirsa
+                {
+                    isPreparingToExplode = false; //patlama hazirligini iptal et
+                    explosiveEnemyRenderer.material.color = defaultColor;
+                    yield break;
+                }
+
+                elapsedTime += Time.deltaTime; //gecen zaman         
+                yield return null;
             }
 
-            elapsedTime += Time.deltaTime; //gecen zaman         
-            yield return null;
+            Explode();
         }
 
-        Explode();
-    }
-
-    private void Explode()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
-
-        foreach (Collider objectWithinRadius in colliders) //patlama yaricapi icersindeki tum colliderlarda
+        private void Explode()
         {
-            if (objectWithinRadius.CompareTag("Player")) //player tagli biri varsa
+            Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+
+            foreach (Collider objectWithinRadius in colliders) //patlama yaricapi icersindeki tum colliderlarda
             {
-                //HASAR VER
-                if (target.gameObject.TryGetComponent(out IDamageable damageable))
-                    damageable.TakeDamage(enemyStats.GetStat(EnemyStatType.Damage));
+                if (objectWithinRadius.CompareTag("Player")) //player tagli biri varsa
+                {
+                    //HASAR VER
+                    if (target.gameObject.TryGetComponent(out IDamageable damageable))
+                        damageable.TakeDamage(enemyStats.GetStat(EnemyStatType.Damage));
+                }
             }
+
+            SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
+
+            foreach (SimpleOrb orb in orbsOnEnemy)
+            {
+                orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
+                orb.ResetParent();
+            }
+
+            GetComponentInChildren<EnemyCombatant>().Die(DeathCause.Self);
         }
 
-        SimpleOrb[] orbsOnEnemy = GetComponentsInChildren<SimpleOrb>();
-
-        foreach (SimpleOrb orb in orbsOnEnemy)
+        private void CancelPreparation()
         {
-            orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
-            orb.ResetParent();
+            StopCoroutine(preparationCoroutine);
+            preparationCoroutine = null;
+            isPreparingToExplode = false;
+            explosiveEnemyRenderer.material.color = defaultColor;
         }
-
-        GetComponentInChildren<EnemyCombatant>().Die(DeathCause.Self);
     }
 
-    private void CancelPreparation()
-    {
-        StopCoroutine(preparationCoroutine);
-        preparationCoroutine = null;
-        isPreparingToExplode = false;
-        explosiveEnemyRenderer.material.color = defaultColor;
-    }
 }

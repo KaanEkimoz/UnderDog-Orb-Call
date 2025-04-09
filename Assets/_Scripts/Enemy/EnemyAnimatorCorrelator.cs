@@ -16,7 +16,7 @@ namespace com.game.enemysystem
 
         private void Update()
         {
-            bool isMoving = m_instance.NavMeshAgent.speed > 0f;
+            bool isMoving = m_instance.AI.Speed > 0f;
             bool isAttacking = m_enemy.IsAttacking;
 
             bool animatorAttacking = m_animator.GetHash().Equals(EnemyAnimator.ATTACK_HASH);

@@ -8,7 +8,7 @@ namespace com.game.enemysystem
     {
         private VirtualEnemy(EnemyInstance instance, PlayerLight light)
         {
-            instance.NavMeshAgent.enabled = false;
+            instance.AI.Enabled = false;
             instance.SetCollision(false, true);
 
             Vector3 randomDirection = Random.insideUnitSphere;

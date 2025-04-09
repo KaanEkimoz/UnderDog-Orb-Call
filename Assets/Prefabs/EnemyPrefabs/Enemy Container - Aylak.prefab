@@ -255,6 +255,10 @@ PrefabInstance:
       propertyPath: m_body
       value: 
       objectReference: {fileID: 727190864592953770}
+    - target: {fileID: 5123425019609143620, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+      propertyPath: m_movementData
+      value: 
+      objectReference: {fileID: 11400000, guid: 305a46262ddc82c458f39c3d616b8907, type: 2}
     - target: {fileID: 5228576093519980111, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
       propertyPath: m_Name
       value: Model

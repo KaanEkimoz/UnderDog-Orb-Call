@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 3642404789856939474}
+    - target: {fileID: 4422238401409145886, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: m_movementData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4777f073f7830c24b9a30849f5153c9e, type: 2}
     - target: {fileID: 6836446959609869726, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_enemy
       value: 
@@ -142,7 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0b6016e2a56ee4ca09a7bb775d44c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMovementData: {fileID: 11400000, guid: 16eb94bfc925dc04aa26aeaef2e46051, type: 2}
+  enemyAIScript:
+    underlyingValue: {fileID: 4282704230989460531}
+  hasAttackAnimation: 0
+  canMoveDuringAttack: 0
   slowPercentPerOrb: 25
   enemyStats: {fileID: 635029754020833559}
   isDummyModeActive: 0
@@ -153,3 +160,14 @@ MonoBehaviour:
   container: {fileID: 1178343884590122114}
   explotionColor: {r: 1, g: 0.6079833, b: 0, a: 1}
   defaultColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &4282704230989460531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4422238401409145886, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+  m_PrefabInstance: {fileID: 446360677266040877}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609224006285841765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 710210c6c5666234199e3b789949f4c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

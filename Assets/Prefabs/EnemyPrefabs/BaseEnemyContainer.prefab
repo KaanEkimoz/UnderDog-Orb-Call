@@ -200,7 +200,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enemy: {fileID: 0}
   m_combatant: {fileID: 3701225131490053606}
-  m_navMeshAgent: {fileID: 7298133027063933198}
+  m_enemyAIScript:
+    underlyingValue: {fileID: 4422238401409145886}
   m_body: {fileID: 3660124457791922965}
   m_stats: {fileID: 1072382937486459194}
   m_healthBar: {fileID: 283575652366040232}
@@ -615,6 +616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7892791133856918113}
   - component: {fileID: 7298133027063933198}
+  - component: {fileID: 4422238401409145886}
   - component: {fileID: 3794116278725284438}
   - component: {fileID: 3701225131490053606}
   - component: {fileID: 1072382937486459194}
@@ -665,6 +667,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &4422238401409145886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758043571796573512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 710210c6c5666234199e3b789949f4c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_state: 0
+  m_navMeshAgent: {fileID: 7298133027063933198}
+  m_movementData: {fileID: 0}
 --- !u!136 &3794116278725284438
 CapsuleCollider:
   m_ObjectHideFlags: 0

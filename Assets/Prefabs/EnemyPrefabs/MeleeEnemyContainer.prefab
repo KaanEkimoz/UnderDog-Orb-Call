@@ -32,6 +32,10 @@ PrefabInstance:
       propertyPath: enemy
       value: 
       objectReference: {fileID: 5254133707734902772}
+    - target: {fileID: 4422238401409145886, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+      propertyPath: m_movementData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0575c8de2ab673f49824cb48627b9059, type: 2}
     - target: {fileID: 6836446959609869726, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
       propertyPath: m_enemy
       value: 
@@ -104,6 +108,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5254133707734902772}
   m_SourcePrefab: {fileID: 100100000, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+--- !u!114 &5123425019609143620 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4422238401409145886, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
+  m_PrefabInstance: {fileID: 8810445550445102426}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5648566422250223634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 710210c6c5666234199e3b789949f4c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5648566422250223634 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3758043571796573512, guid: fc87156df0b6b934ab9e63c06d7628a9, type: 3}
@@ -121,10 +136,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a01df464b45744785bd5f3040decd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMovementData: {fileID: 11400000, guid: e5b2f0a111d087b4197a2780bff9ef50, type: 2}
+  enemyAIScript:
+    underlyingValue: {fileID: 5123425019609143620}
+  hasAttackAnimation: 0
+  canMoveDuringAttack: 0
   slowPercentPerOrb: 25
   enemyStats: {fileID: 8405162856804353120}
   isDummyModeActive: 0
+  attackingPoint: {fileID: 0}
+  attackLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  attackRadius: 0
   meleeAttackDelay: 2
   attackingCooldown: 2
 --- !u!114 &8405162856804353120 stripped
