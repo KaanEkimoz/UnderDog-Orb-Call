@@ -182,12 +182,14 @@ Transform:
   m_Children:
   - {fileID: 5412598139826976108}
   - {fileID: 5484864895314415761}
+  - {fileID: 7518995536450334317}
   - {fileID: 4966788802529111472}
   - {fileID: 7892791133856918113}
   - {fileID: 7904738105167425862}
   - {fileID: 782513048736819641}
   - {fileID: 389924386728855505}
   - {fileID: 4045625808674151776}
+  - {fileID: 5322387802565819643}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6836446959609869726
@@ -413,14 +415,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_flashPhase: 0
-  m_enemyRenderer: {fileID: 391948113693585292}
-  m_emissionProperty: _Emission
-  m_emissionColor: {r: 0, g: 0, b: 0, a: 0}
-  m_materialIndex: 0
-  m_defaultMaterialType: 0
+  m_rendererEntries:
+  - TargetRenderer: {fileID: 391948113693585292}
+    EmissionColor: {r: 1, g: 0, b: 0, a: 1}
+    AllMaterials: 0
+    MaterialEntries:
+    - EmissionProperty: _Emission
+      MaterialIndex: 0
+      DefaultMaterialType: 0
+      CustomEmissionColor: 0
+      EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+      EmissionMultiplier: 1
+      Material: {fileID: 0}
   m_noEmissionValue: 0
   m_maxEmissionValue: 0.005
   m_flashDuration: 0.5
+  m_flashSpeedMultiplier: 1
   m_minTime: 2
   m_maxTime: 5
 --- !u!1 &2144543076416177774
@@ -1018,6 +1028,83 @@ MonoBehaviour:
   m_fetchFromSceneManager: 1
   m_navMeshAgentScript: {fileID: 4422238401409145886}
   m_polarithAIScript: {fileID: 4802897052717572884}
+--- !u!1 &5598269585976188260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5322387802565819643}
+  - component: {fileID: 2116206189952677987}
+  - component: {fileID: 7003892310772978507}
+  m_Layer: 0
+  m_Name: DamageSpark
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5322387802565819643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5598269585976188260}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9134454142794667705}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2116206189952677987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5598269585976188260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fab889c0dda38a4c8d4c0ecce219494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_disableMode: 0
+--- !u!114 &7003892310772978507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5598269585976188260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b23d4d724711214cb6340f4e0b75254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_flashPhase: 0
+  m_rendererEntries:
+  - TargetRenderer: {fileID: 391948113693585292}
+    EmissionColor: {r: 1, g: 0, b: 0, a: 1}
+    AllMaterials: 0
+    MaterialEntries:
+    - EmissionProperty: _Emission
+      MaterialIndex: 0
+      DefaultMaterialType: 0
+      CustomEmissionColor: 0
+      EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+      EmissionMultiplier: 1
+      Material: {fileID: 0}
+  m_noEmissionValue: 0
+  m_maxEmissionValue: 1
+  m_flashDuration: 0.4
+  m_flashSpeedMultiplier: 4
+  m_minTime: 0
+  m_maxTime: 0
 --- !u!1 &5958879475438055213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1447,84 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7268591753424091127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7518995536450334317}
+  - component: {fileID: 6440289242351127843}
+  m_Layer: 0
+  m_Name: Effect Logic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7518995536450334317
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7268591753424091127}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9134454142794667705}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6440289242351127843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7268591753424091127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747c55d1a3b2b5540aa7c87230fce04a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_target: {fileID: 7688118483741568865}
+  onTakeDamage:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7003892310772978507}
+        m_TargetAssemblyTypeName: com.game.enemysystem.EnemyFlash, Assembly-CSharp
+        m_MethodName: ForceStop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7003892310772978507}
+        m_TargetAssemblyTypeName: com.game.enemysystem.EnemyFlash, Assembly-CSharp
+        m_MethodName: Spark
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHeal:
+    m_PersistentCalls:
+      m_Calls: []
+  onDie:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7680781926439936809
 GameObject:
   m_ObjectHideFlags: 0
