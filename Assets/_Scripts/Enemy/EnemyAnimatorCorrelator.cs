@@ -7,10 +7,14 @@ namespace com.game.enemysystem
     {
         [SerializeField, Required] private EnemyAnimator m_animator;
         [SerializeField, Required] private Enemy m_enemy;
+        [SerializeField] private EnemyAnimatorStateListener m_stateListener;
 
         private void Start()
         {
             m_animator.SetStateByHash(EnemyAnimator.IDLE_HASH);
+
+            if (m_stateListener != null)
+                m_stateListener.OnEventRaised += OnListenState;
         }
 
         private void Update()
@@ -48,6 +52,12 @@ namespace com.game.enemysystem
             {
                 m_animator.SetStateByHash(EnemyAnimator.IDLE_HASH);
             }
+        }
+
+        private void OnListenState(AnimatorStateStage stage, AnimatorStateEvent @event, EnemyAnimatorStateListener.Context context)
+        {
+            if (@event == AnimatorStateEvent.Attack && stage == AnimatorStateStage.Exit)
+                m_enemy.CommitEndOfAttack();
         }
     }
 }

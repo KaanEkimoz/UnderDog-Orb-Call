@@ -1,3 +1,4 @@
+using com.absence.attributes;
 using com.game.enemysystem.ai;
 using com.game.enemysystem.statsystemextensions;
 using System.Collections;

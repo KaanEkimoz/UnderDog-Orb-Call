@@ -416,6 +416,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy Container - Domestos
       objectReference: {fileID: 0}
+    - target: {fileID: 6360570821326833967, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6894847600467668111, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_Enabled
       value: 1

@@ -2007,7 +2007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &756496171
 Transform:
   m_ObjectHideFlags: 0
@@ -5420,7 +5420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_defaultAISelection: 0
   m_waveCycleEnabled: 1
-  m_lightSystemEnabled: 0
+  m_lightSystemEnabled: 1
   m_orbShopUI: {fileID: 339635027}
   m_playerShopUI: {fileID: 2106000671}
   m_orbContainerUI: {fileID: 374574694}
@@ -6286,6 +6286,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6581562185115844137, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: near clip plane
+      value: -5.27
+      objectReference: {fileID: 0}
     - target: {fileID: 7707722319073390454, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_Radius
       value: 1.11
@@ -6366,7 +6370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &2114283754330233425
 Light:
   m_ObjectHideFlags: 0
