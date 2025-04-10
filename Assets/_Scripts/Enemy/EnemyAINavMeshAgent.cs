@@ -8,9 +8,17 @@ namespace com.game.enemysystem.ai
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyAINavMeshAgent : MonoBehaviour, IEnemyAI
     {
-        [SerializeField, Readonly] private EnemyAIState m_state;
+        public const int MAX_AGENTS_CAN_BE_DETECTED = 8;
+
         [SerializeField, Readonly] private NavMeshAgent m_navMeshAgent;
+        [SerializeField, Readonly] private EnemyAIState m_state;
+        [SerializeField] private Collider m_selfCollider;
+        [SerializeField] private LayerMask m_agentDetectionMask;
+        [SerializeField] private float m_agentDetectionRadius;
+        [SerializeField] private float m_fleeStrength;
         [SerializeField, InlineEditor] private EnemyMovementDataNavMeshAgent m_movementData;
+
+        Collider[] m_agentsFound;
 
         public EnemyAIState State
         {
@@ -57,6 +65,11 @@ namespace com.game.enemysystem.ai
         bool m_enabled = true;
         Transform m_target;
 
+        private void Start()
+        {
+            m_agentsFound = new Collider[MAX_AGENTS_CAN_BE_DETECTED];
+        }
+
         private void Update()
         {
             if (!m_initialized)
@@ -89,7 +102,29 @@ namespace com.game.enemysystem.ai
         public void Refresh(Transform target)
         {
             m_target = target;
-            m_navMeshAgent.SetDestination(target.position);
+
+            m_navMeshAgent.SetDestination(m_target.position);
+
+            //Vector3 diff = m_target.position - transform.position;
+            //Vector3 direction = diff.normalized;
+            //float distance = diff.sqrMagnitude;
+
+            //int count = 
+            //    Physics.OverlapSphereNonAlloc(transform.position, m_agentDetectionRadius, m_agentsFound, m_agentDetectionMask);
+
+            //foreach (Collider collider in m_agentsFound)
+            //{
+            //    if (collider == null)
+            //        continue;
+
+            //    if (m_selfCollider != null && collider == m_selfCollider)
+            //        continue;
+
+            //    direction += 
+            //        ((transform.position - collider.transform.position).normalized * m_fleeStrength) / count;
+            //}
+
+            //m_navMeshAgent.SetDestination(transform.position + (direction * distance));
         }
 
         void RotateTowardsTarget()
@@ -102,6 +137,12 @@ namespace com.game.enemysystem.ai
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * m_navMeshAgent.angularSpeed);
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, m_agentDetectionRadius);
         }
 
         private void Reset()
