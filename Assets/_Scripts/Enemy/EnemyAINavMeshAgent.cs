@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.attributes.experimental;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,6 +8,10 @@ namespace com.game.enemysystem.ai
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyAINavMeshAgent : MonoBehaviour, IEnemyAI
     {
+        [SerializeField, Readonly] private EnemyAIState m_state;
+        [SerializeField, Readonly] private NavMeshAgent m_navMeshAgent;
+        [SerializeField, InlineEditor] private EnemyMovementDataNavMeshAgent m_movementData;
+
         public EnemyAIState State
         {
             get
@@ -46,10 +51,6 @@ namespace com.game.enemysystem.ai
             set => m_navMeshAgent.speed = value;
         }
         public float DefaultSpeed => m_defaultSpeed;
-
-        [SerializeField, Readonly] private EnemyAIState m_state;
-        [SerializeField, Readonly] private NavMeshAgent m_navMeshAgent;
-        [SerializeField] private EnemyMovementDataNavMeshAgent m_movementData;
 
         float m_defaultSpeed;
         bool m_initialized;

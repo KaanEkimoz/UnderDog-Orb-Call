@@ -23,6 +23,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Coroutine spawnCoroutine;
 
+    public event Action<GameObject, EnemyCombatant> OnEnemySpawned;
     public event Action OnEnemiesCleared;
 
     public bool IsSpawning => spawnCoroutine != null;
@@ -58,6 +59,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 enemyCombatant.OnDie += OnEnemyDeath;
             }
+
+            OnEnemySpawned?.Invoke(enemy, enemyCombatant);
         }
 
         isCoroutineRunning = false;

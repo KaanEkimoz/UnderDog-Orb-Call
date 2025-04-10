@@ -44,11 +44,14 @@ namespace com.game.enemysystem.ai
             foreach (var kvp in m_entries)
             {
                 kvp.Value.Enabled = false;
+                kvp.Value.gameObject.SetActive(false);
             }
 
             m_currentAI = m_entries[m_AISelection];
             m_entries[m_AISelection].Enabled = true;
+            m_entries[m_AISelection].gameObject.SetActive(true);
         }
     }
 }
+
 

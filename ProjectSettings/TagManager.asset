@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Enemy
+  - AI/Enemy/Perceiver
   layers:
   - Default
   - TransparentFX
@@ -26,8 +27,8 @@ TagManager:
   - Popup
   - Drop
   - DeathZone
-  - 
-  - 
+  - AI/Agent/Enemy
+  - NavMesh/Virtual
   - 
   - 
   - 

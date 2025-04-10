@@ -35,7 +35,7 @@ namespace com.game.generics
 
         void Apply(GameObject other)
         {
-            if (other.TryGetComponent(out IDamageable damageable)) damageable.Die(DeathCause.Default);
+            if (other.TryGetComponent(out IDamageable damageable)) damageable.Die(DeathCause.Internal);
             else if (other.TryGetComponent(out ICustomDestroy customDestroy)) customDestroy.CustomDestroy();
             else Destroy(other);
         }
