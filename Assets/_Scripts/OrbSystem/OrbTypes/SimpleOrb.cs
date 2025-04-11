@@ -5,6 +5,7 @@ using com.game.player.statsystemextensions;
 using System;
 using System.Collections;
 using UnityEngine;
+using com.game.enemysystem;
 public enum OrbState
 {
     OnEllipse,

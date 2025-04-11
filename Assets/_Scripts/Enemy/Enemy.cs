@@ -48,7 +48,7 @@ namespace com.game.enemysystem
                 return aiLocked;
             }
 
-            set 
+            set
             {
                 aiLocked = value;
             }
@@ -63,7 +63,7 @@ namespace com.game.enemysystem
 
         protected virtual void Start()
         {
-            if (isDummyModeActive) 
+            if (isDummyModeActive)
                 return;
 
             if (target == null)
@@ -78,11 +78,11 @@ namespace com.game.enemysystem
         }
         protected virtual void Update()
         {
-            if (isDummyModeActive || target == null) 
+            if (isDummyModeActive || target == null)
                 return;
 
-            ai.Speed = 
-                (ai.DefaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) * 
+            ai.Speed =
+                (ai.DefaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) *
                 (1 - (currentSlowAmount / 100));
 
             if (!IsAILocked)
@@ -93,24 +93,24 @@ namespace com.game.enemysystem
         protected virtual void CustomUpdate() { }
         protected virtual void Fakify() { }
 
-    public void ApplySlowForSeconds(float slowPercent, float duration)
-    {
-        StartCoroutine(SlowForSeconds(slowPercent, duration));
-    }
-    public void ApplyKnockbackForce(Vector3 orbPosition, float knocbackForce)
-    {
-        Vector3 forceDirection = new Vector3(transform.position.x - orbPosition.x, 0,transform.position.z - orbPosition.z).normalized;
-        Vector3 force = forceDirection * knocbackForce;
-        transform.DOMove(transform.position + force, 0.4f).SetEase(Ease.OutBack);
-    }
-    private IEnumerator StopKnockback()
-    {
-        yield return new WaitForSeconds(0.2f);
-        navMeshAgent.isStopped = false;
-    }
-    public void ApplySlowForOrbsOnEnemy(int orbCount)
-    {
-        currentSlowAmount = slowPercentPerOrb * orbCount;
+        public void ApplySlowForSeconds(float slowPercent, float duration)
+        {
+            StartCoroutine(SlowForSeconds(slowPercent, duration));
+        }
+        public void ApplyKnockbackForce(Vector3 orbPosition, float knocbackForce)
+        {
+            Vector3 forceDirection = new Vector3(transform.position.x - orbPosition.x, 0, transform.position.z - orbPosition.z).normalized;
+            Vector3 force = forceDirection * knocbackForce;
+            transform.DOMove(transform.position + force, 0.4f).SetEase(Ease.OutBack);
+        }
+        private IEnumerator StopKnockback()
+        {
+            yield return new WaitForSeconds(0.2f);
+            //navMeshAgent.isStopped = false;
+        }
+        public void ApplySlowForOrbsOnEnemy(int orbCount)
+        {
+            currentSlowAmount = slowPercentPerOrb * orbCount;
 
             if (currentSlowAmount > 100)
                 currentSlowAmount = 100;

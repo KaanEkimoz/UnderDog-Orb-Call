@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 1
+  movementSpeed: 2
   speedMultiplier: 1
   movementCurve:
     serializedVersion: 2
@@ -197,6 +197,15 @@ MonoBehaviour:
   normalLifetime: 0.5
   m_light: {fileID: 4889231651571930717}
   trailParticle: {fileID: 98057579503599703}
+  throwSlowEffectOnHit: 100
+  throwSlowEffectOnHitSeconds: 1.5
+  throwKnockbackEffectOnHit: 1
+  throwKnockbackEffectOnPenetrationHit: 0
+  throwKnockbackEffectOnHitForce: 1
+  returnSlowEffectOnHit: 100
+  returnSlowEffectOnHitSeconds: 1.5
+  returnKnockbackEffectOnHit: 1
+  returnKnockbackEffectOnHitForce: 0.1
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0
