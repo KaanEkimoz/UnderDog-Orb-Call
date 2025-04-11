@@ -9,7 +9,7 @@ namespace com.game.player
 {
     public class PlayerOrbContainer : MonoBehaviour
     {
-        [SerializeField] private OrbController m_targetController;
+        [SerializeField] private PlayerOrbController m_targetController;
 
         Dictionary<SimpleOrb, OrbInventory> m_orbInventoryEntries = new();
         List<OrbItemProfile> m_restoredUpgradeCache;

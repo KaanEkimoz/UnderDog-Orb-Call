@@ -23,7 +23,7 @@ namespace com.game.player
         public event Action<float> OnHeal = delegate { };
         public event Action<DeathCause> OnDie = delegate { };
 
-        [Inject] OrbController _orbController;
+        [Inject] PlayerOrbController _orbController;
 
         private void Awake()
         {

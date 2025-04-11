@@ -33,7 +33,7 @@ namespace com.game.ui
         [SerializeField, ShowIf(nameof(m_formation), Formation.Circular)] private float m_diameter;
         [SerializeField, ShowIf(nameof(m_formation), Formation.Horizontal)] private HorizontalLayoutGroup m_horizontalLayoutGroup;
 
-        OrbController m_orbController;
+        PlayerOrbController m_orbController;
         PlayerOrbContainer m_orbContainer;
         List<OrbDisplayGP> m_orbDisplays;
         int m_orbCount;
@@ -50,7 +50,7 @@ namespace com.game.ui
         Tween m_virtualTween;
 
         [Inject]
-        void Initialize(OrbController orbController)
+        void Initialize(PlayerOrbController orbController)
         {
             m_orbController = orbController;
         }

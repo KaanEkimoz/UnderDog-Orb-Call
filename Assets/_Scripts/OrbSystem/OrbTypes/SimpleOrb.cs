@@ -41,6 +41,18 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private float normalLifetime = 0.5f;
     [SerializeField] private GameObject m_light;
     [SerializeField] private ParticleSystem trailParticle;
+    [Header("Orb Throw Effects")]
+    [Range(0f, 100f)] [SerializeField] private float throwSlowEffectOnHit = 100f;
+    [Range(0f, 5f)] [SerializeField] private float throwSlowEffectOnHitSeconds = 1.5f;
+    [SerializeField] private bool throwKnockbackEffectOnHit = true;
+    [SerializeField] private bool throwKnockbackEffectOnPenetrationHit = false;
+    [SerializeField] private float throwKnockbackEffectOnHitForce = 1f;
+    [Space]
+    [Header("Orb Call, Return Effects")]
+    [Range(0f, 100f)] [SerializeField] private float returnSlowEffectOnHit = 100f;
+    [Range(0f, 5f)] [SerializeField] private float returnSlowEffectOnHitSeconds = 1.5f;
+    [SerializeField] private bool returnKnockbackEffectOnHit = true;
+    [SerializeField] private float returnKnockbackEffectOnHitForce = 0.1f;
 
     //Movement
     private Transform startParent;
@@ -65,7 +77,8 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnStuck;
     public event Action OnReachedToEllipse;
     public event Action<OrbState> OnStateChanged;
-
+    public event Action OnPenetrateHit;
+    public event Action OnPhysicsHit;
     //Effects
     private SoundFXManager _soundFXManager;
 
@@ -147,10 +160,9 @@ public class SimpleOrb : MonoBehaviour
     {
         currentState = OrbState.Returning;
 
-        //SetTrigger(true);
         SetNewDestination(returnPosition);
         ResetParent();
-
+        _sphereCollider.isTrigger = true;
         OnCalled?.Invoke();
         OnStateChanged?.Invoke(currentState);
     }
@@ -181,16 +193,10 @@ public class SimpleOrb : MonoBehaviour
 
         trailParticle.startLifetime = normalLifetime;
         _rigidBody.isKinematic = false;
-        //ApplyForce(forceDirection);
+        _sphereCollider.isTrigger = false;
         
         OnThrown?.Invoke();
         OnStateChanged?.Invoke(currentState);
-    }
-    private void ApplyForce(Vector3 direction)
-    {
-        Vector3 force = direction * (((orbStats.GetStat(OrbStatType.Speed) / 10)) * ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
-
-        _rigidBody.AddForce(force, ForceMode.Impulse);
     }
     private void CalculateDistanceTraveled()
     {
@@ -219,25 +225,7 @@ public class SimpleOrb : MonoBehaviour
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
-    private void OnTriggerEnter(Collider triggerObject)
-    {
-        /*if (currentState == OrbState.Throwing)
-        {
-            Game.Event = com.game.GameRuntimeEvent.OrbThrow;
-
-            ApplyOrbThrowTriggerEffects(triggerObject);
-
-            Game.Event = com.game.GameRuntimeEvent.Null;
-        }*/
-        if (currentState == OrbState.Returning)
-        {
-            Game.Event = com.game.GameRuntimeEvent.OrbCall;
-
-            ApplyOrbReturnTriggerEffects(triggerObject);
-
-            Game.Event = com.game.GameRuntimeEvent.Null;
-        }
-    }
+    
     private void OnCollisionEnter(Collision collisionObject)
     {
         if (currentState == OrbState.Throwing)
@@ -249,88 +237,62 @@ public class SimpleOrb : MonoBehaviour
             Game.Event = com.game.GameRuntimeEvent.Null;
         }
     }
+    private void OnTriggerEnter(Collider triggerObject)
+    {
+        if (currentState == OrbState.Returning)
+        {
+            Game.Event = com.game.GameRuntimeEvent.OrbCall;
+
+            ApplyOrbReturnTriggerEffects(triggerObject);
+
+            Game.Event = com.game.GameRuntimeEvent.Null;
+        }
+    }
     private void Stick(Collision stickCollider)
     {
         currentState = OrbState.Sticked;
+        OnPhysicsHit?.Invoke();
 
-        _rigidBody.linearVelocity = Vector3.zero;
         _rigidBody.isKinematic = true;
-        //TO DO: FIND HOW TO GET FIRST TRIGGER CONTACT POINT
-        //Disable Physics and Stick to Surface
-        //Vector3 point = GetComponent<Collider>().ClosestPoint(stickCollider.transform.position);
-        //Vector3 point = stickCollider.ClosestPoint(transform.position);
-        //transform.position = point;
-        //Debug.DrawRay(point, Vector3.up * 0.5f, Color.red, 2f);
-        //transform.position = stickCollider.ClosestPoint(transform.position); // DOESN'T WORK
-        transform.position = stickCollider.contacts[0].point; // WORKS
-        //transform.position = stickCollider.ClosestPoint(transform.position);
+        transform.position = stickCollider.contacts[0].point;
         StickToTransform(stickCollider.transform);
     }
     
-    protected virtual void ApplyOrbThrowCollisionEffects(Collision collider)
+    protected virtual void ApplyOrbThrowCollisionEffects(Collision collisionObject)
     {
-
-        // devam eden hasar iþlemleri
-        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+        if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            if (penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration))
-                Stick(collider);
+            bool penetrationCompleted = penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration);
+
+            if (penetrationCompleted)
+                Stick(collisionObject);
 
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
 
-            if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            if (collisionObject.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
-                hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+
+                if(penetrationCompleted)
+                    hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
             }
 
             penetrationCount++;
         }
         else
-            Stick(collider);
+            Stick(collisionObject);
 
-        /*Vector3 hitPoint = Vector3.zero;
-        Vector3 direction = _rigidBody.linearVelocity.normalized;
-        Ray ray = new Ray(collider.transform.position, direction);
-        RaycastHit hit;
-
-        // Bu objenin collider'ý üzerinden ray atýyoruz
-        if (_sphereCollider.Raycast(ray, out hit, 2f))
-        {
-            hitPoint = hit.point;
-            Debug.Log("Raycast temas noktasý: " + hitPoint);
-            Debug.DrawRay(ray.origin, direction * hit.distance, Color.red, 2f);
-        }
-
-
-        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
-        {
-            if (penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration))
-                Stick(collider,hitPoint);
-
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
-
-            if (collider.gameObject.TryGetComponent(out Enemy hittedEnemy))
-            {
-                hittedEnemy.ApplySlowForSeconds(100f, 2f);
-                hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
-            }
-
-            penetrationCount++;
-        }
-        else
-            Stick(collider, hitPoint);*/
     }
-    protected virtual void ApplyOrbReturnTriggerEffects(Collider trigger)
+    protected virtual void ApplyOrbReturnTriggerEffects(Collider triggerCollider)
     {
-        if (trigger.gameObject.TryGetComponent(out IDamageable damageable))
+        if (triggerCollider.gameObject.TryGetComponent(out IDamageable damageable))
         {
             ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbRecallDamage));
 
-            if (trigger.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            if (triggerCollider.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
                 hittedEnemy.ApplySlowForSeconds(100f, 2f);
-                hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+                hittedEnemy.ApplyKnockbackForce(transform.position, 0.1f);
             }
                 
         }

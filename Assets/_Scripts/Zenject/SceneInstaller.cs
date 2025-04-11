@@ -7,7 +7,7 @@ public class SceneInstaller : MonoInstaller
     {
         Container.Bind<PlayerStats>().FromComponentInHierarchy().AsSingle();
         Container.Bind<SoundFXManager>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<OrbController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PlayerOrbController>().FromComponentInHierarchy().AsSingle();
         Container.Bind<PlayerCombatant>().FromComponentInHierarchy().AsSingle();
         Container.Bind<ZenjectMemoryPool>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
         //Container.BindMemoryPool<GameObject,ZenjectMemoryPool>

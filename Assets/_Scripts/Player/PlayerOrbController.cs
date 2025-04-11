@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-public class OrbController : MonoBehaviour
+public class PlayerOrbController : MonoBehaviour
 {
     public static readonly Dictionary<Type, int> OrbTypePoolIndexDict = new Dictionary<Type, int>()
     {
@@ -39,6 +39,7 @@ public class OrbController : MonoBehaviour
     [Space]
     [Header("Extensions")]
     [SerializeField] private List<PlayerOrbControllerExtensionBase> m_extensions = new();
+    [SerializeField] private Animator _playerAnimator;
 
     //Orb Types
     public const int SIMPLE_ORB_INDEX = 7;
@@ -93,6 +94,7 @@ public class OrbController : MonoBehaviour
         HandleInput();
         HandleCooldowns();
         UpdateOrbEllipsePositions();
+        UpdateAnimator ();
     }
     private void HandleInput()
     {
@@ -149,6 +151,7 @@ public class OrbController : MonoBehaviour
         if (orbToThrow == null || !IsAiming) return;
 
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
+        _playerAnimator.SetTrigger("Throw");
         IsAiming = false;
 
         Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
@@ -165,9 +168,9 @@ public class OrbController : MonoBehaviour
         orbToThrow = null;
 
         Player.Instance.Hub.OrbHandler.RemoveOrb();
+        
         OnOrbThrowed?.Invoke();
     }
-    
     private void CallOrb(SimpleOrb orb)
     {
         if (orb.currentState != OrbState.Sticked) return;
@@ -365,6 +368,11 @@ public class OrbController : MonoBehaviour
             }
         }
 
+        
         return closestOrb;
+    }
+    public void UpdateAnimator()
+    {
+        _playerAnimator.SetBool("IsAiming", IsAiming);
     }
 }

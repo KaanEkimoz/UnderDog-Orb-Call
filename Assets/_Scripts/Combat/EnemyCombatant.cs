@@ -44,7 +44,7 @@ namespace com.game.enemysystem
         public event Action<DeathCause> OnDie = delegate { };
 
         PlayerCombatant _playerCombatant;
-        [Inject] OrbController _orbController;
+        [Inject] PlayerOrbController _orbController;
 
         private void Awake()
         {

@@ -5,13 +5,13 @@ namespace com.game.player
 {
     public abstract class PlayerOrbControllerExtensionBase : MonoBehaviour
     {
-        [SerializeField, Readonly] protected OrbController m_instance;
+        [SerializeField, Readonly] protected PlayerOrbController m_instance;
 
         public abstract Vector3 ConvertAimDirection(Vector3 direction);
 
         private void Reset()
         {
-            m_instance = GetComponent<OrbController>();
+            m_instance = GetComponent<PlayerOrbController>();
         }
     }
 }

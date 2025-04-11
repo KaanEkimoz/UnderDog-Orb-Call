@@ -9,7 +9,7 @@ public class IsometricAiming : MonoBehaviour
     private Camera _mainCamera;
     private Vector3 _hitPoint;
 
-    [Inject] OrbController _orbController;
+    [Inject] PlayerOrbController _orbController;
 
     private void Start()
     {
