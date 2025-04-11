@@ -1,10 +1,10 @@
 using com.absence.attributes;
+using System;
 using System.Text;
 using UnityEngine;
 
 namespace com.game.enemysystem
 {
-    [RequireComponent(typeof(Animator))]
     public class EnemyAnimator : MonoBehaviour
     {
         public static readonly int IDLE_HASH = Animator.StringToHash("Idle");
@@ -20,7 +20,7 @@ namespace com.game.enemysystem
             return Animator.StringToHash(sb.ToString());
         }
 
-        [SerializeField, Readonly] private Animator m_animator;
+        [SerializeField, Required] private Animator m_animator;
         [SerializeField] private float m_normalizedTransitionDurations = 0.15f;
 
         int m_hash;
@@ -34,11 +34,6 @@ namespace com.game.enemysystem
         public int GetHash()
         {
             return m_hash;
-        }
-
-        private void Reset()
-        {
-            m_animator = GetComponent<Animator>();
         }
     }
 }

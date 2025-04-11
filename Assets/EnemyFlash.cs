@@ -1,12 +1,117 @@
 using com.absence.attributes;
 using com.game.generics;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace com.game.enemysystem
 {
     public class EnemyFlash : MonoBehaviour, ISpark
     {
+        [System.Serializable]
+        public class MaterialEntry
+        {
+            [DisableIf(nameof(DefaultMaterialType))]
+            public string EmissionProperty = DefaultEmissionValueProperty;
+
+            public int MaterialIndex;
+            public bool DefaultMaterialType = true;
+
+            public bool CustomEmissionColor = false;
+
+            [ShowIf(nameof(CustomEmissionColor))]
+            public Color EmissionColor;
+
+            public float EmissionMultiplier = 1f;
+
+            [HideInInspector] public Material Material;
+
+            public void Initialize(Renderer targetRenderer)
+            {
+                Material = targetRenderer.materials[MaterialIndex];
+
+                if (DefaultMaterialType)
+                {
+                    Material.EnableKeyword(DefaultEmissionSwitchProperty);
+                }
+            }
+
+            public void OnValidate()
+            {
+                if (DefaultMaterialType)
+                    EmissionProperty = DefaultEmissionValueProperty;
+            }
+
+            public void SetEmission(Color emissionColor, float value)
+            {
+                Color color = GetEmissionColor(emissionColor);
+                float multiplier = GetEmissionMultiplier();
+
+                if (DefaultMaterialType) Material.SetColor(DefaultEmissionValueProperty, color * value * multiplier);
+                else Material.SetFloat(EmissionProperty, value);
+            }
+
+            protected Color GetEmissionColor(Color emissionColor)
+            {
+                return CustomEmissionColor ?
+                    EmissionColor : emissionColor;
+            }
+
+            protected float GetEmissionMultiplier()
+            {
+                return EmissionMultiplier;
+            }
+        }
+
+        [System.Serializable]
+        public class RendererEntry
+        {
+            public Renderer TargetRenderer;
+            public Color EmissionColor;
+            [Tooltip("If enabled, you can only have one material entry which is used for all materials of the renderer.")] 
+            public bool AllMaterials = true;
+            public List<MaterialEntry> MaterialEntries = new();
+
+            public void Initialize()
+            {
+                foreach (var entry in MaterialEntries)
+                {
+                    entry.Initialize(TargetRenderer);
+                }
+            }
+
+            public void OnValidate()
+            {
+                if (AllMaterials)
+                {
+                    if (MaterialEntries.Count > 1)
+                    {
+                        MaterialEntry entry = MaterialEntries[0];
+                        MaterialEntries.Clear();
+                        MaterialEntries.Add(entry);
+                    }
+
+                    else if (MaterialEntries.Count < 1)
+                    {
+                        MaterialEntries.Add(new MaterialEntry());
+                    }
+                }
+
+                foreach (var entry in MaterialEntries)
+                {
+                    entry.OnValidate();
+                }
+            }
+
+            public void SetEmission(float value)
+            {
+                foreach (var entry in MaterialEntries)
+                {
+                    entry.SetEmission(EmissionColor, value);
+                }
+            }
+        }
+
         public enum Phase
         {
             [InspectorName("Idle (Not Active)")] Idle,
@@ -20,13 +125,11 @@ namespace com.game.enemysystem
 
         [Header("Emission Settings")]
         [SerializeField, Readonly] private Phase m_flashPhase;
-        [SerializeField] private Renderer m_enemyRenderer;
-        [SerializeField] private string m_emissionProperty = CustomEmissionProperty;
-        [SerializeField] private int m_materialIndex = 0;
-        [SerializeField] private bool m_defaultMaterialType = false;
+        [SerializeField, NonReorderable] private List<RendererEntry> m_rendererEntries = new();
         [SerializeField] private float m_noEmissionValue = 0f;
         [SerializeField] private float m_maxEmissionValue = 2f;
         [SerializeField] private float m_flashDuration = 0.5f;
+        [SerializeField] private float m_flashSpeedMultiplier = 1f;
 
         [Header("Timer Settings")]
         [SerializeField] private float m_minTime = 2f;
@@ -34,25 +137,24 @@ namespace com.game.enemysystem
 
         public event Action OnEnd;
 
-        Material m_material;
-        Color m_emissionColor;
         float m_timer;
         bool m_isFlashing;
         float m_flashTimer;
 
         private void Start()
         {
-            m_material = m_enemyRenderer.materials[m_materialIndex];
-
-            if (m_defaultMaterialType)
-            {
-                m_material.EnableKeyword(DefaultEmissionSwitchProperty);
-                m_emissionColor = m_material.GetColor(DefaultEmissionValueProperty);
-            }
-
+            Initialize();
             SetEmission(m_noEmissionValue);
 
             m_timer = GetRandomTime();
+        }
+
+        void Initialize()
+        {
+            foreach (var entry in m_rendererEntries)
+            {
+                entry.Initialize();
+            }
         }
 
         private void Update()
@@ -93,7 +195,7 @@ namespace com.game.enemysystem
 
         private void HandleFlash()
         {
-            m_flashTimer += Time.deltaTime;
+            m_flashTimer += Time.deltaTime * m_flashSpeedMultiplier;
             float t = m_flashTimer / (m_flashDuration / 2f);
 
             if (m_flashPhase == Phase.Increasing) // Increasing
@@ -117,8 +219,10 @@ namespace com.game.enemysystem
 
         private void OnValidate()
         {
-            if (m_defaultMaterialType)
-                m_emissionProperty = DefaultEmissionValueProperty;
+            foreach (var entry in m_rendererEntries)
+            {
+                entry.OnValidate();
+            }
         }
 
         void Stop()
@@ -136,8 +240,10 @@ namespace com.game.enemysystem
 
         void SetEmission(float value)
         {
-            if (m_defaultMaterialType) m_material.SetColor(DefaultEmissionValueProperty, m_emissionColor * value);
-            else m_material.SetFloat(m_emissionProperty, value);
+            foreach(var entry in m_rendererEntries)
+            {
+                entry.SetEmission(value);
+            }
         }
 
         private float GetRandomTime()

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c6813dda0c64cb34f8e4a9f4caf00c86
+timeCreated: 1449950061
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Characters/Materials/Character Orc.mat
+  uploadId: 451093

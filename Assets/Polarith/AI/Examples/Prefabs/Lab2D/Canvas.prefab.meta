@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ebe5e0817e2f40743a89d9594072ca60
+timeCreated: 1504080448
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab2D/Canvas.prefab
+  uploadId: 451093

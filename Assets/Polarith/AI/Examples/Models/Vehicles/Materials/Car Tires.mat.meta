@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: df330e55be438174bba3654784dde209
+timeCreated: 1504874395
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Vehicles/Materials/Car Tires.mat
+  uploadId: 451093

@@ -5389,6 +5389,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5f4daf24146ee040b5a2d7a73b30aa0, type: 3}
+--- !u!1 &1884485995
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1884485997}
+  - component: {fileID: 1884485996}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1884485996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884485995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 292b3697a5270f4408cc63180d98a754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_waveCycleEnabled: 1
+  m_lightSystemEnabled: 1
+  m_orbShopUI: {fileID: 339635027}
+  m_playerShopUI: {fileID: 2106000671}
+  m_orbContainerUI: {fileID: 374574694}
+  m_orbUIUpdater: {fileID: 1652774987}
+  m_orbUIUpdater2: {fileID: 0}
+  m_defaultEnvironmentLight: {fileID: 2114283754330233424}
+  m_lightSystemEnvironmentLight: {fileID: 756496170}
+  m_altar: {fileID: 0}
+--- !u!4 &1884485997
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884485995}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1894659580
 GameObject:
   m_ObjectHideFlags: 0
@@ -5999,13 +6053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed09a95ae552a2943856f4bc90267ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_state: 0
-  m_orbShopUI: {fileID: 339635027}
-  m_playerShopUI: {fileID: 2106000671}
-  m_orbContainerUI: {fileID: 374574694}
-  m_orbUIUpdater: {fileID: 355569671}
-  m_orbUIUpdater2: {fileID: 1652774987}
-  m_altar: {fileID: 0}
+  m_state: 2
 --- !u!4 &2141979435
 Transform:
   m_ObjectHideFlags: 0
@@ -6329,7 +6377,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.972549, g: 0.9607843, b: 0.8784314, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.58
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -6391,13 +6439,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2114283754330233424}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.51102585, y: 0.11807905, z: 0.22233307, w: 0.82187474}
   m_LocalPosition: {x: 39.455, y: 0, z: 7.815}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2114283753834967213}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 51.952, y: 43.127, z: 52.071}
 --- !u!114 &2114283754330233427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7480,6 +7528,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2141979435}
+  - {fileID: 1884485997}
   - {fileID: 2114283753834967213}
   - {fileID: 8345070700268369567}
   - {fileID: 474243313}

@@ -7,6 +7,12 @@ namespace com.game.miscs
 {
     public class MagnetBehaviour : MonoBehaviour
     {
+        public enum UpdateMode
+        {
+            Update,
+            FixedUpdate,
+        }
+
         public enum MagnetType
         {
             [InspectorName("Physics (Force)")] Physics,
@@ -16,21 +22,44 @@ namespace com.game.miscs
         }
 
         [SerializeField] private MagnetType m_magnetType = MagnetType.Physics;
+        [SerializeField] private UpdateMode m_updateMode = UpdateMode.FixedUpdate;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private LayerMask m_layerMask;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Physics)] private ForceMode m_forceMode;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Virtual)] private Ease m_ease;
+        [SerializeField] private bool m_useDeltaTime;
         [SerializeField, ShowIf(nameof(m_magnetType), MagnetType.Lerp)] private float m_smoothing;
         [SerializeField] private float m_minRadius;
         [SerializeField] private float m_maxAffectionRadius;
         [SerializeField] private float m_strength;
 
+        float p_deltaTime 
+        { 
+            get
+            {
+                return m_useDeltaTime ? Time.deltaTime : 1f;
+            }
+        }
+
+        Collider[] m_found;
         Dictionary<Rigidbody, Tweener> m_followers = new();
 
         private void FixedUpdate()
         {
-            var found = Physics.OverlapSphere(transform.position, m_maxAffectionRadius, m_layerMask);
+            m_found = Physics.OverlapSphere(transform.position, m_maxAffectionRadius, m_layerMask);
 
-            foreach (Collider collider in found)
+            if (m_updateMode == UpdateMode.FixedUpdate)
+                ApplyMagnet();
+        }
+
+        private void Update()
+        {
+            if (m_updateMode == UpdateMode.Update)
+                ApplyMagnet();
+        }
+
+        void ApplyMagnet()
+        {
+            foreach (Collider collider in m_found)
             {
                 if (!collider.attachedRigidbody.TryGetComponent(out IMagnetable magnetable))
                     continue;
@@ -86,7 +115,7 @@ namespace com.game.miscs
             float multiplier = 1 / 
                 Mathf.Pow(GetDistance(rigidbody.transform.position) + magnetable.MagnetResistance, 2);
 
-            rigidbody.AddForce(forceDirection * m_strength * multiplier * Time.deltaTime, m_forceMode);
+            rigidbody.AddForce(forceDirection * m_strength * multiplier * p_deltaTime, m_forceMode);
         }
 
         void ApplyTransformMagnet(Transform target, IMagnetable magnetable, bool lerp = false)
@@ -101,8 +130,8 @@ namespace com.game.miscs
 
             Vector3 delta = multiplier * moveDirection * m_strength;
 
-            if (lerp) target.position = Vector3.Lerp(target.position, target.position + delta, Time.deltaTime * m_smoothing);
-            else target.Translate(delta * Time.deltaTime, Space.World);
+            if (lerp) target.position = Vector3.Lerp(target.position, target.position + delta, p_deltaTime * m_smoothing);
+            else target.Translate(delta * p_deltaTime, Space.World);
         }
 
         float GetDistance(Vector3 position)

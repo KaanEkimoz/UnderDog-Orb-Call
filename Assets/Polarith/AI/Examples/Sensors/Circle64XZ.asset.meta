@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9a5308e6b2c9efa469582ba5ee428c42
+timeCreated: 1504021451
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Sensors/Circle64XZ.asset
+  uploadId: 451093

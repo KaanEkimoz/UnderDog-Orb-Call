@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d3592dfd2209f6847b8589696de44c25
+timeCreated: 1504874363
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Vehicles/Materials/Car Metal.mat
+  uploadId: 451093

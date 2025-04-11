@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: df0e5bf87776e11499c400aea74b29e5
+timeCreated: 1516118305
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Plugins/Shaders/Extrude.shader
+  uploadId: 451093

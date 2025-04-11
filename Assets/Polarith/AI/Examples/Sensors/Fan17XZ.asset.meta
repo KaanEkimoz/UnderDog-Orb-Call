@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 656fdb59b687a9b43b3c59436f4eaef3
+timeCreated: 1508419668
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Sensors/Fan17XZ.asset
+  uploadId: 451093

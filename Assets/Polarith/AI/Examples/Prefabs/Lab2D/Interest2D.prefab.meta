@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8dbd46fa14acf19459cb63a759b6629f
+timeCreated: 1504083193
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab2D/Interest2D.prefab
+  uploadId: 451093

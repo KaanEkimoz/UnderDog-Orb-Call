@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 66000b2cacd46434fbc5f5683d3e19ae
+timeCreated: 1505117090
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/Car Van.prefab
+  uploadId: 451093

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: db15b8fba04aed247a7b95cb344c0896
+timeCreated: 1506673178
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/AI PriorityRoad.prefab
+  uploadId: 451093

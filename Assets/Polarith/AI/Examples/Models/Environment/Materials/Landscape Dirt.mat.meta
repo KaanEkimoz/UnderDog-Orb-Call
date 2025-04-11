@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b983253accbbd34e9c3960fbd9b8df8
+timeCreated: 1504877100
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Environment/Materials/Landscape Dirt.mat
+  uploadId: 451093

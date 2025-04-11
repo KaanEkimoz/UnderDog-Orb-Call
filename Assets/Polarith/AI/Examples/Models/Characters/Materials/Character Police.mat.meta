@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ee8707d5667075c45815cc5720c10056
+timeCreated: 1449950062
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Characters/Materials/Character Police.mat
+  uploadId: 451093

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 86747e05cd28c3d43b80f7fd4d1dcee1
+timeCreated: 1504095105
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab2D/Agent2D Orbit.prefab
+  uploadId: 451093

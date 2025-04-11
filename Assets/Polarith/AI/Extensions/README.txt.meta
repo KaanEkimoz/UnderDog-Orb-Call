@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 412b1b4f63a8fae49ab97bd6bfd75fe6
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Extensions/README.txt
+  uploadId: 451093

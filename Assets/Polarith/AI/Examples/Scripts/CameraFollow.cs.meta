@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: c907a3339e6b18147b13a929004c02a5
+timeCreated: 1557231136
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Scripts/CameraFollow.cs
+  uploadId: 451093

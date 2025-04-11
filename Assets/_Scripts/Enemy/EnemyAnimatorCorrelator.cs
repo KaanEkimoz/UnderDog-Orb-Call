@@ -1,22 +1,25 @@
-using System.Collections.Generic;
+using com.absence.attributes;
 using UnityEngine;
 
 namespace com.game.enemysystem
 {
     public class EnemyAnimatorCorrelator : MonoBehaviour
     {
-        [SerializeField] private EnemyAnimator m_animator;
-        [SerializeField] private EnemyInstance m_instance;
-        [SerializeField] private Enemy m_enemy;
+        [SerializeField, Required] private EnemyAnimator m_animator;
+        [SerializeField, Required] private Enemy m_enemy;
+        [SerializeField] private EnemyAnimatorStateListener m_stateListener;
 
         private void Start()
         {
             m_animator.SetStateByHash(EnemyAnimator.IDLE_HASH);
+
+            if (m_stateListener != null)
+                m_stateListener.OnEventRaised += OnListenState;
         }
 
         private void Update()
         {
-            bool isMoving = m_instance.NavMeshAgent.speed > 0f;
+            bool isMoving = m_enemy.AI.Speed > 0f;
             bool isAttacking = m_enemy.IsAttacking;
 
             bool animatorAttacking = m_animator.GetHash().Equals(EnemyAnimator.ATTACK_HASH);
@@ -49,6 +52,12 @@ namespace com.game.enemysystem
             {
                 m_animator.SetStateByHash(EnemyAnimator.IDLE_HASH);
             }
+        }
+
+        private void OnListenState(AnimatorStateStage stage, AnimatorStateEvent @event, EnemyAnimatorStateListener.Context context)
+        {
+            if (@event == AnimatorStateEvent.Attack && stage == AnimatorStateStage.Exit)
+                m_enemy.CommitEndOfAttack();
         }
     }
 }

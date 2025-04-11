@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9f369e5547e49fe4ea2237eafdb6c782
+timeCreated: 1504861967
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/PhysicsMaterials/Obstacle.physicsMaterial2D
+  uploadId: 451093

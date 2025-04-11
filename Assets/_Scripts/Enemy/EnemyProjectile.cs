@@ -1,7 +1,8 @@
 using com.game;
+using com.game.generics.interfaces;
 using UnityEngine;
 
-public class EnemyProjectile : MonoBehaviour
+public class EnemyProjectile : MonoBehaviour, ICustomDestroy
 {
     private float _damage;
     private Rigidbody _rigidBody;
@@ -20,7 +21,7 @@ public class EnemyProjectile : MonoBehaviour
             if (other.gameObject.TryGetComponent(out IDamageable damageable))
                 damageable.TakeDamage(_damage);
 
-            gameObject.SetActive(false);
+            CustomDestroy();
         }
     }
     public void ApplyVelocity(Vector3 velocity)
@@ -38,5 +39,10 @@ public class EnemyProjectile : MonoBehaviour
     public void SetDamage(float damage)
     {
         _damage = damage;
+    }
+
+    public void CustomDestroy()
+    {
+        gameObject.SetActive(false);
     }
 }

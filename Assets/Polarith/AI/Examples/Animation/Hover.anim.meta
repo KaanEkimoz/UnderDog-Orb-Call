@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f6ade22010da55a40b14965315fc2f5c
+timeCreated: 1504268047
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Animation/Hover.anim
+  uploadId: 451093

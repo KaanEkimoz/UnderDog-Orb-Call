@@ -173,7 +173,6 @@ public class OrbController : MonoBehaviour
         if (orb.currentState != OrbState.Sticked) return;
 
         orb.ReturnToPosition(returnPointTransform.position);
-        Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();
     }
     private void CallAllOrbs()
@@ -324,6 +323,10 @@ public class OrbController : MonoBehaviour
     {
         orb.transform.position = ellipseCenterTransform.position;
         orb.AssignPlayerStats(_playerStats);
+        orb.OnReachedToEllipse += () =>
+        {
+            Player.Instance.Hub.OrbHandler.AddOrb();
+        };
     }
     public void RemoveOrbFromEllipse(SimpleOrb orb)
     {
