@@ -203,7 +203,7 @@ public class SimpleOrb : MonoBehaviour
         // AnimationCurve adjustments
         float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
         float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
-        float currentSpeed = movementSpeed * curveValue * speedMultiplier;
+        float currentSpeed = movementSpeed * curveValue * speedMultiplier * (((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10)) + 1);
 
         // MoveTowards to the target
         transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
