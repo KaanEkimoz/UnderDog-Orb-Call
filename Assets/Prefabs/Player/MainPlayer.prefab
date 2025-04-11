@@ -244,7 +244,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.69
+  m_Radius: 1.11
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8658953852903097278
 MonoBehaviour:
@@ -3168,6 +3168,7 @@ Transform:
   - {fileID: 6087539927713434286}
   - {fileID: 3266443062295838621}
   - {fileID: 1751406404384577358}
+  - {fileID: 6005703171603943554}
   - {fileID: 993881574209821007}
   - {fileID: 4030823930667705638}
   - {fileID: 3044074994272069983}
@@ -5258,3 +5259,59 @@ Transform:
   - {fileID: 254842979027133138}
   m_Father: {fileID: 3726526231529346270}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9220937164132448436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6005703171603943554}
+  - component: {fileID: 7117346067365990600}
+  m_Layer: 3
+  m_Name: PlayerMagnet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6005703171603943554
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9220937164132448436}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5895881473504401873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7117346067365990600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9220937164132448436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bca2a7178e420b488433cf46b3d9aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_magnetType: 2
+  m_updateMode: 1
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 131072
+  m_forceMode: 0
+  m_ease: 11
+  m_useDeltaTime: 0
+  m_smoothing: 0
+  m_minRadius: 1.12
+  m_maxAffectionRadius: 12.22
+  m_strength: 10.26
