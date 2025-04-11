@@ -17,6 +17,7 @@ public class PlayerOrbController : MonoBehaviour
     [Header("Orb Count")]
     [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
     [Range(0, 10)][SerializeField] private int orbCountAtStart = 5;
+    [SerializeField] private bool autoSelectNextOrbOnShoot = false;
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 0f;
     [SerializeField] private Transform firePointTransform;
@@ -167,6 +168,9 @@ public class PlayerOrbController : MonoBehaviour
         orbToThrow.ResetMaterial();
         orbToThrow = null;
 
+        if (autoSelectNextOrbOnShoot)
+            SelectNextOrb();
+
         Player.Instance.Hub.OrbHandler.RemoveOrb();
         
         OnOrbThrowed?.Invoke();
@@ -176,7 +180,6 @@ public class PlayerOrbController : MonoBehaviour
         if (orb.currentState != OrbState.Sticked) return;
 
         orb.ReturnToPosition(returnPointTransform.position);
-        Player.Instance.Hub.OrbHandler.AddOrb();
         OnOrbCalled?.Invoke();
     }
     private void CallAllOrbs()
@@ -328,6 +331,10 @@ public class PlayerOrbController : MonoBehaviour
     {
         orb.transform.position = ellipseCenterTransform.position;
         orb.AssignPlayerStats(_playerStats);
+        orb.OnReachedToEllipse += () =>
+        {
+            Player.Instance.Hub.OrbHandler.AddOrb();
+        };
     }
     public void RemoveOrbFromEllipse(SimpleOrb orb)
     {

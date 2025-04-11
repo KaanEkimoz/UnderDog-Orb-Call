@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 55991db7d0a503845995195b26bc390c
+timeCreated: 1505137192
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/AI Crossroads SideRoad.prefab
+  uploadId: 451093

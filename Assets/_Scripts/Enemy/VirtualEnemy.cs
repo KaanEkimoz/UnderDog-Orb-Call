@@ -8,7 +8,7 @@ namespace com.game.enemysystem
     {
         private VirtualEnemy(EnemyInstance instance, PlayerLight light)
         {
-            instance.NavMeshAgent.enabled = false;
+            instance.AI.Enabled = false;
             instance.SetCollision(false, true);
 
             Vector3 randomDirection = Random.insideUnitSphere;
@@ -30,8 +30,8 @@ namespace com.game.enemysystem
             instance.Body.transform.forward = direction;
             instance.HealthBar.gameObject.SetActive(false);
             instance.Combatant.ReinitializeAsFake();
-            instance.SparkLight.Spark();
-            instance.SparkLight.OnSparkEnds += Dispose;
+            instance.Spark.Spark();
+            instance.Spark.OnEnd += Dispose;
 
             Enemy.DoVirtualize(instance.Enemy);
 

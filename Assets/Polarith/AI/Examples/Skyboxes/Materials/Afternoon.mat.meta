@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7781b52b1ef1b9345a6fd0e8a7d24d15
+timeCreated: 1505063363
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Skyboxes/Materials/Afternoon.mat
+  uploadId: 451093

@@ -4,7 +4,7 @@ namespace com.game.generics.interfaces
 {
     public interface IVisible
     {
-        SparkLight Spark { get; }
+        ISpark Spark { get; }
         Transform transform { get; }
     }
 }

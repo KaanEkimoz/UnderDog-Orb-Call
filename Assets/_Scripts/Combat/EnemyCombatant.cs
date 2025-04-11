@@ -11,6 +11,7 @@ using System.Collections;
 using com.game.miscs;
 using System.Collections.Generic;
 using System.Linq;
+using com.game.events;
 
 namespace com.game.enemysystem
 {
@@ -19,7 +20,7 @@ namespace com.game.enemysystem
         private const bool k_randomizeDropDirections = false;
 
         private const float k_popupPositionRandomization = 0.3f;
-        private const float k_dropSpawnForceMagnitude = 4f;
+        private const float k_dropSpawnForceMagnitude = 4.2f;
         private const float k_dropSpawnForceYAddition = 0.1f;
 
         private const int k_maxMoneyDropAmount = 5;
@@ -27,9 +28,10 @@ namespace com.game.enemysystem
 
         [SerializeField] private GameObject m_container;
         [SerializeField, Required] private EnemyStats m_stats;
-        [SerializeField] private SparkLight m_sparkLight;
+        [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
         [SerializeField] private Enemy enemy;
-        public SparkLight Spark => m_sparkLight;
+
+        public ISpark Spark => m_spark.Value;
 
         private float _health;
         private float _maxHealth;
@@ -43,6 +45,7 @@ namespace com.game.enemysystem
         public event Action<float> OnHeal = delegate { };
         public event Action<DeathCause> OnDie = delegate { };
 
+        bool _deathFlag;
         PlayerCombatant _playerCombatant;
         [Inject] PlayerOrbController _orbController;
 
@@ -123,7 +126,10 @@ namespace com.game.enemysystem
         }
         public void Die(DeathCause cause)
         {
-            Debug.Log("test");
+            if (_deathFlag)
+                return;
+
+            _deathFlag = true;
 
             SimpleOrb[] orbsOnEnemy = GetOrbsOnEnemy();
 
@@ -155,6 +161,10 @@ namespace com.game.enemysystem
             }
 
             TestEventChannel.ReceiveEnemyKill();
+
+            if (cause != DeathCause.Self || cause != DeathCause.Internal)
+                PlayerEventChannel.CommitEnemyKill();
+
             if (m_container != null) Destroy(m_container);
             else Destroy(gameObject);
 

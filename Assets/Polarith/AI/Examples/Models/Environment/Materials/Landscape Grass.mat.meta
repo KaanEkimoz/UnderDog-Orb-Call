@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 24d25bf3b5fb3bf409f7db7c98d271cf
+timeCreated: 1504877100
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Models/Environment/Materials/Landscape Grass.mat
+  uploadId: 451093

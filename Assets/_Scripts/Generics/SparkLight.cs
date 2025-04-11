@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace com.game.generics
 {
-    public class SparkLight : MonoBehaviour
+    public class SparkLight : MonoBehaviour, ISpark
     {
         [SerializeField] private bool m_startOnAwake;
         [SerializeField] private bool m_destroyOnEnd;
@@ -20,7 +20,7 @@ namespace com.game.generics
 
         public bool InCooldown => m_inCooldown;
 
-        public event Action OnSparkEnds;
+        public event Action OnEnd;
 
         bool m_inCooldown;
         Sequence m_sequence;
@@ -71,7 +71,7 @@ namespace com.game.generics
             ResetAllLights();
             m_sequence = null;
 
-            OnSparkEnds?.Invoke();
+            OnEnd?.Invoke();
         }
 
         void OnSequenceComplete()
@@ -89,7 +89,7 @@ namespace com.game.generics
             m_cooldownTimer = Timer.Create(UnityEngine.Random.Range(m_cooldownRange.x, m_cooldownRange.y), null, OnTimerComplete);
             m_cooldownTimer.Start();
 
-            OnSparkEnds?.Invoke();
+            OnEnd?.Invoke();
         }
 
         void ResetAllLights()

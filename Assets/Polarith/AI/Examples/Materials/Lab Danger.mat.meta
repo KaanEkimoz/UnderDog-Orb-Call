@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bb63a47990b206a489bc6db156d4fa22
+timeCreated: 1504535836
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Materials/Lab Danger.mat
+  uploadId: 451093

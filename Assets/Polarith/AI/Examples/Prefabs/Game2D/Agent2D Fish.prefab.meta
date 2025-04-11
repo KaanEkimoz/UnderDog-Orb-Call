@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6d2e1722e40add94f841e4250961c16b
+timeCreated: 1504614528
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game2D/Agent2D Fish.prefab
+  uploadId: 451093

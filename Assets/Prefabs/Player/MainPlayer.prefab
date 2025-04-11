@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 3266443062295838621}
   - component: {fileID: 5684851121412659886}
   - component: {fileID: 8658953852903097278}
-  m_Layer: 3
+  m_Layer: 2
   m_Name: PlayerGatherer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3140,8 +3140,8 @@ GameObject:
   - component: {fileID: 210113340321595825}
   - component: {fileID: 2353888567497166380}
   - component: {fileID: 4040944181606278680}
+  - component: {fileID: 307646420677299998}
   - component: {fileID: 2814813539509469751}
-  - component: {fileID: 6576080689018815754}
   m_Layer: 3
   m_Name: MainPlayer
   m_TagString: Player
@@ -3854,6 +3854,20 @@ MonoBehaviour:
   m_target: {fileID: 1020411334301909070}
   m_altarSystem: {fileID: 0}
   m_strength: 0.00006
+--- !u!114 &307646420677299998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338948318937879419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5830f1012bd9021479942e80982d70e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_paranoia: {fileID: 1020411334301909070}
+  m_enemyKillEffect: -0.002
 --- !u!114 &2814813539509469751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3866,24 +3880,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b2ff264ef62cdf458b30df638333995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6576080689018815754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6338948318937879419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bca2a7178e420b488433cf46b3d9aea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_layerMask:
-    serializedVersion: 2
-    m_Bits: 131072
-  m_forceMode: 0
-  m_maxAffectionRadius: 3.39
-  m_forceMagnitude: 0
 --- !u!1 &6399843601557321151
 GameObject:
   m_ObjectHideFlags: 0

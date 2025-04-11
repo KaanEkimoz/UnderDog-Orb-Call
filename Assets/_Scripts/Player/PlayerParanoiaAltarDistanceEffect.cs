@@ -41,7 +41,12 @@ namespace com.game.player
         // !!!
         Vector3 GetAltarPosition()
         {
-            return GameManager.Instance.AltarTransform.position;
+            Transform altar = SceneManager.Instance.AltarTransform;
+
+            if (altar == null) 
+                return transform.position;
+
+            return SceneManager.Instance.AltarTransform.position;
         }
     }
 }

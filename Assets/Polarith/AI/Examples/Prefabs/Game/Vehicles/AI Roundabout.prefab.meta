@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b477614798e48d54e81bbc1e76e01005
+timeCreated: 1505483361
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/AI Roundabout.prefab
+  uploadId: 451093

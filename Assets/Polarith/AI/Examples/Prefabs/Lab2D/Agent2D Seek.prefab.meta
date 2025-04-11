@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d8ff62c90959f8d42bb581ae67638fc0
+timeCreated: 1504192319
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Lab2D/Agent2D Seek.prefab
+  uploadId: 451093

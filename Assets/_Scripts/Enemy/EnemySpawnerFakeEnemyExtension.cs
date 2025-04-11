@@ -11,7 +11,7 @@ namespace com.game.enemysystem
         public const bool BRUTE_FORCE = false;
 
         [SerializeField, Readonly] private EnemySpawner m_owner;
-        [SerializeField] private EnemyMovementData m_fakeMovementData;
+        //[SerializeField] private EnemyMovementData m_fakeMovementData;
         [SerializeField] private float m_spawnDelay;
         [SerializeField] private int m_maxFakeEnemyCount;
 
@@ -94,14 +94,14 @@ namespace com.game.enemysystem
             if (m_instances.Count >= m_maxFakeEnemyCount)
                 return;
 
-            Transform spawnPoint = m_owner.GetRandomSpawnPoint();
+            Vector3 spawnPoint = m_owner.GetRandomSpawnPoint();
             GameObject enemyPrefab = m_owner.GetRandomEnemyPrefab();
 
-            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint, Quaternion.identity);
             EnemyCombatant combatant = enemy.GetComponentInChildren<EnemyCombatant>();
             combatant.ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
 
-            if (m_fakeMovementData != null) combatant.Owner.enemyMovementData = m_fakeMovementData;
+            //if (m_fakeMovementData != null) combatant.Owner.enemyMovementData = m_fakeMovementData;
             combatant.ReinitializeAsFake();
 
             combatant.OnDie += (_) => m_instances.Remove(combatant);

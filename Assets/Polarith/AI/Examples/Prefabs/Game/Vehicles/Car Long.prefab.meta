@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2f96db1cbfbe26d4182dfc6220622b12
+timeCreated: 1504886010
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Game/Vehicles/Car Long.prefab
+  uploadId: 451093

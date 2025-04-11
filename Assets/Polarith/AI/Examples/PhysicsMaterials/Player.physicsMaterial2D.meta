@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 87c206bf94ace7c43b0d1c718331aa1b
+timeCreated: 1506601991
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/PhysicsMaterials/Player.physicsMaterial2D
+  uploadId: 451093

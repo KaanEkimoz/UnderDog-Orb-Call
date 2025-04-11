@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  playerDistanceRange: {x: 31.9, y: 40.1}
   spawnDelay: 1
   maxEnemyCount: 10
 --- !u!114 &1686234130075004198

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7840132fae9b8d34bb9a6369f125ba84
+timeCreated: 1504268047
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Animation/Hover.controller
+  uploadId: 451093

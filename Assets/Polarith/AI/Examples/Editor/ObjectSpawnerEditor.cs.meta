@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 0079edfee502b104cad8e69f027bb0ef
+timeCreated: 1505115751
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Editor/ObjectSpawnerEditor.cs
+  uploadId: 451093

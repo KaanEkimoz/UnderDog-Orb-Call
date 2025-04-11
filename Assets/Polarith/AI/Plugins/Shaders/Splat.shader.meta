@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 08c7f6b4815afe34cb44c297605b62fd
+timeCreated: 1516032556
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Plugins/Shaders/Splat.shader
+  uploadId: 451093

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c8aace888c02cc740aefe506a7793d90
+timeCreated: 1566394278
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 92029
+  packageName: Polarith AI Free | Movement with 2D Sensors
+  packageVersion: 1.8
+  assetPath: Assets/Polarith/AI/Examples/Prefabs/Agent Questionaire.prefab
+  uploadId: 451093

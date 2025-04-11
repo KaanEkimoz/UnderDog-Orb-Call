@@ -17,7 +17,7 @@ namespace com.game.player
         Stack<OrbInventoryChange> m_undoCache = new();
 
         public Dictionary<SimpleOrb, OrbInventory> OrbInventoryEntries => m_orbInventoryEntries;
-        public List<OrbItemProfile> RestoredUpgradeCache { get { return m_restoredUpgradeCache; } }
+        public List<OrbItemProfile> RestoredUpgradeCache { get { return m_restoredUpgradeCache; } private set { m_restoredUpgradeCache = value; } }
         public List<OrbItemProfile> UpgradeCache { get { return m_upgradeCache; } set { m_upgradeCache = value; } }
         public Stack<OrbInventoryChange> UndoCache { get { return m_undoCache; } set { m_undoCache = value; } }
 
@@ -60,6 +60,17 @@ namespace com.game.player
             ClearUndoHistory();
         }
 
+        public void FetchRestoredUpgrades()
+        {
+            if (m_restoredUpgradeCache == null)
+            {
+                m_upgradeCache = null;
+                return;
+            }
+
+            m_upgradeCache = new(m_restoredUpgradeCache);
+        }
+
         public bool ApplyUpgrade(OrbItemProfile upgrade, SimpleOrb target)
         {
             if (!m_orbInventoryEntries.TryGetValue(target, out OrbInventory inventory))
@@ -85,6 +96,8 @@ namespace com.game.player
             }
 
             ClearUndoHistory();
+            RestoredUpgradeCache = new(UpgradeCache);
+            FetchRestoredUpgrades();
         }
 
         public bool SwapOrb(SimpleOrb target, SimpleOrb prefab)

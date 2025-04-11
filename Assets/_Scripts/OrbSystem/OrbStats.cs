@@ -63,7 +63,7 @@ namespace com.game.orbsystem.statsystemextensions
 
             if (Pipeline == null)
             {
-                Debug.LogWarning("Player stat pipeline is null.");
+                Debug.LogWarning("Orb stat pipeline is null.");
                 return rawStatValue;
             }
 
