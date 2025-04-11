@@ -9,6 +9,7 @@ namespace com.game.enemysystem.ai
         EnemyAIState State { get; set; }
         EnemyMovementData MovementData { get; }
         bool Enabled { get; set; }
+        bool Locked { get; set; }
         float Speed { get; set; }
         float DefaultSpeed { get; }
 

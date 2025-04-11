@@ -90,6 +90,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
+      propertyPath: _playerAnimator
+      value: 
+      objectReference: {fileID: 5929512429482728677}
+    - target: {fileID: 1505749297283057371, guid: 124706999a27f1f4ea6e28e34d973c05, type: 3}
       propertyPath: firePointTransform
       value: 
       objectReference: {fileID: 2807072290656101536}
@@ -204,6 +208,11 @@ Transform:
 --- !u!4 &2807072290656101536 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 209215095016149368, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
+  m_PrefabInstance: {fileID: 2599686826208818648}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5929512429482728677 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8528178625363880253, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
   m_PrefabInstance: {fileID: 2599686826208818648}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8099926423175544694 stripped
