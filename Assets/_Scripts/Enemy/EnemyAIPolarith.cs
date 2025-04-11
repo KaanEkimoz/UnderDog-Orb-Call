@@ -32,6 +32,11 @@ namespace com.game.enemysystem.ai
             get => m_enabled;
             set => m_enabled = value;
         }
+        public bool Locked
+        {
+            get => m_isLocked;
+            set => m_isLocked = value;
+        }
         public float Speed
         {
             get => m_speed;
@@ -45,6 +50,7 @@ namespace com.game.enemysystem.ai
         float m_defaultSpeed;
         float m_speed;
         bool m_enabled;
+        bool m_isLocked;
 
         public void Initialize(Transform target)
         {

@@ -18,8 +18,6 @@ namespace com.game.enemysystem.ai
         [SerializeField] private float m_fleeStrength;
         [SerializeField, InlineEditor] private EnemyMovementDataNavMeshAgent m_movementData;
 
-        Collider[] m_agentsFound;
-
         public EnemyAIState State
         {
             get
@@ -53,6 +51,11 @@ namespace com.game.enemysystem.ai
                 m_navMeshAgent.enabled = value;
             }
         }
+        public bool Locked
+        {
+            get => m_isLocked;
+            set => m_isLocked = value;
+        }
         public float Speed
         {
             get => m_navMeshAgent.speed;
@@ -64,6 +67,8 @@ namespace com.game.enemysystem.ai
         bool m_initialized;
         bool m_enabled = true;
         Transform m_target;
+        bool m_isLocked;
+        Collider[] m_agentsFound;
 
         private void Start()
         {
@@ -75,6 +80,8 @@ namespace com.game.enemysystem.ai
             if (!m_initialized)
                 return;
 
+            ApplyPrerequisites();
+
             if (!Enabled)
                 return;
 
@@ -82,6 +89,11 @@ namespace com.game.enemysystem.ai
                 return;
 
             RotateTowardsTarget();
+        }
+
+        void ApplyPrerequisites()
+        {
+            m_navMeshAgent.isStopped = Locked;
         }
 
         public void Initialize(Transform target)
