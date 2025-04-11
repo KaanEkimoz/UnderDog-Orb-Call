@@ -148,6 +148,7 @@ public class SimpleOrb : MonoBehaviour
             if (m_light != null) m_light.SetActive(false);
             trailParticle.startLifetime = onEllipseLifetime;
             currentState = OrbState.OnEllipse;
+            transform.parent = startParent;
 
             OnReachedToEllipse?.Invoke();
             OnStateChanged?.Invoke(currentState);
