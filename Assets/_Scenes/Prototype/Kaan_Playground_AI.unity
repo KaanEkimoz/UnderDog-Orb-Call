@@ -6614,6 +6614,10 @@ PrefabInstance:
       propertyPath: objectPool
       value: 
       objectReference: {fileID: 1792406521}
+    - target: {fileID: 624608683657201586, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: autoSelectNextOrbOnShoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1438975964073265034, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_smoothing
       value: 0
