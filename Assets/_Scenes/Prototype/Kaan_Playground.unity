@@ -2007,7 +2007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &756496171
 Transform:
   m_ObjectHideFlags: 0
@@ -5371,7 +5371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_defaultAISelection: 0
   m_waveCycleEnabled: 1
-  m_lightSystemEnabled: 0
+  m_lightSystemEnabled: 1
   m_orbShopUI: {fileID: 339635027}
   m_playerShopUI: {fileID: 2106000671}
   m_orbContainerUI: {fileID: 374574694}
@@ -6317,7 +6317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &2114283754330233425
 Light:
   m_ObjectHideFlags: 0
