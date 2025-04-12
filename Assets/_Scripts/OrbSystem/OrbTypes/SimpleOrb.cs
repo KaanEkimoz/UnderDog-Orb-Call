@@ -62,6 +62,8 @@ public class SimpleOrb : MonoBehaviour
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
     private const float ellipseReachThreshold = 0.2f;
+    private Transform stickedTransform;
+    private Collider stickedCollider;
 
     //Throw
     private float distanceTraveled;
@@ -171,6 +173,15 @@ public class SimpleOrb : MonoBehaviour
     }
     public void ReturnToPosition(Vector3 returnPosition)
     {
+        if (currentState == OrbState.Sticked)
+        {
+            if (stickedCollider != null)
+                ApplyOrbReturnTriggerEffects(stickedCollider);
+
+            stickedCollider = null;
+            stickedTransform = null;
+        }
+
         currentState = OrbState.Returning;
 
         SetNewDestination(returnPosition);
@@ -256,7 +267,8 @@ public class SimpleOrb : MonoBehaviour
         {
             Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
-            ApplyOrbReturnTriggerEffects(triggerObject);
+            if (stickedCollider == null || stickedCollider != triggerObject) 
+                ApplyOrbReturnTriggerEffects(triggerObject);
 
             Game.Event = com.game.GameRuntimeEvent.Null;
         }
@@ -264,6 +276,8 @@ public class SimpleOrb : MonoBehaviour
     private void Stick(Collision stickCollider)
     {
         currentState = OrbState.Sticked;
+        stickedCollider = stickCollider.collider;
+
         OnPhysicsHit?.Invoke();
 
         _rigidBody.isKinematic = true;
@@ -319,6 +333,7 @@ public class SimpleOrb : MonoBehaviour
         currentState = OrbState.Sticked;
         _rigidBody.isKinematic = true;
         transform.SetParent(stickTransform);
+        stickedTransform = stickTransform;
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);
