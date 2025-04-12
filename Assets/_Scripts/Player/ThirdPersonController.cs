@@ -1,4 +1,6 @@
-﻿using com.game.player;
+﻿using com.absence.soundsystem;
+using com.absence.soundsystem.internals;
+using com.game.player;
 using com.game.player.statsystemextensions;
 using UnityEngine;
 using Zenject;
@@ -31,6 +33,11 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Acceleration")]
     [Tooltip("Acceleration and deceleration")]
     [SerializeField] private float speedChangeRate = 10.0f;
+    [Space]
+    [Header("Sound")]
+    [SerializeField] private SoundAsset m_concreteFootstepsSoundAsset;
+    [SerializeField] private SoundAsset m_grassFootstepsSoundAsset;
+    [SerializeField] private SoundAsset m_dashSoundAsset;
 
     //player
     private float _currentHorizontalSpeed;
@@ -245,13 +252,23 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
-            _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.walkOnGrassEffects, transform);
+            PlaySFX(m_grassFootstepsSoundAsset);
         }
             
     }
     private void OnDashStart(AnimationEvent animationEvent)
     {
-        _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.dashSoundEffects, transform);
+        PlaySFX(m_dashSoundAsset);
     }
     #endregion
+
+    void PlaySFX(ISoundAsset asset)
+    {
+        if (SoundManager.Instance == null)
+            return;
+
+        Sound.Create(asset)
+            .AtPosition(transform.position)
+            .Play();
+    }
 }

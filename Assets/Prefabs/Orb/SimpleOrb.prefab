@@ -207,6 +207,9 @@ MonoBehaviour:
   returnSlowEffectOnHitSeconds: 1.5
   returnKnockbackEffectOnHit: 1
   returnKnockbackEffectOnHitForce: 0.1
+  m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}
+  m_recallSoundAsset: {fileID: 11400000, guid: bb630daa7c8da4e49ae270b7975c82d4, type: 2}
+  m_catchSoundAsset: {fileID: 11400000, guid: c612b549984e4874ca8228d091a8ac1e, type: 2}
 --- !u!114 &6960696444875857668
 MonoBehaviour:
   m_ObjectHideFlags: 0

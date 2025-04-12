@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using com.game.enemysystem;
+using com.absence.soundsystem;
+using com.absence.soundsystem.internals;
 public enum OrbState
 {
     OnEllipse,
@@ -55,6 +57,11 @@ public class SimpleOrb : MonoBehaviour
     [Range(0f, 5f)] [SerializeField] private float returnSlowEffectOnHitSeconds = 1.5f;
     [SerializeField] private bool returnKnockbackEffectOnHit = true;
     [SerializeField] private float returnKnockbackEffectOnHitForce = 0.1f;
+    [Space]
+    [Header("Sound Asset References")]
+    [SerializeField] private SoundAsset m_throwSoundAsset;
+    [SerializeField] private SoundAsset m_recallSoundAsset;
+    [SerializeField] private SoundAsset m_catchSoundAsset;
 
     //Movement
     private Transform startParent;
@@ -94,24 +101,21 @@ public class SimpleOrb : MonoBehaviour
     {
         _soundFXManager = soundFXManager;
     }
-    private void OnEnable()
-    {
-        OnThrown += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbThrowEffects, transform);
-        OnCalled += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbCallEffects, transform);
-        OnReachedToEllipse += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbReturnEffects, transform);
-    }
-    private void OnDisable()
-    {
-        OnThrown -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbThrowEffects, transform);
-        OnCalled -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbCallEffects, transform);
-        OnReachedToEllipse -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbReturnEffects, transform);
-    }
     private void Reset()
     {
         currentState = OrbState.OnEllipse;
         if (m_light != null) m_light.SetActive(false);
         trailParticle.startLifetime = onEllipseLifetime;
         CheckStartVariables();
+    }
+    void PlaySFX(ISoundAsset asset)
+    {
+        if (SoundManager.Instance == null)
+            return;
+
+        Sound.Create(asset)
+            .AtPosition(transform.position)
+            .Play();
     }
     private void CheckStartVariables()
     {
@@ -130,6 +134,10 @@ public class SimpleOrb : MonoBehaviour
     private void Start()
     {
         CheckStartVariables();
+
+        OnThrown += () => PlaySFX(m_throwSoundAsset);
+        OnCalled += () => PlaySFX(m_recallSoundAsset);
+        OnReachedToEllipse += () => PlaySFX(m_catchSoundAsset);
 
         if (m_light != null) m_light.SetActive(false);
         trailParticle.startLifetime = onEllipseLifetime;
