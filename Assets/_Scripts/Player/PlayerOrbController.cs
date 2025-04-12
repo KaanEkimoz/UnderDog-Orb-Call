@@ -325,9 +325,17 @@ public class PlayerOrbController : MonoBehaviour
         else
             newOrb = Instantiate(prefab);
 
+        int targetIndex = orbsOnEllipse.IndexOf(target);
+
         InitializeOrb(newOrb);
         newOrb.transform.position = target.transform.position;
-        orbsOnEllipse[orbsOnEllipse.IndexOf(target)] = newOrb;
+        orbsOnEllipse[targetIndex] = newOrb;
+
+        if (selectedOrbIndex == targetIndex)
+        {
+            selectedOrbIndex--;
+            SelectNextOrb();
+        }
 
         return true;
     }

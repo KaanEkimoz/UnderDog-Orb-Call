@@ -15,7 +15,7 @@ using com.game.events;
 
 namespace com.game.enemysystem
 {
-    public class EnemyCombatant : MonoBehaviour, IDamageable, IVisible
+    public class EnemyCombatant : MonoBehaviour, IRenderedDamageable, IVisible
     {
         private const bool k_randomizeDropDirections = false;
 
@@ -27,6 +27,7 @@ namespace com.game.enemysystem
         private const int k_maxExperienceDropAmount = 4;
 
         [SerializeField] private GameObject m_container;
+        [SerializeField, Required] private Renderer m_renderer;
         [SerializeField, Required] private EnemyStats m_stats;
         [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
         [SerializeField] private Enemy enemy;
@@ -40,6 +41,7 @@ namespace com.game.enemysystem
         public float Health { get => _health; set => _health = value; }
         public float MaxHealth { get => _maxHealth; set => _maxHealth = value; }
         public Enemy Owner => enemy;
+        public Renderer Renderer => m_renderer;
 
         public event Action<float> OnTakeDamage = delegate { };
         public event Action<float> OnHeal = delegate { };
@@ -51,8 +53,7 @@ namespace com.game.enemysystem
 
         private void Awake()
         {
-            if(enemy == null)
-               enemy = GetComponent<Enemy>();
+            enemy.OnDeathRequest += Die;
 
             _maxHealth = m_stats.GetStat(EnemyStatType.Health);
             _health = _maxHealth;

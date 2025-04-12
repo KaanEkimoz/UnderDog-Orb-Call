@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_container: {fileID: 1615555516738219183}
+  m_renderer: {fileID: 391948113693585292}
   m_stats: {fileID: 6483158665112541329}
   m_spark:
     underlyingValue: {fileID: 8156995981169104547}

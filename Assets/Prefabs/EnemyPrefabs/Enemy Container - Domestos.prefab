@@ -356,6 +356,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 539a33a777c48784e8783c834989188b, type: 2}
+    - target: {fileID: 3122010397051837324, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_renderer
+      value: 
+      objectReference: {fileID: 7682023414854928190}
     - target: {fileID: 3342991894426285698, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: firePoint
       value: 
@@ -556,6 +560,10 @@ PrefabInstance:
       propertyPath: m_movementData
       value: 
       objectReference: {fileID: 11400000, guid: 30dfbe798e36d9f479cccd22bf1b67cb, type: 2}
+    - target: {fileID: 8988277245215467763, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_selfCollider
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8450261750710576827, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
     - {fileID: 2664877981278392852, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
