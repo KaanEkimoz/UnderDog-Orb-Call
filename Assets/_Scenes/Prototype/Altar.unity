@@ -2665,6 +2665,61 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1200162878}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1210741563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1210741564}
+  - component: {fileID: 1210741565}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1210741564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210741563}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1210741565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210741563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 292b3697a5270f4408cc63180d98a754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_defaultAISelection: 0
+  m_waveCycleEnabled: 1
+  m_lightSystemEnabled: 1
+  m_orbShopUI: {fileID: 186644836}
+  m_playerShopUI: {fileID: 186644837}
+  m_orbContainerUI: {fileID: 186644838}
+  m_orbUIUpdater: {fileID: 1617196759}
+  m_orbUIUpdater2: {fileID: 0}
+  m_defaultEnvironmentLight: {fileID: 0}
+  m_lightSystemEnvironmentLight: {fileID: 0}
+  m_altar: {fileID: 1822633504}
 --- !u!224 &1233255582 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 597308369130767402, guid: 2f7f3dde7ae722a4aafffe20691ad702, type: 3}
@@ -4201,12 +4256,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_state: 0
-  m_orbShopUI: {fileID: 186644836}
-  m_playerShopUI: {fileID: 186644837}
-  m_orbContainerUI: {fileID: 186644838}
-  m_orbUIUpdater: {fileID: 1617196759}
-  m_orbUIUpdater2: {fileID: 0}
-  m_altar: {fileID: 1822633504}
 --- !u!4 &1722498854
 Transform:
   m_ObjectHideFlags: 0
@@ -4366,7 +4415,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_owner: {fileID: 1812771219}
-  m_fakeMovementData: {fileID: 11400000, guid: 60474108630ee3446a829520a9c59e00, type: 2}
   m_spawnDelay: 5
   m_maxFakeEnemyCount: 10
 --- !u!1 &1822633499
@@ -4739,6 +4787,56 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f7f3dde7ae722a4aafffe20691ad702, type: 3}
+--- !u!1 &1981151454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1981151456}
+  - component: {fileID: 1981151455}
+  m_Layer: 0
+  m_Name: Sound Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1981151455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981151454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce7fd29a30b8ba46bc96ae656806e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_useSingleton: 1
+  m_dontDestroyOnLoad: 1
+  m_initialPoolCapacity: 64
+  m_maxFrequentInstances: 16
+  m_prefab: {fileID: 0}
+  m_activeInstances: 0
+--- !u!4 &1981151456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981151454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2031654926
 GameObject:
   m_ObjectHideFlags: 0
@@ -5818,7 +5916,9 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1981151456}
   - {fileID: 1722498854}
+  - {fileID: 1210741564}
   - {fileID: 2114283753834967213}
   - {fileID: 8345070700268369567}
   - {fileID: 300419682}
