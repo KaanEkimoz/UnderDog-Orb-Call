@@ -42,9 +42,9 @@ MonoBehaviour:
   - TargetStat: 13
     Value: 0
   - TargetStat: 14
-    Value: 17
+    Value: 0
   - TargetStat: 15
-    Value: 24
+    Value: 0
   - TargetStat: 16
     Value: 0
   - TargetStat: 17
