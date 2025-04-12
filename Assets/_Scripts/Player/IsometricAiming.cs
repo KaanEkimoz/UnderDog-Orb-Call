@@ -45,7 +45,7 @@ public class IsometricAiming : MonoBehaviour
     {
         var direction = targetPosition - transform.position;
         direction.y = 0; // Keep the direction on the XZ plane
-        transform.forward = direction;
+        transform.forward = direction.normalized;
     }
 
 #if UNITY_EDITOR

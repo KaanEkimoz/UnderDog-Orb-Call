@@ -3463,7 +3463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorDetectMask:
     serializedVersion: 2
-    m_Bits: 8449
+    m_Bits: 8193
 --- !u!114 &8092107762673492513
 MonoBehaviour:
   m_ObjectHideFlags: 0

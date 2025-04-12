@@ -110,7 +110,7 @@ public class ThirdPersonController : MonoBehaviour
 
         Vector3 inputDirection = GetInputDirection();
         float targetRotation = CalculateTargetRotation(inputDirection);
-        ApplyRotation(targetRotation);
+        //ApplyRotation(targetRotation);
 
         Vector3 targetDirection = CalculateTargetDirection(targetRotation);
         MovePlayer(targetDirection);
@@ -128,8 +128,8 @@ public class ThirdPersonController : MonoBehaviour
         if (_input.SprintButtonHeld)
             return sprintSpeed;
 
-        if(PlayerInputHandler.Instance.AttackButtonHeld)
-            return slowWalkSpeed;
+        //if(PlayerInputHandler.Instance.AttackButtonHeld)
+        //    return slowWalkSpeed;
 
         return walkSpeed;
     }

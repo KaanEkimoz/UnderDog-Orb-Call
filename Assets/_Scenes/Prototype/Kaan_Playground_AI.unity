@@ -6583,6 +6583,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3936004821978566371, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.1237245
+      objectReference: {fileID: 0}
+    - target: {fileID: 3936004821978566371, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.375001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3936004821978566371, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 5104291335115891984, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_useDeltaTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7861526060795953134, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
