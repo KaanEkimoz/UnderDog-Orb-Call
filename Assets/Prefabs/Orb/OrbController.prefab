@@ -98,6 +98,7 @@ MonoBehaviour:
   ghostOrbPrefab: {fileID: 8886230964089384064, guid: 3ac12e18f03e79d40b774a17a4df6ba3, type: 3}
   m_extensions:
   - {fileID: 597214469549277730}
+  _playerAnimator: {fileID: 0}
   orbsOnEllipse: []
 --- !u!114 &597214469549277730
 MonoBehaviour:
@@ -127,5 +128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_followingType: 1
   m_target: {fileID: 0}
+  m_alsoLockToRotation: 0
   m_keepStartingOffset: 1
   m_offset: {x: 0, y: 0, z: 0}

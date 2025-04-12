@@ -130,6 +130,9 @@ public class SimpleOrb : MonoBehaviour
     private void Start()
     {
         CheckStartVariables();
+
+        if (m_light != null) m_light.SetActive(false);
+        trailParticle.startLifetime = onEllipseLifetime;
     }
     private void Update()
     {

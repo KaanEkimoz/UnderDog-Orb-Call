@@ -5310,7 +5310,7 @@ MonoBehaviour:
     m_Bits: 131072
   m_forceMode: 0
   m_ease: 11
-  m_useDeltaTime: 0
+  m_useDeltaTime: 1
   m_smoothing: 0
   m_minRadius: 1.12
   m_maxAffectionRadius: 12.22
