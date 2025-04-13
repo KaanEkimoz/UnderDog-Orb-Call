@@ -7,6 +7,12 @@ using Zenject;
 [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler))]
 public class ThirdPersonController : MonoBehaviour
 {
+    public static Matrix4x4 CameraMatrix =
+    new(new Vector4(Mathf.Sqrt(2) / 2, 0f, -Mathf.Sqrt(2) / 2),
+        new Vector4(Mathf.Sqrt(2) / 2, 0f, Mathf.Sqrt(2) / 2),
+        Vector4.zero,
+        Vector4.zero);
+
     [Header("Walk")]
     [Tooltip("Move speed of the character in m/s")]
     [SerializeField] private float walkSpeed = 2.0f;
@@ -119,7 +125,7 @@ public class ThirdPersonController : MonoBehaviour
         float targetRotation = CalculateTargetRotation(inputDirection);
         //ApplyRotation(targetRotation);
 
-        Vector3 targetDirection = CalculateTargetDirection(targetRotation);
+        Vector3 targetDirection = CalculateTargetDirection(_input.MovementInput);
         MovePlayer(targetDirection);
 
         UpdateAnimator();
@@ -189,9 +195,9 @@ public class ThirdPersonController : MonoBehaviour
 
         transform.rotation = rotationQuat;
     }
-    private Vector3 CalculateTargetDirection(float targetRotation)
+    private Vector3 CalculateTargetDirection(Vector2 input)
     {
-        return Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+        return CameraMatrix.MultiplyVector(input).normalized * input.magnitude; // ??
     }
     private void MovePlayer(Vector3 targetDirection)
     {
