@@ -245,8 +245,11 @@ public class PlayerOrbController : MonoBehaviour
 
             if (orbsOnEllipse[i] == orbToThrow)
             {
-                orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
-                orbToThrow.SetNewDestination(firePointTransform.position);
+                if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
+                {
+                    orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
+                    orbToThrow.SetNewDestination(firePointTransform.position);
+                }
             }
             else if (ghostOrbs[i] != null)
             {
