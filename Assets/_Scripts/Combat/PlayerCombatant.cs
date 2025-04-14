@@ -7,9 +7,10 @@ using Zenject;
 
 namespace com.game.player
 {
-    public class PlayerCombatant : MonoBehaviour, IDamageable
+    public class PlayerCombatant : MonoBehaviour, IRenderedDamageable
     {
         [SerializeField] private GameObject m_container;
+        [SerializeField] private Renderer m_renderer;
 
         float _health;
         float _maxHealth;
@@ -18,6 +19,7 @@ namespace com.game.player
         public bool IsAlive => _health > 0;
         public float Health => _health;
         public float MaxHealth => _maxHealth;
+        public Renderer Renderer => m_renderer;
 
         public event Action<float> OnTakeDamage = delegate { };
         public event Action<float> OnHeal = delegate { };

@@ -36,15 +36,15 @@ MonoBehaviour:
   - TargetStat: 10
     Value: 1
   - TargetStat: 11
-    Value: 1
+    Value: 0
   - TargetStat: 12
     Value: 0
   - TargetStat: 13
     Value: 0
   - TargetStat: 14
-    Value: 17
+    Value: 0
   - TargetStat: 15
-    Value: 24
+    Value: 0
   - TargetStat: 16
     Value: 0
   - TargetStat: 17

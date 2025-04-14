@@ -1735,6 +1735,10 @@ PrefabInstance:
       propertyPath: m_rendererEntries.Array.data[0].MaterialEntries.Array.data[0].DefaultMaterialType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1221973632695429691, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
+      propertyPath: m_renderer
+      value: 
+      objectReference: {fileID: 4097871067843537171}
     - target: {fileID: 1443141131952181409, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
       propertyPath: m_Enabled
       value: 1

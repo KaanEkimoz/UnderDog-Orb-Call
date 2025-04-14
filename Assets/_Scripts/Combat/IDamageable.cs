@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace com.game
 {
@@ -17,5 +18,10 @@ namespace com.game
 
         void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds);
         void Die(DeathCause cause);
+    }
+
+    public interface IRenderedDamageable : IDamageable
+    {
+        Renderer Renderer { get; }
     }
 }

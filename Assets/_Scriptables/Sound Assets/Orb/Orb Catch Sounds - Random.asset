@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5846bb456b8c7454d8f435bd26a21e67, type: 3}
+  m_Name: Orb Catch Sounds - Random
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: 4a3b653098e503b49b7f577a2698e3ef, type: 3}
+  - {fileID: 8300000, guid: d06f310a57bcfc447981e87c2c9b86e1, type: 3}
+  - {fileID: 8300000, guid: 6c3ad45805647e142a375ee1f94d1e10, type: 3}
+  - {fileID: 8300000, guid: 1de612cf8765ae6428806a5b333f5873, type: 3}
+  - {fileID: 8300000, guid: 72833b3f24178b541b40410a9830f3ee, type: 3}
+  - {fileID: 8300000, guid: 34795e26a917d624eaa3afdf145e89d7, type: 3}
+  - {fileID: 8300000, guid: b62b4dcc1b7742f4082c1167c8e90572, type: 3}
+  m_soundData:
+    m_clip: {fileID: 0}
+    m_mixerGroup: {fileID: -4782549682957368712, guid: 67b98f3e85147c0489d109a335d53e6f, type: 2}
+    m_loop: 0
+    m_isFrequent: 0
+    m_volume: {x: 0.8, y: 1}
+    m_pitch: {x: 0.95, y: 1.05}

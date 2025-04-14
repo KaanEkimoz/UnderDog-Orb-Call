@@ -87,6 +87,8 @@ public class PlayerOrbController : MonoBehaviour
         InitializeGhostOrbs();
         InitializeOrbs();
         CalculateAngleStep();
+
+        StartAiming();
     }
     private void Update()
     {
@@ -100,8 +102,6 @@ public class PlayerOrbController : MonoBehaviour
     private void HandleInput()
     {
         if (PlayerInputHandler.Instance.AttackButtonPressed)
-            StartAiming();
-        else if (PlayerInputHandler.Instance.AttackButtonReleased)
             ThrowOrb();
 
         if(PlayerInputHandler.Instance.RecallButtonPressed)
@@ -136,24 +136,29 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void StartAiming()
     {
+        selectedOrbIndex = -1;
+        SelectNextOrb();
+        IsAiming = true;
+    }
+    private void ThrowOrb()
+    {
+        if (orbToThrow == null)
+            return;
+
+        if (throwCooldownTimer > 0 || orbToThrow.currentState != OrbState.OnEllipse)
+            return;
+
+        if (!IsAiming)
+            return;
+
         foreach (SimpleOrb orb in orbsOnEllipse)
         {
             if (orb.currentState == OrbState.Returning)
                 return;
         }
 
-        if (orbToThrow != null || orbsOnEllipse.Count == 0 || throwCooldownTimer > 0 || orbsOnEllipse[selectedOrbIndex].currentState != OrbState.OnEllipse) return;
-
-        IsAiming = true;
-        orbToThrow = orbsOnEllipse[selectedOrbIndex];
-    }
-    private void ThrowOrb()
-    {
-        if (orbToThrow == null || !IsAiming) return;
-
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
         _playerAnimator.SetTrigger("Throw");
-        IsAiming = false;
 
         Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
         throwDirection.y = 0;
@@ -164,9 +169,6 @@ public class PlayerOrbController : MonoBehaviour
         }
 
         orbToThrow.Throw(throwDirection.normalized);
-
-        orbToThrow.ResetMaterial();
-        orbToThrow = null;
 
         if (autoSelectNextOrbOnShoot)
             SelectNextOrb();
@@ -196,6 +198,7 @@ public class PlayerOrbController : MonoBehaviour
         if (orbsOnEllipse.Count <= 1) return;
 
         selectedOrbIndex = (selectedOrbIndex + 1) % orbsOnEllipse.Count;
+        orbToThrow = orbsOnEllipse[selectedOrbIndex];
         ShiftOrbs();
         UpdateOrbEllipsePositions();
         OnNextOrbSelected?.Invoke();
@@ -205,6 +208,7 @@ public class PlayerOrbController : MonoBehaviour
         if (orbsOnEllipse.Count <= 1) return;
 
         selectedOrbIndex = (selectedOrbIndex - 1 + orbsOnEllipse.Count) % orbsOnEllipse.Count;
+        orbToThrow = orbsOnEllipse[selectedOrbIndex];
         ShiftOrbs();
         UpdateOrbEllipsePositions();
         OnPreviousOrbSelected?.Invoke();
@@ -241,24 +245,23 @@ public class PlayerOrbController : MonoBehaviour
 
             if (orbsOnEllipse[i] == orbToThrow)
             {
-                orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
-                orbToThrow.SetNewDestination(firePointTransform.position);
+                if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
+                {
+                    orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
+                    orbToThrow.SetNewDestination(firePointTransform.position);
+                }
             }
             else if (ghostOrbs[i] != null)
             {
                 if (orbsOnEllipse[i].currentState != OrbState.OnEllipse)
                 {
-                    if (ghostOrbs[i].gameObject.activeSelf == false)
-                        ghostOrbs[i].gameObject.SetActive(true);
-
+                    ghostOrbs[i].gameObject.SetActive(true);
                     ghostOrbs[i].SetNewDestination(targetPosition);
                 }
                 else
                 {
-                    if (ghostOrbs[i].gameObject.activeSelf == true)
-                        ghostOrbs[i].gameObject.SetActive(false);
-
-                    orbsOnEllipse[i]?.SetNewDestination(targetPosition);
+                    ghostOrbs[i].gameObject.SetActive(false);
+                    orbsOnEllipse[i].SetNewDestination(targetPosition);
                 }
             }
 
@@ -321,9 +324,17 @@ public class PlayerOrbController : MonoBehaviour
         else
             newOrb = Instantiate(prefab);
 
+        int targetIndex = orbsOnEllipse.IndexOf(target);
+
         InitializeOrb(newOrb);
         newOrb.transform.position = target.transform.position;
-        orbsOnEllipse[orbsOnEllipse.IndexOf(target)] = newOrb;
+        orbsOnEllipse[targetIndex] = newOrb;
+
+        if (selectedOrbIndex == targetIndex)
+        {
+            selectedOrbIndex--;
+            SelectNextOrb();
+        }
 
         return true;
     }
@@ -380,6 +391,6 @@ public class PlayerOrbController : MonoBehaviour
     }
     public void UpdateAnimator()
     {
-        _playerAnimator.SetBool("IsAiming", IsAiming);
+        //_playerAnimator.SetBool("IsAiming", IsAiming);
     }
 }

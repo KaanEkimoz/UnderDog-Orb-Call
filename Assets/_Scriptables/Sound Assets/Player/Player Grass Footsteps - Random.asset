@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5846bb456b8c7454d8f435bd26a21e67, type: 3}
+  m_Name: Player Grass Footsteps - Random
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: 563e091afd5fed8489ecbe023979033d, type: 3}
+  - {fileID: 8300000, guid: 142a1d7919867824cbf6ff8448e699a5, type: 3}
+  - {fileID: 8300000, guid: dd600ce3eee053e4596b44cddb11fb58, type: 3}
+  - {fileID: 8300000, guid: 5a4f385696ff4a94e9beb97334df9f91, type: 3}
+  - {fileID: 8300000, guid: 202f2528c6780b74683d847f7019a65f, type: 3}
+  - {fileID: 8300000, guid: 8ca41d9c470f3074bb8f4e31b494bb72, type: 3}
+  - {fileID: 8300000, guid: 75a64c6455ff32a47b144dbdabd40188, type: 3}
+  - {fileID: 8300000, guid: ccdacd5fadf412e4fbd0d28c2c07c24b, type: 3}
+  - {fileID: 8300000, guid: c66d4dda24589cd479ca58af3cfcaac0, type: 3}
+  - {fileID: 8300000, guid: db13db2a1c439b84d9dce6aaba66689e, type: 3}
+  - {fileID: 8300000, guid: e7473949f2612b249ad9fabf86169d23, type: 3}
+  - {fileID: 8300000, guid: d56c7886ecd0df54fbfafaf6ef853c17, type: 3}
+  - {fileID: 8300000, guid: 60ad3430c9431ed4292721b8b03117a1, type: 3}
+  - {fileID: 8300000, guid: 789e404997d62de4e85e503e9124799e, type: 3}
+  - {fileID: 8300000, guid: 8fe87239c2a553e4f9a437a726506c71, type: 3}
+  - {fileID: 8300000, guid: 9cd1996e0d17f734190ffe7185f1a115, type: 3}
+  - {fileID: 8300000, guid: 303102575522dc14e9bfbc0bc5a1b2c7, type: 3}
+  - {fileID: 8300000, guid: 88be2a3e6ecdc24419c3be5e3b05fe72, type: 3}
+  - {fileID: 8300000, guid: 7d8a93552e7b7dd489797c250ab3d931, type: 3}
+  - {fileID: 8300000, guid: 622d9d07498284746a4530bbfdd250e7, type: 3}
+  m_soundData:
+    m_clip: {fileID: 0}
+    m_mixerGroup: {fileID: -4782549682957368712, guid: 67b98f3e85147c0489d109a335d53e6f, type: 2}
+    m_loop: 0
+    m_isFrequent: 1
+    m_volume: {x: 0.9, y: 1}
+    m_pitch: {x: 0.97, y: 1.03}

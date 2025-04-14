@@ -20,7 +20,7 @@ namespace com.game
         [SerializeField] private GameObject electricChainEffectPrefab; // Prefab for the electric line
         [SerializeField] private float electricChainEffectDuration = 0.2f;
 
-        private List<IDamageable> affectedEnemies = new List<IDamageable>();
+        private List<IRenderedDamageable> affectedEnemies = new();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
             damageable.TakeDamageInSeconds(damage, electricEffectDurationInSeconds, electrictEffectIntervalInSeconds);
@@ -34,7 +34,7 @@ namespace com.game
 
             // Filter and sort the colliders by distance
             var sortedDamageables = hitColliders
-                .Where(c => c.gameObject.TryGetComponent(out IDamageable _)) // Filter colliders with IDamageable
+                .Where(c => c.gameObject.TryGetComponent(out IRenderedDamageable _)) // Filter colliders with IDamageable
                 .Select(c => new
                 {
                     Collider = c,
@@ -53,7 +53,7 @@ namespace com.game
                 if (item.Collider.gameObject.CompareTag("Player"))
                     continue;
 
-                if (item.Collider.gameObject.TryGetComponent(out IDamageable hitDamageable))
+                if (item.Collider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
                 {
                     hitDamageable.TakeDamageInSeconds(damage, electricEffectDurationInSeconds, electrictEffectIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
@@ -79,14 +79,14 @@ namespace com.game
         }
         private void CreateElectricLineBetweenInRangeEnemies()
         {
-            MonoBehaviour firstEnemy = affectedEnemies[0] as MonoBehaviour;
-            Vector3 firstEnemyPosition = firstEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; //Center Position
+            IRenderedDamageable firstEnemy = affectedEnemies[0];
+            Vector3 firstEnemyPosition = firstEnemy.Renderer.bounds.center; //Center Position
 
             for (int i = 1; i < affectedEnemies.Count; i++)
             {
-                MonoBehaviour nextEnemy = affectedEnemies[i] as MonoBehaviour;
+                IRenderedDamageable nextEnemy = affectedEnemies[i];
                 
-                Vector3 nextEnemyPosition = nextEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; // Center Position
+                Vector3 nextEnemyPosition = nextEnemy.Renderer.bounds.center; // Center Position
 
                 CreateElectricLine(firstEnemyPosition, nextEnemyPosition);
             }

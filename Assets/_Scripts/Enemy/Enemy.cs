@@ -2,6 +2,7 @@ using com.absence.attributes;
 using com.game.enemysystem.ai;
 using com.game.enemysystem.statsystemextensions;
 using DG.Tweening;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -29,14 +30,9 @@ namespace com.game.enemysystem
         [Header("Stats")]
         [SerializeField] protected EnemyStats enemyStats;
 
-        //AI
-        protected IEnemyAI ai;
-        protected GameObject target;
-        bool aiLocked;
-
-        //Movement
-        private float defaultSpeed;
-
+        //Dummy Mode
+        [Header("Dummy Mode")]
+        [SerializeField] protected bool isDummyModeActive = false;
         public bool IsFake { get; set; } = false;
         public bool IsVirtual { get; protected set; } = false;
         public bool IsAttacking { get; protected set; } = false;
@@ -54,12 +50,18 @@ namespace com.game.enemysystem
             }
         }
 
+        public event Action<DeathCause> OnDeathRequest;
+
+        //AI
+        protected IEnemyAI ai;
+        protected GameObject target;
+        bool aiLocked;
+
+        //Movement
+        private float defaultSpeed;
+
         //Slow
         private float currentSlowAmount = 0;
-
-        //Dummy Mode
-        [Header("Dummy Mode")]
-        [SerializeField] protected bool isDummyModeActive = false;
 
         protected virtual void Start()
         {
@@ -128,6 +130,11 @@ namespace com.game.enemysystem
         public void CommitEndOfAttack()
         {
             IsAttacking = false;
+        }
+
+        public void SendDeathRequest(DeathCause cause)
+        {
+            OnDeathRequest?.Invoke(cause);
         }
     }
 

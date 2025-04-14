@@ -21,6 +21,13 @@
       "dependencies": {},
       "hash": "59ff4466daf17b5c6c557a774eb991a66b1aabc7"
     },
+    "com.absence.soundsystem": {
+      "version": "https://github.com/b1lodHand/absent-sounds.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a6c4a8ad4dade1ad404dedadb5951c8649fed0db"
+    },
     "com.absence.timersystem": {
       "version": "https://www.github.com/b1lodHand/absent-timers.git",
       "depth": 0,
@@ -41,6 +48,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "5a6d080a75d137aac92c081850890c957d6af75d"
+    },
+    "com.tayx.graphy": {
+      "version": "https://github.com/Tayx94/graphy.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1cdf31613ea294970560f0bbb2ee2d1f0cd16a22"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

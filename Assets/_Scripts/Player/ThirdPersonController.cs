@@ -1,10 +1,18 @@
-﻿using com.game.player;
+﻿using com.absence.soundsystem;
+using com.absence.soundsystem.internals;
+using com.game.player;
 using com.game.player.statsystemextensions;
 using UnityEngine;
 using Zenject;
 [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler))]
 public class ThirdPersonController : MonoBehaviour
 {
+    public static Matrix4x4 CameraMatrix =
+    new(new Vector4(Mathf.Sqrt(2) / 2, 0f, -Mathf.Sqrt(2) / 2),
+        new Vector4(Mathf.Sqrt(2) / 2, 0f, Mathf.Sqrt(2) / 2),
+        Vector4.zero,
+        Vector4.zero);
+
     [Header("Walk")]
     [Tooltip("Move speed of the character in m/s")]
     [SerializeField] private float walkSpeed = 2.0f;
@@ -31,6 +39,11 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Acceleration")]
     [Tooltip("Acceleration and deceleration")]
     [SerializeField] private float speedChangeRate = 10.0f;
+    [Space]
+    [Header("Sound")]
+    [SerializeField] private SoundAsset m_concreteFootstepsSoundAsset;
+    [SerializeField] private SoundAsset m_grassFootstepsSoundAsset;
+    [SerializeField] private SoundAsset m_dashSoundAsset;
 
     //player
     private float _currentHorizontalSpeed;
@@ -110,9 +123,9 @@ public class ThirdPersonController : MonoBehaviour
 
         Vector3 inputDirection = GetInputDirection();
         float targetRotation = CalculateTargetRotation(inputDirection);
-        ApplyRotation(targetRotation);
+        //ApplyRotation(targetRotation);
 
-        Vector3 targetDirection = CalculateTargetDirection(targetRotation);
+        Vector3 targetDirection = CalculateTargetDirection(_input.MovementInput);
         MovePlayer(targetDirection);
 
         UpdateAnimator();
@@ -128,8 +141,8 @@ public class ThirdPersonController : MonoBehaviour
         if (_input.SprintButtonHeld)
             return sprintSpeed;
 
-        if(PlayerInputHandler.Instance.AttackButtonHeld)
-            return slowWalkSpeed;
+        //if(PlayerInputHandler.Instance.AttackButtonHeld)
+        //    return slowWalkSpeed;
 
         return walkSpeed;
     }
@@ -182,9 +195,9 @@ public class ThirdPersonController : MonoBehaviour
 
         transform.rotation = rotationQuat;
     }
-    private Vector3 CalculateTargetDirection(float targetRotation)
+    private Vector3 CalculateTargetDirection(Vector2 input)
     {
-        return Quaternion.Euler(0.0f, targetRotation, 0.0f) * Vector3.forward;
+        return CameraMatrix.MultiplyVector(input).normalized * input.magnitude; // ??
     }
     private void MovePlayer(Vector3 targetDirection)
     {
@@ -245,13 +258,23 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
-            _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.walkOnGrassEffects, transform);
+            PlaySFX(m_grassFootstepsSoundAsset);
         }
             
     }
     private void OnDashStart(AnimationEvent animationEvent)
     {
-        _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.dashSoundEffects, transform);
+        PlaySFX(m_dashSoundAsset);
     }
     #endregion
+
+    void PlaySFX(ISoundAsset asset)
+    {
+        if (SoundManager.Instance == null)
+            return;
+
+        Sound.Create(asset)
+            .AtPosition(transform.position)
+            .Play();
+    }
 }

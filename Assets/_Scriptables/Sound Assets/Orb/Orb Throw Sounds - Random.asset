@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5846bb456b8c7454d8f435bd26a21e67, type: 3}
+  m_Name: Orb Throw Sounds - Random
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: 20b1f9ebab04bb04ba3ff92d8288438d, type: 3}
+  - {fileID: 8300000, guid: 284ab47e71fc29147b459573ff2f643b, type: 3}
+  - {fileID: 8300000, guid: 4cf5c107b30dd514d86f8b0b4d972792, type: 3}
+  - {fileID: 8300000, guid: 0e0294a1dfb032742ab54dabba662cbf, type: 3}
+  - {fileID: 8300000, guid: aeddca592d1f8dc409561685296fed33, type: 3}
+  - {fileID: 8300000, guid: 0124bb3d4a1fe2347aa28d46025f8241, type: 3}
+  m_soundData:
+    m_clip: {fileID: 0}
+    m_mixerGroup: {fileID: -4782549682957368712, guid: 67b98f3e85147c0489d109a335d53e6f, type: 2}
+    m_loop: 0
+    m_isFrequent: 0
+    m_volume: {x: 0.8, y: 1}
+    m_pitch: {x: 0.95, y: 1.05}

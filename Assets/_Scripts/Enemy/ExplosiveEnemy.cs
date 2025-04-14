@@ -1,4 +1,5 @@
 using com.game.enemysystem.statsystemextensions;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -85,7 +86,7 @@ namespace com.game.enemysystem
                 orb.ResetParent();
             }
 
-            GetComponentInChildren<EnemyCombatant>().Die(DeathCause.Self);
+            SendDeathRequest(DeathCause.Self);
         }
 
         private void CancelPreparation()

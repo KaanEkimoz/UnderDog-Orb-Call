@@ -6,6 +6,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using com.game.enemysystem;
+using com.absence.soundsystem;
+using com.absence.soundsystem.internals;
 public enum OrbState
 {
     OnEllipse,
@@ -21,7 +23,8 @@ public class SimpleOrb : MonoBehaviour
 
     [Header("Orb Movement")]
     [SerializeField] private float movementSpeed = 5f;
-    [SerializeField] private float speedMultiplier = 1f;
+    [SerializeField] private float throwSpeedMultiplier = 1f;
+    [SerializeField] private float recallSpeedMultiplier = 1f;
     [SerializeField] private AnimationCurve movementCurve;
     [Header("Orb Throw")]
     [SerializeField] private float maxDistance = 20f;
@@ -54,6 +57,11 @@ public class SimpleOrb : MonoBehaviour
     [Range(0f, 5f)] [SerializeField] private float returnSlowEffectOnHitSeconds = 1.5f;
     [SerializeField] private bool returnKnockbackEffectOnHit = true;
     [SerializeField] private float returnKnockbackEffectOnHitForce = 0.1f;
+    [Space]
+    [Header("Sound Asset References")]
+    [SerializeField] private SoundAsset m_throwSoundAsset;
+    [SerializeField] private SoundAsset m_recallSoundAsset;
+    [SerializeField] private SoundAsset m_catchSoundAsset;
 
     //Movement
     private Transform startParent;
@@ -61,6 +69,8 @@ public class SimpleOrb : MonoBehaviour
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
     private const float ellipseReachThreshold = 0.2f;
+    private Transform stickedTransform;
+    private Collider stickedCollider;
 
     //Throw
     private float distanceTraveled;
@@ -91,24 +101,21 @@ public class SimpleOrb : MonoBehaviour
     {
         _soundFXManager = soundFXManager;
     }
-    private void OnEnable()
-    {
-        OnThrown += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbThrowEffects, transform);
-        OnCalled += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbCallEffects, transform);
-        OnReachedToEllipse += () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbReturnEffects, transform);
-    }
-    private void OnDisable()
-    {
-        OnThrown -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbThrowEffects, transform);
-        OnCalled -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbCallEffects, transform);
-        OnReachedToEllipse -= () => _soundFXManager.PlayRandomSoundFXAtPosition(_soundFXManager.orbReturnEffects, transform);
-    }
     private void Reset()
     {
         currentState = OrbState.OnEllipse;
         if (m_light != null) m_light.SetActive(false);
         trailParticle.startLifetime = onEllipseLifetime;
         CheckStartVariables();
+    }
+    void PlaySFX(ISoundAsset asset)
+    {
+        if (SoundManager.Instance == null)
+            return;
+
+        Sound.Create(asset)
+            .AtPosition(transform.position)
+            .Play();
     }
     private void CheckStartVariables()
     {
@@ -124,6 +131,17 @@ public class SimpleOrb : MonoBehaviour
         startParent = transform.parent;
         startScale = transform.localScale;
     }
+    private void Start()
+    {
+        CheckStartVariables();
+
+        OnThrown += () => PlaySFX(m_throwSoundAsset);
+        OnCalled += () => PlaySFX(m_recallSoundAsset);
+        OnReachedToEllipse += () => PlaySFX(m_catchSoundAsset);
+
+        if (m_light != null) m_light.SetActive(false);
+        trailParticle.startLifetime = onEllipseLifetime;
+    }
     private void Update()
     {
         HandleStateBehaviours();
@@ -131,7 +149,13 @@ public class SimpleOrb : MonoBehaviour
     private void FixedUpdate()
     {
         if (currentState == OrbState.Throwing)
-            _rigidBody.MovePosition(transform.position + throwVector * Time.deltaTime);
+        {
+            float speedFromStats = (((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) *
+                ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
+
+            _rigidBody.linearVelocity = throwVector * Time.deltaTime
+                * speedFromStats * movementSpeed * throwSpeedMultiplier;
+        }
     }
     private void HandleStateBehaviours()
     {
@@ -160,6 +184,15 @@ public class SimpleOrb : MonoBehaviour
     }
     public void ReturnToPosition(Vector3 returnPosition)
     {
+        if (currentState == OrbState.Sticked)
+        {
+            if (stickedCollider != null)
+                ApplyOrbReturnTriggerEffects(stickedCollider);
+
+            stickedCollider = null;
+            stickedTransform = null;
+        }
+
         currentState = OrbState.Returning;
 
         SetNewDestination(returnPosition);
@@ -191,7 +224,7 @@ public class SimpleOrb : MonoBehaviour
 
         if (m_light != null) m_light.SetActive(true);
 
-        throwVector = forceDirection * (((orbStats.GetStat(OrbStatType.Speed) / 10)) * ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
+        throwVector = forceDirection;
 
         trailParticle.startLifetime = normalLifetime;
         _rigidBody.isKinematic = false;
@@ -211,7 +244,7 @@ public class SimpleOrb : MonoBehaviour
     public void SetNewDestination(Vector3 newPos, float multiplier)
     {
         currentTargetPos = newPos;
-        speedMultiplier = multiplier;
+        recallSpeedMultiplier = multiplier;
     }
     private void MoveToTargetPosition()
     {
@@ -220,10 +253,10 @@ public class SimpleOrb : MonoBehaviour
         // AnimationCurve adjustments
         float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
         float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
-        float currentSpeed = movementSpeed * curveValue * speedMultiplier;
+        float currentSpeed = movementSpeed * curveValue * recallSpeedMultiplier;
 
         // MoveTowards to the target
-        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
@@ -245,7 +278,8 @@ public class SimpleOrb : MonoBehaviour
         {
             Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
-            ApplyOrbReturnTriggerEffects(triggerObject);
+            if (stickedCollider == null || stickedCollider != triggerObject) 
+                ApplyOrbReturnTriggerEffects(triggerObject);
 
             Game.Event = com.game.GameRuntimeEvent.Null;
         }
@@ -253,6 +287,8 @@ public class SimpleOrb : MonoBehaviour
     private void Stick(Collision stickCollider)
     {
         currentState = OrbState.Sticked;
+        stickedCollider = stickCollider.collider;
+
         OnPhysicsHit?.Invoke();
 
         _rigidBody.isKinematic = true;
@@ -308,6 +344,7 @@ public class SimpleOrb : MonoBehaviour
         currentState = OrbState.Sticked;
         _rigidBody.isKinematic = true;
         transform.SetParent(stickTransform);
+        stickedTransform = stickTransform;
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);

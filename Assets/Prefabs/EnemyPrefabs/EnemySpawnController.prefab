@@ -47,9 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefabs:
-  - {fileID: 7795562328944617973, guid: dff80c8be51a2b64a8fe9050b4c4a17c, type: 3}
-  - {fileID: 6307766008950331458, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
-  - {fileID: 1178343884590122114, guid: e447143fcb506dc4f9c2c1995d0de447, type: 3}
+  - {fileID: 1666046060614819989, guid: 4940c44dc0b9ced44b31e550504fc09a, type: 3}
+  - {fileID: 6887376344276674388, guid: 48b0cb23155e67b40b30e857e46dc4e2, type: 3}
   spawnPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -71,7 +70,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_owner: {fileID: 2543461384285703306}
-  m_fakeMovementData: {fileID: 11400000, guid: 60474108630ee3446a829520a9c59e00, type: 2}
   m_spawnDelay: 1
   m_maxFakeEnemyCount: 10
 --- !u!114 &5532184478540652775

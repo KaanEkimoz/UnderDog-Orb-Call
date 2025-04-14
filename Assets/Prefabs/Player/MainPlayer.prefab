@@ -3434,6 +3434,9 @@ MonoBehaviour:
   maxDashCount: 2
   rotationSmoothTime: 0.03
   speedChangeRate: 10
+  m_concreteFootstepsSoundAsset: {fileID: 11400000, guid: dceabc312cca7d248b4fb7c3076f90d2, type: 2}
+  m_grassFootstepsSoundAsset: {fileID: 11400000, guid: 0833bddb76329c94c828dac25d685d5f, type: 2}
+  m_dashSoundAsset: {fileID: 11400000, guid: b9903d915bf5ea745b46dfcbf52f433f, type: 2}
 --- !u!114 &1309948186291933912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3463,7 +3466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorDetectMask:
     serializedVersion: 2
-    m_Bits: 8449
+    m_Bits: 8193
 --- !u!114 &8092107762673492513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5310,7 +5313,7 @@ MonoBehaviour:
     m_Bits: 131072
   m_forceMode: 0
   m_ease: 11
-  m_useDeltaTime: 0
+  m_useDeltaTime: 1
   m_smoothing: 0
   m_minRadius: 1.12
   m_maxAffectionRadius: 12.22

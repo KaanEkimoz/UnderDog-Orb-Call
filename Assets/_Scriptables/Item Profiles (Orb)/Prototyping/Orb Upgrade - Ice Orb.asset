@@ -18,7 +18,7 @@ MonoBehaviour:
   Description: 
   CustomActions: []
   Behaviour: {fileID: 0}
-  m_prefab: {fileID: 7143535229156785589, guid: 137521e94abb83445b1f47839e6ada84, type: 3}
+  m_prefab: {fileID: -8477115736559109764, guid: 7f516f112f11d8a4a9d5ced0c0d9b39a, type: 3}
   m_orbStatOverrides: []
   m_orbStatModifications: []
   m_orbStatCaps: []

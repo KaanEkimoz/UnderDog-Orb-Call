@@ -16,5 +16,5 @@ MonoBehaviour:
   - TargetStat: 0
     Value: 2
   - TargetStat: 1
-    Value: 80
+    Value: 0
   m_initialized: 1

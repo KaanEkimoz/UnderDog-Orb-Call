@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5846bb456b8c7454d8f435bd26a21e67, type: 3}
+  m_Name: Orb Call Sounds - Random
+  m_EditorClassIdentifier: 
+  m_audioClips:
+  - {fileID: 8300000, guid: aa780e0b854c54843ad824d566761f81, type: 3}
+  - {fileID: 8300000, guid: ccaae748e8624bf4883f5fa68b8108bc, type: 3}
+  - {fileID: 8300000, guid: 2da1ad2621cdf394c80cff73ae36c9d1, type: 3}
+  - {fileID: 8300000, guid: 9c756d5d813684b418a85e8bb6d0d6b6, type: 3}
+  - {fileID: 8300000, guid: ff6e97f59fc08b2469126136afce9067, type: 3}
+  - {fileID: 8300000, guid: e195fb6a81377da43acc78dca3861534, type: 3}
+  m_soundData:
+    m_clip: {fileID: 0}
+    m_mixerGroup: {fileID: -4782549682957368712, guid: 67b98f3e85147c0489d109a335d53e6f, type: 2}
+    m_loop: 0
+    m_isFrequent: 0
+    m_volume: {x: 0.8, y: 1}
+    m_pitch: {x: 0.95, y: 1.05}

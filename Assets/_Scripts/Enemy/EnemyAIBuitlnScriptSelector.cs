@@ -41,15 +41,22 @@ namespace com.game.enemysystem.ai
                 { AISelection.PolarithAI, m_polarithAIScript },
             };
 
-            foreach (var kvp in m_entries)
-            {
-                kvp.Value.Enabled = false;
-                kvp.Value.gameObject.SetActive(false);
-            }
-
             m_currentAI = m_entries[m_AISelection];
             m_entries[m_AISelection].Enabled = true;
             m_entries[m_AISelection].gameObject.SetActive(true);
+
+            transform.SetParent(m_currentAI.transform, false);
+
+            foreach (var kvp in m_entries)
+            {
+                IEnemyAI ai = kvp.Value;
+                if (ai == m_currentAI)
+                    continue;
+
+                ai.Enabled = false;
+                ai.gameObject.SetActive(false);
+                Destroy(kvp.Value.gameObject);
+            }
         }
     }
 }
