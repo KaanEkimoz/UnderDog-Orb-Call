@@ -38,5 +38,5 @@ MonoBehaviour:
     m_mixerGroup: {fileID: -4782549682957368712, guid: 67b98f3e85147c0489d109a335d53e6f, type: 2}
     m_loop: 0
     m_isFrequent: 1
-    m_volume: {x: 0.9, y: 1}
+    m_volume: {x: 0.5867168, y: 0.6867168}
     m_pitch: {x: 0.97, y: 1.03}

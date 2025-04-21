@@ -22,9 +22,11 @@ namespace com.game
         private List<IDamageable> affectedEnemies = new List<IDamageable>();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
+            base.ApplyCombatEffects(damageable, damage);
+
             damageable.TakeDamageInSeconds(damage, fireDurationInSeconds, fireDamageIntervalInSeconds);
 
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, fireDamageRadius);
+            Collider[] hitColliders = Physics.OverlapSphere(damageable.transform.position, fireDamageRadius);
 
             affectedEnemies.Clear();
             GameObject instantEffect = Instantiate(instantFireEffectPrefab, transform.position, Quaternion.identity);

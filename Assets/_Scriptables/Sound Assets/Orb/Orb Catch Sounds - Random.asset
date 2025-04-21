@@ -19,7 +19,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1de612cf8765ae6428806a5b333f5873, type: 3}
   - {fileID: 8300000, guid: 72833b3f24178b541b40410a9830f3ee, type: 3}
   - {fileID: 8300000, guid: 34795e26a917d624eaa3afdf145e89d7, type: 3}
-  - {fileID: 8300000, guid: b62b4dcc1b7742f4082c1167c8e90572, type: 3}
   m_soundData:
     m_clip: {fileID: 0}
     m_mixerGroup: {fileID: -4782549682957368712, guid: 67b98f3e85147c0489d109a335d53e6f, type: 2}

@@ -8,6 +8,8 @@ using UnityEngine;
 using com.game.enemysystem;
 using com.absence.soundsystem;
 using com.absence.soundsystem.internals;
+using com.absence.attributes.experimental;
+using com.game.orbsystem;
 public enum OrbState
 {
     OnEllipse,
@@ -22,11 +24,8 @@ public class SimpleOrb : MonoBehaviour
     public OrbState currentState = OrbState.OnEllipse;
 
     [Header("Orb Movement")]
-    [SerializeField] private float movementSpeed = 5f;
-    [SerializeField] private float throwSpeedMultiplier = 1f;
-    [SerializeField] private float recallSpeedMultiplier = 1f;
+    [SerializeField, InlineEditor] protected OrbMovementData m_movementData;
     [SerializeField] private AnimationCurve movementCurve;
-    [Header("Orb Throw")]
     [SerializeField] private float maxDistance = 20f;
     [Space]
     [Header("Orb Stats")]
@@ -131,6 +130,10 @@ public class SimpleOrb : MonoBehaviour
         startParent = transform.parent;
         startScale = transform.localScale;
     }
+    private void Awake()
+    {
+        m_movementData = Instantiate(m_movementData);
+    }
     private void Start()
     {
         CheckStartVariables();
@@ -154,7 +157,7 @@ public class SimpleOrb : MonoBehaviour
                 ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
 
             _rigidBody.linearVelocity = throwVector * Time.deltaTime
-                * speedFromStats * movementSpeed * throwSpeedMultiplier;
+                * speedFromStats * m_movementData.movementSpeed * m_movementData.throwSpeedMultiplier;
         }
     }
     private void HandleStateBehaviours()
@@ -241,11 +244,6 @@ public class SimpleOrb : MonoBehaviour
     {
         currentTargetPos = newPos;
     }
-    public void SetNewDestination(Vector3 newPos, float multiplier)
-    {
-        currentTargetPos = newPos;
-        recallSpeedMultiplier = multiplier;
-    }
     private void MoveToTargetPosition()
     {
         float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
@@ -253,7 +251,7 @@ public class SimpleOrb : MonoBehaviour
         // AnimationCurve adjustments
         float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
         float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
-        float currentSpeed = movementSpeed * curveValue * recallSpeedMultiplier;
+        float currentSpeed = m_movementData.movementSpeed * curveValue * m_movementData.recallSpeedMultiplier;
 
         // MoveTowards to the target
         transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
@@ -356,8 +354,8 @@ public class SimpleOrb : MonoBehaviour
     }
     private IEnumerator IncreaseSpeed(float speedIncrease, float duration)
     {
-        movementSpeed += speedIncrease;
+        m_movementData.movementSpeed += speedIncrease;
         yield return new WaitForSeconds(duration);
-        movementSpeed -= speedIncrease;
+        m_movementData.movementSpeed -= speedIncrease;
     }
 }

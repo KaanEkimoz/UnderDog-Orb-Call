@@ -152,9 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 100
-  throwSpeedMultiplier: 7.66
-  recallSpeedMultiplier: 0.17
+  m_movementData: {fileID: 11400000, guid: fc6caf5b39523ba40894e6e2436fb9f2, type: 2}
   movementCurve:
     serializedVersion: 2
     m_Curve:
