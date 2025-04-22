@@ -314,14 +314,14 @@ public class SimpleOrb : MonoBehaviour
             if (penetrationCompleted)
                 Stick(collisionObject);
 
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
 
             if (collisionObject.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
-                hittedEnemy.ApplySlowForSeconds(100f, 2f);
+                hittedEnemy.ApplySlowForSeconds(throwSlowEffectOnHit, throwSlowEffectOnHitSeconds);
 
-                if(penetrationCompleted)
-                    hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+                if(penetrationCompleted && throwKnockbackEffectOnHit)
+                    hittedEnemy.ApplyKnockbackForce(transform.position, throwKnockbackEffectOnHitForce);
             }
 
             penetrationCount++;
@@ -334,12 +334,13 @@ public class SimpleOrb : MonoBehaviour
     {
         if (triggerCollider.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbRecallDamage));
+            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbRecallDamage));
 
             if (triggerCollider.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
-                hittedEnemy.ApplySlowForSeconds(100f, 2f);
-                hittedEnemy.ApplyKnockbackForce(transform.position, 0.1f);
+                hittedEnemy.ApplySlowForSeconds(returnSlowEffectOnHit, returnSlowEffectOnHitSeconds);
+                if (returnKnockbackEffectOnHit) 
+                    hittedEnemy.ApplyKnockbackForce(transform.position, returnKnockbackEffectOnHitForce);
             }
                 
         }

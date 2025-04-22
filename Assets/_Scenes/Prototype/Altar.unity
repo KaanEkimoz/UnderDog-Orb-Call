@@ -933,10 +933,6 @@ PrefabInstance:
       propertyPath: m_entries.Array.data[1].Target.underlyingValue
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 624608683657201586, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: autoSelectNextOrbOnShoot
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2019759119449363392, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_altarSystem
       value: 
@@ -980,26 +976,6 @@ PrefabInstance:
     - target: {fileID: 2059313747511272117, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3624581799953983724, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: Lens.NearClipPlane
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3936004821978566371, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.1237245
-      objectReference: {fileID: 0}
-    - target: {fileID: 3936004821978566371, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.375001
-      objectReference: {fileID: 0}
-    - target: {fileID: 3936004821978566371, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -6.123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 6581562185115844137, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: near clip plane
-      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7922492431965004093, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_Name

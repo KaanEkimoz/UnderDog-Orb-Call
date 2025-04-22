@@ -39,6 +39,8 @@ namespace com.game.player
         [SerializeField] private FieldSettings m_intensitySettings;
         [SerializeField] private FieldSettings m_rangeSettings;
         [SerializeField, ShowIf(nameof(m_lightType), LightType.Spot)] private FieldSettings m_localHeightSettings;
+        [SerializeField, ShowIf(nameof(m_lightType), LightType.Point)] private FieldSettings m_virtualHalfVisionSettings;
+        [SerializeField, ShowIf(nameof(m_lightType), LightType.Point)] private FieldSettings m_virtualFullVisionSettings;
 
         [SerializeField, BeginFoldoutGroup("Vision Settings")] private float m_fullVisionRadiusShift;
         [SerializeField] private float m_halfVisionRadiusShift;
@@ -58,12 +60,16 @@ namespace com.game.player
 
         int m_fullSeenCount;
         int m_halfSeenCount;
+        float m_intermediateFullVisionRadius;
+        float m_intermediateHalfVisionRadius;
 
         List<IVisible> m_halfVisibles;
         List<IVisible> m_fullVisibles;
 
         public float FullVisionRadius => m_fullVisionRadius;
         public float HalfVisionRadius => m_halfVisionRadius;
+        public bool HasGround => m_hasGround;
+        public RaycastHit GroundData => m_groundData;
 
         private void Awake()
         {
@@ -81,7 +87,6 @@ namespace com.game.player
         {
             CacheVariables();
             UpdateFields();
-            CalculateView(out _);
             DetectAll();
             SparkAll();
         }
@@ -94,6 +99,13 @@ namespace com.game.player
             float refinedLightStat = m_rawLightStat * m_generalLightStatCoefficient;
             m_generalCoefficient = m_orbsInHand;
             m_generalShift = refinedLightStat;
+
+            m_hasGround = Physics.Raycast(m_light.transform.position,
+                Vector3.down,
+                out m_groundData,
+                float.PositiveInfinity,
+                m_groundMask,
+                QueryTriggerInteraction.UseGlobal);
         }
 
         void UpdateFields()
@@ -106,43 +118,25 @@ namespace com.game.player
                 Vector3 lightLocalPosition = m_light.transform.localPosition;
                 lightLocalPosition.y = UpdateViaFieldData(m_localHeightSettings, lightLocalPosition.y);
                 m_light.transform.localPosition = lightLocalPosition;
-            }
 
-            m_light.intensity = UpdateViaFieldData(m_intensitySettings, m_light.intensity);
-            m_light.range = UpdateViaFieldData(m_rangeSettings, m_light.range);
-        }
-
-        public bool CalculateView(out RaycastHit groundData)
-        {
-            m_hasGround = Physics.Raycast(m_light.transform.position,
-                Vector3.down,
-                out groundData,
-                float.PositiveInfinity,
-                m_groundMask,
-                QueryTriggerInteraction.UseGlobal);
-
-            if (m_lightType == LightType.Spot)
-            {
                 float outerAngleInRads = m_light.spotAngle * Mathf.Deg2Rad;
                 float innerAngleInRads = m_light.innerSpotAngle * Mathf.Deg2Rad;
 
-                m_fullVisionRadius = Mathf.Tan(innerAngleInRads / 2) * m_groundData.distance;
-                m_halfVisionRadius = Mathf.Tan(outerAngleInRads / 2) * m_groundData.distance;
-
-                m_fullVisionRadius *= m_fullVisionRadiusMultiplier;
-                m_halfVisionRadius *= m_halfVisionRadiusMultiplier;
-
-                m_fullVisionRadius += m_fullVisionRadiusShift;
-                m_halfVisionRadius += m_halfVisionRadiusShift;
+                m_intermediateFullVisionRadius = Mathf.Tan(innerAngleInRads / 2) * m_groundData.distance;
+                m_intermediateHalfVisionRadius = Mathf.Tan(outerAngleInRads / 2) * m_groundData.distance;
             }
 
-            else
+            else if (m_lightType == LightType.Point)
             {
-                m_fullVisionRadius = m_fullVisionRadiusShift * m_fullVisionRadiusMultiplier;
-                m_halfVisionRadius = m_halfVisionRadiusShift * m_halfVisionRadiusMultiplier;
+                m_intermediateHalfVisionRadius = UpdateViaFieldData(m_virtualHalfVisionSettings, m_intermediateHalfVisionRadius);
+                m_intermediateFullVisionRadius = UpdateViaFieldData(m_virtualFullVisionSettings, m_intermediateFullVisionRadius);
             }
 
-            return m_hasGround;
+            m_halfVisionRadius = Mathf.Max(0f, (m_intermediateHalfVisionRadius * m_halfVisionRadiusMultiplier) + m_halfVisionRadiusShift);
+            m_fullVisionRadius = Mathf.Max(0f, (m_intermediateFullVisionRadius * m_fullVisionRadiusMultiplier) + m_fullVisionRadiusShift);
+
+            m_light.intensity = UpdateViaFieldData(m_intensitySettings, m_light.intensity);
+            m_light.range = UpdateViaFieldData(m_rangeSettings, m_light.range);
         }
 
         void DetectAll()

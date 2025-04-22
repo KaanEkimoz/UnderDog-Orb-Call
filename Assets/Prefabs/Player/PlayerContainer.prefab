@@ -359,7 +359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4131968428352367322, guid: b80cdace5c2229c488e180e66fb51ba4, type: 3}
       propertyPath: near clip plane
-      value: 0.01
+      value: -5.27
       objectReference: {fileID: 0}
     - target: {fileID: 5786225545141369887, guid: b80cdace5c2229c488e180e66fb51ba4, type: 3}
       propertyPath: Target.TrackingTarget
@@ -529,6 +529,10 @@ PrefabInstance:
     - target: {fileID: 8122816023459241335, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
       propertyPath: m_Name
       value: Player Dynamic Light (Old)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8122816023459241335, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8947970959442835041, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
       propertyPath: m_LocalPosition.x

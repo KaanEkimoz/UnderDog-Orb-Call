@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8947970959442835041
 Transform:
   m_ObjectHideFlags: 0
@@ -233,6 +233,16 @@ MonoBehaviour:
     LightStatCoefficient: 0.22
     StepAmount: 0.5
     AnimationSpeed: 4
+  m_virtualHalfVisionSettings:
+    InitialValue: 0
+    LightStatCoefficient: 0
+    StepAmount: 0
+    AnimationSpeed: 0
+  m_virtualFullVisionSettings:
+    InitialValue: 0
+    LightStatCoefficient: 0
+    StepAmount: 0
+    AnimationSpeed: 0
   m_fullVisionRadiusShift: 0.6
   m_halfVisionRadiusShift: 0.66
   m_fullVisionRadiusMultiplier: 4.41
