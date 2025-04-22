@@ -5,6 +5,7 @@ using com.game.player.statsystemextensions;
 using System.Collections.Generic;
 using System;
 using com.game.statsystem;
+using com.absence.attributes.experimental;
 
 namespace com.game.player
 {
@@ -19,7 +20,7 @@ namespace com.game.player
         [SerializeField, Tooltip("If enabled, this component with initialize itself, and also some additional console messages will take place.")]
         private bool m_debugMode = false;
 
-        [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")]
+        [SerializeField, Required, InlineEditor, Tooltip("Default values provided for the any initialization process.")]
         private PlayerDefaultStats m_defaultStats;
 
         [SerializeField, ShowIf(nameof(m_debugMode)), Required, Tooltip("Profile provided for the self-initialization process.")]
@@ -73,6 +74,7 @@ namespace com.game.player
         }
 
         public float GetStat(PlayerStatType targetStat)
+
         {
             float rawStatValue = m_statHolder.GetStat(targetStat);
 

@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.attributes.experimental;
 using com.game.enemysystem.statsystemextensions;
 using com.game.statsystem;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace com.game.enemysystem
     {
         [Header("Utilities")]
 
-        [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")]
+        [SerializeField, Required, InlineEditor, Tooltip("Default values provided for the any initialization process.")]
         private EnemyDefaultStats m_defaultStats;
 
         [Header("Stats")]
