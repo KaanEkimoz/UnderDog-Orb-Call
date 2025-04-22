@@ -1,7 +1,9 @@
-﻿using com.absence.soundsystem;
+﻿using com.absence.attributes;
+using com.absence.soundsystem;
 using com.absence.soundsystem.internals;
 using com.game.player;
 using com.game.player.statsystemextensions;
+using com.game.utilities;
 using UnityEngine;
 using Zenject;
 [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler))]
@@ -13,6 +15,17 @@ public class ThirdPersonController : MonoBehaviour
         Vector4.zero,
         Vector4.zero);
 
+    public static Matrix4x4 NegativeCameraMatrix =
+    new(new Vector4(Mathf.Sqrt(2) / 2, 0f, -Mathf.Sqrt(2) / 2),
+        new Vector4(Mathf.Sqrt(2) / 2, 0f, Mathf.Sqrt(2) / 2),
+        Vector4.zero,
+        Vector4.zero);
+
+    private static readonly int s_animIDMovementDiffX = Animator.StringToHash("MovementDiffX");
+    private static readonly int s_animIDMovementDiffY = Animator.StringToHash("MovementDiffY");
+
+    [Header("Utilities")]
+    [SerializeField, Required] private Transform m_orientation;
     [Header("Walk")]
     [Tooltip("Move speed of the character in m/s")]
     [SerializeField] private float walkSpeed = 2.0f;
@@ -39,6 +52,7 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Acceleration")]
     [Tooltip("Acceleration and deceleration")]
     [SerializeField] private float speedChangeRate = 10.0f;
+    [SerializeField] private float animSpeedChangeCoefficient = 10.0f;
     [Space]
     [Header("Sound")]
     [SerializeField] private SoundAsset m_concreteFootstepsSoundAsset;
@@ -68,6 +82,7 @@ public class ThirdPersonController : MonoBehaviour
     private int _animIDDashTrigger;
     private int _animIDAttackTrigger;
     private int _animIDDeathTrigger;
+    Vector2 m_movementDiff;
 
     //components
     private Animator _animator;
@@ -119,14 +134,21 @@ public class ThirdPersonController : MonoBehaviour
         float targetSpeed = CalculateMaximumSpeed() * stat;
         _currentHorizontalSpeed = CalculateCurrentSpeed(targetSpeed);
 
-        _horizontalSpeedAnimationBlend = CalculateAnimationBlend(targetSpeed);
+        _horizontalSpeedAnimationBlend = CalculateAnimationBlend(Mathf.Min(1f, targetSpeed));
 
         Vector3 inputDirection = GetInputDirection();
         float targetRotation = CalculateTargetRotation(inputDirection);
         //ApplyRotation(targetRotation);
 
         Vector3 targetDirection = CalculateTargetDirection(_input.MovementInput);
-        MovePlayer(targetDirection);
+
+        float realForwardDifference = Vector3.SignedAngle(Vector3.forward, m_orientation.forward, Vector3.up);
+
+        Vector2 movementDiff = _input.MovementInput.normalized.RotateByAngle(realForwardDifference - 45f);
+
+        m_movementDiff = Vector2.Lerp(m_movementDiff, movementDiff, Time.deltaTime * speedChangeRate);
+
+        MovePlayer(targetDirection * _input.MovementInput.magnitude);
 
         UpdateAnimator();
     }
@@ -167,8 +189,9 @@ public class ThirdPersonController : MonoBehaviour
     }
     private float CalculateAnimationBlend(float targetSpeed)
     {
-        float blend = Mathf.Lerp(_horizontalSpeedAnimationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
-        return blend < 0.01f ? 0f : blend;
+        float blend = Mathf.Lerp(_horizontalSpeedAnimationBlend, targetSpeed, Time.deltaTime * speedChangeRate * animSpeedChangeCoefficient);
+        blend = Mathf.Clamp01(blend);
+        return blend;
     }
     private Vector3 GetInputDirection()
     {
@@ -197,7 +220,7 @@ public class ThirdPersonController : MonoBehaviour
     }
     private Vector3 CalculateTargetDirection(Vector2 input)
     {
-        return CameraMatrix.MultiplyVector(input).normalized * input.magnitude; // ??
+        return CameraMatrix.MultiplyVector(input).normalized; // ??
     }
     private void MovePlayer(Vector3 targetDirection)
     {
@@ -250,6 +273,8 @@ public class ThirdPersonController : MonoBehaviour
     {
         _animator.SetFloat(_animIDSpeed, _horizontalSpeedAnimationBlend);
         _animator.SetFloat(_animIDMotionSpeed, _input.analogMovement ? _input.MovementInput.magnitude : 1f);
+        _animator.SetFloat(s_animIDMovementDiffX, m_movementDiff.x);
+        _animator.SetFloat(s_animIDMovementDiffY, m_movementDiff.y);
     }
     #endregion
 
