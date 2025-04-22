@@ -1,3 +1,4 @@
+using com.absence.attributes;
 using com.absence.attributes.experimental;
 using com.game.generics.interfaces;
 using com.game.player.statsystemextensions;
@@ -9,6 +10,12 @@ namespace com.game.player
 {
     public class PlayerLight : MonoBehaviour
     {
+        public enum LightType
+        {
+            Spot,
+            Point,
+        }
+
         [System.Serializable]
         public class FieldSettings
         {
@@ -20,22 +27,23 @@ namespace com.game.player
 
         const float k_threshold = 0.1f;
 
+        [SerializeField] private LightType m_lightType;
         [SerializeField] private Light m_light;
         [SerializeField] private LayerMask m_sparkMask;
         [SerializeField] private LayerMask m_groundMask;
         [SerializeField] private float m_generalLightStatCoefficient;
         [SerializeField] private float m_threshold = k_threshold;
 
-        [SerializeField] private FieldSettings m_innerSpotAngleSettings;
-        [SerializeField] private FieldSettings m_outerSpotAngleSettings;
+        [SerializeField, ShowIf(nameof(m_lightType), LightType.Spot)] private FieldSettings m_innerSpotAngleSettings;
+        [SerializeField, ShowIf(nameof(m_lightType), LightType.Spot)] private FieldSettings m_outerSpotAngleSettings;
         [SerializeField] private FieldSettings m_intensitySettings;
         [SerializeField] private FieldSettings m_rangeSettings;
-        [SerializeField] private FieldSettings m_localHeightSettings;
+        [SerializeField, ShowIf(nameof(m_lightType), LightType.Spot)] private FieldSettings m_localHeightSettings;
 
         [SerializeField, BeginFoldoutGroup("Vision Settings")] private float m_fullVisionRadiusShift;
         [SerializeField] private float m_halfVisionRadiusShift;
         [SerializeField, Min(0)] private float m_fullVisionRadiusMultiplier;
-        [SerializeField, Min(0), EndFoldoutGroup()] private float m_halfVisionRadiusMultiplier;
+        [SerializeField, Min(0), EndFoldoutGroup] private float m_halfVisionRadiusMultiplier;
 
         PlayerStats m_playerStats;
         PlayerOrbHandler m_orbHandler;
@@ -90,39 +98,50 @@ namespace com.game.player
 
         void UpdateFields()
         {
-            m_light.innerSpotAngle = UpdateViaFieldData(m_innerSpotAngleSettings, m_light.innerSpotAngle);
-            m_light.spotAngle = UpdateViaFieldData(m_outerSpotAngleSettings, m_light.spotAngle);
+            if (m_lightType == LightType.Spot)
+            {
+                m_light.innerSpotAngle = UpdateViaFieldData(m_innerSpotAngleSettings, m_light.innerSpotAngle);
+                m_light.spotAngle = UpdateViaFieldData(m_outerSpotAngleSettings, m_light.spotAngle);
+
+                Vector3 lightLocalPosition = m_light.transform.localPosition;
+                lightLocalPosition.y = UpdateViaFieldData(m_localHeightSettings, lightLocalPosition.y);
+                m_light.transform.localPosition = lightLocalPosition;
+            }
+
             m_light.intensity = UpdateViaFieldData(m_intensitySettings, m_light.intensity);
             m_light.range = UpdateViaFieldData(m_rangeSettings, m_light.range);
-
-            Vector3 lightLocalPosition = m_light.transform.localPosition;
-            lightLocalPosition.y = UpdateViaFieldData(m_localHeightSettings, lightLocalPosition.y);
-            m_light.transform.localPosition = lightLocalPosition;
         }
 
         public bool CalculateView(out RaycastHit groundData)
         {
-            float outerAngleInRads = m_light.spotAngle * Mathf.Deg2Rad;
-            float innerAngleInRads = m_light.innerSpotAngle * Mathf.Deg2Rad;
-            float range = m_light.range;
-
             m_hasGround = Physics.Raycast(m_light.transform.position,
-            Vector3.down,
-            out groundData,
-            range,
-            m_groundMask,
-            QueryTriggerInteraction.UseGlobal);
+                Vector3.down,
+                out groundData,
+                float.PositiveInfinity,
+                m_groundMask,
+                QueryTriggerInteraction.UseGlobal);
 
-            m_fullVisionRadius = Mathf.Tan(innerAngleInRads / 2) * m_groundData.distance;
-            m_halfVisionRadius = Mathf.Tan(outerAngleInRads / 2) * m_groundData.distance;
+            if (m_lightType == LightType.Spot)
+            {
+                float outerAngleInRads = m_light.spotAngle * Mathf.Deg2Rad;
+                float innerAngleInRads = m_light.innerSpotAngle * Mathf.Deg2Rad;
 
-            m_fullVisionRadius *= m_fullVisionRadiusMultiplier;
-            m_halfVisionRadius *= m_halfVisionRadiusMultiplier;
+                m_fullVisionRadius = Mathf.Tan(innerAngleInRads / 2) * m_groundData.distance;
+                m_halfVisionRadius = Mathf.Tan(outerAngleInRads / 2) * m_groundData.distance;
 
-            m_fullVisionRadius += m_fullVisionRadiusShift;
-            m_halfVisionRadius += m_halfVisionRadiusShift;
+                m_fullVisionRadius *= m_fullVisionRadiusMultiplier;
+                m_halfVisionRadius *= m_halfVisionRadiusMultiplier;
 
-            m_groundData = groundData;
+                m_fullVisionRadius += m_fullVisionRadiusShift;
+                m_halfVisionRadius += m_halfVisionRadiusShift;
+            }
+
+            else
+            {
+                m_fullVisionRadius = m_fullVisionRadiusShift * m_fullVisionRadiusMultiplier;
+                m_halfVisionRadius = m_halfVisionRadiusShift * m_halfVisionRadiusMultiplier;
+            }
+
             return m_hasGround;
         }
 

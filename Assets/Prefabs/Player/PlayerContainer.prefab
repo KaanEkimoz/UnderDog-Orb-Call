@@ -35,6 +35,7 @@ Transform:
   - {fileID: 4848904986225089193}
   - {fileID: 6734477592658286132}
   - {fileID: 1000153049617162633}
+  - {fileID: 2283943268561658304}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2039692251543290217
@@ -193,7 +194,7 @@ PrefabInstance:
     - target: {fileID: 6479942883019277793, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
       propertyPath: m_light
       value: 
-      objectReference: {fileID: 4165926420074612670}
+      objectReference: {fileID: 3135397778184800247}
     m_RemovedComponents:
     - {fileID: 1924421431037557230, guid: 4327494d024b0a144a24820aa7f197d6, type: 3}
     m_RemovedGameObjects: []
@@ -436,6 +437,83 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2815133153327662870, guid: 4fe3a72edd9259a4496ed641f637a505, type: 3}
   m_PrefabInstance: {fileID: 7231542766681218495}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7632653887783445891
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2059313747511272117}
+    m_Modifications:
+    - target: {fileID: 5233489762828686393, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_target
+      value: 
+      objectReference: {fileID: 8485223235258493961}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8847618365488852821, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+      propertyPath: m_Name
+      value: 'Player Dynamic Light '
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+--- !u!4 &2283943268561658304 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8529413109177451587, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+  m_PrefabInstance: {fileID: 7632653887783445891}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3135397778184800247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4787196591538119284, guid: 22f66f286a435e143a90c98b89a77c5d, type: 3}
+  m_PrefabInstance: {fileID: 7632653887783445891}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 195b52d14ba203141ad63dc31fcf4d95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8200164092232439784
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -450,7 +528,7 @@ PrefabInstance:
       objectReference: {fileID: 8485223235258493961}
     - target: {fileID: 8122816023459241335, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
       propertyPath: m_Name
-      value: Player Dynamic Light
+      value: Player Dynamic Light (Old)
       objectReference: {fileID: 0}
     - target: {fileID: 8947970959442835041, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
       propertyPath: m_LocalPosition.x
@@ -502,14 +580,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8947970959442835041, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
   m_PrefabInstance: {fileID: 8200164092232439784}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4165926420074612670 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5196183970506330198, guid: 6a1e599a8476b224e9539ea726baa3ea, type: 3}
-  m_PrefabInstance: {fileID: 8200164092232439784}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 195b52d14ba203141ad63dc31fcf4d95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
