@@ -356,6 +356,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4131968428352367322, guid: b80cdace5c2229c488e180e66fb51ba4, type: 3}
+      propertyPath: near clip plane
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 5786225545141369887, guid: b80cdace5c2229c488e180e66fb51ba4, type: 3}
       propertyPath: Target.TrackingTarget
       value: 

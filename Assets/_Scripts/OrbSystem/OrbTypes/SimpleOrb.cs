@@ -92,6 +92,8 @@ public class SimpleOrb : MonoBehaviour
     //Effects
     private SoundFXManager _soundFXManager;
 
+    float m_internalRecallSpeedMultiplier;
+
     public void AssignPlayerStats(PlayerStats playerStats)
     {
         _playerStats = playerStats;
@@ -175,6 +177,7 @@ public class SimpleOrb : MonoBehaviour
             if (m_light != null) m_light.SetActive(false);
             trailParticle.startLifetime = onEllipseLifetime;
             currentState = OrbState.OnEllipse;
+            m_internalRecallSpeedMultiplier = 1f;
             transform.parent = startParent;
 
             OnReachedToEllipse?.Invoke();
@@ -185,7 +188,7 @@ public class SimpleOrb : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    public void ReturnToPosition(Vector3 returnPosition)
+    public void ReturnToPosition(Vector3 returnPosition, float speedCoefficient = 1f)
     {
         if (currentState == OrbState.Sticked)
         {
@@ -198,7 +201,7 @@ public class SimpleOrb : MonoBehaviour
 
         currentState = OrbState.Returning;
 
-        SetNewDestination(returnPosition);
+        SetNewDestination(returnPosition, speedCoefficient);
         ResetParent();
         _sphereCollider.isTrigger = true;
         OnCalled?.Invoke();
@@ -244,6 +247,11 @@ public class SimpleOrb : MonoBehaviour
     {
         currentTargetPos = newPos;
     }
+    public void SetNewDestination(Vector3 newPos, float multiplier)
+    {
+        currentTargetPos = newPos;
+        m_internalRecallSpeedMultiplier = multiplier;
+    }
     private void MoveToTargetPosition()
     {
         float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
@@ -251,7 +259,10 @@ public class SimpleOrb : MonoBehaviour
         // AnimationCurve adjustments
         float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
         float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
-        float currentSpeed = m_movementData.movementSpeed * curveValue * m_movementData.recallSpeedMultiplier;
+        float currentSpeed = m_movementData.movementSpeed * curveValue;
+
+        if (currentState == OrbState.Returning)
+            currentSpeed *= m_movementData.recallSpeedMultiplier * m_internalRecallSpeedMultiplier;
 
         // MoveTowards to the target
         transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
