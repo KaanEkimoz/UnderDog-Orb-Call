@@ -10,6 +10,8 @@ using com.absence.soundsystem;
 using com.absence.soundsystem.internals;
 using com.absence.attributes.experimental;
 using com.game.orbsystem;
+using com.game.utilities;
+using com.absence.attributes;
 public enum OrbState
 {
     OnEllipse,
@@ -44,18 +46,7 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private float normalLifetime = 0.5f;
     [SerializeField] private GameObject m_light;
     [SerializeField] private ParticleSystem trailParticle;
-    [Header("Orb Throw Effects")]
-    [Range(0f, 100f)] [SerializeField] private float throwSlowEffectOnHit = 100f;
-    [Range(0f, 5f)] [SerializeField] private float throwSlowEffectOnHitSeconds = 1.5f;
-    [SerializeField] private bool throwKnockbackEffectOnHit = true;
-    [SerializeField] private bool throwKnockbackEffectOnPenetrationHit = false;
-    [SerializeField] private float throwKnockbackEffectOnHitForce = 1f;
-    [Space]
-    [Header("Orb Call, Return Effects")]
-    [Range(0f, 100f)] [SerializeField] private float returnSlowEffectOnHit = 100f;
-    [Range(0f, 5f)] [SerializeField] private float returnSlowEffectOnHitSeconds = 1.5f;
-    [SerializeField] private bool returnKnockbackEffectOnHit = true;
-    [SerializeField] private float returnKnockbackEffectOnHitForce = 0.1f;
+    [SerializeField, InlineEditor, Required] private OrbCombatEffectData m_combatEffectData;
     [Space]
     [Header("Sound Asset References")]
     [SerializeField] private SoundAsset m_throwSoundAsset;
@@ -201,7 +192,12 @@ public class SimpleOrb : MonoBehaviour
         if (currentState == OrbState.Sticked)
         {
             if (stickedCollider != null)
+            {
                 ApplyOrbReturnTriggerEffects(stickedCollider);
+
+                if (stickedCollider.TryGetComponent(out IOrbStickTarget stickable))
+                    stickable.CommitOrbUnstick(this);
+            }
 
             stickedCollider = null;
             stickedTransform = null;
@@ -308,6 +304,9 @@ public class SimpleOrb : MonoBehaviour
 
         OnPhysicsHit?.Invoke();
 
+        if (stickCollider.collider.TryGetComponent(out IOrbStickTarget stickable))
+            stickable.CommitOrbStick(this);
+
         _rigidBody.isKinematic = true;
         transform.position = stickCollider.contacts[0].point;
         StickToTransform(stickCollider.transform);
@@ -324,12 +323,15 @@ public class SimpleOrb : MonoBehaviour
 
             ApplyCombatEffects(damageable, ThrowDamage);
 
-            if (collisionObject.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            if (m_combatEffectData.throwKnockback && penetrationCompleted)
             {
-                hittedEnemy.ApplySlowForSeconds(throwSlowEffectOnHit, throwSlowEffectOnHitSeconds);
+                if (collisionObject.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                    knockbackable.Knockback(-collisionObject.relativeVelocity, m_combatEffectData.throwKnockbackStrength, KnockbackSourceUsage.Final);
+            }
 
-                if(penetrationCompleted && throwKnockbackEffectOnHit)
-                    hittedEnemy.ApplyKnockbackForce(transform.position, throwKnockbackEffectOnHitForce);
+            if (collisionObject.gameObject.TryGetComponent(out ISlowable slowable))
+            {
+                slowable.SlowForSeconds(m_combatEffectData.throwSlowAmount, m_combatEffectData.throwSlowDuration);
             }
 
             penetrationCount++;
@@ -343,14 +345,17 @@ public class SimpleOrb : MonoBehaviour
         if (triggerCollider.gameObject.TryGetComponent(out IDamageable damageable))
         {
             ApplyCombatEffects(damageable, RecallDamage);
-
-            if (triggerCollider.gameObject.TryGetComponent(out Enemy hittedEnemy))
+             
+            if (m_combatEffectData.returnKnockback)
             {
-                hittedEnemy.ApplySlowForSeconds(returnSlowEffectOnHit, returnSlowEffectOnHitSeconds);
-                if (returnKnockbackEffectOnHit) 
-                    hittedEnemy.ApplyKnockbackForce(transform.position, returnKnockbackEffectOnHitForce);
+                if (triggerCollider.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                    knockbackable.Knockback(_rigidBody.linearVelocity, m_combatEffectData.returnKnockbackStrength, KnockbackSourceUsage.Final);
             }
-                
+
+            if (triggerCollider.gameObject.TryGetComponent(out ISlowable slowable))
+            {
+                slowable.SlowForSeconds(m_combatEffectData.returnSlowAmount, m_combatEffectData.returnSlowDuration);
+            }
         }
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)

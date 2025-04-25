@@ -9912,15 +9912,7 @@ MonoBehaviour:
   normalLifetime: 0.5
   m_light: {fileID: 0}
   trailParticle: {fileID: 1929282375273034525}
-  throwSlowEffectOnHit: 100
-  throwSlowEffectOnHitSeconds: 1.5
-  throwKnockbackEffectOnHit: 1
-  throwKnockbackEffectOnPenetrationHit: 0
-  throwKnockbackEffectOnHitForce: 1
-  returnSlowEffectOnHit: 100
-  returnSlowEffectOnHitSeconds: 1.5
-  returnKnockbackEffectOnHit: 1
-  returnKnockbackEffectOnHitForce: 0.1
+  m_combatEffectData: {fileID: 11400000, guid: ec4772f3a62a9914c868f4d11d1b8bca, type: 2}
   m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}
   m_recallSoundAsset: {fileID: 11400000, guid: bb630daa7c8da4e49ae270b7975c82d4, type: 2}
   m_catchSoundAsset: {fileID: 11400000, guid: c612b549984e4874ca8228d091a8ac1e, type: 2}
