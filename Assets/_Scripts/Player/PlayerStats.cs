@@ -74,8 +74,10 @@ namespace com.game.player
         }
 
         public float GetStat(PlayerStatType targetStat)
-
         {
+            if (!Application.isPlaying)
+                return m_defaultStats.GetDefaultValue(targetStat);
+
             float rawStatValue = m_statHolder.GetStat(targetStat);
 
             if (Pipeline == null)

@@ -9927,6 +9927,7 @@ MonoBehaviour:
   fireDurationInSeconds: 3
   fireDamageIntervalInSeconds: 0.2
   fireDamageRadius: 10
+  fireDamageMultiplier: 1
   instantFireEffectPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
   continuosFireEffect: {fileID: 3529606434721392210, guid: 73b53084e9ffaeb4090736700af8f632, type: 3}
   fireEffectDurationInSeconds: 3

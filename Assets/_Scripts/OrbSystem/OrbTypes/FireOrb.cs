@@ -12,6 +12,7 @@ namespace com.game
         [SerializeField] float fireDurationInSeconds = 5f;
         [SerializeField] float fireDamageIntervalInSeconds = 1f;
         [SerializeField] float fireDamageRadius = 10f;
+        [SerializeField] float fireDamageMultiplier = 1f;
         [Space]
         [Header("Collision Instant Fire Effect")]
         [SerializeField] private GameObject instantFireEffectPrefab;
@@ -24,7 +25,7 @@ namespace com.game
         {
             base.ApplyCombatEffects(damageable, damage);
 
-            damageable.TakeDamageInSeconds(damage, fireDurationInSeconds, fireDamageIntervalInSeconds);
+            damageable.TakeDamageInSeconds(damage * fireDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
 
             Collider[] hitColliders = Physics.OverlapSphere(damageable.transform.position, fireDamageRadius);
 
@@ -42,7 +43,7 @@ namespace com.game
 
                 if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable))
                 {
-                    hitDamageable.TakeDamageInSeconds(damage, fireDurationInSeconds, fireDamageIntervalInSeconds);
+                    hitDamageable.TakeDamageInSeconds(damage * fireDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                 }
 

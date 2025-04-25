@@ -94,6 +94,14 @@ public class SimpleOrb : MonoBehaviour
 
     float m_internalRecallSpeedMultiplier;
 
+    public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
+        _playerStats.GetStat(PlayerStatType.Damage) + 
+        _playerStats.GetStat(PlayerStatType.OrbThrowDamage);
+
+    public float RecallDamage => orbStats.GetStat(OrbStatType.Damage) +
+        _playerStats.GetStat(PlayerStatType.Damage) +
+        _playerStats.GetStat(PlayerStatType.OrbRecallDamage);
+
     public void AssignPlayerStats(PlayerStats playerStats)
     {
         _playerStats = playerStats;
@@ -314,7 +322,7 @@ public class SimpleOrb : MonoBehaviour
             if (penetrationCompleted)
                 Stick(collisionObject);
 
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
+            ApplyCombatEffects(damageable, ThrowDamage);
 
             if (collisionObject.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {
@@ -334,7 +342,7 @@ public class SimpleOrb : MonoBehaviour
     {
         if (triggerCollider.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbRecallDamage));
+            ApplyCombatEffects(damageable, RecallDamage);
 
             if (triggerCollider.gameObject.TryGetComponent(out Enemy hittedEnemy))
             {

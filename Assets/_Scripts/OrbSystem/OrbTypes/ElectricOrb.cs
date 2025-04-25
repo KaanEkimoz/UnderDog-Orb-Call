@@ -12,7 +12,8 @@ namespace com.game
         [SerializeField] private int maxElectricBounceCount = 3;
         [SerializeField] private float electricBounceRadius = 15f;
         [SerializeField] private float electricEffectDurationInSeconds = 5f;
-        [SerializeField] private float electrictEffectIntervalInSeconds = 1f;
+        [SerializeField] private float electricEffectIntervalInSeconds = 1f;
+        [SerializeField] private float electricDamageMultiplier = 1f;
         [Space]
         [Header("Collision Instant Electric Effect")]
         [SerializeField] private GameObject electricEffectPrefab;
@@ -23,7 +24,7 @@ namespace com.game
         private List<IRenderedDamageable> affectedEnemies = new();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
-            damageable.TakeDamageInSeconds(damage, electricEffectDurationInSeconds, electrictEffectIntervalInSeconds);
+            damageable.TakeDamageInSeconds(damage * electricDamageMultiplier, electricEffectDurationInSeconds, electricEffectIntervalInSeconds);
 
             // Find all colliders within the electric bounce radius
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, electricBounceRadius);
@@ -55,7 +56,7 @@ namespace com.game
 
                 if (item.Collider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
                 {
-                    hitDamageable.TakeDamageInSeconds(damage, electricEffectDurationInSeconds, electrictEffectIntervalInSeconds);
+                    hitDamageable.TakeDamageInSeconds(damage * electricDamageMultiplier, electricEffectDurationInSeconds, electricEffectIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                 }
             }
@@ -94,13 +95,13 @@ namespace com.game
         private IEnumerator CreateChainElectricEffectWithIntervals()
         {
             float elapsedTime = 0f;
-            float damageDivider = electricEffectDurationInSeconds / electrictEffectIntervalInSeconds;
+            float damageDivider = electricEffectDurationInSeconds / electricEffectIntervalInSeconds;
 
             while (elapsedTime < electricEffectDurationInSeconds)
             {
                 CreateElectricLineBetweenInRangeEnemies();
-                elapsedTime += electrictEffectIntervalInSeconds;
-                yield return new WaitForSeconds(electrictEffectIntervalInSeconds);
+                elapsedTime += electricEffectIntervalInSeconds;
+                yield return new WaitForSeconds(electricEffectIntervalInSeconds);
             }
         }
         private void CreateElectricLine(Vector3 startPos, Vector3 endPos)
