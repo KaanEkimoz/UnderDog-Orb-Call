@@ -48,9 +48,15 @@ namespace com.game
             }
         }
 
-        protected override void ApplyCombatEffects(IDamageable damageableObject, float damage)
+        protected override void ApplyCombatEffects(IDamageable damageableObject, float damage, bool penetrationCompleted, bool recall)
         {
-            base.ApplyCombatEffects(damageableObject, damage);
+            base.ApplyCombatEffects(damageableObject, damage, penetrationCompleted, recall);
+
+            if (recall)
+                return;
+
+            if (!penetrationCompleted)
+                return;
 
             if (damageableObject is not IRenderedDamageable renderedDamageable)
                 return;
@@ -60,7 +66,10 @@ namespace com.game
 
         void StartBouncing(IRenderedDamageable firstAnchor)
         {
-            m_pastAnchors = new(m_bounceCount);
+            m_pastAnchors = new(m_bounceCount)
+            {
+                firstAnchor
+            };
 
             m_bouncing = true;
             m_anchor = firstAnchor;
@@ -97,8 +106,8 @@ namespace com.game
             if (newAnchor == null)
                 StopBouncing();
 
-            if (oldAnchor != null)
-                m_pastAnchors.Add(oldAnchor);
+            if (newAnchor != null)
+                m_pastAnchors.Add(newAnchor);
         }
 
         void ResetLocalTimer()

@@ -323,7 +323,7 @@ public class SimpleOrb : MonoBehaviour
             if (penetrationCompleted)
                 Stick(collisionObject);
 
-            ApplyCombatEffects(damageable, ThrowDamage);
+            ApplyCombatEffects(damageable, ThrowDamage, penetrationCompleted, false);
 
             if (m_combatEffectData.throwKnockback && penetrationCompleted)
             {
@@ -346,7 +346,7 @@ public class SimpleOrb : MonoBehaviour
     {
         if (triggerCollider.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            ApplyCombatEffects(damageable, RecallDamage);
+            ApplyCombatEffects(damageable, RecallDamage, false, true);
              
             if (m_combatEffectData.returnKnockback)
             {
@@ -360,7 +360,7 @@ public class SimpleOrb : MonoBehaviour
             }
         }
     }
-    protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
+    protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage, bool penetrationCompleted, bool recall)
     {
         damageableObject.TakeDamage(damage);
     }

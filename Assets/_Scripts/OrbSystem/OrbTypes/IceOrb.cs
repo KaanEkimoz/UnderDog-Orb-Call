@@ -1,4 +1,3 @@
-using com.game.enemysystem;
 using com.game.utilities;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,13 +19,15 @@ namespace com.game
         [SerializeField] private float iceEffectDurationInSeconds = 0.2f;
 
         private List<IDamageable> affectedEnemies = new List<IDamageable>();
-        protected override void ApplyCombatEffects(IDamageable damageable, float damage)
+        protected override void ApplyCombatEffects(IDamageable damageable, float damage, bool penetrationCompleted, bool recall)
         {
-            base.ApplyCombatEffects(damageable, damage);
-        }
-        protected override void ApplyOrbThrowCollisionEffects(Collision collisionObject)
-        {
-            base.ApplyOrbThrowCollisionEffects(collisionObject);
+            base.ApplyCombatEffects(damageable, damage, penetrationCompleted, recall);
+
+            if (recall)
+                return;
+
+            if (!penetrationCompleted)
+                return;
 
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
 
