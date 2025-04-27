@@ -46,7 +46,6 @@ namespace com.game
 
         public Transform AltarTransform => m_altar;
 
-        PlayerParanoiaLogic m_playerParanoiaLogic;
         int m_levelsGained;
         int m_wavesEnded;
         float m_waveStartTime;
@@ -70,8 +69,6 @@ namespace com.game
 
         void Initialize()
         {
-            m_playerParanoiaLogic = Player.Instance != null ? Player.Instance.Hub.Paranoia : null;
-
             if (m_defaultEnvironmentLight != null) 
                 m_defaultEnvironmentLight.SetActive(!m_lightSystemEnabled);
 
@@ -257,7 +254,6 @@ namespace com.game
 
             if (m_orbUIUpdater != null) m_orbUIUpdater.Refresh();
             if (m_orbUIUpdater2 != null) m_orbUIUpdater2.Refresh();
-            m_playerParanoiaLogic.SetToSegment(m_wavesEnded);
         }
 
         #endregion
