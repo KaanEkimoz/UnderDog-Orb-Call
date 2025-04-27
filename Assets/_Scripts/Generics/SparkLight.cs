@@ -24,7 +24,7 @@ namespace com.game.generics
 
         bool m_inCooldown;
         Sequence m_sequence;
-        Timer m_cooldownTimer;
+        ITimer m_cooldownTimer;
 
         private void Awake()
         {
@@ -86,8 +86,9 @@ namespace com.game.generics
             }
 
             m_inCooldown = true;
-            m_cooldownTimer = Timer.Create(UnityEngine.Random.Range(m_cooldownRange.x, m_cooldownRange.y), null, OnTimerComplete);
-            m_cooldownTimer.Start();
+            m_cooldownTimer = Timer.Create(UnityEngine.Random.Range(m_cooldownRange.x, m_cooldownRange.y))
+                .OnComplete(OnTimerComplete);
+            m_cooldownTimer.Restart();
 
             OnEnd?.Invoke();
         }

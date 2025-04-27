@@ -1,5 +1,5 @@
-using com.absence.variablesystem.internals;
-using com.absence.variablesystem.mutations.internals;
+using com.absence.variablesystem;
+using com.absence.variablesystem.mutations;
 using System;
 
 namespace com.game.statsystem.extensions
