@@ -131,7 +131,7 @@ public class SimpleOrb : MonoBehaviour
         startParent = transform.parent;
         startScale = transform.localScale;
     }
-    private void Awake()
+    protected virtual void Awake()
     {
         m_movementData = Instantiate(m_movementData);
     }
@@ -146,7 +146,7 @@ public class SimpleOrb : MonoBehaviour
         if (m_light != null) m_light.SetActive(false);
         trailParticle.startLifetime = onEllipseLifetime;
     }
-    private void Update()
+    protected virtual void Update()
     {
         HandleStateBehaviours();
     }

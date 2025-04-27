@@ -1,134 +1,175 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace com.game
 {
     public class ElectricOrb : SimpleOrb, IElemental
     {
-        [Space]
-        [Header("Electric")]
-        [SerializeField] private int maxElectricBounceCount = 3;
-        [SerializeField] private float electricBounceRadius = 15f;
-        [SerializeField] private float electricEffectDurationInSeconds = 5f;
-        [SerializeField] private float electricEffectIntervalInSeconds = 1f;
-        [SerializeField] private float electricDamageMultiplier = 1f;
-        [Space]
-        [Header("Collision Instant Electric Effect")]
-        [SerializeField] private GameObject electricEffectPrefab;
-        [Header("Electric Line Effect")]
-        [SerializeField] private GameObject electricChainEffectPrefab; // Prefab for the electric line
-        [SerializeField] private float electricChainEffectDuration = 0.2f;
+        public const int MAX_DETECTABLE_COLLIDERS = 8;
 
-        private List<IRenderedDamageable> affectedEnemies = new();
-        protected override void ApplyCombatEffects(IDamageable damageable, float damage)
+        [SerializeField, Min(0f)] private int m_electricMaxBounceCount = 3;
+        [SerializeField, Min(0f)] private float m_electricBounceRadius = 15f;
+        [SerializeField, Min(0f)] private float m_electricBounceIntervalInSeconds = 1f;
+        [SerializeField, Min(0f)] private float m_electricDamage = 1f;
+        [SerializeField, Min(0f)] private float m_electricLineLifetime = 0.2f;
+        [SerializeField] private LayerMask m_electricBounceLayerMask;
+
+        [SerializeField] private GameObject m_electricInstantEffectPrefab;
+        [SerializeField] private ElectricLine m_electricChainEffectPrefab;
+
+        float m_localBounceTimer;
+        int m_bounceCount;
+        IRenderedDamageable m_anchor;
+        bool m_bouncing;
+
+        Collider[] m_nearbyPossibleAnchors;
+        List<IRenderedDamageable> m_pastAnchors;
+
+        protected override void Awake()
         {
-            damageable.TakeDamageInSeconds(damage * electricDamageMultiplier, electricEffectDurationInSeconds, electricEffectIntervalInSeconds);
+            base.Awake();
 
-            // Find all colliders within the electric bounce radius
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, electricBounceRadius);
+            m_nearbyPossibleAnchors = new Collider[MAX_DETECTABLE_COLLIDERS];
+        }
 
-            // Clear the list of affected enemies and add the initial target
-            affectedEnemies.Clear();
-            //affectedEnemies.Add(damageable);
+        protected override void Update()
+        {
+            base.Update();
 
-            // Filter and sort the colliders by distance
-            var sortedDamageables = hitColliders
-                .Where(c => c.gameObject.TryGetComponent(out IRenderedDamageable _)) // Filter colliders with IDamageable
-                .Select(c => new
-                {
-                    Collider = c,
-                    Distance = Vector3.Distance(transform.position, c.transform.position) // Calculate distance
-                })
-                .OrderBy(x => x.Distance) // Sort by distance
-                .Take(maxElectricBounceCount) // Take the closest 'maxElectricBounceCount' enemies
-                .ToList();
+            if (!m_bouncing)
+                return;
 
-            GameRuntimeEvent evt = Game.Event;
-            Game.Event = GameRuntimeEvent.Null;
+            m_localBounceTimer -= Time.deltaTime;
 
-            // Apply damage to the closest enemies
-            foreach (var item in sortedDamageables)
+            if (m_localBounceTimer <= 0f)
             {
-                if (item.Collider.gameObject.CompareTag("Player"))
+                Bounce();
+                ResetLocalTimer();
+            }
+        }
+
+        protected override void ApplyCombatEffects(IDamageable damageableObject, float damage)
+        {
+            base.ApplyCombatEffects(damageableObject, damage);
+
+            if (damageableObject is not IRenderedDamageable renderedDamageable)
+                return;
+
+            StartBouncing(renderedDamageable);
+        }
+
+        void StartBouncing(IRenderedDamageable firstAnchor)
+        {
+            m_pastAnchors = new(m_bounceCount);
+
+            m_bouncing = true;
+            m_anchor = firstAnchor;
+            m_bounceCount = 0;
+
+            ApplyEffects(null, firstAnchor);
+            ResetLocalTimer();
+        }
+
+        void StopBouncing()
+        {
+            m_bouncing = false;
+        }
+
+        void Bounce()
+        {
+            m_bounceCount++;
+
+            if (m_bounceCount > m_electricMaxBounceCount)
+            {
+                StopBouncing();
+                return;
+            }
+
+            IRenderedDamageable newAnchor = GetClosestDamageable();
+            IRenderedDamageable oldAnchor = m_anchor;
+
+            m_anchor = newAnchor;
+
+            OnBounce(newAnchor);
+            ApplyEffects(oldAnchor, newAnchor);
+            ResetLocalTimer();
+
+            if (newAnchor == null)
+                StopBouncing();
+
+            if (oldAnchor != null)
+                m_pastAnchors.Add(oldAnchor);
+        }
+
+        void ResetLocalTimer()
+        {
+            m_localBounceTimer = m_electricBounceIntervalInSeconds;
+        }
+
+        void ApplyEffects(IRenderedDamageable from, IRenderedDamageable to)
+        {
+            bool firstOrLast = from == null || to == null;
+
+            if (!firstOrLast)
+            {
+                CreateElectricLineEffect(from.Renderer.bounds.center, to.Renderer.bounds.center);
+            }
+
+            if (to != null)
+            {
+                CreateElectricInstantEffect(to.Renderer.bounds.center);
+            }
+        }
+
+        void CreateElectricInstantEffect(Vector3 at)
+        {
+            Instantiate(m_electricInstantEffectPrefab, at, Quaternion.identity);
+        }
+
+        void CreateElectricLineEffect(Vector3 from, Vector3 to)
+        {
+            ElectricLine lineInstance = Instantiate(m_electricChainEffectPrefab, from, Quaternion.identity);
+            lineInstance.pointAposition = from;
+            lineInstance.pointBposition = to;
+
+            Destroy(lineInstance.gameObject, m_electricLineLifetime);
+        }
+
+        void OnBounce(IRenderedDamageable anchor)
+        {
+            anchor.TakeDamage(m_electricDamage);
+        }
+
+        IRenderedDamageable GetClosestDamageable()
+        {
+            Vector3 anchorOrigin = m_anchor != null ?
+                m_anchor.Renderer.bounds.center : transform.position;
+
+            Physics.OverlapSphereNonAlloc(anchorOrigin, m_electricBounceRadius, m_nearbyPossibleAnchors, m_electricBounceLayerMask);
+
+            float lastDistance = float.MaxValue;
+            IRenderedDamageable result = null;
+            foreach (Collider possibleAnchor in m_nearbyPossibleAnchors)
+            {
+                if (possibleAnchor == null)
                     continue;
 
-                if (item.Collider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
+                if (!possibleAnchor.gameObject.TryGetComponent(out IRenderedDamageable renderedDamageable))
+                    continue;
+
+                if (m_anchor != null && m_pastAnchors.Contains(renderedDamageable))
+                    continue;
+
+                float localDistance = Vector3.Distance(anchorOrigin, possibleAnchor.transform.position);
+
+                if (localDistance < lastDistance)
                 {
-                    hitDamageable.TakeDamageInSeconds(damage * electricDamageMultiplier, electricEffectDurationInSeconds, electricEffectIntervalInSeconds);
-                    affectedEnemies.Add(hitDamageable);
+                    lastDistance = localDistance;
+                    result = renderedDamageable;
                 }
             }
 
-            Game.Event = evt;
-
-            if (electricChainEffectPrefab == null)
-            {
-                Debug.LogWarning("ElectricLine prefab is not assigned.");
-                return;
-            }
-
-            // Ensure there are at least two enemies to draw lines
-            if (affectedEnemies.Count < 2)
-            {
-                Debug.LogWarning("Not enough enemies to draw electric lines.");
-                return;
-            }
-
-            StartCoroutine(nameof(CreateChainElectricEffectWithIntervals));
-        }
-        private void CreateElectricLineBetweenInRangeEnemies()
-        {
-            IRenderedDamageable firstEnemy = affectedEnemies[0];
-            Vector3 firstEnemyPosition = firstEnemy.Renderer.bounds.center; //Center Position
-
-            for (int i = 1; i < affectedEnemies.Count; i++)
-            {
-                IRenderedDamageable nextEnemy = affectedEnemies[i];
-                
-                Vector3 nextEnemyPosition = nextEnemy.Renderer.bounds.center; // Center Position
-
-                CreateElectricLine(firstEnemyPosition, nextEnemyPosition);
-            }
-        }
-        private IEnumerator CreateChainElectricEffectWithIntervals()
-        {
-            float elapsedTime = 0f;
-            float damageDivider = electricEffectDurationInSeconds / electricEffectIntervalInSeconds;
-
-            while (elapsedTime < electricEffectDurationInSeconds)
-            {
-                CreateElectricLineBetweenInRangeEnemies();
-                elapsedTime += electricEffectIntervalInSeconds;
-                yield return new WaitForSeconds(electricEffectIntervalInSeconds);
-            }
-        }
-        private void CreateElectricLine(Vector3 startPos, Vector3 endPos)
-        {
-            GameObject electricLineInstance = Instantiate(electricChainEffectPrefab, startPos, Quaternion.identity);
-
-            // Get the ElectricLine component
-            ElectricLine electricLine = electricLineInstance.GetComponent<ElectricLine>();
-
-            if (electricLine != null)
-            {
-                // Set the start and end points
-                electricLine.pointAposition = startPos;
-                electricLine.pointBposition = endPos;
-
-                // Destroy the electric line after a delay
-                StartCoroutine(DestroyElectricLineAfterDelay(electricLineInstance, electricChainEffectDuration));
-            }
-        }
-        private IEnumerator DestroyElectricLineAfterDelay(GameObject electricLineInstance, float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            Destroy(electricLineInstance);
-        }
-        protected override void ApplyOrbThrowCollisionEffects(Collision collisionObject)
-        {
-            base.ApplyOrbThrowCollisionEffects(collisionObject);
+            return result;
         }
 
 #if UNITY_EDITOR
@@ -140,7 +181,7 @@ namespace com.game
             if (currentState != OrbState.OnEllipse)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(transform.position, electricBounceRadius);
+                Gizmos.DrawSphere(transform.position, m_electricBounceRadius);
             }
         }
 
