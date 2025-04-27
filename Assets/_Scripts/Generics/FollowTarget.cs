@@ -32,6 +32,37 @@ namespace com.game.generics
                 m_target = value;
             }
         }
+        public Vector3 RealOffset
+        {
+            get
+            {
+                return m_realOffset;
+            }
+
+            set
+            {
+                if (KeepStartingOffset)
+                {
+                    Debug.LogWarning("Cannot set real offset of FollowTarget instance. Instance must be 'KeepStartingOffset'.");
+                    return;
+                }
+
+                m_realOffset = value;
+            }
+        }
+        public bool KeepStartingOffset
+        {
+            get
+            {
+                return m_keepStartingOffset;
+            }
+
+            set
+            {
+                m_keepStartingOffset = value;
+                RecalculateOffset();
+            }
+        }
 
         private void Start()
         {

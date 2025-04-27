@@ -1,3 +1,4 @@
+using com.game.generics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,10 @@ namespace com.game
         [Header("Collision Instant Fire Effect")]
         [SerializeField] private GameObject instantFireEffectPrefab;
         [Header("Continuos Fire Effect")]
-        [SerializeField] private GameObject continuosFireEffect; // Prefab for the electric line
+        [SerializeField] private FollowTarget continuosFireEffect; // Prefab for the electric line
         [SerializeField] private float fireEffectDurationInSeconds = 0.2f;
 
-        private List<IDamageable> affectedEnemies = new List<IDamageable>();
+        private List<IRenderedDamageable> affectedEnemies = new();
         protected override void ApplyCombatEffects(IDamageable damageable, float damage)
         {
             base.ApplyCombatEffects(damageable, damage);
@@ -41,7 +42,7 @@ namespace com.game
                 if(hitCollider.gameObject.CompareTag("Player"))
                     continue;
 
-                if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable))
+                if (hitCollider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
                 {
                     hitDamageable.TakeDamageInSeconds(damage * fireDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
@@ -64,11 +65,11 @@ namespace com.game
 
             for (int i = 0; i < affectedEnemies.Count; i++)
             {
-                MonoBehaviour currentEnemy = affectedEnemies[i] as MonoBehaviour;
+                IRenderedDamageable currentEnemy = affectedEnemies[i];
 
-                Vector3 topPos = currentEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; // Top Position
+                Vector3 topPos = currentEnemy.Renderer.bounds.center; // Top Position
 
-                CreateFireEffect(topPos);
+                CreateFireEffect(topPos, currentEnemy.transform);
             }
         }
         private IEnumerator CreateFireEffectWithIntervals()
@@ -83,11 +84,17 @@ namespace com.game
                 yield return new WaitForSeconds(fireDamageIntervalInSeconds);
             }
         }
-        private void CreateFireEffect(Vector3 effectPos)
+        private void CreateFireEffect(Vector3 effectPos, Transform followTarget = null)
         {
-            GameObject fireEffectInstance = Instantiate(continuosFireEffect, effectPos, Quaternion.identity);
+            FollowTarget fireEffectInstance = Instantiate(continuosFireEffect, effectPos, Quaternion.identity);
 
-            StartCoroutine(DestroyFireEffectAfterDelay(fireEffectInstance, fireEffectDurationInSeconds));
+            if (followTarget != null)
+            {
+                fireEffectInstance.Target = followTarget;
+                fireEffectInstance.KeepStartingOffset = true;
+            }
+
+            StartCoroutine(DestroyFireEffectAfterDelay(fireEffectInstance.gameObject, fireEffectDurationInSeconds));
         }
         private IEnumerator DestroyFireEffectAfterDelay(GameObject fireEffectInstance, float delay)
         {
