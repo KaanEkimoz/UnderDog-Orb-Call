@@ -107,10 +107,11 @@ public class PlayerOrbController : MonoBehaviour
         if (PlayerInputHandler.Instance.AttackButtonPressed)
             ThrowOrb();
 
-        if(PlayerInputHandler.Instance.RecallButtonPressed)
-            CallOrb(orbsOnEllipse[selectedOrbIndex]);
-        if(PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(recallButtonHoldTime))
+        if (PlayerInputHandler.Instance.RecallButtonPerformed)
             CallAllOrbs();
+        else if (PlayerInputHandler.Instance.RecallButtonPressed)
+            CallOrb(orbsOnEllipse[selectedOrbIndex]);
+
         if(PlayerInputHandler.Instance.ClosestRecallButtonPressed)
             CallOrb(FindClosestOrb(orbsOnEllipse));
 
