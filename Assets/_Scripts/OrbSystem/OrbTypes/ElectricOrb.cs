@@ -66,7 +66,10 @@ namespace com.game
 
         void StartBouncing(IRenderedDamageable firstAnchor)
         {
-            m_pastAnchors = new(m_bounceCount);
+            m_pastAnchors = new(m_bounceCount)
+            {
+                firstAnchor
+            };
 
             m_bouncing = true;
             m_anchor = firstAnchor;
@@ -103,8 +106,8 @@ namespace com.game
             if (newAnchor == null)
                 StopBouncing();
 
-            if (oldAnchor != null)
-                m_pastAnchors.Add(oldAnchor);
+            if (newAnchor != null)
+                m_pastAnchors.Add(newAnchor);
         }
 
         void ResetLocalTimer()
