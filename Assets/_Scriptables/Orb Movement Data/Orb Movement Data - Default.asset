@@ -15,4 +15,6 @@ MonoBehaviour:
   movementSpeed: 100
   throwSpeedMultiplier: 7.66
   recallSpeedMultiplier: 0.17
+  onEllipseSpeedMutliplier: 0.07
+  onEllipseDistanceFactor: 4
   maxDistance: 20

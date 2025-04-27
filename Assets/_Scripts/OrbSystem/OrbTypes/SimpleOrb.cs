@@ -268,10 +268,13 @@ public class SimpleOrb : MonoBehaviour
         float currentSpeed = m_movementData.movementSpeed * curveValue;
 
         if (currentState == OrbState.Returning)
-            currentSpeed *= m_movementData.recallSpeedMultiplier * m_internalRecallSpeedMultiplier;
+            currentSpeed *= m_movementData.recallSpeedMultiplier * m_internalRecallSpeedMultiplier
+                * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1);
+        else if (currentState == OrbState.OnEllipse)
+            currentSpeed *= m_movementData.onEllipseSpeedMutliplier * (distanceToTarget * m_movementData.onEllipseDistanceFactor);
 
         // MoveTowards to the target
-        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * Time.deltaTime);
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
