@@ -1,14 +1,15 @@
 using com.absence.attributes;
 using com.absence.utilities;
 using com.absence.variablesystem.builtin;
-using com.absence.variablesystem.internals;
-using com.absence.variablesystem.mutations.internals;
+using com.absence.variablesystem;
+using com.absence.variablesystem.mutations;
 using com.game.statsystem.extensions;
 using com.game.statsystem.presetobjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using com.absence.variablesystem.mutations.internals;
 
 namespace com.game.statsystem
 {
@@ -67,7 +68,7 @@ namespace com.game.statsystem
         {
             string rawLabel = Enum.GetName(typeof(T), targetStat);
 
-            return new FloatVariable(Helpers.SplitCamelCase(rawLabel, " "), 0f);
+            return new FloatVariable(0f);
         }
 
         /*

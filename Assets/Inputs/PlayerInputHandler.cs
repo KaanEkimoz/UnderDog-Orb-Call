@@ -21,7 +21,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool ParryButtonReleased => _parryButtonReleasedThisFrame;
     public bool RecallButtonPressed => _recallButtonPressedThisFrame;
     public bool RecallButtonReleased => _recallButtonReleasedThisFrame;
-    public bool RecallButtonHeld => _recallButtonHeld;
+    public bool RecallButtonPerformed => _recallButtonPerformedThisFrame;
     public bool NextChooseButtonPressed => _nextChooseButtonPressedThisFrame;
     public bool PreviousChooseButtonPressed => _previousChooseButtonPressedThisFrame;
     public bool SprintButtonHeld => _sprintButtonHeld;
@@ -53,8 +53,7 @@ public class PlayerInputHandler : MonoBehaviour
     // Recall - R Keyboard Button
     private bool _recallButtonPressedThisFrame;
     private bool _recallButtonReleasedThisFrame;
-    private bool _recallButtonHeld;
-    private float _recallButtonHoldTime;
+    private bool _recallButtonPerformedThisFrame;
 
     // Closest Recall - F Button
     private bool _closestRecallButtonPressedThisFrame;
@@ -87,26 +86,6 @@ public class PlayerInputHandler : MonoBehaviour
         _parryButtonReleasedThisFrame = false;
         _closestRecallButtonPressedThisFrame = false;
     }
-
-    #region Timers
-    private void Update()
-    {
-        HandleRecallHoldTimer();
-    }
-    public bool IsRecallHoldTimeGreaterThan(float time = 0.15f)
-    {
-        return _recallButtonHoldTime > time;
-    }
-    private void HandleRecallHoldTimer()
-    {
-        if (_recallButtonHeld)
-            _recallButtonHoldTime += Time.deltaTime;
-
-        if (_recallButtonReleasedThisFrame)
-            _recallButtonHoldTime = 0;
-    }
-
-    #endregion
 
     #region Mouse Cursor
 
@@ -182,14 +161,20 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnRecall(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (context.started)
         {
-            _recallButtonHeld = true;
             _recallButtonPressedThisFrame = true;
+            _recallButtonPerformedThisFrame = false;
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (context.performed)
         {
-            _recallButtonHeld = false;
+            _recallButtonPressedThisFrame = false;
+            _recallButtonPerformedThisFrame = true;
+        }
+        else if (context.canceled)
+        {
+            _recallButtonPerformedThisFrame = false;
+            _recallButtonPressedThisFrame = false;
             _recallButtonReleasedThisFrame = true;
         }
 

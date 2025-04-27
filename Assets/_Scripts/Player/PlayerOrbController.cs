@@ -3,6 +3,7 @@ using com.game.player;
 using com.game.player.statsystemextensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 public class PlayerOrbController : MonoBehaviour
@@ -25,6 +26,8 @@ public class PlayerOrbController : MonoBehaviour
     [Header("Orb Recall")]
     [SerializeField] private float recallButtonHoldTime = 0.2f;
     [SerializeField] private Transform returnPointTransform;
+    [SerializeField] private float callAllOrbsSpeedCoefficient;
+    [SerializeField] private bool allOrbsCoefficientAffectsPerOrb;
     [Header("Ellipse Creation")]
     [SerializeField] private Transform ellipseCenterTransform;
     [SerializeField] private float ellipseXRadius = 0.5f;
@@ -104,10 +107,11 @@ public class PlayerOrbController : MonoBehaviour
         if (PlayerInputHandler.Instance.AttackButtonPressed)
             ThrowOrb();
 
-        if(PlayerInputHandler.Instance.RecallButtonPressed)
-            CallOrb(orbsOnEllipse[selectedOrbIndex]);
-        if(PlayerInputHandler.Instance.IsRecallHoldTimeGreaterThan(recallButtonHoldTime))
+        if (PlayerInputHandler.Instance.RecallButtonPerformed)
             CallAllOrbs();
+        else if (PlayerInputHandler.Instance.RecallButtonPressed)
+            CallOrb(orbsOnEllipse[selectedOrbIndex]);
+
         if(PlayerInputHandler.Instance.ClosestRecallButtonPressed)
             CallOrb(FindClosestOrb(orbsOnEllipse));
 
@@ -177,20 +181,39 @@ public class PlayerOrbController : MonoBehaviour
         
         OnOrbThrowed?.Invoke();
     }
-    private void CallOrb(SimpleOrb orb)
+    private void CallOrb(SimpleOrb orb, float coefficient = 1f)
     {
-        if (orb.currentState != OrbState.Sticked) return;
+        if (orb.currentState != OrbState.Sticked) 
+            return;
 
-        orb.ReturnToPosition(returnPointTransform.position);
+        orb.ReturnToPosition(returnPointTransform.position, coefficient);
         OnOrbCalled?.Invoke();
     }
     private void CallAllOrbs()
     {
-        foreach (var orb in orbsOnEllipse)
+        IEnumerable<SimpleOrb> stickedOrbs = 
+            orbsOnEllipse.Where(orb => orb.currentState == OrbState.Sticked);
+
+        int lastCalledOrbCount = stickedOrbs.Count();
+
+        if (lastCalledOrbCount == 1)
         {
-            if (orb.currentState == OrbState.Sticked)
-                CallOrb(orb);
+            CallOrb(stickedOrbs.FirstOrDefault());
+            return;
         }
+
+        float speedCoefficient = 1f;
+
+        if (allOrbsCoefficientAffectsPerOrb)
+            speedCoefficient = Mathf.Pow(callAllOrbsSpeedCoefficient, lastCalledOrbCount);
+        else
+            speedCoefficient = callAllOrbsSpeedCoefficient;
+
+        foreach (var orb in stickedOrbs)
+        {
+            CallOrb(orb, speedCoefficient);
+        }
+
         OnAllOrbsCalled?.Invoke();
     }
     private void SelectNextOrb()

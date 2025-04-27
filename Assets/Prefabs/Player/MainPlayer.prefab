@@ -3424,6 +3424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_orientation: {fileID: 5895881473504401873}
   walkSpeed: 5.335
   slowWalkSpeed: 0.75
   sprintSpeed: 5.335
@@ -3434,6 +3435,7 @@ MonoBehaviour:
   maxDashCount: 2
   rotationSmoothTime: 0.03
   speedChangeRate: 10
+  animSpeedChangeCoefficient: 1
   m_concreteFootstepsSoundAsset: {fileID: 11400000, guid: dceabc312cca7d248b4fb7c3076f90d2, type: 2}
   m_grassFootstepsSoundAsset: {fileID: 11400000, guid: 0833bddb76329c94c828dac25d685d5f, type: 2}
   m_dashSoundAsset: {fileID: 11400000, guid: b9903d915bf5ea745b46dfcbf52f433f, type: 2}
@@ -3499,6 +3501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_container: {fileID: 0}
+  m_renderer: {fileID: 0}
 --- !u!114 &1070504648105895888
 MonoBehaviour:
   m_ObjectHideFlags: 0

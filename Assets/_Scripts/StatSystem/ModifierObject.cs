@@ -1,4 +1,4 @@
-using com.absence.variablesystem.mutations.internals;
+using com.absence.variablesystem.mutations;
 using System;
 using UnityEngine;
 

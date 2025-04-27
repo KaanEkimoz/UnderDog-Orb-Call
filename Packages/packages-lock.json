@@ -33,7 +33,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "0d57086ca887b40a86b5e650eae49155ec597e40"
+      "hash": "7cedf16eb60c274a7f2042a64957db4e32c6c411"
     },
     "com.absence.utilities": {
       "version": "https://www.github.com/b1lodHand/absent-utilities.git",
@@ -47,7 +47,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "5a6d080a75d137aac92c081850890c957d6af75d"
+      "hash": "ad3d46f5add9aaea052c66ff5ebfb89f56fecde5"
     },
     "com.tayx.graphy": {
       "version": "https://github.com/Tayx94/graphy.git",

@@ -19,7 +19,7 @@ public class ObjectPool : MonoBehaviour
         {
             if(pools[j].objectPrefab == null)
             {
-                Debug.LogError("Object prefab is null in pool " + j);
+                Debug.LogWarning("Object prefab is null in pool " + j);
                 continue;
             }
             pools[j].pooledObjects = new Queue<GameObject>();

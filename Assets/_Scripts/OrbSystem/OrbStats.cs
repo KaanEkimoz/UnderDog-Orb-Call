@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.attributes.experimental;
 using com.game.statsystem;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace com.game.orbsystem.statsystemextensions
     {
         [Header("Utilities")]
 
-        [SerializeField, Required, Tooltip("Default values provided for the any initialization process.")]
+        [SerializeField, Required, InlineEditor, Tooltip("Default values provided for the any initialization process.")]
         private OrbDefaultStats m_defaultStats;
 
         [Header("Stats")]
@@ -59,6 +60,9 @@ namespace com.game.orbsystem.statsystemextensions
 
         public float GetStat(OrbStatType targetStat)
         {
+            if (!Application.isPlaying)
+                return m_defaultStats.GetDefaultValue(targetStat);
+
             float rawStatValue = m_statHolder.GetStat(targetStat);
 
             if (Pipeline == null)

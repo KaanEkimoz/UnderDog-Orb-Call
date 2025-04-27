@@ -40,5 +40,17 @@ namespace com.game
                 Player.Instance.Hub.Stats.Manipulator.OverrideWith(ovr);
             }
         }
+
+        [Command]
+        public static void GiveItem()
+        {
+
+        }
+
+        [Command]
+        public static void GiveElement()
+        {
+
+        }
     }
 }

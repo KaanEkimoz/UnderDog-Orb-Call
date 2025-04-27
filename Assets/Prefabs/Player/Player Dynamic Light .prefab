@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4000073320642647464
+--- !u!1 &4463095097434630026
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4950203327658907154}
-  - component: {fileID: 5789188721859287695}
-  - component: {fileID: 666648236263054965}
+  - component: {fileID: 5674996875172521008}
+  - component: {fileID: 6495404925236947117}
+  - component: {fileID: 230648042235456599}
   m_Layer: 0
   m_Name: Light
   m_TagString: Untagged
@@ -18,31 +18,31 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4950203327658907154
+--- !u!4 &5674996875172521008
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4000073320642647464}
+  m_GameObject: {fileID: 4463095097434630026}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710677, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8947970959442835041}
+  m_Father: {fileID: 8529413109177451587}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!108 &5789188721859287695
+--- !u!108 &6495404925236947117
 Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4000073320642647464}
+  m_GameObject: {fileID: 4463095097434630026}
   m_Enabled: 1
   serializedVersion: 11
-  m_Type: 0
+  m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 7.94
   m_Range: 4.54
@@ -98,13 +98,13 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!114 &666648236263054965
+--- !u!114 &230648042235456599
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4000073320642647464}
+  m_GameObject: {fileID: 4463095097434630026}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!1 &8122816023459241335
+--- !u!1 &8847618365488852821
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,53 +129,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8947970959442835041}
-  - component: {fileID: 3263008460770362929}
-  - component: {fileID: 4814931927561725467}
-  - component: {fileID: 5196183970506330198}
+  - component: {fileID: 8529413109177451587}
+  - component: {fileID: 2827008007400010771}
+  - component: {fileID: 5233489762828686393}
+  - component: {fileID: 4787196591538119284}
   m_Layer: 0
-  m_Name: Player Dynamic Light
+  m_Name: 'Player Dynamic Light '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8947970959442835041
+--- !u!4 &8529413109177451587
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8122816023459241335}
+  m_GameObject: {fileID: 8847618365488852821}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 3.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4950203327658907154}
+  - {fileID: 5674996875172521008}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3263008460770362929
+--- !u!114 &2827008007400010771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8122816023459241335}
+  m_GameObject: {fileID: 8847618365488852821}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fab889c0dda38a4c8d4c0ecce219494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_disableMode: 0
---- !u!114 &4814931927561725467
+--- !u!114 &5233489762828686393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8122816023459241335}
+  m_GameObject: {fileID: 8847618365488852821}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03f18d2a6265fad4aada38bf12721a10, type: 3}
@@ -183,28 +183,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_followingType: 1
   m_target: {fileID: 0}
+  m_alsoLockToRotation: 0
   m_keepStartingOffset: 1
   m_offset: {x: 0, y: 0, z: 0}
---- !u!114 &5196183970506330198
+--- !u!114 &4787196591538119284
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8122816023459241335}
+  m_GameObject: {fileID: 8847618365488852821}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 195b52d14ba203141ad63dc31fcf4d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_light: {fileID: 5789188721859287695}
+  m_lightType: 1
+  m_light: {fileID: 6495404925236947117}
   m_sparkMask:
     serializedVersion: 2
     m_Bits: 256
   m_groundMask:
     serializedVersion: 2
     m_Bits: 8192
-  m_generalLightStatCoefficient: 3
+  m_generalLightStatCoefficient: 1
   m_threshold: 0.1
   m_innerSpotAngleSettings:
     InitialValue: 0
@@ -217,21 +219,31 @@ MonoBehaviour:
     StepAmount: 3
     AnimationSpeed: 4
   m_intensitySettings:
-    InitialValue: 7.94
-    LightStatCoefficient: 2.2
-    StepAmount: 10
+    InitialValue: 1.21
+    LightStatCoefficient: 0.55
+    StepAmount: 0.67
     AnimationSpeed: 4
   m_rangeSettings:
-    InitialValue: 4.54
-    LightStatCoefficient: 1
-    StepAmount: 4.54
+    InitialValue: 0.55
+    LightStatCoefficient: 0.25
+    StepAmount: 0.54
     AnimationSpeed: 4
   m_localHeightSettings:
     InitialValue: 0
     LightStatCoefficient: 0.22
     StepAmount: 0.5
     AnimationSpeed: 4
-  m_fullVisionRadiusShift: 0.6
-  m_halfVisionRadiusShift: 0.66
-  m_fullVisionRadiusMultiplier: 4.41
-  m_halfVisionRadiusMultiplier: 0.91
+  m_virtualHalfVisionSettings:
+    InitialValue: 5.38
+    LightStatCoefficient: 1.12
+    StepAmount: 1.47
+    AnimationSpeed: 4
+  m_virtualFullVisionSettings:
+    InitialValue: 0
+    LightStatCoefficient: 0.79
+    StepAmount: 1.34
+    AnimationSpeed: 4
+  m_fullVisionRadiusShift: -2.25
+  m_halfVisionRadiusShift: 1.13
+  m_fullVisionRadiusMultiplier: 0.58
+  m_halfVisionRadiusMultiplier: 0.54

@@ -8,6 +8,10 @@ using UnityEngine;
 using com.game.enemysystem;
 using com.absence.soundsystem;
 using com.absence.soundsystem.internals;
+using com.absence.attributes.experimental;
+using com.game.orbsystem;
+using com.game.utilities;
+using com.absence.attributes;
 public enum OrbState
 {
     OnEllipse,
@@ -22,11 +26,8 @@ public class SimpleOrb : MonoBehaviour
     public OrbState currentState = OrbState.OnEllipse;
 
     [Header("Orb Movement")]
-    [SerializeField] private float movementSpeed = 5f;
-    [SerializeField] private float throwSpeedMultiplier = 1f;
-    [SerializeField] private float recallSpeedMultiplier = 1f;
+    [SerializeField, InlineEditor] protected OrbMovementData m_movementData;
     [SerializeField] private AnimationCurve movementCurve;
-    [Header("Orb Throw")]
     [SerializeField] private float maxDistance = 20f;
     [Space]
     [Header("Orb Stats")]
@@ -45,18 +46,7 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private float normalLifetime = 0.5f;
     [SerializeField] private GameObject m_light;
     [SerializeField] private ParticleSystem trailParticle;
-    [Header("Orb Throw Effects")]
-    [Range(0f, 100f)] [SerializeField] private float throwSlowEffectOnHit = 100f;
-    [Range(0f, 5f)] [SerializeField] private float throwSlowEffectOnHitSeconds = 1.5f;
-    [SerializeField] private bool throwKnockbackEffectOnHit = true;
-    [SerializeField] private bool throwKnockbackEffectOnPenetrationHit = false;
-    [SerializeField] private float throwKnockbackEffectOnHitForce = 1f;
-    [Space]
-    [Header("Orb Call, Return Effects")]
-    [Range(0f, 100f)] [SerializeField] private float returnSlowEffectOnHit = 100f;
-    [Range(0f, 5f)] [SerializeField] private float returnSlowEffectOnHitSeconds = 1.5f;
-    [SerializeField] private bool returnKnockbackEffectOnHit = true;
-    [SerializeField] private float returnKnockbackEffectOnHitForce = 0.1f;
+    [SerializeField, InlineEditor, Required] private OrbCombatEffectData m_combatEffectData;
     [Space]
     [Header("Sound Asset References")]
     [SerializeField] private SoundAsset m_throwSoundAsset;
@@ -92,6 +82,16 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnPhysicsHit;
     //Effects
     private SoundFXManager _soundFXManager;
+
+    float m_internalRecallSpeedMultiplier;
+
+    public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
+        _playerStats.GetStat(PlayerStatType.Damage) + 
+        _playerStats.GetStat(PlayerStatType.OrbThrowDamage);
+
+    public float RecallDamage => orbStats.GetStat(OrbStatType.Damage) +
+        _playerStats.GetStat(PlayerStatType.Damage) +
+        _playerStats.GetStat(PlayerStatType.OrbRecallDamage);
 
     public void AssignPlayerStats(PlayerStats playerStats)
     {
@@ -131,6 +131,10 @@ public class SimpleOrb : MonoBehaviour
         startParent = transform.parent;
         startScale = transform.localScale;
     }
+    protected virtual void Awake()
+    {
+        m_movementData = Instantiate(m_movementData);
+    }
     private void Start()
     {
         CheckStartVariables();
@@ -142,7 +146,7 @@ public class SimpleOrb : MonoBehaviour
         if (m_light != null) m_light.SetActive(false);
         trailParticle.startLifetime = onEllipseLifetime;
     }
-    private void Update()
+    protected virtual void Update()
     {
         HandleStateBehaviours();
     }
@@ -154,7 +158,7 @@ public class SimpleOrb : MonoBehaviour
                 ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
 
             _rigidBody.linearVelocity = throwVector * Time.deltaTime
-                * speedFromStats * movementSpeed * throwSpeedMultiplier;
+                * speedFromStats * m_movementData.movementSpeed * m_movementData.throwSpeedMultiplier;
         }
     }
     private void HandleStateBehaviours()
@@ -172,7 +176,10 @@ public class SimpleOrb : MonoBehaviour
             if (m_light != null) m_light.SetActive(false);
             trailParticle.startLifetime = onEllipseLifetime;
             currentState = OrbState.OnEllipse;
+            m_internalRecallSpeedMultiplier = 1f;
             transform.parent = startParent;
+
+            penetrationCount = 0;
 
             OnReachedToEllipse?.Invoke();
             OnStateChanged?.Invoke(currentState);
@@ -182,12 +189,17 @@ public class SimpleOrb : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    public void ReturnToPosition(Vector3 returnPosition)
+    public void ReturnToPosition(Vector3 returnPosition, float speedCoefficient = 1f)
     {
         if (currentState == OrbState.Sticked)
         {
             if (stickedCollider != null)
+            {
                 ApplyOrbReturnTriggerEffects(stickedCollider);
+
+                if (stickedCollider.TryGetComponent(out IOrbStickTarget stickable))
+                    stickable.CommitOrbUnstick(this);
+            }
 
             stickedCollider = null;
             stickedTransform = null;
@@ -195,7 +207,7 @@ public class SimpleOrb : MonoBehaviour
 
         currentState = OrbState.Returning;
 
-        SetNewDestination(returnPosition);
+        SetNewDestination(returnPosition, speedCoefficient);
         ResetParent();
         _sphereCollider.isTrigger = true;
         OnCalled?.Invoke();
@@ -244,7 +256,7 @@ public class SimpleOrb : MonoBehaviour
     public void SetNewDestination(Vector3 newPos, float multiplier)
     {
         currentTargetPos = newPos;
-        recallSpeedMultiplier = multiplier;
+        m_internalRecallSpeedMultiplier = multiplier;
     }
     private void MoveToTargetPosition()
     {
@@ -253,7 +265,10 @@ public class SimpleOrb : MonoBehaviour
         // AnimationCurve adjustments
         float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
         float curveValue = movementCurve.Evaluate(1 - (distanceToTarget / dynamicMaxDistance));
-        float currentSpeed = movementSpeed * curveValue * recallSpeedMultiplier;
+        float currentSpeed = m_movementData.movementSpeed * curveValue;
+
+        if (currentState == OrbState.Returning)
+            currentSpeed *= m_movementData.recallSpeedMultiplier * m_internalRecallSpeedMultiplier;
 
         // MoveTowards to the target
         transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1) * Time.deltaTime);
@@ -291,6 +306,9 @@ public class SimpleOrb : MonoBehaviour
 
         OnPhysicsHit?.Invoke();
 
+        if (stickCollider.collider.TryGetComponent(out IOrbStickTarget stickable))
+            stickable.CommitOrbStick(this);
+
         _rigidBody.isKinematic = true;
         transform.position = stickCollider.contacts[0].point;
         StickToTransform(stickCollider.transform);
@@ -305,14 +323,17 @@ public class SimpleOrb : MonoBehaviour
             if (penetrationCompleted)
                 Stick(collisionObject);
 
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbThrowDamage));
+            ApplyCombatEffects(damageable, ThrowDamage);
 
-            if (collisionObject.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            if (m_combatEffectData.throwKnockback && penetrationCompleted)
             {
-                hittedEnemy.ApplySlowForSeconds(100f, 2f);
+                if (collisionObject.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                    knockbackable.Knockback(-collisionObject.relativeVelocity, m_combatEffectData.throwKnockbackStrength, KnockbackSourceUsage.Final);
+            }
 
-                if(penetrationCompleted)
-                    hittedEnemy.ApplyKnockbackForce(transform.position, 1f);
+            if (collisionObject.gameObject.TryGetComponent(out ISlowable slowable))
+            {
+                slowable.SlowForSeconds(m_combatEffectData.throwSlowAmount, m_combatEffectData.throwSlowDuration);
             }
 
             penetrationCount++;
@@ -325,14 +346,18 @@ public class SimpleOrb : MonoBehaviour
     {
         if (triggerCollider.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            ApplyCombatEffects(damageable, orbStats.GetStat(OrbStatType.Damage) + _playerStats.GetStat(PlayerStatType.OrbRecallDamage));
-
-            if (triggerCollider.gameObject.TryGetComponent(out Enemy hittedEnemy))
+            ApplyCombatEffects(damageable, RecallDamage);
+             
+            if (m_combatEffectData.returnKnockback)
             {
-                hittedEnemy.ApplySlowForSeconds(100f, 2f);
-                hittedEnemy.ApplyKnockbackForce(transform.position, 0.1f);
+                if (triggerCollider.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                    knockbackable.Knockback(_rigidBody.linearVelocity, m_combatEffectData.returnKnockbackStrength, KnockbackSourceUsage.Final);
             }
-                
+
+            if (triggerCollider.gameObject.TryGetComponent(out ISlowable slowable))
+            {
+                slowable.SlowForSeconds(m_combatEffectData.returnSlowAmount, m_combatEffectData.returnSlowDuration);
+            }
         }
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage)
@@ -346,6 +371,8 @@ public class SimpleOrb : MonoBehaviour
         transform.SetParent(stickTransform);
         stickedTransform = stickTransform;
 
+        penetrationCount = 0;
+
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);
     }
@@ -356,8 +383,8 @@ public class SimpleOrb : MonoBehaviour
     }
     private IEnumerator IncreaseSpeed(float speedIncrease, float duration)
     {
-        movementSpeed += speedIncrease;
+        m_movementData.movementSpeed += speedIncrease;
         yield return new WaitForSeconds(duration);
-        movementSpeed -= speedIncrease;
+        m_movementData.movementSpeed -= speedIncrease;
     }
 }

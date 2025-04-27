@@ -52,9 +52,13 @@ namespace com.game.player.editor
 
         private void OnSceneGUI()
         {
+            if (!Application.isPlaying)
+                return;
+
             PlayerLight playerLight = target as PlayerLight;
 
-            bool hit = playerLight.CalculateView(out RaycastHit groundData);
+            bool hit = playerLight.HasGround;
+            RaycastHit groundData = playerLight.GroundData;
 
             const float kAlpha = 1f;
 

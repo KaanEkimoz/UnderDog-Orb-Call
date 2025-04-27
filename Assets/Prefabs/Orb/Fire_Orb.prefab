@@ -9877,9 +9877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 100
-  throwSpeedMultiplier: 7.66
-  recallSpeedMultiplier: 0.17
+  m_movementData: {fileID: 11400000, guid: fc6caf5b39523ba40894e6e2436fb9f2, type: 2}
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -9914,23 +9912,16 @@ MonoBehaviour:
   normalLifetime: 0.5
   m_light: {fileID: 0}
   trailParticle: {fileID: 1929282375273034525}
-  throwSlowEffectOnHit: 100
-  throwSlowEffectOnHitSeconds: 1.5
-  throwKnockbackEffectOnHit: 1
-  throwKnockbackEffectOnPenetrationHit: 0
-  throwKnockbackEffectOnHitForce: 1
-  returnSlowEffectOnHit: 100
-  returnSlowEffectOnHitSeconds: 1.5
-  returnKnockbackEffectOnHit: 1
-  returnKnockbackEffectOnHitForce: 0.1
+  m_combatEffectData: {fileID: 11400000, guid: ec4772f3a62a9914c868f4d11d1b8bca, type: 2}
   m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}
   m_recallSoundAsset: {fileID: 11400000, guid: bb630daa7c8da4e49ae270b7975c82d4, type: 2}
   m_catchSoundAsset: {fileID: 11400000, guid: c612b549984e4874ca8228d091a8ac1e, type: 2}
   fireDurationInSeconds: 3
   fireDamageIntervalInSeconds: 0.2
   fireDamageRadius: 10
+  fireDamageMultiplier: 1
   instantFireEffectPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
-  continuosFireEffect: {fileID: 3529606434721392210, guid: 73b53084e9ffaeb4090736700af8f632, type: 3}
+  continuosFireEffect: {fileID: 529021590064772990, guid: b529d1b4c3501734898bf1bedb2b6cb9, type: 3}
   fireEffectDurationInSeconds: 3
 --- !u!114 &-8209655953048531298
 MonoBehaviour:

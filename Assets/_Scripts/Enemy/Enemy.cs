@@ -25,8 +25,6 @@ namespace com.game.enemysystem
         [SerializeField] protected EnemyAIBuitlInScriptSelector enemyAISelector;
         [SerializeField] public bool hasAttackAnimation;
         [SerializeField] protected bool canMoveDuringAttack;
-        [Header("Slow")]
-        [SerializeField] public float slowPercentPerOrb = 25f;
         [Header("Stats")]
         [SerializeField] protected EnemyStats enemyStats;
 
@@ -61,7 +59,7 @@ namespace com.game.enemysystem
         private float defaultSpeed;
 
         //Slow
-        private float currentSlowAmount = 0;
+        public float currentSlowAmount { get; set; } = 0;
 
         protected virtual void Start()
         {
@@ -78,6 +76,7 @@ namespace com.game.enemysystem
             ai.Initialize(target.transform);
             ai.Speed = defaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed);
         }
+
         protected virtual void Update()
         {
             if (isDummyModeActive || target == null)
@@ -92,13 +91,10 @@ namespace com.game.enemysystem
 
             CustomUpdate();
         }
+
         protected virtual void CustomUpdate() { }
         protected virtual void Fakify() { }
 
-        public void ApplySlowForSeconds(float slowPercent, float duration)
-        {
-            StartCoroutine(SlowForSeconds(slowPercent, duration));
-        }
         public void ApplyKnockbackForce(Vector3 orbPosition, float knocbackForce)
         {
             Vector3 forceDirection = new Vector3(transform.position.x - orbPosition.x, 0, transform.position.z - orbPosition.z).normalized;
@@ -110,23 +106,12 @@ namespace com.game.enemysystem
             yield return new WaitForSeconds(0.2f);
             //navMeshAgent.isStopped = false;
         }
-        public void ApplySlowForOrbsOnEnemy(int orbCount)
-        {
-            currentSlowAmount = slowPercentPerOrb * orbCount;
 
-            if (currentSlowAmount > 100)
-                currentSlowAmount = 100;
-        }
-        private IEnumerator SlowForSeconds(float slowPercent, float duration)
-        {
-            currentSlowAmount = slowPercent;
-            yield return new WaitForSeconds(duration);
-            currentSlowAmount = 0;
-        }
         protected bool GetDistanceToPlayer()
         {
             return Vector3.Distance(transform.position, target.transform.position) <= ai.MovementData.stoppingDistance;
         }
+
         public void CommitEndOfAttack()
         {
             IsAttacking = false;

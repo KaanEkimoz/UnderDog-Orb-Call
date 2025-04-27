@@ -1,4 +1,5 @@
 using com.game.enemysystem;
+using com.game.utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,8 +34,8 @@ namespace com.game
             Game.Event = GameRuntimeEvent.Null;
 
             foreach (var hitCollider in hitColliders)
-                if (hitCollider.gameObject.TryGetComponent(out Enemy hitEnemy))
-                    hitEnemy.ApplySlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
+                if (hitCollider.gameObject.TryGetComponent(out ISlowable slowable))
+                    slowable.SlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
 
             affectedEnemies.Clear();
             GameObject instantEffect = Instantiate(instantIceEffect, transform.position, Quaternion.identity);

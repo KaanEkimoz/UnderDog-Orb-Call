@@ -83,7 +83,7 @@ namespace com.game
         float m_currentHealth;
         float m_maxHealth;
 
-        Timer m_hideTimer;
+        ITimer m_hideTimer;
 
         private void Start()
         {
@@ -182,8 +182,9 @@ namespace com.game
 
             m_graphic.alpha = 1f;
 
-            m_hideTimer = Timer.Create(m_timeBeforeHide, null, OnHideTimerComplete);
-            m_hideTimer.Start();
+            m_hideTimer = Timer.Create(m_timeBeforeHide)
+                .OnComplete(OnHideTimerComplete);
+            m_hideTimer.Restart();
         }
 
         public void UpdateEffect()

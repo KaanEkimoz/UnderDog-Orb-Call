@@ -12,10 +12,13 @@ using com.game.miscs;
 using System.Collections.Generic;
 using System.Linq;
 using com.game.events;
+using com.game.utilities;
+using DG.Tweening;
 
 namespace com.game.enemysystem
 {
-    public class EnemyCombatant : MonoBehaviour, IRenderedDamageable, IVisible
+    public class EnemyCombatant : MonoBehaviour, 
+        IRenderedDamageable, IVisible, ISlowable, IKnockbackable, IOrbStickTarget
     {
         private const bool k_randomizeDropDirections = false;
 
@@ -26,11 +29,12 @@ namespace com.game.enemysystem
         private const int k_maxMoneyDropAmount = 5;
         private const int k_maxExperienceDropAmount = 4;
 
-        [SerializeField] private GameObject m_container;
         [SerializeField, Required] private Renderer m_renderer;
         [SerializeField, Required] private EnemyStats m_stats;
-        [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
+        [SerializeField] private GameObject m_container;
         [SerializeField] private Enemy enemy;
+        [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
+        [SerializeField] public float m_slowPercentPerOrb = 25f;
 
         public ISpark Spark => m_spark.Value;
 
@@ -43,12 +47,28 @@ namespace com.game.enemysystem
         public Enemy Owner => enemy;
         public Renderer Renderer => m_renderer;
 
+        public int StickedOrbCount => OrbsSticked.Count;
+        public List<SimpleOrb> OrbsSticked
+        {
+            get
+            {
+                return m_orbsSticked;
+            }
+
+            set
+            {
+                m_orbsSticked = value;
+            }
+        }
+
         public event Action<float> OnTakeDamage = delegate { };
         public event Action<float> OnHeal = delegate { };
         public event Action<DeathCause> OnDie = delegate { };
 
         bool _deathFlag;
+        float m_currentSlowAmount;
         PlayerCombatant _playerCombatant;
+        List<SimpleOrb> m_orbsSticked = new();
         [Inject] PlayerOrbController _orbController;
 
         private void Awake()
@@ -93,7 +113,7 @@ namespace com.game.enemysystem
 
                 Die(deathCause);
             }
-            enemy.ApplySlowForOrbsOnEnemy(GetOrbsCountOnEnemy());
+            ApplySlowForOrbsOnEnemy();
             OnTakeDamage?.Invoke(damage);
             _playerCombatant.OnLifeSteal(realDamage);
         }
@@ -132,9 +152,7 @@ namespace com.game.enemysystem
 
             _deathFlag = true;
 
-            SimpleOrb[] orbsOnEnemy = GetOrbsOnEnemy();
-
-            foreach (SimpleOrb orb in orbsOnEnemy)
+            foreach (SimpleOrb orb in OrbsSticked)
             {
                 orb.SetNewDestination(new Vector3(orb.transform.position.x, 0, orb.transform.position.z));
                 orb.ResetParent();
@@ -173,14 +191,6 @@ namespace com.game.enemysystem
 
             Debug.Log("Dusman bayildi");
         }
-        public int GetOrbsCountOnEnemy()
-        {
-            return GetOrbsOnEnemy().Length;
-        }
-        public SimpleOrb[] GetOrbsOnEnemy()
-        {
-            return GetComponentsInChildren<SimpleOrb>();
-        }
 
         Vector3 GetRandomDirectionForDrop(DeathCause deathCause, float yAddition = k_dropSpawnForceYAddition)
         {
@@ -209,6 +219,53 @@ namespace com.game.enemysystem
             resultVector.Normalize();
 
             return resultVector;
+        }
+
+        public void ApplySlowForOrbsOnEnemy()
+        {
+            m_currentSlowAmount = m_slowPercentPerOrb * StickedOrbCount;
+
+            if (m_currentSlowAmount > 100)
+                m_currentSlowAmount = 100;
+
+            enemy.currentSlowAmount = m_currentSlowAmount;
+        }
+
+        public void SlowForSeconds(float slowPercent, float duration)
+        {
+            StartCoroutine(C_SlowForSeconds(slowPercent, duration));
+        }
+
+        private IEnumerator C_SlowForSeconds(float slowPercent, float duration)
+        {
+            m_currentSlowAmount = slowPercent;
+            enemy.currentSlowAmount = m_currentSlowAmount;
+
+            yield return new WaitForSeconds(duration);
+
+            m_currentSlowAmount = 0;
+            enemy.currentSlowAmount = m_currentSlowAmount;
+        }
+
+        public void Knockback(Vector3 source, float strength, KnockbackSourceUsage usage)
+        {
+            Transform target = enemy.AI != null ? enemy.AI.transform : transform;
+
+            Vector3 forceDirection = this.CalculateKnockbackDirection(source, usage, target);
+            Vector3 force = forceDirection * strength;
+            target.DOMove(target.position + force, 0.4f).SetEase(Ease.OutBack);
+        }
+
+        public void CommitOrbStick(SimpleOrb orb)
+        {
+            if (!OrbsSticked.Contains(orb))
+                OrbsSticked.Add(orb);
+        }
+
+        public void CommitOrbUnstick(SimpleOrb orb)
+        {
+            if (OrbsSticked.Contains(orb))
+                OrbsSticked.Remove(orb);
         }
     }
 }

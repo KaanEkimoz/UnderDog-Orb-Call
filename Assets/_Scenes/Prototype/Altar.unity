@@ -933,10 +933,6 @@ PrefabInstance:
       propertyPath: m_entries.Array.data[1].Target.underlyingValue
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 624608683657201586, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: autoSelectNextOrbOnShoot
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2019759119449363392, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_altarSystem
       value: 
@@ -980,14 +976,6 @@ PrefabInstance:
     - target: {fileID: 2059313747511272117, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3624581799953983724, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: Lens.NearClipPlane
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6581562185115844137, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
-      propertyPath: near clip plane
-      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7922492431965004093, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: m_Name
@@ -1106,7 +1094,6 @@ MonoBehaviour:
   m_initialPoolCapacity: 16
   m_dontDestroyOnLoad: 0
   m_useSingleton: 1
-  m_activeTimers: []
 --- !u!4 &312242445
 Transform:
   m_ObjectHideFlags: 0
@@ -5395,6 +5382,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[11].objectPrefab
+      value: 
+      objectReference: {fileID: 6970958069335474699, guid: 3db01166763311443b8beb57da41e74d, type: 3}
     - target: {fileID: 7441109518502746199, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: m_Name
       value: ObjectPool

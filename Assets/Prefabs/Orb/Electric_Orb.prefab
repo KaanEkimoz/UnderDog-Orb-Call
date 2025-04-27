@@ -153,9 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  movementSpeed: 100
-  throwSpeedMultiplier: 7.66
-  recallSpeedMultiplier: 0.17
+  m_movementData: {fileID: 11400000, guid: fc6caf5b39523ba40894e6e2436fb9f2, type: 2}
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -190,25 +188,20 @@ MonoBehaviour:
   normalLifetime: 0.5
   m_light: {fileID: 0}
   trailParticle: {fileID: 5112996817047285831}
-  throwSlowEffectOnHit: 100
-  throwSlowEffectOnHitSeconds: 1.5
-  throwKnockbackEffectOnHit: 1
-  throwKnockbackEffectOnPenetrationHit: 0
-  throwKnockbackEffectOnHitForce: 1
-  returnSlowEffectOnHit: 100
-  returnSlowEffectOnHitSeconds: 1.5
-  returnKnockbackEffectOnHit: 1
-  returnKnockbackEffectOnHitForce: 0.1
+  m_combatEffectData: {fileID: 11400000, guid: ec4772f3a62a9914c868f4d11d1b8bca, type: 2}
   m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}
   m_recallSoundAsset: {fileID: 11400000, guid: bb630daa7c8da4e49ae270b7975c82d4, type: 2}
   m_catchSoundAsset: {fileID: 11400000, guid: c612b549984e4874ca8228d091a8ac1e, type: 2}
-  maxElectricBounceCount: 3
-  electricBounceRadius: 15
-  electricEffectDurationInSeconds: 5
-  electrictEffectIntervalInSeconds: 1
-  electricEffectPrefab: {fileID: 0}
-  electricChainEffectPrefab: {fileID: 4255653483301192683, guid: b954bd2d90fa36542aa7568f516a286e, type: 3}
-  electricChainEffectDuration: 0.2
+  m_electricMaxBounceCount: 3
+  m_electricBounceRadius: 15
+  m_electricBounceIntervalInSeconds: 1
+  m_electricDamage: 1
+  m_electricLineLifetime: 0.2
+  m_electricBounceLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  m_electricInstantEffectPrefab: {fileID: 1000011396044746, guid: f504bf652108b4a41bcee2f3f9d188dc, type: 3}
+  m_electricChainEffectPrefab: {fileID: 3280036614087464108, guid: b954bd2d90fa36542aa7568f516a286e, type: 3}
 --- !u!114 &-7261617665073162034
 MonoBehaviour:
   m_ObjectHideFlags: 0

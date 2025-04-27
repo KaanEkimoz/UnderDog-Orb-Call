@@ -37,5 +37,28 @@ namespace com.game.utilities
             dict.Add(newKey, value);
             return true;
         }
+
+        public static Transform GetRealTransform(this Collider collider)
+        {
+            if (collider.attachedRigidbody != null)
+                return collider.attachedRigidbody.transform;
+
+            return collider.transform;
+        }
+
+        public static Vector3 CalculateKnockbackDirection(this IKnockbackable knockbackable, Vector3 source, KnockbackSourceUsage usage)
+        {
+            return CalculateKnockbackDirection(knockbackable, source, usage, knockbackable.transform);
+        }
+
+        public static Vector3 CalculateKnockbackDirection(this IKnockbackable knockbackable, Vector3 source, KnockbackSourceUsage usage, Transform self)
+        {
+            return usage switch
+            {
+                KnockbackSourceUsage.KnockSource => new Vector3(self.position.x - source.x, 0, self.position.z - source.z).normalized,
+                KnockbackSourceUsage.Final => source.normalized,
+                _ => Vector3.up,
+            };
+        }
     }
 }

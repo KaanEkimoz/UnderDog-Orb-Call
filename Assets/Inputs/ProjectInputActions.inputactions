@@ -310,7 +310,7 @@
                     "name": "",
                     "id": "58ce7197-87ef-4c34-97f1-4e1d73bcf8bd",
                     "path": "<Mouse>/rightButton",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "processors": "",
                     "groups": "",
                     "action": "Recall",

@@ -1,9 +1,10 @@
+using com.game.utilities;
 using System;
 using UnityEngine;
 
 namespace com.game
 {
-    public interface IDamageable
+    public interface IDamageable : IObject
     {
         bool IsAlive { get; }
         float Health { get; }
