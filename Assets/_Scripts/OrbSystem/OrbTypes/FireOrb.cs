@@ -13,7 +13,7 @@ namespace com.game
         [SerializeField] float fireDurationInSeconds = 5f;
         [SerializeField] float fireDamageIntervalInSeconds = 1f;
         [SerializeField] float fireDamageRadius = 10f;
-        [SerializeField] float fireDamageMultiplier = 1f;
+        [SerializeField] float fireInstantDamageMultiplier = 1f;
         [Space]
         [Header("Collision Instant Fire Effect")]
         [SerializeField] private GameObject instantFireEffectPrefab;
@@ -22,11 +22,17 @@ namespace com.game
         [SerializeField] private float fireEffectDurationInSeconds = 0.2f;
 
         private List<IRenderedDamageable> affectedEnemies = new();
-        protected override void ApplyCombatEffects(IDamageable damageable, float damage)
+        protected override void ApplyCombatEffects(IDamageable damageable, float damage, bool penetrationCompleted, bool recall)
         {
-            base.ApplyCombatEffects(damageable, damage);
+            base.ApplyCombatEffects(damageable, damage, penetrationCompleted, recall);
 
-            damageable.TakeDamageInSeconds(damage * fireDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
+            if (recall)
+                return;
+
+            if (!penetrationCompleted)
+                return;
+
+            damageable.TakeDamageInSeconds(damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
 
             Collider[] hitColliders = Physics.OverlapSphere(damageable.transform.position, fireDamageRadius);
 
@@ -44,7 +50,7 @@ namespace com.game
 
                 if (hitCollider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
                 {
-                    hitDamageable.TakeDamageInSeconds(damage * fireDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
+                    hitDamageable.TakeDamageInSeconds(damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                 }
 

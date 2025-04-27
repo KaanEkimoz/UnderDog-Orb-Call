@@ -48,9 +48,15 @@ namespace com.game
             }
         }
 
-        protected override void ApplyCombatEffects(IDamageable damageableObject, float damage)
+        protected override void ApplyCombatEffects(IDamageable damageableObject, float damage, bool penetrationCompleted, bool recall)
         {
-            base.ApplyCombatEffects(damageableObject, damage);
+            base.ApplyCombatEffects(damageableObject, damage, penetrationCompleted, recall);
+
+            if (recall)
+                return;
+
+            if (!penetrationCompleted)
+                return;
 
             if (damageableObject is not IRenderedDamageable renderedDamageable)
                 return;
