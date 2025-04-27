@@ -179,6 +179,8 @@ public class SimpleOrb : MonoBehaviour
             m_internalRecallSpeedMultiplier = 1f;
             transform.parent = startParent;
 
+            penetrationCount = 0;
+
             OnReachedToEllipse?.Invoke();
             OnStateChanged?.Invoke(currentState);
         }
@@ -368,6 +370,8 @@ public class SimpleOrb : MonoBehaviour
         _rigidBody.isKinematic = true;
         transform.SetParent(stickTransform);
         stickedTransform = stickTransform;
+
+        penetrationCount = 0;
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);
