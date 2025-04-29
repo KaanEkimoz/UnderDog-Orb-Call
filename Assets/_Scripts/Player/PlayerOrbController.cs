@@ -416,4 +416,17 @@ public class PlayerOrbController : MonoBehaviour
     {
         //_playerAnimator.SetBool("IsAiming", IsAiming);
     }
+
+    //private void OnGUI()
+    //{
+    //    for (int i = 0; i < orbsOnEllipse.Count; i++) 
+    //    {
+    //        Color prevColor = GUI.color;
+    //        if (i == selectedOrbIndex) GUI.color = Color.yellow;
+
+    //        GUILayout.Label(orbsOnEllipse[i].penetrationExcessDamage.ToString());
+
+    //        GUI.color = prevColor;
+    //    }
+    //}
 }

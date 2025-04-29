@@ -12,6 +12,7 @@ using com.absence.attributes.experimental;
 using com.game.orbsystem;
 using com.game.utilities;
 using com.absence.attributes;
+using System.Collections.Generic;
 public enum OrbState
 {
     OnEllipse,
@@ -64,7 +65,7 @@ public class SimpleOrb : MonoBehaviour
 
     //Throw
     private float distanceTraveled;
-    private float penetrationExcessDamage;
+    private float m_penetrationExcessDamage;
     private Vector3 throwStartPosition;
     private Vector3 throwVector;
     private int penetrationCount = 0;
@@ -72,6 +73,8 @@ public class SimpleOrb : MonoBehaviour
     //Stats
     public OrbStats Stats => orbStats;
     private PlayerStats _playerStats;
+
+    public float penetrationExcessDamage => m_penetrationExcessDamage;
 
     //Events
     public event Action OnThrown;
@@ -83,7 +86,10 @@ public class SimpleOrb : MonoBehaviour
     public event Action OnPhysicsHit;
     //Effects
     private SoundFXManager _soundFXManager;
+    protected Vector3 m_latestVelocity;
+    protected DamageEvent m_latestDamageEvt;
 
+    List<IDamageable> m_penetratedEnemies = new();
     float m_internalRecallSpeedMultiplier;
 
     public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
@@ -155,6 +161,8 @@ public class SimpleOrb : MonoBehaviour
     {
         if (currentState == OrbState.Throwing)
         {
+            m_latestVelocity = _rigidBody.linearVelocity;
+
             float speedFromStats = (((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) *
                 ((_playerStats.GetStat(PlayerStatType.OrbThrowSpeed) / 10)) + 1);
 
@@ -181,6 +189,8 @@ public class SimpleOrb : MonoBehaviour
             transform.parent = startParent;
 
             penetrationCount = 0;
+            m_penetrationExcessDamage = 0f;
+            m_penetratedEnemies.Clear();
 
             OnReachedToEllipse?.Invoke();
             OnStateChanged?.Invoke(currentState);
@@ -210,7 +220,6 @@ public class SimpleOrb : MonoBehaviour
 
         SetNewDestination(returnPosition, speedCoefficient);
         ResetParent();
-        _sphereCollider.isTrigger = true;
         OnCalled?.Invoke();
         OnStateChanged?.Invoke(currentState);
     }
@@ -241,7 +250,6 @@ public class SimpleOrb : MonoBehaviour
 
         trailParticle.startLifetime = normalLifetime;
         _rigidBody.isKinematic = false;
-        _sphereCollider.isTrigger = false;
         
         OnThrown?.Invoke();
         OnStateChanged?.Invoke(currentState);
@@ -282,18 +290,20 @@ public class SimpleOrb : MonoBehaviour
     
     private void OnCollisionEnter(Collision collisionObject)
     {
+
+    }
+    private void OnTriggerEnter(Collider triggerObject)
+    {
         if (currentState == OrbState.Throwing)
         {
             Game.Event = com.game.GameRuntimeEvent.OrbThrow;
 
-            ApplyOrbThrowCollisionEffects(collisionObject);
+            ApplyOrbThrowCollisionEffects(triggerObject);
 
             Game.Event = com.game.GameRuntimeEvent.Null;
         }
-    }
-    private void OnTriggerEnter(Collider triggerObject)
-    {
-        if (currentState == OrbState.Returning)
+
+        else if (currentState == OrbState.Returning)
         {
             Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
@@ -303,44 +313,64 @@ public class SimpleOrb : MonoBehaviour
             Game.Event = com.game.GameRuntimeEvent.Null;
         }
     }
-    private void Stick(Collision stickCollider)
+    private void Stick(Collider stickCollider)
     {
         currentState = OrbState.Sticked;
-        stickedCollider = stickCollider.collider;
+        stickedCollider = stickCollider;
 
         OnPhysicsHit?.Invoke();
 
-        if (stickCollider.collider.TryGetComponent(out IOrbStickTarget stickable))
+        if (stickCollider.TryGetComponent(out IOrbStickTarget stickable))
             stickable.CommitOrbStick(this);
 
         _rigidBody.isKinematic = true;
-        transform.position = stickCollider.contacts[0].point;
+        transform.position = stickCollider.ClosestPointOnBounds(transform.position);
         StickToTransform(stickCollider.transform);
     }
     
-    protected virtual void ApplyOrbThrowCollisionEffects(Collision collisionObject)
+    protected virtual void ApplyOrbThrowCollisionEffects(Collider collisionObject)
     {
         if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
         {
-            bool penetrationCompleted = penetrationCount >= _playerStats.GetStat(PlayerStatType.Penetration);
+            float maxPenetrationCount = _playerStats.GetStat(PlayerStatType.Penetration);
+            bool penetrationCompleted = penetrationCount >= maxPenetrationCount;
+            bool alreadyPenetrated = m_penetratedEnemies.Contains(damageable);
 
             if (penetrationCompleted)
-                Stick(collisionObject);
-
-            ApplyCombatEffects(damageable, ThrowDamage + penetrationExcessDamage, penetrationCompleted, false);
-
-            if (m_combatEffectData.throwKnockback && penetrationCompleted)
             {
-                if (collisionObject.gameObject.TryGetComponent(out IKnockbackable knockbackable))
-                    knockbackable.Knockback(-collisionObject.relativeVelocity, m_combatEffectData.throwKnockbackStrength, KnockbackSourceUsage.Final);
+                Stick(collisionObject);
             }
 
-            if (collisionObject.gameObject.TryGetComponent(out ISlowable slowable))
+            else
+            {
+                if (alreadyPenetrated)
+                {
+                    return;
+                }
+
+                else
+                {
+                    m_penetratedEnemies.Add(damageable);
+                }
+            }
+
+            ApplyCombatEffects(damageable, ThrowDamage + m_penetrationExcessDamage, penetrationCompleted, false);
+
+            if (penetrationCompleted && m_combatEffectData.throwKnockback)
+            {
+                if (collisionObject.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                    knockbackable.Knockback(m_latestVelocity.normalized, m_combatEffectData.throwKnockbackStrength, KnockbackSourceUsage.Final);
+            }
+
+            if (penetrationCompleted && collisionObject.gameObject.TryGetComponent(out ISlowable slowable))
             {
                 slowable.SlowForSeconds(m_combatEffectData.throwSlowAmount, m_combatEffectData.throwSlowDuration);
             }
 
-            penetrationCount++;
+            if (m_latestDamageEvt.CausedDeath)
+                penetrationCount++;
+            else
+                Stick(collisionObject);
         }
         else
             Stick(collisionObject);
@@ -368,16 +398,12 @@ public class SimpleOrb : MonoBehaviour
     {
         damageableObject.TakeDamage(damage, out DamageEvent evt);
 
+        m_latestDamageEvt = evt;
+
         if (recall)
             return;
 
-        if (!evt.CausedDeath)
-        {
-            penetrationExcessDamage = 0f;
-            return;
-        }
-
-        penetrationExcessDamage += (evt.DamageSent - evt.DamageDealt);
+        m_penetrationExcessDamage += (evt.DamageSent - evt.DamageDealt);
     }
     private void StickToTransform(Transform stickTransform)
     {
@@ -387,7 +413,8 @@ public class SimpleOrb : MonoBehaviour
         stickedTransform = stickTransform;
 
         penetrationCount = 0;
-        penetrationExcessDamage = 0f;
+        m_penetrationExcessDamage = 0f;
+        m_penetratedEnemies.Clear();
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);

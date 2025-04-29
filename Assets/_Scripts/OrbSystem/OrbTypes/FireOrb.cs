@@ -107,10 +107,6 @@ namespace com.game
             yield return new WaitForSeconds(delay);
             Destroy(fireEffectInstance);
         }
-        protected override void ApplyOrbThrowCollisionEffects(Collision collisionObject)
-        {
-            base.ApplyOrbThrowCollisionEffects(collisionObject);
-        }
 
 #if UNITY_EDITOR
 

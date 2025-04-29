@@ -94,13 +94,14 @@ namespace com.game.enemysystem
                 return;
             }
 
-            float damageDealt = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
+            float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
+            float damageDealt = Mathf.Min(realDamage, _health);
 
-            _health -= damageDealt;
+            _health -= realDamage;
 
             if (PopupManager.Instance != null)
             {
-                PopupManager.Instance.CreateDamagePopup(damageDealt, transform.position
+                PopupManager.Instance.CreateDamagePopup(realDamage, transform.position
                     + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
                     + ((Vector3)UnityEngine.Random.insideUnitCircle * k_popupPositionRandomization)
                     , true); // !!!
