@@ -39,35 +39,34 @@ namespace com.game.player
         {
             Heal(amount * (_playerStats.GetStat(PlayerStatType.LifeSteal) / 100));
         }
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, out DamageEvent evt)
         {
             if (damage == 0f)
+            {
+                evt = DamageEvent.Empty;
                 return;
+            }
 
-            _health -= damage * (1 - (_playerStats.GetStat(PlayerStatType.Armor) / 100)); ;
+            float damageDealt = damage * (1 - (_playerStats.GetStat(PlayerStatType.Armor) / 100));
 
-            if (_health <= 0)
+            _health -= damageDealt;
+
+            bool causedDeath = _health <= 0;
+
+            if (causedDeath)
             {
                 _health = 0;
                 Die(DeathCause.Default);
             }
-            OnTakeDamage?.Invoke(damage);
-        }
-        public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
-        {
-            StartCoroutine(TakeDamageOverTime(damage, durationInSeconds, intervalInSeconds));
-        }
-        private IEnumerator TakeDamageOverTime(float damage, float durationInSeconds, float intervalInSeconds)
-        {
-            float elapsedTime = 0f;
-            float damageDivider = durationInSeconds / intervalInSeconds;
 
-            while (elapsedTime < durationInSeconds)
+            evt = new DamageEvent()
             {
-                TakeDamage(damage / damageDivider);
-                elapsedTime += intervalInSeconds;
-                yield return new WaitForSeconds(intervalInSeconds);
-            }
+                DamageSent = damage,
+                DamageDealt = damageDealt,
+                CausedDeath = causedDeath,
+            };
+
+            OnTakeDamage?.Invoke(damage);
         }
         public void HealWithLifeSteal(float amount)
         {

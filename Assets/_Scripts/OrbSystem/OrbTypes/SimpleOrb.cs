@@ -64,6 +64,7 @@ public class SimpleOrb : MonoBehaviour
 
     //Throw
     private float distanceTraveled;
+    private float penetrationExcessDamage;
     private Vector3 throwStartPosition;
     private Vector3 throwVector;
     private int penetrationCount = 0;
@@ -326,7 +327,7 @@ public class SimpleOrb : MonoBehaviour
             if (penetrationCompleted)
                 Stick(collisionObject);
 
-            ApplyCombatEffects(damageable, ThrowDamage, penetrationCompleted, false);
+            ApplyCombatEffects(damageable, ThrowDamage + penetrationExcessDamage, penetrationCompleted, false);
 
             if (m_combatEffectData.throwKnockback && penetrationCompleted)
             {
@@ -365,7 +366,18 @@ public class SimpleOrb : MonoBehaviour
     }
     protected virtual void ApplyCombatEffects(IDamageable damageableObject, float damage, bool penetrationCompleted, bool recall)
     {
-        damageableObject.TakeDamage(damage);
+        damageableObject.TakeDamage(damage, out DamageEvent evt);
+
+        if (recall)
+            return;
+
+        if (!evt.CausedDeath)
+        {
+            penetrationExcessDamage = 0f;
+            return;
+        }
+
+        penetrationExcessDamage += (evt.DamageSent - evt.DamageDealt);
     }
     private void StickToTransform(Transform stickTransform)
     {
@@ -375,6 +387,7 @@ public class SimpleOrb : MonoBehaviour
         stickedTransform = stickTransform;
 
         penetrationCount = 0;
+        penetrationExcessDamage = 0f;
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);

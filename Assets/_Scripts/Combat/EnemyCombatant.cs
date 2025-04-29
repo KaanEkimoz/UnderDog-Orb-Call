@@ -86,24 +86,29 @@ namespace com.game.enemysystem
         {
             _playerCombatant = playerCombatant;
         }
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, out DamageEvent evt)
         {
             if (damage == 0f)
+            {
+                evt = DamageEvent.Empty;
                 return;
+            }
 
-            float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
+            float damageDealt = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
 
-            _health -= realDamage;
+            _health -= damageDealt;
 
             if (PopupManager.Instance != null)
             {
-                PopupManager.Instance.CreateDamagePopup(realDamage, transform.position
+                PopupManager.Instance.CreateDamagePopup(damageDealt, transform.position
                     + transform.localToWorldMatrix.MultiplyVector(new Vector3(0f, 0.5f, 0f))
                     + ((Vector3)UnityEngine.Random.insideUnitCircle * k_popupPositionRandomization)
                     , true); // !!!
             }
 
-            if (_health <= 0)
+            bool causedDeath = _health <= 0;
+
+            if (causedDeath)
             {
                 _health = 0;
 
@@ -113,29 +118,21 @@ namespace com.game.enemysystem
 
                 Die(deathCause);
             }
+
+            evt = new DamageEvent()
+            {
+                DamageSent = damage,
+                DamageDealt = damageDealt,
+                CausedDeath = causedDeath,
+            };
+
             ApplySlowForOrbsOnEnemy();
             OnTakeDamage?.Invoke(damage);
-            _playerCombatant.OnLifeSteal(realDamage);
+            _playerCombatant.OnLifeSteal(damageDealt);
         }
         public void ApplyKnockback(Vector3 forceDirection, float forceMagnitude)
         {
             enemy.ApplyKnockbackForce(forceDirection, forceMagnitude);
-        }
-        public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
-        {
-            StartCoroutine(TakeDamageOverTime(damage, durationInSeconds, intervalInSeconds));
-        }
-        private IEnumerator TakeDamageOverTime(float damage, float durationInSeconds, float intervalInSeconds)
-        {
-            float elapsedTime = 0f;
-            float damageDivider = durationInSeconds / intervalInSeconds;
-
-            while (elapsedTime < durationInSeconds)
-            {
-                TakeDamage(damage / damageDivider);
-                elapsedTime += intervalInSeconds;
-                yield return new WaitForSeconds(intervalInSeconds);
-            }
         }
         public void Heal(float amount)
         {

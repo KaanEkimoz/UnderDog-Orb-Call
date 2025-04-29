@@ -32,7 +32,7 @@ namespace com.game
             if (!penetrationCompleted)
                 return;
 
-            damageable.TakeDamageInSeconds(damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
+            damageable.TakeDamageInSeconds(this, damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
 
             Collider[] hitColliders = Physics.OverlapSphere(damageable.transform.position, fireDamageRadius);
 
@@ -50,7 +50,7 @@ namespace com.game
 
                 if (hitCollider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
                 {
-                    hitDamageable.TakeDamageInSeconds(damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
+                    hitDamageable.TakeDamageInSeconds(this, damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                 }
 
