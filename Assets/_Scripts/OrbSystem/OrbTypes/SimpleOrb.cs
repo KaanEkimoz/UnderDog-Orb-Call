@@ -59,7 +59,7 @@ public class SimpleOrb : MonoBehaviour
     private Vector3 startScale;
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
-    private const float ellipseReachThreshold = 0.2f;
+    private const float ellipseReachThreshold = 0.4f;
     private Transform stickedTransform;
     private Collider stickedCollider;
 

@@ -283,12 +283,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 305c8a926fd4dab46a2d82c072bd88e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_container: {fileID: 1615555516738219183}
   m_renderer: {fileID: 391948113693585292}
   m_stats: {fileID: 6483158665112541329}
+  m_container: {fileID: 1615555516738219183}
+  enemy: {fileID: 0}
   m_spark:
     underlyingValue: {fileID: 8156995981169104547}
-  enemy: {fileID: 0}
+  m_slowPercentPerOrb: 25
 --- !u!114 &3242157560232732096
 MonoBehaviour:
   m_ObjectHideFlags: 0
