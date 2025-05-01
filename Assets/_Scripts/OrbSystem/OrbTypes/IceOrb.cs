@@ -26,7 +26,7 @@ namespace com.game
             if (recall)
                 return;
 
-            if (!penetrationCompleted)
+            if (m_latestDamageEvt.CausedDeath && !penetrationCompleted)
                 return;
 
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);

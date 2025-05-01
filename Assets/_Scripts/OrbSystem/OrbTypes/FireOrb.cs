@@ -29,7 +29,7 @@ namespace com.game
             if (recall)
                 return;
 
-            if (!penetrationCompleted)
+            if (m_latestDamageEvt.CausedDeath && !penetrationCompleted)
                 return;
 
             damageable.TakeDamageInSeconds(this, damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
