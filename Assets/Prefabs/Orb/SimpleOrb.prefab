@@ -186,7 +186,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxDistance: 15
+  maxDistance: 12
   orbStats: {fileID: 6960696444875857668}
   startMaterial: {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
   _rigidBody: {fileID: 4581226788505073321}
@@ -195,6 +195,7 @@ MonoBehaviour:
   onEllipseLifetime: 0.1
   normalLifetime: 0.5
   m_light: {fileID: 4889231651571930717}
+  m_selectionIndicator: {fileID: 0}
   trailParticle: {fileID: 98057579503599703}
   m_combatEffectData: {fileID: 11400000, guid: ec4772f3a62a9914c868f4d11d1b8bca, type: 2}
   m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}

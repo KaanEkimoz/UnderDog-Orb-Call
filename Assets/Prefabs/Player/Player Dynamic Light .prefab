@@ -219,14 +219,14 @@ MonoBehaviour:
     StepAmount: 3
     AnimationSpeed: 4
   m_intensitySettings:
-    InitialValue: 1.21
+    InitialValue: 8.17
     LightStatCoefficient: 0.55
     StepAmount: 0.67
     AnimationSpeed: 4
   m_rangeSettings:
-    InitialValue: 0.55
-    LightStatCoefficient: 0.25
-    StepAmount: 0.54
+    InitialValue: 0
+    LightStatCoefficient: 31.17
+    StepAmount: 1.1
     AnimationSpeed: 4
   m_localHeightSettings:
     InitialValue: 0
@@ -234,14 +234,14 @@ MonoBehaviour:
     StepAmount: 0.5
     AnimationSpeed: 4
   m_virtualHalfVisionSettings:
-    InitialValue: 5.38
+    InitialValue: 15.89
     LightStatCoefficient: 1.12
-    StepAmount: 1.47
+    StepAmount: 1.35
     AnimationSpeed: 4
   m_virtualFullVisionSettings:
-    InitialValue: 0
+    InitialValue: 2.04
     LightStatCoefficient: 0.79
-    StepAmount: 1.34
+    StepAmount: 1.7
     AnimationSpeed: 4
   m_fullVisionRadiusShift: -2.25
   m_halfVisionRadiusShift: 1.13

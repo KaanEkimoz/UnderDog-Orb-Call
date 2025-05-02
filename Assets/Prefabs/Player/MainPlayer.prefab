@@ -3425,7 +3425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_orientation: {fileID: 5895881473504401873}
-  walkSpeed: 5.335
+  walkSpeed: 4.7
   slowWalkSpeed: 0.75
   sprintSpeed: 5.335
   alwaysSprint: 0
@@ -3531,13 +3531,13 @@ MonoBehaviour:
   m_order: 0
   m_statEntries:
   - TargetStat: 2
-    Coefficient: -1
+    Coefficient: -6
   - TargetStat: 15
-    Coefficient: 1
+    Coefficient: 15
   - TargetStat: 6
-    Coefficient: -1
+    Coefficient: -20
   - TargetStat: 1
-    Coefficient: 1
+    Coefficient: -10
   m_ascendingOrbCountCurve:
     serializedVersion: 2
     m_Curve:
@@ -3563,9 +3563,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_inverse: 0
-  m_generalCoefficient: 0
-  m_shift: -0.5
-  m_amplitude: 1
+  m_generalCoefficient: 0.492
+  m_shift: 0
+  m_amplitude: 1.6
 --- !u!114 &4494302876250417051
 MonoBehaviour:
   m_ObjectHideFlags: 0

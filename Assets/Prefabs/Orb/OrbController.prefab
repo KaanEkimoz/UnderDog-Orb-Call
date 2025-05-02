@@ -89,8 +89,8 @@ MonoBehaviour:
     m_Bits: 8449
   recallButtonHoldTime: 0.2
   returnPointTransform: {fileID: 0}
-  callAllOrbsSpeedCoefficient: 0.86
-  allOrbsCoefficientAffectsPerOrb: 1
+  callAllOrbsSpeedCoefficient: 0.85
+  allOrbsCoefficientAffectsPerOrb: 0
   ellipseCenterTransform: {fileID: 0}
   ellipseXRadius: 0.5
   ellipseYRadius: 0.75
