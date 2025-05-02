@@ -1028,6 +1028,50 @@ PrefabInstance:
       propertyPath: m_intensitySettings.LightStatCoefficient
       value: 1.19
       objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_fullVisionRadiusShift
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_fullVisionRadiusMultiplier
+      value: 5.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_halfVisionRadiusMultiplier
+      value: 1.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_intensitySettings.StepAmount
+      value: 11.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_intensitySettings.InitialValue
+      value: 5.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_localHeightSettings.InitialValue
+      value: 2.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_innerSpotAngleSettings.StepAmount
+      value: 3.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_outerSpotAngleSettings.StepAmount
+      value: 5.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_innerSpotAngleSettings.InitialValue
+      value: 30.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_outerSpotAngleSettings.InitialValue
+      value: 34.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4165926420074612670, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
+      propertyPath: m_innerSpotAngleSettings.LightStatCoefficient
+      value: 2.99
+      objectReference: {fileID: 0}
     - target: {fileID: 6581562185115844137, guid: 607c2f99627fc344f955ff370e19be17, type: 3}
       propertyPath: near clip plane
       value: -5.27
@@ -2377,8 +2421,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 756496170}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 39.455, y: 0, z: 7.815}
+  m_LocalRotation: {x: 0.35768786, y: -0.4768708, z: 0.22097698, w: 0.7718956}
+  m_LocalPosition: {x: 40.706844, y: 53.5004, z: -11.905769}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
