@@ -80,6 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maximumOrbCount: 10
   orbCountAtStart: 5
+  smartOrbSelection: 0
   autoSelectNextOrbOnShoot: 1
   cooldownBetweenThrowsInSeconds: 0.2
   firePointTransform: {fileID: 0}

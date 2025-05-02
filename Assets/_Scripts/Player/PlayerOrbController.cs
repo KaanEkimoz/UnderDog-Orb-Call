@@ -8,6 +8,16 @@ using UnityEngine;
 using Zenject;
 public class PlayerOrbController : MonoBehaviour
 {
+    private static readonly Func<SimpleOrb, bool> s_bestOrbPredicateThrow = (orb) =>
+    {
+        return orb.currentState == OrbState.OnEllipse;
+    };
+
+    private static readonly Func<SimpleOrb, bool> s_bestOrbPredicateRecall = (orb) =>
+    {
+        return orb.currentState == OrbState.Sticked;
+    };
+
     public static readonly Dictionary<Type, int> OrbTypePoolIndexDict = new Dictionary<Type, int>()
     {
         { typeof(SimpleOrb), SIMPLE_ORB_INDEX },
@@ -15,9 +25,11 @@ public class PlayerOrbController : MonoBehaviour
         { typeof(IceOrb), ICE_ORB_INDEX },
         { typeof(ElectricOrb), ELECTRIC_ORB_INDEX },
     };
+
     [Header("Orb Count")]
     [Range(5, 15)][SerializeField] private int maximumOrbCount = 10;
     [Range(0, 10)][SerializeField] private int orbCountAtStart = 5;
+    [SerializeField] private bool smartOrbSelection = true;
     [SerializeField] private bool autoSelectNextOrbOnShoot = false;
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 0f;
@@ -146,10 +158,7 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void ThrowOrb()
     {
-        if (orbToThrow == null)
-            return;
-
-        if (throwCooldownTimer > 0 || orbToThrow.currentState != OrbState.OnEllipse)
+        if (throwCooldownTimer > 0)
             return;
 
         if (!IsAiming)
@@ -159,6 +168,12 @@ public class PlayerOrbController : MonoBehaviour
         {
             if (orb.currentState == OrbState.Returning)
                 return;
+        }
+
+        if (orbToThrow == null || orbToThrow.currentState != OrbState.OnEllipse)
+        {
+            if (smartOrbSelection) SelectBestOrbLHS(s_bestOrbPredicateThrow);
+            else return;
         }
 
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
@@ -175,7 +190,7 @@ public class PlayerOrbController : MonoBehaviour
         orbToThrow.Throw(throwDirection.normalized);
 
         if (autoSelectNextOrbOnShoot)
-            SelectNextOrb();
+            SelectPreviousOrb();
 
         Player.Instance.Hub.OrbHandler.RemoveOrb();
         
@@ -183,8 +198,11 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void CallOrb(SimpleOrb orb, float coefficient = 1f)
     {
-        if (orb.currentState != OrbState.Sticked) 
-            return;
+        if (orb.currentState != OrbState.Sticked)
+        {
+            if (smartOrbSelection) SelectBestOrbLHS(s_bestOrbPredicateRecall);
+            else return;
+        }
 
         orb.ReturnToPosition(returnPointTransform.position, coefficient);
         OnOrbCalled?.Invoke();
@@ -299,9 +317,9 @@ public class PlayerOrbController : MonoBehaviour
         for (int i = 0; i < orbsOnEllipse.Count; i++)
         {
             if (i == selectedOrbIndex)
-                orbsOnEllipse[i].SetMaterial(highlightMaterial);
+                orbsOnEllipse[i].SetSelected(true);
             else
-                orbsOnEllipse[i].ResetMaterial();
+                orbsOnEllipse[i].SetSelected(false);
         }
     }
     private void HandleCooldowns()
@@ -370,6 +388,47 @@ public class PlayerOrbController : MonoBehaviour
             Player.Instance.Hub.OrbHandler.AddOrb();
         };
     }
+
+    bool SelectBestOrbLHS(Func<SimpleOrb, bool> condition)
+    {
+        bool success = FindBestOrbLHS(condition, out int differenceLHS);
+
+        if (!success)
+            return false;
+
+        for (int i = 0; i < differenceLHS; i++) 
+        {
+            SelectPreviousOrb();
+        }
+
+        return true;
+    }
+
+    bool FindBestOrbLHS(Func<SimpleOrb, bool> condition, out int differenceLHS)
+    {
+        differenceLHS = -1;
+        bool success = false;
+        for (int i = selectedOrbIndex; i > selectedOrbIndex - orbsOnEllipse.Count; i--)
+        {
+            differenceLHS++;
+
+            int index = i;
+            if (index < 0) index += orbsOnEllipse.Count;
+
+            SimpleOrb iteratedOrb = orbsOnEllipse[index];
+
+            bool result = condition.Invoke(iteratedOrb);
+
+            if (result)
+            {
+                success = true;
+                break;
+            }
+        }
+
+        return success;
+    }
+
     public void RemoveOrbFromEllipse(SimpleOrb orb)
     {
         orbsOnEllipse.Remove(orb);

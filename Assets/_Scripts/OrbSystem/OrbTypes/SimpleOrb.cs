@@ -5,7 +5,6 @@ using com.game.player.statsystemextensions;
 using System;
 using System.Collections;
 using UnityEngine;
-using com.game.enemysystem;
 using com.absence.soundsystem;
 using com.absence.soundsystem.internals;
 using com.absence.attributes.experimental;
@@ -46,6 +45,7 @@ public class SimpleOrb : MonoBehaviour
     [SerializeField] private float onEllipseLifetime = 0.1f;
     [SerializeField] private float normalLifetime = 0.5f;
     [SerializeField] private GameObject m_light;
+    [SerializeField] private GameObject m_selectionIndicator;
     [SerializeField] private ParticleSystem trailParticle;
     [SerializeField, InlineEditor, Required] private OrbCombatEffectData m_combatEffectData;
     [Space]
@@ -141,6 +141,7 @@ public class SimpleOrb : MonoBehaviour
     protected virtual void Awake()
     {
         m_movementData = Instantiate(m_movementData);
+        SetSelected(false);
     }
     private void Start()
     {
@@ -228,13 +229,10 @@ public class SimpleOrb : MonoBehaviour
         transform.SetParent(startParent);
         transform.localScale = startScale;
     }
-    public void ResetMaterial()
+    public void SetSelected(bool value)
     {
-        _renderer.material = startMaterial;
-    }
-    public void SetMaterial(Material newMaterial)
-    {
-        _renderer.material = newMaterial;
+        if (m_selectionIndicator != null) 
+            m_selectionIndicator.SetActive(value);
     }
     public void Throw(Vector3 forceDirection)
     {
