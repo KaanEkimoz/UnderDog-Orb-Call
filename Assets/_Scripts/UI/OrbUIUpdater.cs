@@ -22,7 +22,8 @@ namespace com.game.ui
         [SerializeField] private bool m_scaleSelectionBorder = true;
         [SerializeField] private Formation m_formation;
         [SerializeField] private Ease m_transitionEase;
-        [SerializeField] [Range(0f, 1f)] private float m_scalingFactor;
+        [SerializeField] [Range(0f, 4f)] private float m_scalingFactor;
+        [SerializeField] [Range(0f, 2f)] private float m_secondaryScalingFactor;
         [SerializeField] [Min(0f)] private float m_transitionDuration;
         [SerializeField] private Transform m_orbSelectionBorder;
         [SerializeField] private Transform m_contentRoot;
@@ -293,7 +294,16 @@ namespace com.game.ui
             {
                 int realIndex = GetRealIndex(i);
 
-                float scale = realIndex == m_selectedOrbIndex ? (1f + m_scalingFactor) : 1f;
+                float scale = 1f;
+                int prevIndex = m_selectedOrbIndex - 1;
+                int nextIndex = m_selectedOrbIndex + 1;
+
+                if (prevIndex < 0) prevIndex += m_orbCount;
+                if (nextIndex >= m_orbCount) nextIndex -= m_orbCount;
+
+                if (realIndex == m_selectedOrbIndex) scale += m_scalingFactor;
+                else if (realIndex == prevIndex || realIndex == nextIndex) scale += m_secondaryScalingFactor;
+
                 Tweener tween = m_orbDisplays[i].Image.rectTransform.DOScale(scale, m_transitionDuration);
                 m_arrangementSequence.Insert(0, tween);
             }

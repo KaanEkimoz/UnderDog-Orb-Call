@@ -3770,6 +3770,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 392404051}
     m_Modifications:
+    - target: {fileID: 73129779314583624, guid: 7770f1915baeea74dbf30c2d7cc8149d, type: 3}
+      propertyPath: m_Spacing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1869246126606524751, guid: 7770f1915baeea74dbf30c2d7cc8149d, type: 3}
       propertyPath: m_damageableObject
       value: 
