@@ -29,10 +29,10 @@ namespace com.game
             if (recall)
                 return;
 
-            if (!penetrationCompleted)
+            if (m_latestDamageEvt.CausedDeath && !penetrationCompleted)
                 return;
 
-            damageable.TakeDamageInSeconds(damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
+            damageable.TakeDamageInSeconds(this, damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
 
             Collider[] hitColliders = Physics.OverlapSphere(damageable.transform.position, fireDamageRadius);
 
@@ -50,7 +50,7 @@ namespace com.game
 
                 if (hitCollider.gameObject.TryGetComponent(out IRenderedDamageable hitDamageable))
                 {
-                    hitDamageable.TakeDamageInSeconds(damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
+                    hitDamageable.TakeDamageInSeconds(this, damage * fireInstantDamageMultiplier, fireDurationInSeconds, fireDamageIntervalInSeconds);
                     affectedEnemies.Add(hitDamageable);
                 }
 
@@ -106,10 +106,6 @@ namespace com.game
         {
             yield return new WaitForSeconds(delay);
             Destroy(fireEffectInstance);
-        }
-        protected override void ApplyOrbThrowCollisionEffects(Collision collisionObject)
-        {
-            base.ApplyOrbThrowCollisionEffects(collisionObject);
         }
 
 #if UNITY_EDITOR

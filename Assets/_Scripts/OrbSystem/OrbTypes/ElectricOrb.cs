@@ -55,7 +55,7 @@ namespace com.game
             if (recall)
                 return;
 
-            if (!penetrationCompleted)
+            if (m_latestDamageEvt.CausedDeath && !penetrationCompleted)
                 return;
 
             if (damageableObject is not IRenderedDamageable renderedDamageable)

@@ -84,6 +84,7 @@ public class PlayerInputHandler : MonoBehaviour
         _previousChooseButtonPressedThisFrame = false;
         _parryButtonPressedThisFrame = false;
         _parryButtonReleasedThisFrame = false;
+        _recallButtonPerformedThisFrame = false;
         _closestRecallButtonPressedThisFrame = false;
     }
 
@@ -164,17 +165,13 @@ public class PlayerInputHandler : MonoBehaviour
         if (context.started)
         {
             _recallButtonPressedThisFrame = true;
-            _recallButtonPerformedThisFrame = false;
         }
         else if (context.performed)
         {
-            _recallButtonPressedThisFrame = false;
             _recallButtonPerformedThisFrame = true;
         }
         else if (context.canceled)
         {
-            _recallButtonPerformedThisFrame = false;
-            _recallButtonPressedThisFrame = false;
             _recallButtonReleasedThisFrame = true;
         }
 

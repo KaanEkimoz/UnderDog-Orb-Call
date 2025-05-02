@@ -1,4 +1,5 @@
 using com.absence.attributes;
+using com.absence.variablesystem.builtin;
 using com.game.enemysystem.ai;
 using com.game.enemysystem.statsystemextensions;
 using DG.Tweening;
@@ -59,7 +60,7 @@ namespace com.game.enemysystem
         private float defaultSpeed;
 
         //Slow
-        public float currentSlowAmount { get; set; } = 0;
+        [Runtime] public FloatVariable moveSpeedModifier { get; set; } = 0;
 
         protected virtual void Start()
         {
@@ -84,7 +85,7 @@ namespace com.game.enemysystem
 
             ai.Speed =
                 (ai.DefaultSpeed + enemyStats.GetStat(EnemyStatType.WalkSpeed)) *
-                (1 - (currentSlowAmount / 100));
+                (1 + moveSpeedModifier.Value);
 
             if (!IsAILocked)
                 ai.Refresh(target.transform);

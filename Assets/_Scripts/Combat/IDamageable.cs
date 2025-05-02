@@ -14,10 +14,9 @@ namespace com.game
         event Action<float> OnHeal;
         event Action<DeathCause> OnDie;
 
-        void TakeDamage(float damage);
+        void TakeDamage(float damage, out DamageEvent evt);
         void Heal(float amount);
 
-        void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds);
         void Die(DeathCause cause);
     }
 

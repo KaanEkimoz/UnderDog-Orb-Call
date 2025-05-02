@@ -29,8 +29,8 @@ TagManager:
   - DeathZone
   - AI/Agent/Enemy
   - NavMesh/Virtual
-  - 
-  - 
+  - ScreenSpaceOutline
+  - OrbSelectionOutline
   - 
   - 
   - 

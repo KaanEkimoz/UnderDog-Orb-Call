@@ -14,6 +14,8 @@ using System.Linq;
 using com.game.events;
 using com.game.utilities;
 using DG.Tweening;
+using com.absence.variablesystem.mutations;
+using com.absence.variablesystem.mutations.internals;
 
 namespace com.game.enemysystem
 {
@@ -34,7 +36,6 @@ namespace com.game.enemysystem
         [SerializeField] private GameObject m_container;
         [SerializeField] private Enemy enemy;
         [SerializeField] private InterfaceReference<ISpark, MonoBehaviour> m_spark;
-        [SerializeField] public float m_slowPercentPerOrb = 25f;
 
         public ISpark Spark => m_spark.Value;
 
@@ -86,12 +87,16 @@ namespace com.game.enemysystem
         {
             _playerCombatant = playerCombatant;
         }
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, out DamageEvent evt)
         {
             if (damage == 0f)
+            {
+                evt = DamageEvent.Empty;
                 return;
+            }
 
             float realDamage = damage * (1 - (m_stats.GetStat(EnemyStatType.Armor) / 100));
+            float damageDealt = Mathf.Min(realDamage, _health);
 
             _health -= realDamage;
 
@@ -103,7 +108,9 @@ namespace com.game.enemysystem
                     , true); // !!!
             }
 
-            if (_health <= 0)
+            bool causedDeath = _health <= 0;
+
+            if (causedDeath)
             {
                 _health = 0;
 
@@ -113,29 +120,20 @@ namespace com.game.enemysystem
 
                 Die(deathCause);
             }
-            ApplySlowForOrbsOnEnemy();
+
+            evt = new DamageEvent()
+            {
+                DamageSent = damage,
+                DamageDealt = damageDealt,
+                CausedDeath = causedDeath,
+            };
+
             OnTakeDamage?.Invoke(damage);
-            _playerCombatant.OnLifeSteal(realDamage);
+            _playerCombatant.OnLifeSteal(damageDealt);
         }
         public void ApplyKnockback(Vector3 forceDirection, float forceMagnitude)
         {
             enemy.ApplyKnockbackForce(forceDirection, forceMagnitude);
-        }
-        public void TakeDamageInSeconds(float damage, float durationInSeconds, float intervalInSeconds)
-        {
-            StartCoroutine(TakeDamageOverTime(damage, durationInSeconds, intervalInSeconds));
-        }
-        private IEnumerator TakeDamageOverTime(float damage, float durationInSeconds, float intervalInSeconds)
-        {
-            float elapsedTime = 0f;
-            float damageDivider = durationInSeconds / intervalInSeconds;
-
-            while (elapsedTime < durationInSeconds)
-            {
-                TakeDamage(damage / damageDivider);
-                elapsedTime += intervalInSeconds;
-                yield return new WaitForSeconds(intervalInSeconds);
-            }
         }
         public void Heal(float amount)
         {
@@ -221,39 +219,23 @@ namespace com.game.enemysystem
             return resultVector;
         }
 
-        public void ApplySlowForOrbsOnEnemy()
-        {
-            m_currentSlowAmount = m_slowPercentPerOrb * StickedOrbCount;
-
-            if (m_currentSlowAmount > 100)
-                m_currentSlowAmount = 100;
-
-            enemy.currentSlowAmount = m_currentSlowAmount;
-        }
-
         public void SlowForSeconds(float slowPercent, float duration)
         {
-            StartCoroutine(C_SlowForSeconds(slowPercent, duration));
-        }
-
-        private IEnumerator C_SlowForSeconds(float slowPercent, float duration)
-        {
-            m_currentSlowAmount = slowPercent;
-            enemy.currentSlowAmount = m_currentSlowAmount;
-
-            yield return new WaitForSeconds(duration);
-
-            m_currentSlowAmount = 0;
-            enemy.currentSlowAmount = m_currentSlowAmount;
+            enemy.moveSpeedModifier.Mutate(Add.CreateTimedForFloat(-(slowPercent/100f), duration));
         }
 
         public void Knockback(Vector3 source, float strength, KnockbackSourceUsage usage)
         {
             Transform target = enemy.AI != null ? enemy.AI.transform : transform;
 
+            if (enemy.AI != null) enemy.AI.Locked = true;
+
             Vector3 forceDirection = this.CalculateKnockbackDirection(source, usage, target);
             Vector3 force = forceDirection * strength;
-            target.DOMove(target.position + force, 0.4f).SetEase(Ease.OutBack);
+            target.DOMove(target.position + force, 0.4f).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                if (enemy.AI != null) enemy.AI.Locked = false;
+            });
         }
 
         public void CommitOrbStick(SimpleOrb orb)

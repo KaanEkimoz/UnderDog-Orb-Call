@@ -49,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 792, y: 366, z: 585, w: 291}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -113,10 +113,10 @@ TextureImporter:
       name: Fire Orb_0
       rect:
         serializedVersion: 2
-        x: 791
-        y: 366
-        width: 1013
-        height: 1012
+        x: 790
+        y: 364
+        width: 1014
+        height: 1015
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,8 +125,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0211c982bbf29a241adbb69b02279272
-      internalID: 1440268358
+      spriteID: 7732efd9281929c4dabfaaa85ee2aa06
+      internalID: -1528746339
       vertices: []
       indices: 
       edges: []
@@ -135,8 +135,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 796af25fa76bb7b499b08441dcef5490
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -145,9 +145,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fire Orb_0: 1440268358
-      Fire Orb_1: 1671468358
-      Fire Orb_2: -738521333
+      Fire Orb_0: -1528746339
+      Fire Orb_1: -1882584270
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

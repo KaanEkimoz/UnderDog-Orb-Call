@@ -5056,7 +5056,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.7166261, b: 0.28773582, a: 1}
+      maxColor: {r: 1, g: 0.3714349, b: 0.28627455, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9831,7 +9831,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -9919,7 +9919,7 @@ MonoBehaviour:
   fireDurationInSeconds: 3
   fireDamageIntervalInSeconds: 0.2
   fireDamageRadius: 10
-  fireDamageMultiplier: 1
+  fireInstantDamageMultiplier: 1
   instantFireEffectPrefab: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
   continuosFireEffect: {fileID: 529021590064772990, guid: b529d1b4c3501734898bf1bedb2b6cb9, type: 3}
   fireEffectDurationInSeconds: 3
