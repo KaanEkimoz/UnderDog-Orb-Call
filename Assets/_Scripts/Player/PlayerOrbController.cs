@@ -187,6 +187,7 @@ public class PlayerOrbController : MonoBehaviour
             throwDirection = extension.ConvertAimDirection(throwDirection);
         }
 
+        orbToThrow.transform.position = firePointTransform.position; // animation here!!!
         orbToThrow.Throw(throwDirection.normalized);
 
         if (autoSelectNextOrbOnShoot)
@@ -288,7 +289,6 @@ public class PlayerOrbController : MonoBehaviour
             {
                 if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
                 {
-                    orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
                     orbToThrow.SetNewDestination(firePointTransform.position);
                 }
             }

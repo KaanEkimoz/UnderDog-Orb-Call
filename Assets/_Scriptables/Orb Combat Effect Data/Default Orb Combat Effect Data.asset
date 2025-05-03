@@ -20,4 +20,4 @@ MonoBehaviour:
   penetrationKnockback: 0
   throwKnockbackStrength: 1
   returnKnockback: 1
-  returnKnockbackStrength: 0.1
+  returnKnockbackStrength: 1

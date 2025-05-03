@@ -94,6 +94,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
 
     List<IDamageable> m_penetratedEnemies = new();
     float m_internalRecallSpeedMultiplier;
+    bool m_bypassKnockback;
 
     public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
         _playerStats.GetStat(PlayerStatType.Damage) + 
@@ -145,7 +146,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     }
     protected virtual void Awake()
     {
-        m_movementData = Instantiate(m_movementData);
+        //m_movementData = Instantiate(m_movementData);
         SetSelected(false);
     }
     private void Start()
@@ -217,10 +218,16 @@ public class SimpleOrb : MonoBehaviour, IGatherable
         {
             if (stickedCollider != null)
             {
+                m_bypassKnockback = true;
                 ApplyOrbReturnTriggerEffects(stickedCollider);
+                m_bypassKnockback = false;
 
                 if (stickedCollider.TryGetComponent(out IOrbStickTarget stickable))
                     stickable.CommitOrbUnstick(this);
+
+                if (m_combatEffectData.returnKnockback && stickedCollider.TryGetComponent(out IKnockbackable knockbackable))
+                    knockbackable.Knockback((returnPosition - transform.position).normalized, 
+                        m_combatEffectData.returnKnockbackStrength, KnockbackSourceUsage.Final);
             }
 
             stickedCollider = null;
@@ -388,10 +395,13 @@ public class SimpleOrb : MonoBehaviour, IGatherable
 
             ApplyCombatEffects(damageable, ThrowDamage + m_penetrationExcessDamage, penetrationCompleted, false);
 
-            if (penetrationCompleted && m_combatEffectData.throwKnockback)
+            if (!m_bypassKnockback)
             {
-                if (collisionObject.gameObject.TryGetComponent(out IKnockbackable knockbackable))
-                    knockbackable.Knockback(m_latestVelocity.normalized, m_combatEffectData.throwKnockbackStrength, KnockbackSourceUsage.Final);
+                if (penetrationCompleted && m_combatEffectData.throwKnockback)
+                {
+                    if (collisionObject.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                        knockbackable.Knockback(m_latestVelocity.normalized, m_combatEffectData.throwKnockbackStrength, KnockbackSourceUsage.Final);
+                }
             }
 
             if (penetrationCompleted && collisionObject.gameObject.TryGetComponent(out ISlowable slowable))
@@ -414,10 +424,13 @@ public class SimpleOrb : MonoBehaviour, IGatherable
         {
             ApplyCombatEffects(damageable, RecallDamage, false, true);
              
-            if (m_combatEffectData.returnKnockback)
+            if (!m_bypassKnockback)
             {
-                if (triggerCollider.gameObject.TryGetComponent(out IKnockbackable knockbackable))
-                    knockbackable.Knockback(_rigidBody.linearVelocity, m_combatEffectData.returnKnockbackStrength, KnockbackSourceUsage.Final);
+                if (m_combatEffectData.returnKnockback)
+                {
+                    if (triggerCollider.gameObject.TryGetComponent(out IKnockbackable knockbackable))
+                        knockbackable.Knockback(_rigidBody.linearVelocity, m_combatEffectData.returnKnockbackStrength, KnockbackSourceUsage.Final);
+                }
             }
 
             if (triggerCollider.gameObject.TryGetComponent(out ISlowable slowable))
@@ -450,17 +463,6 @@ public class SimpleOrb : MonoBehaviour, IGatherable
 
         OnStuck?.Invoke();
         OnStateChanged?.Invoke(currentState);
-    }
-    
-    public void IncreaseSpeedForSeconds(float speedIncrease, float duration)
-    {
-        StartCoroutine(IncreaseSpeed(speedIncrease, duration));
-    }
-    private IEnumerator IncreaseSpeed(float speedIncrease, float duration)
-    {
-        m_movementData.movementSpeed += speedIncrease;
-        yield return new WaitForSeconds(duration);
-        m_movementData.movementSpeed -= speedIncrease;
     }
 
     public bool TryGather(IGatherer sender)
