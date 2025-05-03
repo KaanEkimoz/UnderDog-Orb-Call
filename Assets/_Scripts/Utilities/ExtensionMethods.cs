@@ -60,5 +60,10 @@ namespace com.game.utilities
                 _ => Vector3.up,
             };
         }
+
+        public static void Stun(this IStunnable stunable, float duration)
+        {
+            stunable.Stun(duration, CCBreakFlags.None);
+        }
     }
 }

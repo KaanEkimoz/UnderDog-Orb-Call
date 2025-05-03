@@ -27,7 +27,7 @@ public class SimpleOrb : MonoBehaviour
 
     [Header("Orb Movement")]
     [SerializeField, InlineEditor] protected OrbMovementData m_movementData;
-    [SerializeField] private AnimationCurve movementCurve;
+    [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0f,0f,1f,1f);
     [SerializeField] private float maxDistance = 20f;
     [Space]
     [Header("Orb Stats")]

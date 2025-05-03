@@ -24,6 +24,8 @@ public class PlayerOrbController : MonoBehaviour
         { typeof(FireOrb), FIRE_ORB_INDEX },
         { typeof(IceOrb), ICE_ORB_INDEX },
         { typeof(ElectricOrb), ELECTRIC_ORB_INDEX },
+        { typeof(LifestealOrb), LIFESTEAL_ORB_INDEX },
+        { typeof(SoulOrb), SOUL_ORB_INDEX },
     };
 
     [Header("Orb Count")]
@@ -62,6 +64,8 @@ public class PlayerOrbController : MonoBehaviour
     public const int FIRE_ORB_INDEX = 9;
     public const int ICE_ORB_INDEX = 10;
     public const int ELECTRIC_ORB_INDEX = 11;
+    public const int LIFESTEAL_ORB_INDEX = 12;
+    public const int SOUL_ORB_INDEX = 13;
 
     // Events
     public event Action OnOrbThrowed;
@@ -137,7 +141,7 @@ public class PlayerOrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb();
+            AddOrb(ElementalType.Lifesteal);
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
@@ -165,16 +169,12 @@ public class PlayerOrbController : MonoBehaviour
             return;
 
         foreach (SimpleOrb orb in orbsOnEllipse)
-        {
             if (orb.currentState == OrbState.Returning)
                 return;
-        }
 
         if (orbToThrow == null || orbToThrow.currentState != OrbState.OnEllipse)
-        {
             if (smartOrbSelection) SelectBestOrbLHS(s_bestOrbPredicateThrow);
             else return;
-        }
 
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
         _playerAnimator.SetTrigger("Throw");
@@ -183,9 +183,7 @@ public class PlayerOrbController : MonoBehaviour
         throwDirection.y = 0;
 
         foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
-        {
             throwDirection = extension.ConvertAimDirection(throwDirection);
-        }
 
         orbToThrow.Throw(throwDirection.normalized);
 
@@ -201,7 +199,8 @@ public class PlayerOrbController : MonoBehaviour
         if (orb.currentState != OrbState.Sticked)
         {
             if (smartOrbSelection) SelectBestOrbLHS(s_bestOrbPredicateRecall);
-            else return;
+            else 
+                return;
         }
 
         orb.ReturnToPosition(returnPointTransform.position, coefficient);
@@ -335,6 +334,8 @@ public class PlayerOrbController : MonoBehaviour
             ElementalType.Fire => FIRE_ORB_INDEX,
             ElementalType.Ice => ICE_ORB_INDEX,
             ElementalType.Electric => ELECTRIC_ORB_INDEX,
+            ElementalType.Lifesteal => LIFESTEAL_ORB_INDEX,
+            ElementalType.Soul => SOUL_ORB_INDEX,
             _ => SIMPLE_ORB_INDEX,
         };
 

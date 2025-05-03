@@ -5107,6 +5107,7 @@ MonoBehaviour:
   onEllipseLifetime: 0.1
   normalLifetime: 0.5
   m_light: {fileID: 5812946802068786983}
+  m_selectionIndicator: {fileID: 0}
   trailParticle: {fileID: 3894010871445217794}
   m_combatEffectData: {fileID: 11400000, guid: ec4772f3a62a9914c868f4d11d1b8bca, type: 2}
   m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}
@@ -5116,8 +5117,8 @@ MonoBehaviour:
   iceSlowDurationInSeconds: 1
   iceSlowRadius: 10
   instantIceEffect: {fileID: 2578967629122857929, guid: 35744910ca3546c4b8438c93ea7c506e, type: 3}
-  continuosIceEffect: {fileID: 216183355570814244, guid: d415a9d16d15f014d825770008fa9fb2, type: 3}
-  iceEffectDurationInSeconds: 0.2
+  continuousIceEffect: {fileID: 216183355570814244, guid: d415a9d16d15f014d825770008fa9fb2, type: 3}
+  iceEffectDurationInSeconds: 1
 --- !u!114 &7841533525167026272
 MonoBehaviour:
   m_ObjectHideFlags: 0

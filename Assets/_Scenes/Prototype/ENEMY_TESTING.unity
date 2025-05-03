@@ -1580,7 +1580,6 @@ MonoBehaviour:
   m_initialPoolCapacity: 16
   m_dontDestroyOnLoad: 1
   m_useSingleton: 1
-  m_activeTimers: []
 --- !u!4 &312242445
 Transform:
   m_ObjectHideFlags: 0
@@ -9932,7 +9931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: pools.Array.size
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: pools.Array.data[0].poolSize
@@ -9983,6 +9982,14 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[12].poolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[13].poolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: pools.Array.data[0].objectPrefab
       value: 
       objectReference: {fileID: 0}
@@ -10030,6 +10037,14 @@ PrefabInstance:
       propertyPath: pools.Array.data[11].objectPrefab
       value: 
       objectReference: {fileID: 6970958069335474699, guid: 3db01166763311443b8beb57da41e74d, type: 3}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[12].objectPrefab
+      value: 
+      objectReference: {fileID: 8886230964089384064, guid: 7ebc53ae187ae524fb3a61c6e04d2b68, type: 3}
+    - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
+      propertyPath: pools.Array.data[13].objectPrefab
+      value: 
+      objectReference: {fileID: 8886230964089384064, guid: e76665cfa1fc72c49bee8ab90743dd9c, type: 3}
     - target: {fileID: 7231318641547526593, guid: eaac9086d8a94064c82406555006661b, type: 3}
       propertyPath: pools.Array.data[0].uniqueComponentName
       value: SimpleOrb
@@ -10447,7 +10462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5878544681766094286, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.4523926
+      value: -1.4523315
       objectReference: {fileID: 0}
     - target: {fileID: 6157205050509472771, guid: 8fcaa94ec415bc141aaea5ca632ff7cd, type: 3}
       propertyPath: m_IsActive

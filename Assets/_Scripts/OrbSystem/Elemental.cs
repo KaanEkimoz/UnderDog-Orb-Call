@@ -49,7 +49,7 @@ public enum ElementalType
     /// - Seal Damage Multiplier
     /// - Stun Duration on Sealed Enemies
     /// </summary>
-    SoulBinder,
+    Soul,
 
     /// <summary>
     /// Air Orb:
@@ -68,7 +68,7 @@ public enum ElementalType
     /// - Maximum Health Gain
     /// - Health Transfer Speed
     /// </summary>
-    Health,
+    Lifesteal,
 
     /// <summary>
     /// Flash Orb:
