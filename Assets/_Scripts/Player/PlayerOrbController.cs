@@ -387,6 +387,10 @@ public class PlayerOrbController : MonoBehaviour
         {
             Player.Instance.Hub.OrbHandler.AddOrb();
         };
+        orb.OnCallDemanded += (orb) =>
+        {
+            CallOrb(orb);
+        };
     }
 
     bool SelectBestOrbLHS(Func<SimpleOrb, bool> condition)

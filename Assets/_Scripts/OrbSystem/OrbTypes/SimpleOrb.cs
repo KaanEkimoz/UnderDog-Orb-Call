@@ -12,6 +12,7 @@ using com.game.orbsystem;
 using com.game.utilities;
 using com.absence.attributes;
 using System.Collections.Generic;
+using com.game.miscs;
 public enum OrbState
 {
     OnEllipse,
@@ -21,7 +22,7 @@ public enum OrbState
     Returning
 }
 [RequireComponent(typeof(Rigidbody), typeof(SphereCollider), typeof(MeshRenderer))]
-public class SimpleOrb : MonoBehaviour
+public class SimpleOrb : MonoBehaviour, IGatherable
 {
     public OrbState currentState = OrbState.OnEllipse;
 
@@ -84,6 +85,7 @@ public class SimpleOrb : MonoBehaviour
     public event Action<OrbState> OnStateChanged;
     public event Action OnPenetrateHit;
     public event Action OnPhysicsHit;
+    public event Action<SimpleOrb> OnCallDemanded;
     //Effects
     private SoundFXManager _soundFXManager;
     protected Vector3 m_latestVelocity;
@@ -99,6 +101,8 @@ public class SimpleOrb : MonoBehaviour
     public float RecallDamage => orbStats.GetStat(OrbStatType.Damage) +
         _playerStats.GetStat(PlayerStatType.Damage) +
         _playerStats.GetStat(PlayerStatType.OrbRecallDamage);
+
+    public bool IsGatherable => (currentState == OrbState.Sticked) && (stickedCollider == null);
 
     public void AssignPlayerStats(PlayerStats playerStats)
     {
@@ -179,7 +183,11 @@ public class SimpleOrb : MonoBehaviour
         {
             CalculateDistanceTraveled();
             if (distanceTraveled >= maxDistance + _playerStats.GetStat(PlayerStatType.Range))
+            {
                 StickToTransform(startParent);
+                stickedCollider = null;
+                stickedTransform = null;
+            }
         }
         if (currentState == OrbState.Returning && hasReachedTargetPos)
         {
@@ -294,6 +302,9 @@ public class SimpleOrb : MonoBehaviour
     {
         if (currentState == OrbState.Throwing)
         {
+            if (triggerObject.CompareTag("IgnoreOrbThrow"))
+                return;
+
             Game.Event = com.game.GameRuntimeEvent.OrbThrow;
 
             ApplyOrbThrowCollisionEffects(triggerObject);
@@ -303,12 +314,24 @@ public class SimpleOrb : MonoBehaviour
 
         else if (currentState == OrbState.Returning)
         {
+            if (triggerObject.CompareTag("IgnoreOrbThrow"))
+                return;
+
             Game.Event = com.game.GameRuntimeEvent.OrbCall;
 
             if (stickedCollider == null || stickedCollider != triggerObject) 
                 ApplyOrbReturnTriggerEffects(triggerObject);
 
             Game.Event = com.game.GameRuntimeEvent.Null;
+        }
+
+        else
+        {
+            if (!InternalSettings.PLAYER_ORB_AUTO_PICKUP)
+                return;
+
+            if (triggerObject.TryGetComponent(out IGatherer gatherer))
+                TryGather(gatherer);
         }
     }
     private void Stick(Collider stickCollider)
@@ -427,5 +450,23 @@ public class SimpleOrb : MonoBehaviour
         m_movementData.movementSpeed += speedIncrease;
         yield return new WaitForSeconds(duration);
         m_movementData.movementSpeed -= speedIncrease;
+    }
+
+    public bool TryGather(IGatherer sender)
+    {
+        if (!IsGatherable)
+            return false;
+
+        if (!sender.IsPlayer)
+            return false;
+
+        DemandCall();
+
+        return true;
+    }
+
+    protected void DemandCall()
+    {
+        OnCallDemanded?.Invoke(this);
     }
 }
