@@ -195,7 +195,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   maxDistance: 20
   orbStats: {fileID: 6960696444875857668}
-  startMaterial: {fileID: 0}
+  startMaterial: {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
   _rigidBody: {fileID: 4581226788505073321}
   _sphereCollider: {fileID: 3939961923203656775}
   _renderer: {fileID: 7423161256905524677}
@@ -210,9 +210,10 @@ MonoBehaviour:
   m_catchSoundAsset: {fileID: 11400000, guid: c612b549984e4874ca8228d091a8ac1e, type: 2}
   maxStealableHealthPerEnemy: 100
   stealInterval: 2
-  healthPerSteal: 10
+  healthPerSteal: 5
   instantStealEffect: {fileID: 1775406099119076, guid: bec3fa83f9d5ffb4c9b65518557cbd28, type: 3}
-  continousStealEffect: {fileID: 1775406099119076, guid: bec3fa83f9d5ffb4c9b65518557cbd28, type: 3}
+  continuousStealEffect: {fileID: 1775406099119076, guid: bec3fa83f9d5ffb4c9b65518557cbd28, type: 3}
+  effectDuration: 2
 --- !u!1001 &3054476768895215216
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,21 +15,32 @@ namespace com.game
 
         [Header("Visual Effects")]
         [SerializeField] private GameObject instantStealEffect;
-        [SerializeField] private GameObject continousStealEffect;
+        [SerializeField] private GameObject continuousStealEffect;
+        [SerializeField] private float effectDuration = 2f;
 
-        private IDamageable currentTarget;
-        private float totalStolenHealth;
-        private Coroutine stealCoroutine;
+        private IRenderedDamageable currentTarget = null;
+        private float totalStolenHealth = 0;
+        private Coroutine stealCoroutine = null;
+        private GameObject activeEffect = null;
 
-        [Inject] private PlayerCombatant playerCombatant;
+        [Inject] private PlayerCombatant _playerCombatant;
 
         private void OnEnable()
         {
             OnCalled += StopStealFromEnemy;
+            if (_playerCombatant == null)
+                ProvidePlayerCombatant(Player.Instance.Hub.Combatant);
         }
+
         private void OnDisable()
         {
             OnCalled -= StopStealFromEnemy;
+            CleanUpEffects();
+        }
+
+        public void ProvidePlayerCombatant(PlayerCombatant playerCombatant)
+        {
+            _playerCombatant = playerCombatant;
         }
 
         protected override void ApplyCombatEffects(IDamageable damageable, float damage, bool penetrationCompleted, bool recall)
@@ -39,8 +50,10 @@ namespace com.game
             if (ShouldSkipEffects(recall, penetrationCompleted))
                 return;
 
-            if (currentTarget == null)
-                StartStealFromEnemy(damageable);
+            CreateInstantEffect(transform.position);
+
+            if (currentTarget == null && damageable is IRenderedDamageable enemy)
+                StartStealFromEnemy(enemy);
         }
 
         private bool ShouldSkipEffects(bool recall, bool penetrationCompleted)
@@ -48,18 +61,16 @@ namespace com.game
             return recall || (m_latestDamageEvt.CausedDeath && !penetrationCompleted);
         }
 
-        private void StartStealFromEnemy(IDamageable enemyDamageable)
+        private void StartStealFromEnemy(IRenderedDamageable enemy)
         {
-            currentTarget = enemyDamageable;
+            currentTarget = enemy;
             totalStolenHealth = 0f;
 
             if (stealCoroutine != null)
                 StopCoroutine(stealCoroutine);
 
             stealCoroutine = StartCoroutine(StealHealthRoutine());
-
-            if (continousStealEffect != null && enemyDamageable is MonoBehaviour enemyMono)
-                Instantiate(continousStealEffect, enemyMono.transform);
+            CreateContinuousEffect(enemy.Renderer.bounds.center);
         }
 
         private IEnumerator StealHealthRoutine()
@@ -72,12 +83,51 @@ namespace com.game
                 {
                     float actualSteal = Mathf.Min(healthPerSteal, maxStealableHealthPerEnemy - totalStolenHealth);
                     currentTarget.TakeDamage(actualSteal);
-                    playerCombatant.Heal(actualSteal);
+                    _playerCombatant.Heal(actualSteal);
                     totalStolenHealth += actualSteal;
+
+                    // Efekt pozisyonunu güncelle
+                    if (activeEffect != null)
+                        activeEffect.transform.position = currentTarget.Renderer.bounds.center;
                 }
             }
-
             StopStealFromEnemy();
+        }
+
+        private void CreateInstantEffect(Vector3 position)
+        {
+            if (instantStealEffect != null)
+            {
+                GameObject effect = Instantiate(instantStealEffect, position, Quaternion.identity);
+                StartCoroutine(DestroyEffectAfterDelay(effect, 0.5f));
+            }
+        }
+
+        private void CreateContinuousEffect(Vector3 position)
+        {
+            CleanUpEffects();
+            if (continuousStealEffect != null)
+            {
+                activeEffect = Instantiate(continuousStealEffect, position, Quaternion.identity);
+                if (currentTarget is MonoBehaviour targetMono)
+                    activeEffect.transform.SetParent(targetMono.transform);
+            }
+        }
+
+        private void CleanUpEffects()
+        {
+            if (activeEffect != null)
+            {
+                Destroy(activeEffect);
+                activeEffect = null;
+            }
+        }
+
+        private IEnumerator DestroyEffectAfterDelay(GameObject effect, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (effect != null)
+                Destroy(effect);
         }
 
         private void StopStealFromEnemy()
@@ -88,6 +138,18 @@ namespace com.game
                 StopCoroutine(stealCoroutine);
                 stealCoroutine = null;
             }
+            CleanUpEffects();
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            if (currentTarget != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(transform.position, currentTarget.Renderer.bounds.center);
+            }
+        }
+#endif
     }
 }
