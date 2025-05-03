@@ -66,6 +66,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
 
     //Throw
     private float distanceTraveled;
+    private float timeTravelledReturning;
     private float m_penetrationExcessDamage;
     private Vector3 throwStartPosition;
     private Vector3 throwVector;
@@ -197,6 +198,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
             m_internalRecallSpeedMultiplier = 1f;
             transform.parent = startParent;
 
+            timeTravelledReturning = 0f;
             penetrationCount = 0;
             m_penetrationExcessDamage = 0f;
             m_penetratedEnemies.Clear();
@@ -283,10 +285,19 @@ public class SimpleOrb : MonoBehaviour, IGatherable
         float currentSpeed = m_movementData.movementSpeed * curveValue;
 
         if (currentState == OrbState.Returning)
+        {
             currentSpeed *= m_movementData.recallSpeedMultiplier * m_internalRecallSpeedMultiplier
                 * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1);
+
+            currentSpeed *= Mathf.Pow(m_movementData.recallSpeedTimeTravelledBase, timeTravelledReturning * m_movementData.recallSpeedCoefficientOverTimeTravelled);
+
+            timeTravelledReturning += Time.deltaTime;
+        }
+
         else if (currentState == OrbState.OnEllipse)
+        {
             currentSpeed *= m_movementData.onEllipseSpeedMutliplier * (distanceToTarget * m_movementData.onEllipseDistanceFactor);
+        }
 
         // MoveTowards to the target
         transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * Time.deltaTime);

@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 100
   throwSpeedMultiplier: 5
-  recallSpeedMultiplier: 0.055
+  recallSpeedMultiplier: 0.048
+  recallSpeedTimeTravelledBase: 1.2
+  recallSpeedCoefficientOverTimeTravelled: 1
   onEllipseSpeedMutliplier: 0.07
   onEllipseDistanceFactor: 4
   maxDistance: 20
