@@ -89,6 +89,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     public event Action<SimpleOrb> OnCallDemanded;
     //Effects
     private SoundFXManager _soundFXManager;
+    protected Vector3 m_secondaryInterestDirection;
+    protected float m_secondaryInterestMagnitude;
     protected Vector3 m_latestVelocity;
     protected DamageEvent m_latestDamageEvt;
 
