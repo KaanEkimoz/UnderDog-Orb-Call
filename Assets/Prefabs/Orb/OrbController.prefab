@@ -86,7 +86,7 @@ MonoBehaviour:
   firePointTransform: {fileID: 0}
   aimCursorDetectMask:
     serializedVersion: 2
-    m_Bits: 8449
+    m_Bits: 8397057
   recallButtonHoldTime: 0.2
   returnPointTransform: {fileID: 0}
   callAllOrbsSpeedCoefficient: 0.85
