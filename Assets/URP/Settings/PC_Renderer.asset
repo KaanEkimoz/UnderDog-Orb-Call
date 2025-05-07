@@ -15,7 +15,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: PlayerAttackIndicatorCircle
-    Event: 600
+    Event: 1000
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: PlayerAttackIndicatorLine
-    Event: 600
+    Event: 1000
     filterSettings:
       RenderQueueType: 1
       LayerMask:

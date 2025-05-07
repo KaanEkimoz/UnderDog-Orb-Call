@@ -81,7 +81,7 @@ MonoBehaviour:
   maximumOrbCount: 10
   orbCountAtStart: 5
   smartOrbSelection: 0
-  autoSelectNextOrbOnShoot: 1
+  autoSelectNextOrbOnShoot: 0
   cooldownBetweenThrowsInSeconds: 0.2
   firePointTransform: {fileID: 0}
   aimCursorDetectMask:

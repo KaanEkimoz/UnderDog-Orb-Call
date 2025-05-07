@@ -219,14 +219,14 @@ MonoBehaviour:
     StepAmount: 3
     AnimationSpeed: 4
   m_intensitySettings:
-    InitialValue: 8.17
-    LightStatCoefficient: 0.55
-    StepAmount: 0.67
+    InitialValue: 3.46
+    LightStatCoefficient: 1.19
+    StepAmount: 1.4
     AnimationSpeed: 4
   m_rangeSettings:
     InitialValue: 0
-    LightStatCoefficient: 31.17
-    StepAmount: 1.1
+    LightStatCoefficient: 0.88
+    StepAmount: 1.05
     AnimationSpeed: 4
   m_localHeightSettings:
     InitialValue: 0

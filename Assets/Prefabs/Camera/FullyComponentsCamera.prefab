@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7229483360425726891}
   - component: {fileID: 6938699103806184766}
   - component: {fileID: 5369712981960350779}
+  - component: {fileID: 1729258432319783142}
   m_Layer: 0
   m_Name: PopupCamera
   m_TagString: Untagged
@@ -107,7 +108,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 1
+  m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -128,6 +129,19 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1729258432319783142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 489929875816257371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c70a50b71280424a851c42bf713db8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_camera: {fileID: 6938699103806184766}
 --- !u!1 &1728398831883944383
 GameObject:
   m_ObjectHideFlags: 0
