@@ -37,6 +37,7 @@ namespace com.game.ui
         PlayerOrbController m_orbController;
         PlayerOrbContainer m_orbContainer;
         List<OrbDisplayGP> m_orbDisplays;
+        RectTransform m_layoutRootRect;
         int m_orbCount;
         float m_stepAngle;
         float m_realScalingFactor;
@@ -59,6 +60,7 @@ namespace com.game.ui
         private void Awake()
         {
             m_prefabWidth = m_prefab.GetComponent<RectTransform>().rect.width;
+            m_layoutRootRect = m_horizontalLayoutGroup.GetComponent<RectTransform>();
         }
 
         private void Start()
@@ -270,6 +272,20 @@ namespace com.game.ui
             if (m_virtualTween != null)
                 m_virtualTween.Kill();
 
+            for (int i = 0; i < m_orbCount; i++)
+            {
+                int index = i;
+
+                if (m_nextFlag) index--;
+                else if (m_previousFlag) index++;
+
+                float scale = GetScaleForOrb_Horizontal(index);
+
+                m_orbDisplays[i].Image.rectTransform.localScale = new Vector3(scale, scale, scale);
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(m_layoutRootRect);
+            }
+
             if (m_nextFlag)
                 m_contentRoot.GetChild(0).SetAsLastSibling();
 
@@ -285,35 +301,42 @@ namespace com.game.ui
                 m_initialPadding, m_transitionDuration, (i) =>
             {
                 m_horizontalLayoutGroup.padding.left = i;
-                LayoutRebuilder.ForceRebuildLayoutImmediate(m_horizontalLayoutGroup.GetComponent<RectTransform>());
+                LayoutRebuilder.ForceRebuildLayoutImmediate(m_layoutRootRect);
             }).SetEase(m_transitionEase)
             .OnComplete(OnVirtualTweenEnds)
             .OnKill(OnVirtualTweenEnds);
 
             for (int i = 0; i < m_orbCount; i++)
             {
-                int realIndex = GetRealIndex(i);
-
-                float scale = 1f;
-                int prevIndex = m_selectedOrbIndex - 1;
-                int nextIndex = m_selectedOrbIndex + 1;
-
-                if (prevIndex < 0) prevIndex += m_orbCount;
-                if (nextIndex >= m_orbCount) nextIndex -= m_orbCount;
-
-                if (realIndex == m_selectedOrbIndex) scale += m_scalingFactor;
-                else if (realIndex == prevIndex || realIndex == nextIndex) scale += m_secondaryScalingFactor;
+                float scale = GetScaleForOrb_Horizontal(i);
 
                 Tweener tween = m_orbDisplays[i].Image.rectTransform.DOScale(scale, m_transitionDuration);
                 m_arrangementSequence.Insert(0, tween);
             }
         }
 
+        float GetScaleForOrb_Horizontal(int index)
+        {
+            int realIndex = GetRealIndex(index);
+
+            float scale = 1f;
+            int prevIndex = m_selectedOrbIndex - 1;
+            int nextIndex = m_selectedOrbIndex + 1;
+
+            if (prevIndex < 0) prevIndex += m_orbCount;
+            if (nextIndex >= m_orbCount) nextIndex -= m_orbCount;
+
+            if (realIndex == m_selectedOrbIndex) scale += m_scalingFactor;
+            else if (realIndex == prevIndex || realIndex == nextIndex) scale += m_secondaryScalingFactor;
+
+            return scale;
+        }
+
         private void OnVirtualTweenEnds()
         {
             m_virtualTween = null;
             m_horizontalLayoutGroup.padding.left = m_initialPadding;
-            LayoutRebuilder.ForceRebuildLayoutImmediate(m_horizontalLayoutGroup.GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_layoutRootRect);
         }
 
         private void OnArrangementSequenceEnds()
