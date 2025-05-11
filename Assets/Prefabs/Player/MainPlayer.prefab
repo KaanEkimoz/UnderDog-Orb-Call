@@ -2740,7 +2740,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1751406404384577358}
   - component: {fileID: 4930824739618687971}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ch24
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2782,7 +2782,7 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 9a90f6e7d02f4a6458f9e9fd4269ab81, type: 2}
@@ -3270,7 +3270,7 @@ CharacterController:
   m_Radius: 0.28
   m_SlopeLimit: 45
   m_StepOffset: 0.25
-  m_SkinWidth: 0.02
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.93, z: 0}
 --- !u!114 &4939185870730852236

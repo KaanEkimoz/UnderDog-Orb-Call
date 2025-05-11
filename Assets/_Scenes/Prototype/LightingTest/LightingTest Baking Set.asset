@@ -554,57 +554,57 @@ MonoBehaviour:
       cellProbeOcclusionDataAsset:
         m_AssetGUID: 48559abdb0f86eb43a60f41dcb569554
         m_StreamableAssetPath: APVStreamingAssets\06ff555d410d4764a94242d264def459\48559abdb0f86eb43a60f41dcb569554.bytes
-        m_ElementSize: 32768
+        m_ElementSize: 0
         m_StreamableCellDescs:
           m_Keys: 0f0000001e000000140000002300000001000000100000001f0000002e000000060000001500000024000000330000000200000011000000200000002f0000000700000016000000250000003400000012000000210000001700000026000000
           m_Values:
           - offset: 0
             elementCount: 9
-          - offset: 294912
+          - offset: 0
             elementCount: 9
-          - offset: 589824
+          - offset: 0
             elementCount: 3
-          - offset: 688128
+          - offset: 0
             elementCount: 3
-          - offset: 786432
+          - offset: 0
             elementCount: 9
-          - offset: 1081344
+          - offset: 0
             elementCount: 14
-          - offset: 1540096
+          - offset: 0
             elementCount: 14
-          - offset: 1998848
+          - offset: 0
             elementCount: 9
-          - offset: 2293760
+          - offset: 0
             elementCount: 2
-          - offset: 2359296
+          - offset: 0
             elementCount: 7
-          - offset: 2588672
+          - offset: 0
             elementCount: 7
-          - offset: 2818048
+          - offset: 0
             elementCount: 2
-          - offset: 2883584
+          - offset: 0
             elementCount: 9
-          - offset: 3178496
+          - offset: 0
             elementCount: 14
-          - offset: 3637248
+          - offset: 0
             elementCount: 14
-          - offset: 4096000
+          - offset: 0
             elementCount: 9
-          - offset: 4390912
+          - offset: 0
             elementCount: 2
-          - offset: 4456448
+          - offset: 0
             elementCount: 7
-          - offset: 4685824
+          - offset: 0
             elementCount: 7
-          - offset: 4915200
+          - offset: 0
             elementCount: 2
-          - offset: 4980736
+          - offset: 0
             elementCount: 9
-          - offset: 5275648
+          - offset: 0
             elementCount: 9
-          - offset: 5570560
+          - offset: 0
             elementCount: 3
-          - offset: 5668864
+          - offset: 0
             elementCount: 3
         m_Asset: {fileID: 0}
   cellBricksDataAsset:
@@ -727,7 +727,7 @@ MonoBehaviour:
     m_Extent: {x: 162, y: 81, z: 162}
   bakedSimplificationLevels: 3
   bakedMinDistanceBetweenProbes: 1
-  bakedProbeOcclusion: 1
+  bakedProbeOcclusion: 0
   bakedSkyOcclusionValue: 0
   bakedSkyShadingDirectionValue: 0
   bakedProbeOffset: {x: 0, y: 0, z: 0}
@@ -741,7 +741,7 @@ MonoBehaviour:
   L0ChunkSize: 65536
   L1ChunkSize: 32768
   L2TextureChunkSize: 32768
-  ProbeOcclusionChunkSize: 32768
+  ProbeOcclusionChunkSize: 0
   sharedValidityMaskChunkSize: 8192
   sharedSkyOcclusionL0L1ChunkSize: 0
   sharedSkyShadingDirectionIndicesChunkSize: 0

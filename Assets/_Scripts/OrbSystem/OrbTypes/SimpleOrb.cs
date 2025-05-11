@@ -298,7 +298,10 @@ public class SimpleOrb : MonoBehaviour, IGatherable
             currentSpeed *= m_movementData.recallSpeedMultiplier * m_internalRecallSpeedMultiplier
                 * ((orbStats.GetStat(OrbStatType.Speed) / 10) + 1) * ((_playerStats.GetStat(PlayerStatType.OrbRecallSpeed) / 10) + 1);
 
-            currentSpeed *= Mathf.Pow(m_movementData.recallSpeedTimeTravelledBase, timeTravelledReturning * m_movementData.recallSpeedCoefficientOverTimeTravelled);
+            float maxCoefficientOverTimeTravelled = m_movementData.recallSpeedMaxCoefficientOverTimeTravelled;
+            float intendedCoefficientOverTimeTravelled = Mathf.Pow(m_movementData.recallSpeedTimeTravelledBase, timeTravelledReturning * m_movementData.recallSpeedCoefficientOverTimeTravelled);
+
+            currentSpeed *= Mathf.Min(maxCoefficientOverTimeTravelled, intendedCoefficientOverTimeTravelled);
 
             timeTravelledReturning += Time.deltaTime;
         }

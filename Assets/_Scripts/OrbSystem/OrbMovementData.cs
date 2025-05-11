@@ -10,8 +10,9 @@ namespace com.game.orbsystem
         public float recallSpeedMultiplier = 1f;
         public float recallSpeedTimeTravelledBase = 1.2f;
         public float recallSpeedCoefficientOverTimeTravelled = 1f;
-        public float recallSecondaryInterestDistanceDeadZone = 100f;
-        public float recallSecondaryInterestMagnitude = 0.1f;
+        public float recallSpeedMaxCoefficientOverTimeTravelled = 5f;
+        //public float recallSecondaryInterestDistanceDeadZone = 100f;
+        //public float recallSecondaryInterestMagnitude = 0.1f;
         public float onEllipseSpeedMutliplier = 1f;
         public float onEllipseDistanceFactor = 1f;
         public float maxDistance = 20f;
