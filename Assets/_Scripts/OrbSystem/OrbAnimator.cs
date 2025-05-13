@@ -17,34 +17,51 @@ namespace com.game.orbsystem
             AllOrbCall_Rotate,
         }
 
-        public enum AxisType
-        {
-            Global,
-            Transform,
-            Vector
-        }
-
         [SerializeField, Readonly] private SimpleOrb m_target;
         [SerializeField, Readonly] private State m_state = State.Idle_Sway;
 
         [Header("Sway Animation (Idle)")]
         [SerializeField] private bool m_swayEnabled;
+        [SerializeField] private Ease m_swayEase = Ease.Linear;
         [SerializeField] private float m_swayMagnitude;
-        [SerializeField, Min(0.001f)] private float m_swayMaxAngleChange = 45f;
-        [SerializeField, Min(0.001f)] private float m_swaySmoothing = 1f;
-        [SerializeField] private bool m_disabledOnLocalZ = true;
+        [SerializeField, Min(0.001f)] private float m_swaySpeed;
+        [SerializeField, MinMaxSlider(0f, 1f)] private Vector2 m_randomSwayDelay;
 
-        [Header("All Orbs Calling Animation (Rotate)")]
-        [SerializeField] private AxisType m_overrideUpAxis = AxisType.Global;
-        [SerializeField, Min(0.001f)] private float m_rotationSmoothing = 1f;
-        [SerializeField] private float m_rotationSpeed;
-        [SerializeField] private float m_rotationRecoverDuration;
-        [SerializeField, ShowIf(nameof(m_overrideUpAxis), AxisType.Transform)] private Transform m_axisReference;
-        [SerializeField, ShowIf(nameof(m_overrideUpAxis), AxisType.Vector)] private Vector3 m_axisValue;
+        [Header("All Orbs Calling Animation (Ellipse Scale)")]
+        [SerializeField] private Ease m_ellipseScaleEase = Ease.Linear;
+        [SerializeField] private float m_ellipseScaleMultiplier = 1f;
+        [SerializeField] private float m_ellipseScaleDuration = 1f;
 
+        public State CurrentState
+        {
+            get
+            {
+                return m_state;
+            }
+
+            set
+            {
+                m_state = value;
+                OnStateChanged(m_state);
+            }
+        }
+
+        float m_swayCoefficient;
         Vector3 m_initialEulers;
         Vector3 m_lastSwayDirection = Vector3.up;
         PlayerOrbController m_controller;
+        Tween m_ellipseScaleTween;
+        Tween m_swayCoefficientTween;
+
+        private void Awake()
+        {
+            float delay = UnityEngine.Random.Range(m_randomSwayDelay.x, m_randomSwayDelay.y);
+
+            m_swayCoefficientTween = DOVirtual.Float(0f, 1f, 1f / m_swaySpeed, f => m_swayCoefficient = f)
+                .SetDelay(delay)
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetEase(m_swayEase);
+        }
 
         private void Start()
         {
@@ -70,48 +87,48 @@ namespace com.game.orbsystem
             return input;
         }
 
-        private void Update()
+        private void OnStateChanged(State newState)
         {
-            Animate();
-        }
-
-        void Animate()
-        {
-            if (m_target.currentState != OrbState.OnEllipse)
-                return;
-
-            switch (m_state)
-            {
-                case State.AllOrbCall_Rotate:
-                    Animate_Rotate();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void Animate_Rotate()
-        {
-            Vector3 currentEulers = transform.eulerAngles;
-            Vector3 targetEulers = GetRotatedVector(currentEulers, m_rotationSpeed);
-
-            Vector3 result = Vector3.Lerp(currentEulers, targetEulers, Time.deltaTime / m_rotationSmoothing);
-
-            transform.eulerAngles = result;
+            //switch (newState)
+            //{
+            //    case State.Idle_Sway:
+            //        m_swayCoefficientTween.Play();
+            //        break;
+            //    case State.AllOrbCall_Rotate:
+            //        m_swayCoefficientTween.Pause();
+            //        break;
+            //    default:
+            //        break;
+            //}
         }
 
         private void OnAllOrbsReturn()
         {
-            if (m_state == State.AllOrbCall_Rotate) 
-                m_state = State.Idle_Sway;
+            if (m_state != State.AllOrbCall_Rotate)
+                return;
 
-            ResetRotation();
+            m_state = State.Idle_Sway;
+            ScaleEllipse(1f);
         }
 
         private void OnAllOrbsCalled(IEnumerable<SimpleOrb> orbsCalled)
         {
-            if (m_state == State.Idle_Sway) 
-                m_state = State.AllOrbCall_Rotate;
+            if (m_state != State.Idle_Sway)
+                return;
+
+            m_state = State.AllOrbCall_Rotate;
+            ScaleEllipse(m_ellipseScaleMultiplier);
+        }
+
+        void ScaleEllipse(float targetValue)
+        {
+            if (m_ellipseScaleTween != null)
+                m_ellipseScaleTween.Kill();
+
+            m_ellipseScaleTween =
+                DOVirtual.Float(m_controller.EllipseSizeMultiplier, targetValue, m_ellipseScaleDuration,
+                f => m_controller.EllipseSizeMultiplier = f)
+                .SetEase(m_ellipseScaleEase);
         }
 
         private void OnOrbStateChanged(OrbState state)
@@ -133,39 +150,10 @@ namespace com.game.orbsystem
 
         Vector3 GetSwayPosition(Vector3 input)
         {
-            Vector3 randomDirection = m_disabledOnLocalZ ?
-                UnityEngine.Random.insideUnitCircle : UnityEngine.Random.insideUnitSphere;
+            if (!m_swayEnabled)
+                return input;
 
-            Vector3 direction = Vector3.RotateTowards(m_lastSwayDirection, randomDirection, m_swayMaxAngleChange * Mathf.Deg2Rad, 
-                Time.deltaTime * m_swaySmoothing);
-
-            Vector3 targetPosition = input + (direction * m_swayMagnitude);
-
-            //return Vector3.Lerp(input, targetPosition, Time.deltaTime / m_swaySmoothing);
-
-            m_lastSwayDirection = direction;
-            return targetPosition;
-        }
-
-        Vector3 GetUpAxis()
-        {
-            return m_overrideUpAxis switch
-            {
-                AxisType.Global => Vector3.up,
-                AxisType.Transform => m_axisReference.up,
-                AxisType.Vector => m_axisValue,
-                _ => throw new NotImplementedException(),
-            };
-        }
-
-        void ResetRotation()
-        {
-            transform.DORotate(m_initialEulers, m_rotationRecoverDuration);
-        }
-
-        public Vector3 GetRotatedVector(Vector3 target, float angle)
-        {
-            return GetRotatedVector(target, angle, GetUpAxis());
+            return input + (m_swayCoefficient * m_swayMagnitude * (transform.position - m_controller.EllipseCenterGlobal));
         }
 
         public Vector3 GetRotatedVector(Vector3 originalEuler, float angle, Vector3 axis)

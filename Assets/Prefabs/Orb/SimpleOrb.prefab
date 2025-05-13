@@ -265,16 +265,13 @@ MonoBehaviour:
   m_target: {fileID: -8593687116418555536}
   m_state: 0
   m_swayEnabled: 1
-  m_swayMagnitude: 0.04
-  m_swayMaxAngleChange: 15
-  m_swaySmoothing: 2000
-  m_disabledOnLocalZ: 1
-  m_overrideUpAxis: 1
-  m_rotationSmoothing: 0.54
-  m_rotationSpeed: 4
-  m_rotationRecoverDuration: 0.3
-  m_axisReference: {fileID: 4557129230938877942}
-  m_axisValue: {x: 0, y: 0, z: 0}
+  m_swayEase: 4
+  m_swayMagnitude: 0.11
+  m_swaySpeed: 0.91
+  m_randomSwayDelay: {x: 0.16977926, y: 0.82625884}
+  m_ellipseScaleEase: 15
+  m_ellipseScaleMultiplier: 1.5
+  m_ellipseScaleDuration: 1
 --- !u!1001 &3054476768895215216
 PrefabInstance:
   m_ObjectHideFlags: 0

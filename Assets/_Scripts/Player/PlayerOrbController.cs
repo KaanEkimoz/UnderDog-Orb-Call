@@ -87,7 +87,23 @@ public class PlayerOrbController : MonoBehaviour
     private PlayerStats _playerStats;
     private SoundFXManager _soundFXManager;
 
+    float m_ellipseSizeMultiplier = 1f;
     List<SimpleOrb> m_lastCalledOrbs = new();
+
+    public Vector3 EllipseCenterGlobal => ellipseCenterTransform.position;
+
+    public float EllipseSizeMultiplier
+    {
+        get
+        {
+            return m_ellipseSizeMultiplier;
+        }
+
+        set
+        {
+            m_ellipseSizeMultiplier = value;
+        }
+    }
 
     public bool IsAiming { get; private set; } = false;
     public int SelectedOrbIndex => selectedOrbIndex;
@@ -288,8 +304,8 @@ public class PlayerOrbController : MonoBehaviour
             float angle = angleOffset + i * -angleStep;
             float angleInRadians = angle * Mathf.Deg2Rad;
 
-            float localX = Mathf.Cos(angleInRadians) * ellipseXRadius;
-            float localY = Mathf.Sin(angleInRadians) * ellipseYRadius;
+            float localX = Mathf.Cos(angleInRadians) * ellipseXRadius * m_ellipseSizeMultiplier;
+            float localY = Mathf.Sin(angleInRadians) * ellipseYRadius * m_ellipseSizeMultiplier;
 
             Vector3 localPosition = new Vector3(localX, localY, 0f);
             Vector3 targetPosition = ellipseCenterTransform.position + (ellipseCenterTransform.rotation * localPosition);
