@@ -21,6 +21,8 @@ namespace com.game.player
         public List<OrbItemProfile> UpgradeCache { get { return m_upgradeCache; } set { m_upgradeCache = value; } }
         public Stack<OrbInventoryChange> UndoCache { get { return m_undoCache; } set { m_undoCache = value; } }
 
+        public PlayerOrbController Controller => m_targetController;
+
         public void SetUpgradeCache(IEnumerable<OrbItemProfile> enumerable)
         {
             if (enumerable == null)

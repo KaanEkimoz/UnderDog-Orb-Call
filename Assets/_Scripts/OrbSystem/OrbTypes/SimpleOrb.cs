@@ -16,7 +16,6 @@ using com.game.miscs;
 public enum OrbState
 {
     OnEllipse,
-    OnEllipseMovement,
     Sticked,
     Throwing,
     Returning
@@ -54,6 +53,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     [SerializeField] private SoundAsset m_throwSoundAsset;
     [SerializeField] private SoundAsset m_recallSoundAsset;
     [SerializeField] private SoundAsset m_catchSoundAsset;
+
+    public Func<Vector3, OrbState, Vector3> targetPositionPostProcessor;
 
     //Movement
     private Transform startParent;
@@ -277,11 +278,19 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     }
     public void SetNewDestination(Vector3 newPos)
     {
-        currentTargetPos = newPos;
+        if (targetPositionPostProcessor != null)
+        {
+            currentTargetPos = targetPositionPostProcessor.Invoke(newPos, currentState);
+        }
+
+        else
+        {
+            currentTargetPos = newPos;
+        }
     }
     public void SetNewDestination(Vector3 newPos, float multiplier)
     {
-        currentTargetPos = newPos;
+        SetNewDestination(newPos);
         m_internalRecallSpeedMultiplier = multiplier;
     }
     private void MoveToTargetPosition()
@@ -486,5 +495,10 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     protected void DemandCall()
     {
         OnCallDemanded?.Invoke(this);
+    }
+
+    public void SubscribeToTargetPositionPostProcessing(Func<Vector3, OrbState, Vector3> postProcessor)
+    {
+        targetPositionPostProcessor = postProcessor;
     }
 }

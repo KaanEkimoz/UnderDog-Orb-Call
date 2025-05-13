@@ -69,6 +69,9 @@ public class PlayerOrbController : MonoBehaviour
     public event Action<float> OnDamageGiven;
     public event Action<int> OnOrbCountChanged;
     public event Action OnAllOrbsCalled;
+    public event Action OnAllOrbsReturn;
+    public event Action<IEnumerable<SimpleOrb>> OnAllOrbsCalledWithReturn;
+    public event Action<SimpleOrb> OnOrbReached;
     public event Action OnNextOrbSelected;
     public event Action OnPreviousOrbSelected;
     public event Action OnSelectedOrbChanged;
@@ -83,6 +86,9 @@ public class PlayerOrbController : MonoBehaviour
     private float angleStep; // The angle between orbs
     private PlayerStats _playerStats;
     private SoundFXManager _soundFXManager;
+
+    List<SimpleOrb> m_lastCalledOrbs = new();
+
     public bool IsAiming { get; private set; } = false;
     public int SelectedOrbIndex => selectedOrbIndex;
 
@@ -233,7 +239,10 @@ public class PlayerOrbController : MonoBehaviour
             CallOrb(orb, speedCoefficient);
         }
 
+        m_lastCalledOrbs = new(stickedOrbs);
+
         OnAllOrbsCalled?.Invoke();
+        OnAllOrbsCalledWithReturn?.Invoke(m_lastCalledOrbs);
     }
     private void SelectNextOrb()
     {
@@ -385,6 +394,12 @@ public class PlayerOrbController : MonoBehaviour
         orb.AssignPlayerStats(_playerStats);
         orb.OnReachedToEllipse += () =>
         {
+            if (m_lastCalledOrbs.Contains(orb))
+                m_lastCalledOrbs.Remove(orb);
+
+            if (m_lastCalledOrbs.Count == 0)
+                OnAllOrbsReturn?.Invoke();
+
             Player.Instance.Hub.OrbHandler.AddOrb();
         };
         orb.OnCallDemanded += (orb) =>
