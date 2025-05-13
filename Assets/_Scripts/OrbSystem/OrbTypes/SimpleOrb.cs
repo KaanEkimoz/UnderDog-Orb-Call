@@ -77,6 +77,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     public OrbStats Stats => orbStats;
     private PlayerStats _playerStats;
 
+    public Transform StickedTransform => stickedTransform;
     public float penetrationExcessDamage => m_penetrationExcessDamage;
 
     //Events
@@ -182,6 +183,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     }
     private void HandleStateBehaviours()
     {
+        if (currentState == OrbState.Sticked && targetPositionPostProcessor != null)
+            transform.position = transform.position = targetPositionPostProcessor.Invoke(transform.position, currentState);
         if (currentState == OrbState.Returning || currentState == OrbState.OnEllipse)
             MoveToTargetPosition();
         if (currentState == OrbState.Throwing)

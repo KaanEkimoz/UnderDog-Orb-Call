@@ -269,6 +269,9 @@ MonoBehaviour:
   m_swayMagnitude: 0.11
   m_swaySpeed: 0.91
   m_randomSwayDelay: {x: 0.16977926, y: 0.82625884}
+  m_unstickEase: 4
+  m_unstickMagnitude: 0.003
+  m_unstickSpeed: 0.7
   m_ellipseScaleEase: 15
   m_ellipseScaleMultiplier: 1.5
   m_ellipseScaleDuration: 1
