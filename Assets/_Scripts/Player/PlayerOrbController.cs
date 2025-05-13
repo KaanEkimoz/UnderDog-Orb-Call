@@ -269,8 +269,11 @@ public class PlayerOrbController : MonoBehaviour
 
         m_lastCalledOrbs = new(stickedOrbs);
 
-        OnAllOrbsCalled?.Invoke();
-        OnAllOrbsCalledWithReturn?.Invoke(m_lastCalledOrbs);
+        if (m_lastCalledOrbs.Count > 1)
+        {
+            OnAllOrbsCalled?.Invoke();
+            OnAllOrbsCalledWithReturn?.Invoke(m_lastCalledOrbs);
+        }
     }
     private void SelectNextOrb()
     {

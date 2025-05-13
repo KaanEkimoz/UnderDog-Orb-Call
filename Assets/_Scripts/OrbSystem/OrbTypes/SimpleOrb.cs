@@ -509,7 +509,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
 
     public void CommitThrowStartWithFirePoint(Vector3 firePoint)
     {
-        targetPositionPostProcessor.Invoke(firePoint, OrbState.Throwing);
+        targetPositionPostProcessor?.Invoke(firePoint, OrbState.Throwing);
         m_inThrowAnimation = true;
     }
 
