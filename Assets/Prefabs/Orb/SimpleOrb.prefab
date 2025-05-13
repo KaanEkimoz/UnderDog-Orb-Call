@@ -297,7 +297,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_throwEnabled: 1
-  m_throwPivotFactor: -0.84
+  m_throwPivotFactor: -0.18
+  m_throwTiltRange: {x: 0, y: 0}
   m_throwDuration: 0.48
   m_ellipseScaleEase: 15
   m_ellipseScaleMultiplier: 1.5
