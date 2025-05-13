@@ -88,6 +88,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     public event Action<OrbState> OnStateChanged;
     public event Action OnPenetrateHit;
     public event Action OnPhysicsHit;
+    public event Action<SimpleOrb> OnThrowAnimationEndOneShot;
     public event Action<SimpleOrb> OnCallDemanded;
     //Effects
     private SoundFXManager _soundFXManager;
@@ -99,6 +100,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     List<IDamageable> m_penetratedEnemies = new();
     float m_internalRecallSpeedMultiplier;
     bool m_bypassKnockback;
+    bool m_inThrowAnimation = false;
 
     public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
         _playerStats.GetStat(PlayerStatType.Damage) + 
@@ -503,5 +505,21 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     public void SubscribeToTargetPositionPostProcessing(Func<Vector3, OrbState, Vector3> postProcessor)
     {
         targetPositionPostProcessor = postProcessor;
+    }
+
+    public void CommitThrowStartWithFirePoint(Vector3 firePoint)
+    {
+        targetPositionPostProcessor.Invoke(firePoint, OrbState.Throwing);
+        m_inThrowAnimation = true;
+    }
+
+    public void CommitThrowAnimationEnd()
+    {
+        if (!m_inThrowAnimation)
+            return;
+
+        m_inThrowAnimation = false;
+        OnThrowAnimationEndOneShot?.Invoke(this);
+        OnThrowAnimationEndOneShot = null;
     }
 }

@@ -86,10 +86,12 @@ public class PlayerOrbController : MonoBehaviour
     private float angleStep; // The angle between orbs
     private PlayerStats _playerStats;
     private SoundFXManager _soundFXManager;
+    private bool m_throwingBlocked = false;
 
     float m_ellipseSizeMultiplier = 1f;
     List<SimpleOrb> m_lastCalledOrbs = new();
 
+    public Vector3 FirePointGlobal => firePointTransform.position;
     public Vector3 EllipseCenterGlobal => ellipseCenterTransform.position;
 
     public float EllipseSizeMultiplier
@@ -180,6 +182,9 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void ThrowOrb()
     {
+        if (m_throwingBlocked)
+            return;
+
         if (throwCooldownTimer > 0)
             return;
 
@@ -201,23 +206,30 @@ public class PlayerOrbController : MonoBehaviour
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
         _playerAnimator.SetTrigger("Throw");
 
-        Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
-        throwDirection.y = 0;
+        orbToThrow.currentState = OrbState.Throwing;
 
-        foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
+        m_throwingBlocked = true;
+        orbToThrow.CommitThrowStartWithFirePoint(firePointTransform.position);
+        orbToThrow.OnThrowAnimationEndOneShot += (orb) =>
         {
-            throwDirection = extension.ConvertAimDirection(throwDirection);
-        }
+            Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
+            throwDirection.y = 0;
 
-        orbToThrow.transform.position = firePointTransform.position; // animation here!!!
-        orbToThrow.Throw(throwDirection.normalized);
+            foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
+            {
+                throwDirection = extension.ConvertAimDirection(throwDirection);
+            }
 
-        if (autoSelectNextOrbOnShoot)
-            SelectPreviousOrb();
+            orb.Throw(throwDirection.normalized);
 
-        Player.Instance.Hub.OrbHandler.RemoveOrb();
-        
-        OnOrbThrowed?.Invoke();
+            if (autoSelectNextOrbOnShoot)
+                SelectPreviousOrb();
+
+            Player.Instance.Hub.OrbHandler.RemoveOrb();
+            OnOrbThrowed?.Invoke();
+
+            m_throwingBlocked = false;
+        };
     }
     private void CallOrb(SimpleOrb orb, float coefficient = 1f)
     {
@@ -310,14 +322,14 @@ public class PlayerOrbController : MonoBehaviour
             Vector3 localPosition = new Vector3(localX, localY, 0f);
             Vector3 targetPosition = ellipseCenterTransform.position + (ellipseCenterTransform.rotation * localPosition);
 
-            if (orbsOnEllipse[i] == orbToThrow)
-            {
-                if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
-                {
-                    orbToThrow.SetNewDestination(firePointTransform.position);
-                }
-            }
-            else if (ghostOrbs[i] != null)
+            //if (orbsOnEllipse[i] == orbToThrow)
+            //{
+            //    if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
+            //    {
+            //        orbToThrow.SetNewDestination(firePointTransform.position);
+            //    }
+            //}
+            if (ghostOrbs[i] != null)
             {
                 if (orbsOnEllipse[i].currentState != OrbState.OnEllipse)
                 {
