@@ -8,6 +8,9 @@ namespace com.game.orbsystem
         public float movementSpeed = 5f;
         public float throwSpeedMultiplier = 1f;
         public float recallSpeedMultiplier = 1f;
+        public float destickDuration = 1f;
+        public float destickStrength = 1f;
+        public AnimationCurve destickCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
         public float recallSpeedTimeTravelledBase = 1.2f;
         public float recallSpeedCoefficientOverTimeTravelled = 1f;
         public float recallSpeedMaxCoefficientOverTimeTravelled = 5f;

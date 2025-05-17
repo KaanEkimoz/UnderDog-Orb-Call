@@ -62,6 +62,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     private Vector3 currentTargetPos;
     private bool hasReachedTargetPos = false;
     private const float ellipseReachThreshold = 0.4f;
+    private Vector3 lastStickNormal;
     private Transform stickedTransform;
     private Collider stickedCollider;
 
@@ -69,6 +70,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     private float distanceTraveled;
     private float timeTravelledReturning;
     private float m_penetrationExcessDamage;
+    private float m_destickLerpTime01 = 0f;
+    private float m_destickLerpFactor = 1f;
     private Vector3 throwStartPosition;
     private Vector3 throwVector;
     private int penetrationCount = 0;
@@ -101,6 +104,7 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     float m_internalRecallSpeedMultiplier;
     bool m_bypassKnockback;
     bool m_inThrowAnimation = false;
+    bool m_lastStickWasAnEnemy = false;
 
     public float ThrowDamage => orbStats.GetStat(OrbStatType.Damage) + 
         _playerStats.GetStat(PlayerStatType.Damage) + 
@@ -197,6 +201,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
                 StickToTransform(startParent);
                 stickedCollider = null;
                 stickedTransform = null;
+                m_destickLerpTime01 = 1f;
+                m_destickLerpFactor = 1f;
             }
         }
         if (currentState == OrbState.Returning && hasReachedTargetPos)
@@ -207,6 +213,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
             m_internalRecallSpeedMultiplier = 1f;
             transform.parent = startParent;
 
+            m_destickLerpFactor = 1f;
+            m_destickLerpTime01 = 0f;
             timeTravelledReturning = 0f;
             penetrationCount = 0;
             m_penetrationExcessDamage = 0f;
@@ -240,6 +248,9 @@ public class SimpleOrb : MonoBehaviour, IGatherable
 
             stickedCollider = null;
             stickedTransform = null;
+
+            m_destickLerpTime01 = 0f;
+            m_destickLerpFactor = 0f;
         }
 
         currentState = OrbState.Returning;
@@ -300,7 +311,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     }
     private void MoveToTargetPosition()
     {
-        float distanceToTarget = Vector3.Distance(transform.position, currentTargetPos);
+        Vector3 targetPosition = currentTargetPos;
+        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
         // AnimationCurve adjustments
         float dynamicMaxDistance = Mathf.Max(maxDistance + _playerStats.GetStat(PlayerStatType.Range), distanceToTarget + 10f);
@@ -318,6 +330,12 @@ public class SimpleOrb : MonoBehaviour, IGatherable
             currentSpeed *= Mathf.Min(maxCoefficientOverTimeTravelled, intendedCoefficientOverTimeTravelled);
 
             timeTravelledReturning += Time.deltaTime;
+            m_destickLerpTime01 += Time.deltaTime / m_movementData.destickDuration;
+            m_destickLerpFactor = m_movementData.destickCurve.Evaluate(m_destickLerpTime01);
+
+            if (m_lastStickWasAnEnemy) 
+                targetPosition = Vector3.Lerp(targetPosition, lastStickNormal * distanceToTarget * m_movementData.destickStrength,
+                m_destickLerpFactor);
         }
 
         else if (currentState == OrbState.OnEllipse)
@@ -326,7 +344,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
         }
 
         // MoveTowards to the target
-        transform.position = Vector3.MoveTowards(transform.position, currentTargetPos, currentSpeed * Time.deltaTime);
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
 
         hasReachedTargetPos = distanceToTarget < ellipseReachThreshold;
     }
@@ -376,13 +395,16 @@ public class SimpleOrb : MonoBehaviour, IGatherable
         currentState = OrbState.Sticked;
         stickedCollider = stickCollider;
 
+        Vector3 closestContact = stickCollider.ClosestPointOnBounds(transform.position);
+        lastStickNormal = -m_latestVelocity.normalized; // !!!
+
         OnPhysicsHit?.Invoke();
 
         if (stickCollider.TryGetComponent(out IOrbStickTarget stickable))
             stickable.CommitOrbStick(this);
 
         _rigidBody.isKinematic = true;
-        transform.position = stickCollider.ClosestPointOnBounds(transform.position);
+        transform.position = closestContact;
         StickToTransform(stickCollider.transform);
     }
     
@@ -390,6 +412,8 @@ public class SimpleOrb : MonoBehaviour, IGatherable
     {
         if (collisionObject.gameObject.TryGetComponent(out IDamageable damageable))
         {
+            m_lastStickWasAnEnemy = true;
+
             float maxPenetrationCount = _playerStats.GetStat(PlayerStatType.Penetration);
             bool penetrationCompleted = penetrationCount >= maxPenetrationCount;
             bool alreadyPenetrated = m_penetratedEnemies.Contains(damageable);
@@ -434,7 +458,10 @@ public class SimpleOrb : MonoBehaviour, IGatherable
                 Stick(collisionObject);
         }
         else
+        {
+            m_lastStickWasAnEnemy = false;
             Stick(collisionObject);
+        }
 
     }
     protected virtual void ApplyOrbReturnTriggerEffects(Collider triggerCollider)
