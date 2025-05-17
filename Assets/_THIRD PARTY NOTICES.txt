@@ -2,3 +2,4 @@ https://github.com/Tayx94/graphy.git
 https://github.com/sinnwrig/URP-Fog-Volumes.git
 https://www.lmhpoly.com/tutorials/unity-urp-tutorial-orthographic-fog-plane-shader
 Mirza Beig
+https://assetstore.unity.com/packages/tools/utilities/dreamteck-splines-61926?srsltid=AfmBOor4ZnJMsPg6JSf7jhGizTBX3XxsSb-vc47JIwspPhgV0Iqrefuy
