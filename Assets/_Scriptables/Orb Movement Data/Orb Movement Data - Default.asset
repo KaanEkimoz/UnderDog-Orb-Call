@@ -15,8 +15,8 @@ MonoBehaviour:
   movementSpeed: 100
   throwSpeedMultiplier: 5
   recallSpeedMultiplier: 0.048
-  destickDuration: 0.16
-  destickStrength: 0.5
+  destickDuration: 0.3
+  destickStrength: 1.13
   destickCurve:
     serializedVersion: 2
     m_Curve:
