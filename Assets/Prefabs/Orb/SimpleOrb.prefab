@@ -296,7 +296,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_throwEnabled: 1
+  m_throwEnabled: 0
   m_throwPivotFactor: -0.8
   m_throwTiltRange: {x: 0, y: 0}
   m_throwDuration: 0.48
