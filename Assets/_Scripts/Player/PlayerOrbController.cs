@@ -33,6 +33,7 @@ public class PlayerOrbController : MonoBehaviour
     [SerializeField] private bool autoSelectNextOrbOnShoot = false;
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 0f;
+    [SerializeField] private float throwTimeBuffer = 0.2f;
     [SerializeField] private Transform firePointTransform;
     [SerializeField] private LayerMask aimCursorDetectMask;
     [Header("Orb Recall")]
@@ -84,9 +85,11 @@ public class PlayerOrbController : MonoBehaviour
     private int activeOrbCount = 0;
     private int selectedOrbIndex = 0;
     private float angleStep; // The angle between orbs
+    private float m_throwBufferTimer; // The angle between orbs
     private PlayerStats _playerStats;
     private SoundFXManager _soundFXManager;
-    private bool m_throwingBlocked = false;
+    private bool m_throwAnimationInPlace = false;
+    private bool m_throwSavedInBuffer = false;
 
     float m_ellipseSizeMultiplier = 1f;
     List<SimpleOrb> m_lastCalledOrbs = new();
@@ -140,6 +143,9 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void HandleInput()
     {
+        if (m_throwSavedInBuffer)
+            IncrementThrowBufferTimer();
+
         if (PlayerInputHandler.Instance.AttackButtonPressed)
             ThrowOrb();
 
@@ -180,10 +186,20 @@ public class PlayerOrbController : MonoBehaviour
         SelectNextOrb();
         IsAiming = true;
     }
+    private void IncrementThrowBufferTimer()
+    {
+        m_throwBufferTimer += Time.deltaTime;
+
+        if (m_throwBufferTimer >= throwTimeBuffer)
+            ClearThrowBuffer(false);
+    }
     private void ThrowOrb()
     {
-        if (m_throwingBlocked)
+        if (m_throwAnimationInPlace)
+        {
+            SaveThrowToBuffer();
             return;
+        }
 
         if (throwCooldownTimer > 0)
             return;
@@ -208,7 +224,7 @@ public class PlayerOrbController : MonoBehaviour
 
         orbToThrow.currentState = OrbState.Throwing;
 
-        m_throwingBlocked = true;
+        m_throwAnimationInPlace = true;
         orbToThrow.CommitThrowStartWithFirePoint(firePointTransform.position);
         orbToThrow.OnThrowAnimationEndOneShot += (orb) =>
         {
@@ -228,8 +244,24 @@ public class PlayerOrbController : MonoBehaviour
             Player.Instance.Hub.OrbHandler.RemoveOrb();
             OnOrbThrowed?.Invoke();
 
-            m_throwingBlocked = false;
+            m_throwAnimationInPlace = false;
+
+            if (m_throwSavedInBuffer) 
+                ClearThrowBuffer(true);
         };
+    }
+    private void ClearThrowBuffer(bool throwIfExists = true)
+    {
+        m_throwSavedInBuffer = false;
+        m_throwBufferTimer = 0f;
+
+        if (throwIfExists) 
+            ThrowOrb();
+    }
+    private void SaveThrowToBuffer()
+    {
+       m_throwSavedInBuffer = true;
+       m_throwBufferTimer = 0f;
     }
     private void CallOrb(SimpleOrb orb, float coefficient = 1f)
     {
@@ -306,7 +338,9 @@ public class PlayerOrbController : MonoBehaviour
         }
 
         orbsOnEllipse = shiftedOrbs;
-        selectedOrbIndex = 0; 
+        selectedOrbIndex = 0;
+
+        ClearThrowBuffer(false);
     }
     private void UpdateOrbEllipsePositions()
     {
