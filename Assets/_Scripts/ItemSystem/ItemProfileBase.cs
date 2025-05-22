@@ -1,6 +1,7 @@
 using com.absence.attributes;
 using com.absence.attributes.experimental;
 using com.absence.utilities.experimental.databases;
+using com.game.itemsystem.gamedependent;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace com.game.itemsystem.scriptables
         [Readonly]
         public string Guid = System.Guid.NewGuid().ToString();
         public string CustomItemId = string.Empty;
+        public ItemRarity Rarity = ItemRarity.Common; 
 
         [Space, Header3("Information")]
 
