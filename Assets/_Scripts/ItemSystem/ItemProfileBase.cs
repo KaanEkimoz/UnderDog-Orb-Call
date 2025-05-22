@@ -15,6 +15,7 @@ namespace com.game.itemsystem.scriptables
 
         [Readonly]
         public string Guid = System.Guid.NewGuid().ToString();
+        public string CustomItemId = string.Empty;
 
         [Space, Header3("Information")]
 

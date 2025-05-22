@@ -23,6 +23,11 @@ namespace com.game.player
 
         public PlayerOrbController Controller => m_targetController;
 
+        private void Start()
+        {
+            Refresh();
+        }
+
         public void SetUpgradeCache(IEnumerable<OrbItemProfile> enumerable)
         {
             if (enumerable == null)

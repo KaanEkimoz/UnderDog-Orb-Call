@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Orb Upgrade - Electric Orb
   m_EditorClassIdentifier: 
   Guid: d8106ece-32bb-48e8-9cfc-5ebd5869b182
+  CustomItemId: orb_electric
   Icon: {fileID: 1408500139, guid: 0f63e6a603fe9f143809feeca5394428, type: 3}
   DisplayName: Electric Orb
   Description: 
