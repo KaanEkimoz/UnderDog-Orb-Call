@@ -9,7 +9,7 @@ namespace com.game.scriptables.events
     order = int.MinValue)]
     public class DebugLogScriptableEventProfile : ScriptableEventProfileBase
     {
-        [SerializeField] private string m_message;
+        [Space, SerializeField] private string m_message;
 
         public override Action<ScriptableEventActionContext, object[]> GenerateAction(ScriptableEventObject instance)
         {

@@ -19,8 +19,8 @@ MonoBehaviour:
   DisplayName: Muzzle
   Description: 
   m_hoverForDetails: 0
-  FirstSpecificCondition: {fileID: 11400000, guid: 014f75d3cc370d54585761b078f22a58, type: 2}
-  FirstSpecificEvent: {fileID: 11400000, guid: 58d3c62c8ad2b1a4690ac23cda54bd0d, type: 2}
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
   SecondSpecificCondition: {fileID: 0}
   SecondSpecificEvent: {fileID: 0}
   CustomActions: []

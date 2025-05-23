@@ -36,10 +36,10 @@ namespace com.game.itemsystem.scriptables
         [Space, Header3("Specifics")]
         [SerializeField, Readonly, Tooltip("Unless rarity is set to <color=yellow>'Legendary'</color>, <color=white>'Second'</color> specifics will be <b>ignored</b>.")]
         private ItemRarity m_hoverForDetails;
-        [InlineEditor(newButtonId = 2392, delButtonId = 2393)] public SubconditionProfileBase FirstSpecificCondition;
-        [InlineEditor(newButtonId = 2394, delButtonId = 2395)] public ScriptableEventProfileBase FirstSpecificEvent;
-        [InlineEditor(newButtonId = 2396, delButtonId = 2397)] public SubconditionProfileBase SecondSpecificCondition;
-        [InlineEditor(newButtonId = 2398, delButtonId = 2399)] public ScriptableEventProfileBase SecondSpecificEvent;
+        [Readonly, InlineEditor(newButtonId = 2392, delButtonId = 2393)] public SubconditionProfileBase FirstSpecificCondition;
+        [Readonly, InlineEditor(newButtonId = 2394, delButtonId = 2395)] public ScriptableEventProfileBase FirstSpecificEvent;
+        [Readonly, InlineEditor(newButtonId = 2396, delButtonId = 2397)] public SubconditionProfileBase SecondSpecificCondition;
+        [Readonly, InlineEditor(newButtonId = 2398, delButtonId = 2399)] public ScriptableEventProfileBase SecondSpecificEvent;
 
         [Space, Header3("Actions and Behaviour")]
 

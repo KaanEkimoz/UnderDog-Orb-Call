@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e517bfb42a4d5e47b1c548573f6dbf1, type: 3}
   m_Name: New Sequential Event
   m_EditorClassIdentifier: 
+  m_guid: 3a000392-6003-4a8e-86a7-42f7bb685a3f
   IsSubAsset: 0
   m_subEvents:
   - {fileID: 0}
