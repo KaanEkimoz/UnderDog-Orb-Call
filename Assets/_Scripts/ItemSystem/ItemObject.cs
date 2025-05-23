@@ -2,6 +2,9 @@ using com.game.itemsystem.scriptables;
 using System;
 using System.Collections.Generic;
 
+using com.game.scriptableeventsystem;
+using com.game.subconditionsystem;
+
 namespace com.game.itemsystem
 {
     [System.Serializable]
@@ -18,6 +21,12 @@ namespace com.game.itemsystem
         }
 
         public ItemProfileBase Profile { get; }
+
+        public SubconditionObject FirstSpecificCondition = null;
+        public ScriptableEventObject FirstSpecificEvent = null;
+        public SubconditionObject SecondSpecificCondition = null;
+        public ScriptableEventObject SecondSpecificEvent = null;
+
         public List<ItemBehaviour> Behaviours { get; protected set; }
         public Dictionary<string, object> CustomData = new();
 
@@ -26,6 +35,22 @@ namespace com.game.itemsystem
         public ItemObject(ItemProfileBase profile)
         {
             Profile = profile;
+
+            if (profile.FirstSpecificCondition != null)
+                FirstSpecificCondition = new SubconditionObject(profile.FirstSpecificCondition);
+
+            if (profile.FirstSpecificEvent != null)
+                FirstSpecificEvent = new ScriptableEventObject(profile.FirstSpecificEvent);
+
+            if (profile.Rarity == gamedependent.ItemRarity.Legendary)
+            {
+                if (profile.SecondSpecificCondition != null)
+                    SecondSpecificCondition = new SubconditionObject(profile.SecondSpecificCondition);
+
+                if (profile.SecondSpecificEvent != null)
+                    SecondSpecificEvent = new ScriptableEventObject(profile.SecondSpecificEvent);
+            }
+
             Behaviours = new();
         }
 
@@ -40,6 +65,7 @@ namespace com.game.itemsystem
             OnDispose?.Invoke();
         }
         public abstract void Dispose();
+        public abstract void Update();
     }
 
     /// <summary>
@@ -74,7 +100,21 @@ namespace com.game.itemsystem
         {
             Profile = null;
             CustomData = null;
+
+            FirstSpecificCondition?.Dispose();
+            FirstSpecificEvent?.Dispose();
+            SecondSpecificCondition?.Dispose();
+            SecondSpecificEvent?.Dispose();
+
             InvokeOnDispose();
+        }
+
+        public override void Update()
+        {
+            FirstSpecificCondition?.Update();
+            FirstSpecificEvent?.Update();
+            SecondSpecificCondition?.Update();
+            SecondSpecificEvent?.Update();
         }
     }
 }
