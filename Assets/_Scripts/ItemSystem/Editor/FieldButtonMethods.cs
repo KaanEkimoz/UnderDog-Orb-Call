@@ -102,7 +102,7 @@ namespace com.game.itemsystem.editor
                 Undo.RecordObject(item, "Item Profile (Second Specific Subcondition Set)");
 
                 createdSO.name = $"{item.name} (Second Specific Subcondition)";
-                item.FirstSpecificCondition = createdSO;
+                item.SecondSpecificCondition = createdSO;
 
                 Undo.CollapseUndoOperations(undoGroup);
 

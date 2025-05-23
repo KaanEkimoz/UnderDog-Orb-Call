@@ -1,22 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6492902762669490954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30dbc403218e3b54fb59f20e1cb8748c, type: 3}
-  m_Name: Item - Muzzle (First Specific Subcondition)
-  m_EditorClassIdentifier: 
-  m_guid: 7ebe9be4-9fb6-40f9-ab26-ceb7676f54cf
-  m_invert: 0
-  m_bypassStateChangeBallbacks: 0
-  IsSubAsset: 1
-  m_targetState: 3
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36,8 +19,8 @@ MonoBehaviour:
   DisplayName: Muzzle
   Description: 
   m_hoverForDetails: 0
-  FirstSpecificCondition: {fileID: -6492902762669490954}
-  FirstSpecificEvent: {fileID: 4438076246990242450}
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
   SecondSpecificCondition: {fileID: 0}
   SecondSpecificEvent: {fileID: 0}
   CustomActions: []
@@ -54,18 +37,3 @@ MonoBehaviour:
     m_percentageValue: 0
     TargetStatType: 8
   m_playerStatCaps: []
---- !u!114 &4438076246990242450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfb159f3ec5f38b4aaf9dda790fad76d, type: 3}
-  m_Name: Item - Muzzle (First Specific Event)
-  m_EditorClassIdentifier: 
-  m_guid: 6f6a931d-f5d2-4894-93e1-4391fd5a4781
-  IsSubAsset: 1
-  m_message: YETER YETER AAAAA
