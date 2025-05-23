@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace com.game.player
 {
-    public class PlayerInventory : MonoBehaviour, IInventory<PlayerItemProfile>
+    public class PlayerInventory : MonoBehaviour, IInventory<PlayerItemProfile>, IInventory<ItemObject<PlayerItemProfile>>
     {
         //[SerializeField] private List<PlayerItemProfile> m_itemBank = new();
 
@@ -45,10 +45,7 @@ namespace com.game.player
 
             ItemObject<PlayerItemProfile> itemToAdd = new(itemProfile);
 
-            ApplyItemModifiers(itemToAdd, itemToAdd.Profile);
-            m_items.Add(itemToAdd);
-
-            return true;
+            return Add(itemToAdd);
         }
 
         public void Remove(PlayerItemProfile itemProfile)
@@ -56,24 +53,61 @@ namespace com.game.player
             ItemObject<PlayerItemProfile> itemToRemove = 
                 m_items.FirstOrDefault(item => item.Profile.Equals(itemProfile));
 
-            if (itemToRemove == null)
-                return;
-
-            m_items.Remove(itemToRemove);
-            RevertItemModifiers(itemToRemove);
-            itemToRemove.Dispose();
+            Remove(itemToRemove);
         }
 
-        public void Combine(ItemObject<PlayerItemProfile> bottom, ItemObject<PlayerItemProfile> top)
+        public bool Add(ItemObject<PlayerItemProfile> target)
         {
+            ApplyItemModifiers(target, target.Profile);
+            m_items.Add(target);
+
+            return true;
+        }
+
+        public void Remove(ItemObject<PlayerItemProfile> target)
+        {
+            if (target == null)
+                return;
+
+            if (!m_items.Contains(target)) 
+                return;
+
+            m_items.Remove(target);
+            RevertItemModifiers(target);
+            target.Dispose();
+
+            m_items.Remove(target);
+        }
+
+        public bool Combine(int bottomIndex, int topIndex)
+        {
+            if (m_items.Count <= bottomIndex)
+                return false;
+
+            if (m_items.Count <= topIndex)
+                return false;
+
+            return Combine(m_items[bottomIndex], m_items[topIndex]);
+        }
+
+        public bool Combine(ItemObject<PlayerItemProfile> bottom, ItemObject<PlayerItemProfile> top)
+        {
+            if (bottom == null)
+                return false;
+
+            if (top == null)
+                return false;
+
             if (!m_items.Contains(bottom))
-                throw new System.Exception("Inventory does not contain intended item!");
+                return false;
 
             if (!m_items.Contains(top))
-                throw new System.Exception("Inventory does not contain intended item!");
+                return false;
 
             ItemObject<PlayerItemProfile>.Combine(bottom, top);
-            Remove(top.Profile);
+            Remove(top);
+
+            return true;
         }
 
         void ApplyItemModifiers(ItemObject<PlayerItemProfile> targetItem, PlayerItemProfile profile)
