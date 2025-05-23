@@ -30,6 +30,11 @@ namespace com.game.player
             //m_itemBank = ItemManager.GetItemsOfType<PlayerItemProfile>().ToList();
         }
 
+        private void Update()
+        {
+            m_items.ForEach(item => item.Update());
+        }
+
         public bool Add(PlayerItemProfile itemProfile)
         {
             if (Full)
