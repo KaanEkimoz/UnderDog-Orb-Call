@@ -115,6 +115,12 @@ namespace com.game.itemsystem
             FirstSpecificEvent?.Update();
             SecondSpecificCondition?.Update();
             SecondSpecificEvent?.Update();
+
+            if (FirstSpecificCondition != null && FirstSpecificCondition.GetResult())
+                FirstSpecificEvent.Invoke();
+
+            if (SecondSpecificCondition != null && FirstSpecificCondition.GetResult())
+                SecondSpecificEvent.Invoke();
         }
     }
 }
