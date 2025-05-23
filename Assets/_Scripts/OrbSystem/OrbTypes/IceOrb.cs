@@ -2,108 +2,113 @@ using com.game.utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace com.game
 {
     public class IceOrb : SimpleOrb, IElemental
     {
-        [Space]
-        [Header("Ice")]
-        [Range(0f, 100f)]
-        [SerializeField] float iceSlowPercent = 100f;
-        [SerializeField] float iceSlowDurationInSeconds = 1f;
-        [SerializeField] float iceSlowRadius = 10f;
-        [Header("Collision Instant Ice Effect")]
-        [SerializeField] private GameObject instantIceEffect;
-        [Header("Continuos Ice Effect")]
-        [SerializeField] private GameObject continuosIceEffect; // Prefab for the electric line
-        [SerializeField] private float iceEffectDurationInSeconds = 0.2f;
+        [Header("Ice Settings")]
+        [Range(0f, 100f), SerializeField] private float iceSlowPercent = 100f;
+        [SerializeField] private float iceSlowDurationInSeconds = 1f;
+        [SerializeField] private float iceSlowRadius = 10f;
 
-        private List<IDamageable> affectedEnemies = new List<IDamageable>();
+        [Header("Ice Effects")]
+        [SerializeField] private GameObject instantIceEffect;
+        [SerializeField] private GameObject continuousIceEffect;
+        [SerializeField] private float iceEffectDurationInSeconds = 1f;
+
+        private List<IRenderedDamageable> affectedEnemies = new();
+        private Coroutine iceEffectCoroutine;
+
         protected override void ApplyCombatEffects(IDamageable damageable, float damage, bool penetrationCompleted, bool recall)
         {
             base.ApplyCombatEffects(damageable, damage, penetrationCompleted, recall);
 
-            if (recall)
+            if (ShouldSkipEffects(recall, penetrationCompleted))
                 return;
 
-            if (m_latestDamageEvt.CausedDeath && !penetrationCompleted)
-                return;
+            using (new GameEventScope(GameRuntimeEvent.Null))
+            {
+                ApplySlowEffectInRadius();
+                CreateInstantIceEffect();
+                CacheAffectedEnemies();
+            }
 
+            if (continuousIceEffect != null)
+                CreateIceEffectsOnEnemies();
+            else
+                Debug.LogWarning("Continuous ice effect prefab is not assigned.");
+        }
+
+        private bool ShouldSkipEffects(bool recall, bool penetrationCompleted)
+        {
+            return recall || (m_latestDamageEvt.CausedDeath && !penetrationCompleted);
+        }
+
+        private void ApplySlowEffectInRadius()
+        {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
 
-            GameRuntimeEvent evt = Game.Event;
-            Game.Event = GameRuntimeEvent.Null;
-
-            foreach (var hitCollider in hitColliders)
-                if (hitCollider.gameObject.TryGetComponent(out ISlowable slowable))
+            foreach (var collider in hitColliders)
+            {
+                if (collider.gameObject.TryGetComponent(out ISlowable slowable))
                     slowable.SlowForSeconds(iceSlowPercent, iceSlowDurationInSeconds);
+            }
+        }
 
+        private void CreateInstantIceEffect()
+        {
+            if (instantIceEffect != null)
+            {
+                GameObject effect = Instantiate(instantIceEffect, transform.position, Quaternion.identity);
+                StartCoroutine(DestroyEffectAfterDelay(effect, 0.3f));
+            }
+        }
+
+        private void CacheAffectedEnemies()
+        {
             affectedEnemies.Clear();
-            GameObject instantEffect = Instantiate(instantIceEffect, transform.position, Quaternion.identity);
-            StartCoroutine(DestroyIceEffectAfterDelay(instantEffect, 0.3f));
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, iceSlowRadius);
 
-            foreach (var hitCollider in hitColliders)
+            foreach (var collider in hitColliders)
             {
-                if (hitCollider.gameObject.CompareTag("Player"))
-                    continue;
-
-                if (hitCollider.gameObject.TryGetComponent(out IDamageable hitDamageable))
-                    affectedEnemies.Add(hitDamageable);
-            }
-
-            Game.Event = evt;
-
-            if (continuosIceEffect == null)
-            {
-                Debug.LogWarning("IceEffect prefab is not assigned.");
-                return;
-            }
-
-            CreateIceEffectOnEnemiesInRange();
-        }
-        private void CreateIceEffectOnEnemiesInRange()
-        {
-
-            for (int i = 0; i < affectedEnemies.Count; i++)
-            {
-                MonoBehaviour currentEnemy = affectedEnemies[i] as MonoBehaviour;
-
-                Vector3 topPos = currentEnemy.GetComponentInChildren<MeshRenderer>().bounds.center; // Top Position
-
-                CreateIceEffect(topPos);
+                if (!collider.gameObject.CompareTag("Player") &&
+                    collider.gameObject.TryGetComponent(out IRenderedDamageable enemy))
+                {
+                    affectedEnemies.Add(enemy);
+                }
             }
         }
-        private IEnumerator CreateIceEffectWithIntervals()
+        private void CreateIceEffectsOnEnemies()
         {
-            CreateIceEffectOnEnemiesInRange();
-            yield return new WaitForSeconds(iceEffectDurationInSeconds);
+            foreach (var enemy in affectedEnemies)
+                CreateContinuousIceEffect(enemy.Renderer.bounds.center + (Vector3.up * 0.5f));
         }
-        private void CreateIceEffect(Vector3 effectPos)
-        {
-            GameObject fireEffectInstance = Instantiate(continuosIceEffect, effectPos, Quaternion.identity);
 
-            StartCoroutine(DestroyIceEffectAfterDelay(fireEffectInstance, iceEffectDurationInSeconds));
+        private void CreateContinuousIceEffect(Vector3 position)
+        {
+            GameObject effect = Instantiate(continuousIceEffect, position, Quaternion.identity);
+            StartCoroutine(DestroyEffectAfterDelay(effect, iceEffectDurationInSeconds));
         }
-        private IEnumerator DestroyIceEffectAfterDelay(GameObject fireEffectInstance, float delay)
+
+        private IEnumerator DestroyEffectAfterDelay(GameObject effect, float delay)
         {
             yield return new WaitForSeconds(delay);
-            Destroy(fireEffectInstance);
+            if (effect != null)
+            {
+                Destroy(effect);
+            }
         }
 
 #if UNITY_EDITOR
-
         private void OnDrawGizmos()
         {
-            // Draw the slow radius in the editor
-
             if (currentState != OrbState.OnEllipse)
             {
                 Gizmos.color = Color.blue;
                 Gizmos.DrawSphere(transform.position, iceSlowRadius);
             }
         }
-
 #endif
-
     }
 }
