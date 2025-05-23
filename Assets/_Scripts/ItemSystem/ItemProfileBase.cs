@@ -31,6 +31,9 @@ namespace com.game.itemsystem.scriptables
         public string Description;
 
         [Space, Header3("Actions and Behaviour")]
+
+        //[]
+
         public List<ItemCustomAction> CustomActions = new();
         [InlineEditor] public ItemBehaviour Behaviour;
 
