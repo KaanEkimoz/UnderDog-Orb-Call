@@ -78,6 +78,8 @@ public class PlayerOrbController : MonoBehaviour
     public event Action OnSelectedOrbChanged;
     public event Action<SimpleOrb> OnOrbAdded;
 
+    private event Action<PlayerOrbController> m_onInitialize;
+
     public List<SimpleOrb> orbsOnEllipse = new();
     private List<GhostOrb> ghostOrbs = new();
     private SimpleOrb orbToThrow;
@@ -110,6 +112,7 @@ public class PlayerOrbController : MonoBehaviour
         }
     }
 
+    public bool Initialized { get; private set; } = false;
     public bool IsAiming { get; private set; } = false;
     public int SelectedOrbIndex => selectedOrbIndex;
 
@@ -121,6 +124,8 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void Start()
     {
+        Initialized = false;
+
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
 
         if (objectPool == null)
@@ -131,6 +136,9 @@ public class PlayerOrbController : MonoBehaviour
         CalculateAngleStep();
 
         StartAiming();
+
+        Initialized = true;
+        m_onInitialize?.Invoke(this);
     }
     private void Update()
     {
@@ -558,6 +566,17 @@ public class PlayerOrbController : MonoBehaviour
     public void UpdateAnimator()
     {
         //_playerAnimator.SetBool("IsAiming", IsAiming);
+    }
+
+    public void OnInitialize(Action<PlayerOrbController> callback)
+    {
+        if (!Initialized)
+        {
+            m_onInitialize += callback;
+            return;
+        }
+
+        callback?.Invoke(this);
     }
 
     //private void OnGUI()

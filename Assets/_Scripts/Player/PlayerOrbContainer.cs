@@ -25,7 +25,7 @@ namespace com.game.player
 
         private void Start()
         {
-            Refresh();
+            m_targetController.OnInitialize((_) => Refresh());
         }
 
         public void SetUpgradeCache(IEnumerable<OrbItemProfile> enumerable)
