@@ -14,9 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Guid: 4b4d04d3-3544-4b8c-afb8-d0fd6ad27c88
   CustomItemId: orb_ice
+  Rarity: 0
   Icon: {fileID: -1111880641, guid: cc815fd5c9b9dc34e9098801c623af24, type: 3}
   DisplayName: Ice Orb
   Description: 
+  m_hoverForDetails: 0
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
+  SecondSpecificCondition: {fileID: 0}
+  SecondSpecificEvent: {fileID: 0}
   CustomActions: []
   Behaviour: {fileID: 0}
   m_prefab: {fileID: -8477115736559109764, guid: 7f516f112f11d8a4a9d5ced0c0d9b39a, type: 3}
