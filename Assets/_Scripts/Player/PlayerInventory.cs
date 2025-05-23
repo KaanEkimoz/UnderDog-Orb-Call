@@ -18,9 +18,10 @@ namespace com.game.player
         private Dictionary<ItemObject<PlayerItemProfile>, List<ModifierObject<PlayerStatType>>>
             m_itemModifierEntries = new();
 
-        string m_labelText = "No items selected.\n\nSelect an item to display its description here.";
-        ItemObject m_selectedItem;
+        public bool Full => m_items.Count >= Constants.Gameplay.MAX_ITEMS_ON_PLAYER;
 
+        //string m_labelText = "No items selected.\n\nSelect an item to display its description here.";
+        //ItemObject m_selectedItem;
         PlayerStats m_stats;
 
         private void Start()
@@ -31,6 +32,9 @@ namespace com.game.player
 
         public bool Add(PlayerItemProfile itemProfile)
         {
+            if (Full)
+                return false;
+
             if (itemProfile == null)
                 return false;
 

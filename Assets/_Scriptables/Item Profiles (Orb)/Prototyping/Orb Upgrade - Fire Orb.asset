@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Orb Upgrade - Fire Orb
   m_EditorClassIdentifier: 
   Guid: 390bb200-f498-4c87-9c48-358c284410c1
+  CustomItemId: orb_fire
   Icon: {fileID: -1528746339, guid: 99202ca57437d514aa66a83ba5d9f664, type: 3}
   DisplayName: Fire Orb
   Description: 

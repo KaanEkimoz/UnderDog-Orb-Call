@@ -39,3 +39,19 @@ MonoBehaviour:
     m_description: Be deprived.
     m_methodPreview: BeDeprived()
     m_isExpanded: 0
+  - m_keyword: give
+    m_arguments:
+    - m_name: itemId
+      m_valueType: 2
+    m_description: Use to acquire an item.
+    m_methodPreview: GiveItem(String itemId)
+    m_isExpanded: 0
+  - m_keyword: give
+    m_arguments:
+    - m_name: elementId
+      m_valueType: 2
+    - m_name: orbIndex
+      m_valueType: 0
+    m_description: Use to acquire an element.
+    m_methodPreview: GiveElement(String elementId, Int32 orbIndex)
+    m_isExpanded: 0
