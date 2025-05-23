@@ -20,6 +20,11 @@ MonoBehaviour:
   Description: 
   CustomActions: []
   Behaviour: {fileID: 0}
+  m_rarity: 0
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
+  SecondSpecificCondition: {fileID: 0}
+  SecondSpecificEvent: {fileID: 0}
   Price: 25
   m_playerStatOverrides: []
   m_playerStatModifications:

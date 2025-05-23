@@ -15,7 +15,7 @@ namespace com.game.player.itemsystemextensions
         [Space, Header3("More Information")]
         [Min(0)] public int Price = 0;
 
-        [Space, Header3("Effects on Player Stats")]
+        [Space, Header3("Effects on Player Stats (Generics)")]
 
         [SerializeField] private List<PlayerStatOverride> m_playerStatOverrides;
         [SerializeField] private List<PlayerStatModification> m_playerStatModifications;

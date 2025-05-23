@@ -15,7 +15,7 @@ namespace com.game.orbsystem.itemsystemextensions
     {
         [SerializeField, InlineEditor] private SimpleOrb m_prefab;
 
-        [Space, Header3("Effects on Orb Stats")]
+        [Space, Header3("Effects on Orb Stats (Generics)")]
 
         [SerializeField] private List<OrbStatOverride> m_orbStatOverrides;
         [SerializeField] private List<OrbStatModification> m_orbStatModifications;
