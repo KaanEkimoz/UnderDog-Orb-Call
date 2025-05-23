@@ -166,6 +166,13 @@ public class PlayerOrbController : MonoBehaviour
         if(PlayerInputHandler.Instance.ClosestRecallButtonPressed)
             CallOrb(FindClosestOrb(orbsOnEllipse));
 
+        // TEMPORARY FIX !!!
+
+        bool isConsoleOpen = com.absence.consolesystem.ConsoleWindow.Instance.IsOpen;
+
+        if (isConsoleOpen)
+            return;
+
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
             SelectNextOrb();
         else if (PlayerInputHandler.Instance.PreviousChooseButtonPressed)
