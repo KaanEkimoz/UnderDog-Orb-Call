@@ -18,6 +18,11 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 4117687ce733e674d951add29f63e175, type: 3}
   DisplayName: Muzzle
   Description: 
+  m_hoverForDetails: 0
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
+  SecondSpecificCondition: {fileID: 0}
+  SecondSpecificEvent: {fileID: 0}
   CustomActions: []
   Behaviour: {fileID: 0}
   Price: 25

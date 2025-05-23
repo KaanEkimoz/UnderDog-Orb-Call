@@ -14,9 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Guid: 390bb200-f498-4c87-9c48-358c284410c1
   CustomItemId: orb_fire
+  Rarity: 3
   Icon: {fileID: -1528746339, guid: 99202ca57437d514aa66a83ba5d9f664, type: 3}
   DisplayName: Fire Orb
   Description: 
+  m_hoverForDetails: 3
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
+  SecondSpecificCondition: {fileID: 0}
+  SecondSpecificEvent: {fileID: 0}
   CustomActions: []
   Behaviour: {fileID: 0}
   m_prefab: {fileID: -7323817676200136362, guid: 4b8bd63260bc4a04f969602a58a0495a, type: 3}

@@ -2,6 +2,11 @@ using com.game.itemsystem.scriptables;
 using System;
 using System.Collections.Generic;
 
+using com.game.scriptableeventsystem;
+using com.game.subconditionsystem;
+using com.game.itemsystem.gamedependent;
+using com.game.player.itemsystemextensions;
+
 namespace com.game.itemsystem
 {
     [System.Serializable]
@@ -18,6 +23,9 @@ namespace com.game.itemsystem
         }
 
         public ItemProfileBase Profile { get; }
+
+        public List<ItemRuntimeSpecific> Specifics;
+
         public List<ItemBehaviour> Behaviours { get; protected set; }
         public Dictionary<string, object> CustomData = new();
 
@@ -25,7 +33,24 @@ namespace com.game.itemsystem
 
         public ItemObject(ItemProfileBase profile)
         {
+            Specifics = new();
             Profile = profile;
+
+            if (profile.FirstSpecificCondition != null && profile.FirstSpecificEvent != null)
+            {
+                Specifics.Add(new ItemRuntimeSpecific(new SubconditionObject(profile.FirstSpecificCondition), 
+                    new ScriptableEventObject(profile.FirstSpecificEvent)));
+            }
+
+            if (profile.Rarity == gamedependent.ItemRarity.Legendary)
+            {
+                if (profile.SecondSpecificCondition != null && profile.SecondSpecificEvent != null)
+                {
+                    Specifics.Add(new ItemRuntimeSpecific(new SubconditionObject(profile.SecondSpecificCondition),
+                        new ScriptableEventObject(profile.SecondSpecificEvent)));
+                }
+            }
+
             Behaviours = new();
         }
 
@@ -40,6 +65,7 @@ namespace com.game.itemsystem
             OnDispose?.Invoke();
         }
         public abstract void Dispose();
+        public abstract void Update();
     }
 
     /// <summary>
@@ -48,6 +74,18 @@ namespace com.game.itemsystem
     [System.Serializable]
     public class ItemObject<T> : ItemObject where T : ItemProfileBase
     {
+        public static ItemObject<T> Combine(ItemObject<T> bottom, ItemObject<T> top)
+        {
+            foreach (ItemRuntimeSpecific specific in top.Specifics)
+            {
+                bottom.Specifics.Add(ItemRuntimeSpecific.Copy(specific));
+            }
+
+            top.Dispose();
+
+            return bottom;
+        }
+
         public new T Profile { get; private set; }
 
         public ItemObject(T profile) : base(profile)
@@ -74,7 +112,15 @@ namespace com.game.itemsystem
         {
             Profile = null;
             CustomData = null;
+
+            Specifics.ForEach(specific => specific.Dispose());
+
             InvokeOnDispose();
+        }
+
+        public override void Update()
+        {
+            Specifics.ForEach(specific => specific.Update());
         }
     }
 }

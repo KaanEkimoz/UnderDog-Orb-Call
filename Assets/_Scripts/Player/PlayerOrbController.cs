@@ -96,6 +96,7 @@ public class PlayerOrbController : MonoBehaviour
     float m_ellipseSizeMultiplier = 1f;
     List<SimpleOrb> m_lastCalledOrbs = new();
 
+    public SimpleOrb OrbHeld => orbsOnEllipse[selectedOrbIndex];
     public Vector3 FirePointGlobal => firePointTransform.position;
     public Vector3 EllipseCenterGlobal => ellipseCenterTransform.position;
 
@@ -164,6 +165,13 @@ public class PlayerOrbController : MonoBehaviour
 
         if(PlayerInputHandler.Instance.ClosestRecallButtonPressed)
             CallOrb(FindClosestOrb(orbsOnEllipse));
+
+        // TEMPORARY FIX !!!
+
+        bool isConsoleOpen = com.absence.consolesystem.ConsoleWindow.Instance.IsOpen;
+
+        if (isConsoleOpen)
+            return;
 
         if (PlayerInputHandler.Instance.NextChooseButtonPressed)
             SelectNextOrb();

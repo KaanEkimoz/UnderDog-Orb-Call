@@ -28,6 +28,14 @@ namespace com.game.player
             m_targetController.OnInitialize((_) => Refresh());
         }
 
+        private void Update()
+        {
+            foreach (var kvp in m_orbInventoryEntries)
+            {
+                kvp.Value.Update();
+            }
+        }
+
         public void SetUpgradeCache(IEnumerable<OrbItemProfile> enumerable)
         {
             if (enumerable == null)

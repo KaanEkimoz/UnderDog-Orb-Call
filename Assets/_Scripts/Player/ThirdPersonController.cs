@@ -122,6 +122,13 @@ public class ThirdPersonController : MonoBehaviour
     }
     private void Update()
     {
+        // TEMPORARY FIX !!!
+
+        bool isConsoleOpen = com.absence.consolesystem.ConsoleWindow.Instance.IsOpen;
+
+        if (isConsoleOpen)
+            return;
+
         HandleDash();
         HandleHorizontalMovement();
     }

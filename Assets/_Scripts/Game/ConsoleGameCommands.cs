@@ -34,7 +34,7 @@ namespace com.game
         [Command]
         public static void BeDeprived()
         {
-            foreach(PlayerStatType enumType in System.Enum.GetValues(typeof(PlayerStatType)))
+            foreach (PlayerStatType enumType in System.Enum.GetValues(typeof(PlayerStatType)))
             {
                 PlayerStatOverride ovr = new()
                 {
@@ -68,7 +68,7 @@ namespace com.game
 
             OrbItemProfile item = ItemManager.GetItemByCustomId<OrbItemProfile>(elementId);
 
-            if (item == null) 
+            if (item == null)
                 return;
 
             PlayerOrbContainer container = Player.Instance.Hub.OrbContainer;
@@ -101,9 +101,15 @@ namespace com.game
         }
 
         [Command]
-        public static void EarnMoney()
+        public static void EarnMoney(int amount)
         {
+            Player.Instance.Hub.Money.Gain(amount);
+        }
 
+        [Command]
+        public static void Combine(int bottomIndex, int topIndex)
+        {
+            Player.Instance.Hub.Inventory.Combine(bottomIndex, topIndex);
         }
     }
 }
