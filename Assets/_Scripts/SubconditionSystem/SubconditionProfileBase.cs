@@ -5,7 +5,13 @@ namespace com.game.subconditionsystem
 {
     public abstract class SubconditionProfileBase : ScriptableObject
     {
-        public abstract Func<object[], bool> GenerateConditionFormula(params object[] args);
+        [SerializeField] private bool m_invert = false;
+
+        [HideInInspector] public bool IsSubAsset = false;
+
+        public bool Invert => m_invert;
+
+        public abstract Func<object[], bool> GenerateConditionFormula(SubconditionObject instance);
         public abstract string GenerateDescription(bool richText = false, SubconditionObject instance = null);
         public abstract void OnInstantiation(SubconditionObject instance);
         public abstract void OnRuntimeEventSubscription(SubconditionObject instance);

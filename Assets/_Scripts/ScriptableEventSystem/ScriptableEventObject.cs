@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace com.game.scriptableeventsystem
 {
@@ -10,6 +11,8 @@ namespace com.game.scriptableeventsystem
 
         object[] m_args;
 
+        public List<ScriptableEventObject> Children;
+
         public bool Bypass { get; set; }
         public object[] Arguments { get { return m_args; } set { m_args = value; } }
 
@@ -17,12 +20,13 @@ namespace com.game.scriptableeventsystem
 
         public ScriptableEventObject(ScriptableEventProfileBase profile)
         {
+            Children = new();
             Bypass = false;
             m_profile = profile;
 
             profile.OnInstantiation(this);
 
-            RegenerateEventAction(m_args);
+            RegenerateEventAction();
             SubscribeToEvents();
         }
 
@@ -31,13 +35,15 @@ namespace com.game.scriptableeventsystem
             m_profile.OnRuntimeEventSubscription(this);
         }
 
-        public void RegenerateEventAction(params object[] args)
+        public void RegenerateEventAction()
         {
-            m_action = m_profile.GenerateAction(args);
+            Children?.ForEach(child => child.RegenerateEventAction());
+            m_action = m_profile.GenerateAction(this);
         }
 
         public virtual void Update(params object[] args)
         {
+            Children?.ForEach(child => child.Update(args));
             m_profile.OnUpdate(Game.Event, this);
         }
 
@@ -61,6 +67,8 @@ namespace com.game.scriptableeventsystem
 
         public virtual void Dispose()
         {
+            Children?.ForEach(child => child.Dispose());
+            Children = null;
             OnDispose?.Invoke(this);
         }
     }
