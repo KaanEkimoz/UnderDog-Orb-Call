@@ -11,6 +11,11 @@ namespace com.game.player
         [SerializeField, Readonly] private PlayerCharacterProfile m_characterProfile;
         [SerializeField] private PlayerComponentHub m_componentHub;
 
+        private void Update()
+        {
+            m_componentHub.Inventory.ForceUpdate(); // !!!
+        }
+
         public PlayerComponentHub Hub => m_componentHub;
         public PlayerCharacterProfile CharacterProfile 
         { 

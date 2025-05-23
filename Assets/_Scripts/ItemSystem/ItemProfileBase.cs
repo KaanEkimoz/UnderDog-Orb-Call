@@ -5,6 +5,9 @@ using com.game.itemsystem.gamedependent;
 using System.Collections.Generic;
 using UnityEngine;
 
+using com.game.scriptableeventsystem;
+using com.game.subconditionsystem;
+
 namespace com.game.itemsystem.scriptables
 {
     /// <summary>
@@ -30,7 +33,16 @@ namespace com.game.itemsystem.scriptables
         [Multiline, Tooltip("Description of this item. It <b>MUST NOT</b> contain the stat modification log of the item.")] 
         public string Description;
 
-        [Space, Header3("Actions and Behaviour")]
+        [Space, Header3("Specifics")]
+        [SerializeField, Readonly, Tooltip("Unless rarity is set to <color=yellow>'Legendary'</color>, <color=white>'Second'</color> specifics will be <b>ignored</b>.")]
+        private ItemRarity m_hoverForDetails;
+        [Readonly, InlineEditor(newButtonId = 2392, delButtonId = 2393)] public SubconditionProfileBase FirstSpecificCondition;
+        [Readonly, InlineEditor(newButtonId = 2394, delButtonId = 2395)] public ScriptableEventProfileBase FirstSpecificEvent;
+        [Readonly, InlineEditor(newButtonId = 2396, delButtonId = 2397)] public SubconditionProfileBase SecondSpecificCondition;
+        [Readonly, InlineEditor(newButtonId = 2398, delButtonId = 2399)] public ScriptableEventProfileBase SecondSpecificEvent;
+
+        [Space, Header3("Actions and Behaviour (Legacy)")]
+
         public List<ItemCustomAction> CustomActions = new();
         [InlineEditor] public ItemBehaviour Behaviour;
 
@@ -46,6 +58,11 @@ namespace com.game.itemsystem.scriptables
         public string GetDatabaseKey()
         {
             return Guid;
+        }
+
+        private void OnValidate()
+        {
+            m_hoverForDetails = Rarity;
         }
     }
 }

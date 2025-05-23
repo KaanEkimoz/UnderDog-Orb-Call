@@ -29,6 +29,11 @@ namespace com.game.orbsystem
             m_currentItem = null;
         }
 
+        public void Update()
+        {
+            m_currentItem?.Update();
+        }
+
         public bool Add(OrbItemProfile profile)
         {
             if (profile == null)

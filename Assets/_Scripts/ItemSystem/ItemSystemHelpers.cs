@@ -1,4 +1,7 @@
+using com.game.itemsystem.gamedependent;
 using com.game.itemsystem.scriptables;
+using com.game.scriptableeventsystem;
+using com.game.subconditionsystem;
 using System.Text;
 
 namespace com.game.itemsystem
@@ -24,9 +27,11 @@ namespace com.game.itemsystem
                 StringBuilder sb = new(trimmedRawDesc);
                 if (!string.IsNullOrWhiteSpace(trimmedRawDesc)) sb.Append("\n\n");
 
+                string specificsDesc = GenerateSpecificsDescription(itemObject, itemProfile, richText);
                 string customActionDesc = GenerateCustomActionDescription_Internal(itemObject, itemProfile, richText);
                 string furtherDesc = itemProfile.GenerateFurtherDescription(itemObject, richText);
 
+                if (specificsDesc != null) sb.Append(specificsDesc);
                 if (furtherDesc != null) sb.Append(furtherDesc);
                 if (customActionDesc != null) sb.Append(customActionDesc);
 
@@ -64,6 +69,42 @@ namespace com.game.itemsystem
             private static string GenerateDescription_Internal(ItemObject context, ItemCustomAction action, bool richText)
             {
                 return action.ItemBehaviour.GenerateActionDescription(richText);
+            }
+
+            private static string GenerateSpecificsDescription(ItemObject context, ItemProfileBase profile, bool richText)
+            {
+                StringBuilder sb = new();
+
+                if (context == null)
+                {
+                    sb.Append(GenerateSpecificProfileDescription(profile.FirstSpecificCondition, profile.FirstSpecificEvent, richText));
+                    sb.Append(GenerateSpecificProfileDescription(profile.SecondSpecificCondition, profile.SecondSpecificEvent, richText));
+
+                    return sb.ToString();
+                }
+
+                foreach (ItemRuntimeSpecific specific in context.Specifics)
+                {
+                    sb.Append(specific.GenerateDescription(richText));
+                }
+
+                return sb.ToString();
+            }
+
+            private static string GenerateSpecificProfileDescription(SubconditionProfileBase subconditionProfile, ScriptableEventProfileBase evtProfile, bool richText)
+            {
+                StringBuilder sb = new();
+
+                if (subconditionProfile == null)
+                    return null;
+
+                sb.Append("when ");
+                sb.Append(subconditionProfile.GenerateDescription(richText, null));
+                sb.Append("; ");
+                sb.Append(evtProfile.GenerateDescription(richText, null));
+                sb.Append("\n");
+
+                return sb.ToString();
             }
         }
     }
