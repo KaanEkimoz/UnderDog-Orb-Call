@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8570a553fe2efbf43b0f4bdd6ecd5bf1, type: 3}
   m_Name: New Composite Subcondition
   m_EditorClassIdentifier: 
+  m_guid: bd0ad118-559c-4798-b152-fc5505849b5a
   m_invert: 0
+  m_bypassStateChangeBallbacks: 0
   IsSubAsset: 0
   m_compositeType: 0
   m_subcondition1: {fileID: 0}

@@ -6,6 +6,8 @@ namespace com.game.subconditionsystem
 {
     public abstract class SubconditionProfileBase : ScriptableObject
     {
+        public static string DesignerTooltip => null;
+
         [SerializeField, Header1("Subcondition"), Readonly] private string m_guid = System.Guid.NewGuid().ToString();
          
         [SerializeField] private bool m_invert = false;

@@ -6,6 +6,8 @@ namespace com.game.scriptableeventsystem
 {
     public abstract class ScriptableEventProfileBase : ScriptableObject
     {
+        public static string DesignerTooltip => null;
+
         [SerializeField, Header1("Scriptable Event"), Readonly] private string m_guid = System.Guid.NewGuid().ToString();
         [HideInInspector] public bool IsSubAsset = false;
 

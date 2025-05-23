@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,7 +38,6 @@ namespace com.game.scriptableeventsystem.editor
 
                 if (GUILayout.Button("Close"))
                 {
-                    OnApplySelectionOneShot?.Invoke(null);
                     OnApplySelectionOneShot = null;
                     Close();
                 }
@@ -60,7 +60,6 @@ namespace com.game.scriptableeventsystem.editor
                             break;
 
                         case KeyCode.Escape:
-                            OnApplySelectionOneShot?.Invoke(null);
                             OnApplySelectionOneShot = null;
                             Close();
                             break;
@@ -87,7 +86,6 @@ namespace com.game.scriptableeventsystem.editor
 
             if (GUILayout.Button("Cancel"))
             {
-                OnApplySelectionOneShot?.Invoke(null);
                 OnApplySelectionOneShot = null;
                 Close();
             }
@@ -121,10 +119,21 @@ namespace com.game.scriptableeventsystem.editor
             {
                 Type type = foundTypes[i];
 
+                string tooltip = "No tooltip set for this sub-type.";
+                PropertyInfo property = type.GetProperty(nameof(ScriptableEventProfileBase.DesignerTooltip));
+
+                if (property != null)
+                {
+                    object val = property.GetValue(null);
+
+                    if (val != null)
+                        tooltip = val.ToString();
+                }
+
                 s_contents[i] = new GUIContent()
                 {
                     text = type.Name,
-                    tooltip = type.FullName,
+                    tooltip = tooltip,
                     image = null,
                 };
             }
