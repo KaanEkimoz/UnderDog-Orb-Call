@@ -82,16 +82,10 @@ namespace com.game.scriptables.subconditions
 
         public override void OnInstantiation(SubconditionObject instance)
         {
+            base.OnInstantiation(instance);
+
             instance.Children.Add(new SubconditionObject(m_subcondition1));
             instance.Children.Add(new SubconditionObject(m_subcondition2));
-        }
-
-        public override void OnRuntimeEventSubscription(SubconditionObject instance)
-        {
-        }
-
-        public override void OnUpdate(GameRuntimeEvent evt, SubconditionObject instance)
-        {  
         }
     }
 }

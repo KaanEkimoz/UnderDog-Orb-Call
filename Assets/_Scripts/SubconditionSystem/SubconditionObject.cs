@@ -48,7 +48,7 @@ namespace com.game.subconditionsystem
             bool prevResult = m_lastResult;
             m_lastResult = m_conditionFormula.Invoke(args);
 
-            if (m_lastResult != prevResult)
+            if (m_lastResult != prevResult && (!m_profile.BypassStateChangeCallbacks))
                 OnResultChanged?.Invoke(m_lastResult);
 
             return m_lastResult;

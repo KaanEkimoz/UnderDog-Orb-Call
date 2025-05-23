@@ -34,17 +34,5 @@ namespace com.game.scriptables.subconditions
 
             return sb.ToString();
         }
-
-        public override void OnInstantiation(SubconditionObject instance)
-        {
-        }
-
-        public override void OnRuntimeEventSubscription(SubconditionObject instance)
-        {
-        }
-
-        public override void OnUpdate(GameRuntimeEvent evt, SubconditionObject instance)
-        {
-        }
     }
 }
