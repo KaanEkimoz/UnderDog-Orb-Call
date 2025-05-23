@@ -41,7 +41,7 @@ namespace com.game.itemsystem.scriptables
         [Readonly, InlineEditor(newButtonId = 2396, delButtonId = 2397)] public SubconditionProfileBase SecondSpecificCondition;
         [Readonly, InlineEditor(newButtonId = 2398, delButtonId = 2399)] public ScriptableEventProfileBase SecondSpecificEvent;
 
-        [Space, Header3("Actions and Behaviour")]
+        [Space, Header3("Actions and Behaviour (Legacy)")]
 
         public List<ItemCustomAction> CustomActions = new();
         [InlineEditor] public ItemBehaviour Behaviour;
