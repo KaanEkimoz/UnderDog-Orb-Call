@@ -156,8 +156,6 @@ namespace com.game.enemysystem
                 orb.ResetParent();
             }
 
-            // !!!
-
             List<bool> conditions = new()
             {
                 DropManager.Instance != null,
