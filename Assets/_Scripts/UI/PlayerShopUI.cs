@@ -137,6 +137,9 @@ namespace com.game.ui
             if (item is not PlayerItemProfile playerItem)
                 return false;
 
+            if (m_inventory.Full)
+                return false;
+
             return Player.Instance.Hub.Money.CanAfford(playerItem.Price);
         }
 
@@ -147,8 +150,12 @@ namespace com.game.ui
             if (item is not PlayerItemProfile playerItem)
                 return;
 
+            bool success = m_inventory.Add(playerItem);
+
+            if (!success)
+                return;
+
             m_money.Spend(playerItem.Price);
-            m_inventory.Add(playerItem);
             display.Interactable = false;
 
             InvokeOnItemBought(playerItem);

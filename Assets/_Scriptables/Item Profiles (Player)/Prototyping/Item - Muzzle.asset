@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: Item - Muzzle
   m_EditorClassIdentifier: 
   Guid: 4934b7a4-0abc-4fbd-81a9-5e0cf744430f
+  CustomItemId: player_muzzle
+  Rarity: 0
   Icon: {fileID: 21300000, guid: 4117687ce733e674d951add29f63e175, type: 3}
   DisplayName: Muzzle
   Description: 
   CustomActions: []
+  Behaviour: {fileID: 0}
   Price: 25
   m_playerStatOverrides: []
   m_playerStatModifications:

@@ -24,8 +24,6 @@ public class PlayerOrbController : MonoBehaviour
         { typeof(FireOrb), FIRE_ORB_INDEX },
         { typeof(IceOrb), ICE_ORB_INDEX },
         { typeof(ElectricOrb), ELECTRIC_ORB_INDEX },
-        { typeof(LifestealOrb), LIFESTEAL_ORB_INDEX },
-        { typeof(SoulOrb), SOUL_ORB_INDEX },
     };
 
     [Header("Orb Count")]
@@ -35,6 +33,7 @@ public class PlayerOrbController : MonoBehaviour
     [SerializeField] private bool autoSelectNextOrbOnShoot = false;
     [Header("Orb Throw")]
     [SerializeField] private float cooldownBetweenThrowsInSeconds = 0f;
+    [SerializeField] private float throwTimeBuffer = 0.2f;
     [SerializeField] private Transform firePointTransform;
     [SerializeField] private LayerMask aimCursorDetectMask;
     [Header("Orb Recall")]
@@ -64,8 +63,6 @@ public class PlayerOrbController : MonoBehaviour
     public const int FIRE_ORB_INDEX = 9;
     public const int ICE_ORB_INDEX = 10;
     public const int ELECTRIC_ORB_INDEX = 11;
-    public const int LIFESTEAL_ORB_INDEX = 12;
-    public const int SOUL_ORB_INDEX = 13;
 
     // Events
     public event Action OnOrbThrowed;
@@ -73,10 +70,15 @@ public class PlayerOrbController : MonoBehaviour
     public event Action<float> OnDamageGiven;
     public event Action<int> OnOrbCountChanged;
     public event Action OnAllOrbsCalled;
+    public event Action OnAllOrbsReturn;
+    public event Action<IEnumerable<SimpleOrb>> OnAllOrbsCalledWithReturn;
+    public event Action<SimpleOrb> OnOrbReached;
     public event Action OnNextOrbSelected;
     public event Action OnPreviousOrbSelected;
     public event Action OnSelectedOrbChanged;
     public event Action<SimpleOrb> OnOrbAdded;
+
+    private event Action<PlayerOrbController> m_onInitialize;
 
     public List<SimpleOrb> orbsOnEllipse = new();
     private List<GhostOrb> ghostOrbs = new();
@@ -85,8 +87,32 @@ public class PlayerOrbController : MonoBehaviour
     private int activeOrbCount = 0;
     private int selectedOrbIndex = 0;
     private float angleStep; // The angle between orbs
+    private float m_throwBufferTimer; // The angle between orbs
     private PlayerStats _playerStats;
     private SoundFXManager _soundFXManager;
+    private bool m_throwAnimationInPlace = false;
+    private bool m_throwSavedInBuffer = false;
+
+    float m_ellipseSizeMultiplier = 1f;
+    List<SimpleOrb> m_lastCalledOrbs = new();
+
+    public Vector3 FirePointGlobal => firePointTransform.position;
+    public Vector3 EllipseCenterGlobal => ellipseCenterTransform.position;
+
+    public float EllipseSizeMultiplier
+    {
+        get
+        {
+            return m_ellipseSizeMultiplier;
+        }
+
+        set
+        {
+            m_ellipseSizeMultiplier = value;
+        }
+    }
+
+    public bool Initialized { get; private set; } = false;
     public bool IsAiming { get; private set; } = false;
     public int SelectedOrbIndex => selectedOrbIndex;
 
@@ -98,6 +124,8 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void Start()
     {
+        Initialized = false;
+
         orbCountAtStart = Player.Instance.CharacterProfile.OrbCount;
 
         if (objectPool == null)
@@ -108,6 +136,9 @@ public class PlayerOrbController : MonoBehaviour
         CalculateAngleStep();
 
         StartAiming();
+
+        Initialized = true;
+        m_onInitialize?.Invoke(this);
     }
     private void Update()
     {
@@ -120,6 +151,9 @@ public class PlayerOrbController : MonoBehaviour
     }
     private void HandleInput()
     {
+        if (m_throwSavedInBuffer)
+            IncrementThrowBufferTimer();
+
         if (PlayerInputHandler.Instance.AttackButtonPressed)
             ThrowOrb();
 
@@ -141,7 +175,7 @@ public class PlayerOrbController : MonoBehaviour
         if (orbCountAtStart <= 0) return;
 
         for (int i = 0; i < orbCountAtStart; i++)
-            AddOrb(ElementalType.Soul);
+            AddOrb();
 
         OnOrbCountChanged?.Invoke(orbCountAtStart);
     }
@@ -160,8 +194,21 @@ public class PlayerOrbController : MonoBehaviour
         SelectNextOrb();
         IsAiming = true;
     }
+    private void IncrementThrowBufferTimer()
+    {
+        m_throwBufferTimer += Time.deltaTime;
+
+        if (m_throwBufferTimer >= throwTimeBuffer)
+            ClearThrowBuffer(false);
+    }
     private void ThrowOrb()
     {
+        if (m_throwAnimationInPlace)
+        {
+            SaveThrowToBuffer();
+            return;
+        }
+
         if (throwCooldownTimer > 0)
             return;
 
@@ -169,38 +216,67 @@ public class PlayerOrbController : MonoBehaviour
             return;
 
         foreach (SimpleOrb orb in orbsOnEllipse)
+        {
             if (orb.currentState == OrbState.Returning)
                 return;
+        }
 
         if (orbToThrow == null || orbToThrow.currentState != OrbState.OnEllipse)
+        {
             if (smartOrbSelection) SelectBestOrbLHS(s_bestOrbPredicateThrow);
             else return;
+        }
 
         throwCooldownTimer = cooldownBetweenThrowsInSeconds;
         _playerAnimator.SetTrigger("Throw");
 
-        Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
-        throwDirection.y = 0;
+        orbToThrow.currentState = OrbState.Throwing;
 
-        foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
-            throwDirection = extension.ConvertAimDirection(throwDirection);
+        m_throwAnimationInPlace = true;
+        orbToThrow.CommitThrowStartWithFirePoint(firePointTransform.position);
+        orbToThrow.OnThrowAnimationEndOneShot += (orb) =>
+        {
+            Vector3 throwDirection = PlayerInputHandler.Instance.GetMouseWorldPosition(aimCursorDetectMask) - firePointTransform.position;
+            throwDirection.y = 0;
 
-        orbToThrow.Throw(throwDirection.normalized);
+            foreach (PlayerOrbControllerExtensionBase extension in m_extensions)
+            {
+                throwDirection = extension.ConvertAimDirection(throwDirection);
+            }
 
-        if (autoSelectNextOrbOnShoot)
-            SelectPreviousOrb();
+            orb.Throw(throwDirection.normalized);
 
-        Player.Instance.Hub.OrbHandler.RemoveOrb();
-        
-        OnOrbThrowed?.Invoke();
+            if (autoSelectNextOrbOnShoot)
+                SelectPreviousOrb();
+
+            Player.Instance.Hub.OrbHandler.RemoveOrb();
+            OnOrbThrowed?.Invoke();
+
+            m_throwAnimationInPlace = false;
+
+            if (m_throwSavedInBuffer) 
+                ClearThrowBuffer(true);
+        };
+    }
+    private void ClearThrowBuffer(bool throwIfExists = true)
+    {
+        m_throwSavedInBuffer = false;
+        m_throwBufferTimer = 0f;
+
+        if (throwIfExists) 
+            ThrowOrb();
+    }
+    private void SaveThrowToBuffer()
+    {
+       m_throwSavedInBuffer = true;
+       m_throwBufferTimer = 0f;
     }
     private void CallOrb(SimpleOrb orb, float coefficient = 1f)
     {
         if (orb.currentState != OrbState.Sticked)
         {
             if (smartOrbSelection) SelectBestOrbLHS(s_bestOrbPredicateRecall);
-            else 
-                return;
+            else return;
         }
 
         orb.ReturnToPosition(returnPointTransform.position, coefficient);
@@ -231,7 +307,13 @@ public class PlayerOrbController : MonoBehaviour
             CallOrb(orb, speedCoefficient);
         }
 
-        OnAllOrbsCalled?.Invoke();
+        m_lastCalledOrbs = new(stickedOrbs);
+
+        if (m_lastCalledOrbs.Count > 1)
+        {
+            OnAllOrbsCalled?.Invoke();
+            OnAllOrbsCalledWithReturn?.Invoke(m_lastCalledOrbs);
+        }
     }
     private void SelectNextOrb()
     {
@@ -264,7 +346,9 @@ public class PlayerOrbController : MonoBehaviour
         }
 
         orbsOnEllipse = shiftedOrbs;
-        selectedOrbIndex = 0; 
+        selectedOrbIndex = 0;
+
+        ClearThrowBuffer(false);
     }
     private void UpdateOrbEllipsePositions()
     {
@@ -277,21 +361,20 @@ public class PlayerOrbController : MonoBehaviour
             float angle = angleOffset + i * -angleStep;
             float angleInRadians = angle * Mathf.Deg2Rad;
 
-            float localX = Mathf.Cos(angleInRadians) * ellipseXRadius;
-            float localY = Mathf.Sin(angleInRadians) * ellipseYRadius;
+            float localX = Mathf.Cos(angleInRadians) * ellipseXRadius * m_ellipseSizeMultiplier;
+            float localY = Mathf.Sin(angleInRadians) * ellipseYRadius * m_ellipseSizeMultiplier;
 
             Vector3 localPosition = new Vector3(localX, localY, 0f);
             Vector3 targetPosition = ellipseCenterTransform.position + (ellipseCenterTransform.rotation * localPosition);
 
-            if (orbsOnEllipse[i] == orbToThrow)
-            {
-                if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
-                {
-                    orbToThrow.IncreaseSpeedForSeconds(15f, 0.1f);
-                    orbToThrow.SetNewDestination(firePointTransform.position);
-                }
-            }
-            else if (ghostOrbs[i] != null)
+            //if (orbsOnEllipse[i] == orbToThrow)
+            //{
+            //    if (orbsOnEllipse[i].currentState == OrbState.OnEllipse)
+            //    {
+            //        orbToThrow.SetNewDestination(firePointTransform.position);
+            //    }
+            //}
+            if (ghostOrbs[i] != null)
             {
                 if (orbsOnEllipse[i].currentState != OrbState.OnEllipse)
                 {
@@ -334,8 +417,6 @@ public class PlayerOrbController : MonoBehaviour
             ElementalType.Fire => FIRE_ORB_INDEX,
             ElementalType.Ice => ICE_ORB_INDEX,
             ElementalType.Electric => ELECTRIC_ORB_INDEX,
-            ElementalType.Lifesteal => LIFESTEAL_ORB_INDEX,
-            ElementalType.Soul => SOUL_ORB_INDEX,
             _ => SIMPLE_ORB_INDEX,
         };
 
@@ -386,7 +467,17 @@ public class PlayerOrbController : MonoBehaviour
         orb.AssignPlayerStats(_playerStats);
         orb.OnReachedToEllipse += () =>
         {
+            if (m_lastCalledOrbs.Contains(orb))
+                m_lastCalledOrbs.Remove(orb);
+
+            if (m_lastCalledOrbs.Count == 0)
+                OnAllOrbsReturn?.Invoke();
+
             Player.Instance.Hub.OrbHandler.AddOrb();
+        };
+        orb.OnCallDemanded += (orb) =>
+        {
+            CallOrb(orb);
         };
     }
 
@@ -475,6 +566,17 @@ public class PlayerOrbController : MonoBehaviour
     public void UpdateAnimator()
     {
         //_playerAnimator.SetBool("IsAiming", IsAiming);
+    }
+
+    public void OnInitialize(Action<PlayerOrbController> callback)
+    {
+        if (!Initialized)
+        {
+            m_onInitialize += callback;
+            return;
+        }
+
+        callback?.Invoke(this);
     }
 
     //private void OnGUI()

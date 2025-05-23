@@ -13,8 +13,37 @@ MonoBehaviour:
   m_Name: Orb Movement Data - Default
   m_EditorClassIdentifier: 
   movementSpeed: 100
-  throwSpeedMultiplier: 7.66
-  recallSpeedMultiplier: 0.17
+  throwSpeedMultiplier: 5
+  recallSpeedMultiplier: 0.048
+  destickDuration: 0.3
+  destickStrength: 1.13
+  destickCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -2.181231
+      outSlope: -2.181231
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.07
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.009425165
+      outSlope: -0.009425165
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  recallSpeedTimeTravelledBase: 1.2
+  recallSpeedCoefficientOverTimeTravelled: 1
+  recallSpeedMaxCoefficientOverTimeTravelled: 5
   onEllipseSpeedMutliplier: 0.07
   onEllipseDistanceFactor: 4
   maxDistance: 20
