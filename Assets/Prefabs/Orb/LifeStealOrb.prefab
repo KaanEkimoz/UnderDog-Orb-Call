@@ -210,7 +210,7 @@ MonoBehaviour:
   m_catchSoundAsset: {fileID: 11400000, guid: c612b549984e4874ca8228d091a8ac1e, type: 2}
   maxStealableHealthPerEnemy: 100
   stealInterval: 2
-  healthPerSteal: 5
+  healthPerSteal: 1
   instantStealEffect: {fileID: 1775406099119076, guid: bec3fa83f9d5ffb4c9b65518557cbd28, type: 3}
   continuousStealEffect: {fileID: 1775406099119076, guid: bec3fa83f9d5ffb4c9b65518557cbd28, type: 3}
   effectDuration: 2
