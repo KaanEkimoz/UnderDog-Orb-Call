@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7863999324323fb4fa5fe36e85e2637e, type: 3}
   m_Name: Default Orb Combat Effect Data
   m_EditorClassIdentifier: 
-  throwSlowAmount: 6
-  throwSlowDuration: 1
-  returnSlowAmount: 6
-  returnSlowDuration: 1
+  throwSlowAmount: 50
+  throwSlowDuration: 5
+  returnSlowAmount: 50
+  returnSlowDuration: 5
   throwKnockback: 1
   penetrationKnockback: 0
   throwKnockbackStrength: 1
   returnKnockback: 1
-  returnKnockbackStrength: 0.1
+  returnKnockbackStrength: 1

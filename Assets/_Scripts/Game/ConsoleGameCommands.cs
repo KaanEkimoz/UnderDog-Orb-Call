@@ -1,7 +1,12 @@
 using com.absence.consolesystem;
 using com.absence.consolesystem.internals;
+using com.game.itemsystem;
+using com.game.orbsystem;
+using com.game.orbsystem.itemsystemextensions;
 using com.game.player;
+using com.game.player.itemsystemextensions;
 using com.game.player.statsystemextensions;
+using System.Collections;
 
 namespace com.game
 {
@@ -42,13 +47,61 @@ namespace com.game
         }
 
         [Command]
-        public static void GiveItem()
+        public static void GiveItem(string itemId)
         {
+            if (string.IsNullOrWhiteSpace(itemId))
+                return;
 
+            PlayerItemProfile item = ItemManager.GetItemByCustomId<PlayerItemProfile>(itemId);
+
+            if (item == null)
+                return;
+
+            Player.Instance.Hub.Inventory.Add(item);
         }
 
         [Command]
-        public static void GiveElement()
+        public static void GiveElement(string elementId, int orbIndex)
+        {
+            if (string.IsNullOrWhiteSpace(elementId))
+                return;
+
+            OrbItemProfile item = ItemManager.GetItemByCustomId<OrbItemProfile>(elementId);
+
+            if (item == null) 
+                return;
+
+            PlayerOrbContainer container = Player.Instance.Hub.OrbContainer;
+            int totalOrbCount = container.Controller.orbsOnEllipse.Count;
+
+            if (orbIndex < 0 || orbIndex >= totalOrbCount)
+                return;
+
+            SimpleOrb targetOrb = container.Controller.orbsOnEllipse[orbIndex];
+
+            if (targetOrb == null)
+                return;
+
+            OrbInventory targetInventory = container.OrbInventoryEntries[targetOrb];
+
+            if (targetInventory.CurrentItem != null)
+                targetInventory.RemoveCurrentElement();
+
+            targetInventory.Add(item);
+
+            if (item.Prefab == null)
+                return;
+
+            bool swap = container.SwapOrb(targetOrb, item.Prefab);
+
+            if (!swap)
+                return;
+
+            targetOrb.gameObject.SetActive(false);
+        }
+
+        [Command]
+        public static void EarnMoney()
         {
 
         }

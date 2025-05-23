@@ -51,7 +51,7 @@ Light:
   m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 1
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -136,5 +136,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_followingType: 1
   m_target: {fileID: 0}
+  m_alsoLockToRotation: 0
   m_keepStartingOffset: 1
   m_offset: {x: 0, y: 0, z: 0}

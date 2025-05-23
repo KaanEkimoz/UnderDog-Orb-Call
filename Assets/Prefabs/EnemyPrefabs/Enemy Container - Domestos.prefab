@@ -103,6 +103,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 434813653655539188}
     m_Modifications:
+    - target: {fileID: 3214814337490331807, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4802346647703831612, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6061237224606574988, guid: d1b7c9537a8ec0843b95937002edd803, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.68876743
@@ -264,10 +272,22 @@ PrefabInstance:
       propertyPath: hasAttackAnimation
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 546715469567183924, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_intensityRange.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 546715469567183924, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_intensityRange.y
+      value: 6.419278
+      objectReference: {fileID: 0}
     - target: {fileID: 692593731674052971, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1736976145021758588, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
+      propertyPath: m_defaultStats
+      value: 
+      objectReference: {fileID: 11400000, guid: eea5f31b92551f14597f4015ad0b8e28, type: 2}
     - target: {fileID: 2251171601075028339, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_body
       value: 
@@ -414,7 +434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_maxEmissionValue
-      value: 1
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_defaultMaterialType
@@ -430,15 +450,15 @@ PrefabInstance:
       objectReference: {fileID: 7682023414854928190}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_rendererEntries.Array.data[0].EmissionColor.b
-      value: 1
+      value: 0.3364786
       objectReference: {fileID: 0}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_rendererEntries.Array.data[0].EmissionColor.g
-      value: 1
+      value: 0.6754716
       objectReference: {fileID: 0}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_rendererEntries.Array.data[0].EmissionColor.r
-      value: 1
+      value: 0.20773932
       objectReference: {fileID: 0}
     - target: {fileID: 3517676680233722446, guid: fbeaadf54c9d1504689a0efa7d8787cf, type: 3}
       propertyPath: m_rendererEntries.Array.data[0].MaterialEntries.Array.size

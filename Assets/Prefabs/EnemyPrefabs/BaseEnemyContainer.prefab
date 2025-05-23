@@ -211,7 +211,7 @@ MonoBehaviour:
   m_stats: {fileID: 6483158665112541329}
   m_healthBar: {fileID: 283575652366040232}
   m_spark:
-    underlyingValue: {fileID: 8156995981169104547}
+    underlyingValue: {fileID: 5076795103391873241}
   m_colliders:
   - {fileID: 7285056777509791481}
 --- !u!1 &1688156559403290073
@@ -288,8 +288,7 @@ MonoBehaviour:
   m_container: {fileID: 1615555516738219183}
   enemy: {fileID: 0}
   m_spark:
-    underlyingValue: {fileID: 8156995981169104547}
-  m_slowPercentPerOrb: 25
+    underlyingValue: {fileID: 5076795103391873241}
 --- !u!114 &3242157560232732096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,7 +374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4045625808674151776
 Transform:
   m_ObjectHideFlags: 0
@@ -2336,11 +2335,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_cooldownRange.x
-      value: 1.0455925
+      value: 3.1783183
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_cooldownRange.y
-      value: 2.8672748
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_durationRange.x
@@ -2348,7 +2347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_durationRange.y
-      value: 0.32221174
+      value: 0.34460825
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_intensityRange.x
@@ -2356,7 +2355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_intensityRange.y
-      value: 0.48498535
+      value: 2.807538
       objectReference: {fileID: 0}
     - target: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_lights.Array.size
@@ -2388,7 +2387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5095028827218751956, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
       propertyPath: m_RenderingLayers
@@ -2491,6 +2490,17 @@ Light:
   m_CorrespondingSourceObject: {fileID: 8997752854358287740, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
   m_PrefabInstance: {fileID: 5290308576765447243}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5076795103391873241 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1089472676735743122, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}
+  m_PrefabInstance: {fileID: 5290308576765447243}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8688269652624818105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85b4b77c663f9040a8cc94c52f5395d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8688269652624818105 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3600659412039807986, guid: ade717d1a9afc8147a14e3449b62427c, type: 3}

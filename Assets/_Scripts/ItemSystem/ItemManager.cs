@@ -73,5 +73,22 @@ namespace com.game.itemsystem
         {
             return s_instance[guid] as T;
         }
+
+        public static T GetItemByCustomId<T>(string customId) where T : ItemProfileBase
+        {
+            T result = null;
+            foreach (ItemProfileBase item in s_instance)
+            {
+                if (item is not T itemCasted)
+                    continue;
+
+                if (itemCasted.CustomItemId != customId)
+                    continue;
+
+                result = itemCasted;
+            }
+
+            return result;
+        }
     }
 }

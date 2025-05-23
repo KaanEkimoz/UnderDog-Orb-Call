@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &561806419037708323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4557129230938877942}
+  m_Layer: 6
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4557129230938877942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561806419037708323}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.35233137, y: -0, z: -0, w: 0.9358753}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7025423010329630760}
+  m_LocalEulerAnglesHint: {x: 41.26, y: 0, z: 0}
 --- !u!1 &8886230964089384064
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,6 +46,7 @@ GameObject:
   - component: {fileID: 3939961923203656775}
   - component: {fileID: -8593687116418555536}
   - component: {fileID: 6960696444875857668}
+  - component: {fileID: 1764116453199983216}
   m_Layer: 6
   m_Name: SimpleOrb
   m_TagString: Untagged
@@ -36,6 +68,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 916647770219169639}
+  - {fileID: 4557129230938877942}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &390401128302963712
@@ -186,7 +219,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxDistance: 15
+  maxDistance: 12
   orbStats: {fileID: 6960696444875857668}
   startMaterial: {fileID: 2100000, guid: 32c0d2a73979811429bc5ff952dcc5ab, type: 2}
   _rigidBody: {fileID: 4581226788505073321}
@@ -195,6 +228,7 @@ MonoBehaviour:
   onEllipseLifetime: 0.1
   normalLifetime: 0.5
   m_light: {fileID: 4889231651571930717}
+  m_selectionIndicator: {fileID: 0}
   trailParticle: {fileID: 98057579503599703}
   m_combatEffectData: {fileID: 11400000, guid: ec4772f3a62a9914c868f4d11d1b8bca, type: 2}
   m_throwSoundAsset: {fileID: 11400000, guid: 327f65645bee78d458de693943fbf38b, type: 2}
@@ -216,6 +250,59 @@ MonoBehaviour:
   m_statHolder:
     m_stats: []
     m_enumValues: 
+--- !u!114 &1764116453199983216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8886230964089384064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b99da1ada7f1854ba86c86d5a4c80bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_target: {fileID: -8593687116418555536}
+  m_state: 0
+  m_swayEnabled: 1
+  m_swayEase: 4
+  m_swayMagnitude: 0.11
+  m_swaySpeed: 0.91
+  m_randomSwayDelay: {x: 0.16977926, y: 0.82625884}
+  m_unstickEase: 4
+  m_unstickMagnitude: 0.003
+  m_unstickSpeed: 0.7
+  m_throwSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_throwEnabled: 1
+  m_throwPivotFactor: -0.8
+  m_throwTiltRange: {x: 0, y: 0}
+  m_throwDuration: 0.48
+  m_ellipseScaleEase: 15
+  m_ellipseScaleMultiplier: 1.5
+  m_ellipseScaleDuration: 1
 --- !u!1001 &3054476768895215216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -268,6 +355,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4934299128530513067, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Color.b
+      value: 0.31764707
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934299128530513067, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934299128530513067, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Color.r
+      value: 0.95686275
+      objectReference: {fileID: 0}
     - target: {fileID: 6301569405988933680, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -283,6 +382,22 @@ PrefabInstance:
     - target: {fileID: 7618300806309359661, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8436222802954195536, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Color.b
+      value: 0.31523663
+      objectReference: {fileID: 0}
+    - target: {fileID: 8436222802954195536, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8353721
+      objectReference: {fileID: 0}
+    - target: {fileID: 8436222802954195536, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Color.r
+      value: 0.9547169
+      objectReference: {fileID: 0}
+    - target: {fileID: 8436222802954195536, guid: 9d842a553ad00c24aa0b6a41517d79b9, type: 3}
+      propertyPath: m_Intensity
+      value: 1.43
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

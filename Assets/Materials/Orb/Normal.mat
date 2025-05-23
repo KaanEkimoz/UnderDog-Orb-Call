@@ -39,7 +39,7 @@ Material:
     - _Smoothness: 0
     - _SurfaceMovementSpeed: 0.05
     m_Colors:
-    - _BorderColor: {r: 11.382972, g: 6.362651, b: 1.3423313, a: 1}
+    - _BorderColor: {r: 22.76594, g: 12.7253, b: 2.684662, a: 1}
     - _Color: {r: 6.9563093, g: 0, b: 83.463615, a: 1}
     - _ElectricitySpeed: {r: 0, g: 0.77, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
