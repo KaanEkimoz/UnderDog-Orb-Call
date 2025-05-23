@@ -13,6 +13,7 @@ namespace com.game.scriptableeventsystem
 
         public List<ScriptableEventObject> Children;
 
+        public ScriptableEventProfileBase Profile => m_profile;
         public bool Bypass { get; set; }
         public object[] Arguments { get { return m_args; } set { m_args = value; } }
 

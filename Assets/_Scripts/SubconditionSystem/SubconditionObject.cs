@@ -12,6 +12,7 @@ namespace com.game.subconditionsystem
 
         public List<SubconditionObject> Children;
 
+        public SubconditionProfileBase Profile => m_profile;
         public bool LastResult => m_lastResult;
         public object[] Arguments { get { return m_args; } set { m_args = value; } }
 

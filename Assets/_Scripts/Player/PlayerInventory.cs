@@ -64,6 +64,18 @@ namespace com.game.player
             itemToRemove.Dispose();
         }
 
+        public void Combine(ItemObject<PlayerItemProfile> bottom, ItemObject<PlayerItemProfile> top)
+        {
+            if (!m_items.Contains(bottom))
+                throw new System.Exception("Inventory does not contain intended item!");
+
+            if (!m_items.Contains(top))
+                throw new System.Exception("Inventory does not contain intended item!");
+
+            ItemObject<PlayerItemProfile>.Combine(bottom, top);
+            Remove(top.Profile);
+        }
+
         void ApplyItemModifiers(ItemObject<PlayerItemProfile> targetItem, PlayerItemProfile profile)
         {
             List<ModifierObject<PlayerStatType>> modifiers = new();

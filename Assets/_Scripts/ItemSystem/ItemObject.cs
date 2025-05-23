@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using com.game.scriptableeventsystem;
 using com.game.subconditionsystem;
 using com.game.itemsystem.gamedependent;
+using com.game.player.itemsystemextensions;
 
 namespace com.game.itemsystem
 {
@@ -73,6 +74,18 @@ namespace com.game.itemsystem
     [System.Serializable]
     public class ItemObject<T> : ItemObject where T : ItemProfileBase
     {
+        public static ItemObject<T> Combine(ItemObject<T> bottom, ItemObject<T> top)
+        {
+            foreach (ItemRuntimeSpecific specific in top.Specifics)
+            {
+                bottom.Specifics.Add(ItemRuntimeSpecific.Copy(specific));
+            }
+
+            top.Dispose();
+
+            return bottom;
+        }
+
         public new T Profile { get; private set; }
 
         public ItemObject(T profile) : base(profile)

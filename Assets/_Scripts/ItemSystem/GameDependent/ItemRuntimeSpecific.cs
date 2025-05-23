@@ -34,6 +34,12 @@ namespace com.game.itemsystem.gamedependent
             };
         }
 
+        public static ItemRuntimeSpecific Copy(ItemRuntimeSpecific original)
+        {
+            return new ItemRuntimeSpecific(new SubconditionObject(original.m_subcondition.Profile),
+                new ScriptableEventObject(original.m_event.Profile));
+        }
+
         public void Update()
         {
             m_subcondition.Update();
