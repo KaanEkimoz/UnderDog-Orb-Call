@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe543c3788e85049bbb2bfc8ab3b032, type: 3}
+  m_Name: Orb Upgrade - Life Steal Orb
+  m_EditorClassIdentifier: 
+  Guid: e2470e37-df28-4e52-946b-b69d2751023e
+  CustomItemId: orb_lifesteal
+  Rarity: 0
+  Icon: {fileID: 8287165777748813492, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
+  DisplayName: Life Steal Orb
+  Description: 
+  m_hoverForDetails: 0
+  FirstSpecificCondition: {fileID: 0}
+  FirstSpecificEvent: {fileID: 0}
+  SecondSpecificCondition: {fileID: 0}
+  SecondSpecificEvent: {fileID: 0}
+  CustomActions: []
+  Behaviour: {fileID: 0}
+  m_prefab: {fileID: 3123676246526951357, guid: 7ebc53ae187ae524fb3a61c6e04d2b68, type: 3}
+  m_orbStatOverrides: []
+  m_orbStatModifications: []
+  m_orbStatCaps: []
