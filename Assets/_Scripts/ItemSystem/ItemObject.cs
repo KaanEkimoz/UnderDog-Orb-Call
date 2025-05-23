@@ -51,6 +51,30 @@ namespace com.game.itemsystem
                     SecondSpecificEvent = new ScriptableEventObject(profile.SecondSpecificEvent);
             }
 
+            if (FirstSpecificCondition != null)
+            {
+                FirstSpecificCondition.OnIgnite += (_) => FirstSpecificEvent.Invoke();
+                FirstSpecificCondition.OnResultChanged += (r) =>
+                {
+                    if (r)
+                        FirstSpecificEvent.StartDurableEvent();
+                    else
+                        FirstSpecificEvent.StopDurableEvent();
+                };
+            }
+
+            if (SecondSpecificCondition != null)
+            {
+                SecondSpecificCondition.OnIgnite += (_) => SecondSpecificEvent.Invoke();
+                SecondSpecificCondition.OnResultChanged += (r) =>
+                {
+                    if (r)
+                        SecondSpecificEvent.StartDurableEvent();
+                    else
+                        SecondSpecificEvent.StopDurableEvent();
+                };
+            }
+
             Behaviours = new();
         }
 

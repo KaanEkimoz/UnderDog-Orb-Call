@@ -96,6 +96,7 @@ public class PlayerOrbController : MonoBehaviour
     float m_ellipseSizeMultiplier = 1f;
     List<SimpleOrb> m_lastCalledOrbs = new();
 
+    public SimpleOrb OrbHeld => orbsOnEllipse[selectedOrbIndex];
     public Vector3 FirePointGlobal => firePointTransform.position;
     public Vector3 EllipseCenterGlobal => ellipseCenterTransform.position;
 

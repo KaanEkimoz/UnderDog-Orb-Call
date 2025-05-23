@@ -10,14 +10,16 @@ namespace com.game.scriptables.events
         order = int.MinValue)]
     public class SequentialScriptableEventProfile : MultiScriptableEventProfileBase
     {
-        public override Action<object[]> GenerateAction(ScriptableEventObject instance)
+        public override Action<ScriptableEventActionContext, object[]> GenerateAction(ScriptableEventObject instance)
         {
-            return (args) =>
+            return (ctx, args) =>
             {
                 for (int i = 0; i < instance.Children.Count; i++)
                 {
                     var evt = instance.Children[i];
-                    evt.Invoke();
+                    if (ctx == ScriptableEventActionContext.Invoke) evt.Invoke();
+                    else if (ctx == ScriptableEventActionContext.StartDurableEvent) evt.StartDurableEvent();
+                    else if (ctx == ScriptableEventActionContext.StopDurableEvent) evt.StopDurableEvent();
                 }
             };
         }

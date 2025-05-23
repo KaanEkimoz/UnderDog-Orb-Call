@@ -7,7 +7,7 @@ namespace com.game.scriptableeventsystem
     {
         ScriptableEventProfileBase m_profile;
 
-        Action<object[]> m_action;
+        Action<ScriptableEventActionContext, object[]> m_action;
 
         object[] m_args;
 
@@ -16,7 +16,11 @@ namespace com.game.scriptableeventsystem
         public bool Bypass { get; set; }
         public object[] Arguments { get { return m_args; } set { m_args = value; } }
 
+        public event Action<ScriptableEventObject> OnInvoke;
+        public event Action<bool> OnDurableEventStateChanged;
         public event Action<ScriptableEventObject> OnDispose;
+
+        bool m_durableEventInProgress = false;
 
         public ScriptableEventObject(ScriptableEventProfileBase profile)
         {
@@ -57,7 +61,29 @@ namespace com.game.scriptableeventsystem
             if (Bypass)
                 return;
 
-            m_action?.Invoke(m_args);
+            m_action?.Invoke(ScriptableEventActionContext.Invoke, m_args);
+        }
+
+        public void StartDurableEvent()
+        {
+            if (m_durableEventInProgress)
+                return;
+
+            m_durableEventInProgress = true;
+            OnDurableEventStateChanged?.Invoke(true);
+
+            m_action?.Invoke(ScriptableEventActionContext.StartDurableEvent, m_args);
+        }
+
+        public void StopDurableEvent()
+        {
+            if (!m_durableEventInProgress) 
+                return;
+
+            m_durableEventInProgress = false;
+            OnDurableEventStateChanged?.Invoke(false);
+
+            m_action?.Invoke(ScriptableEventActionContext.StopDurableEvent, m_args);
         }
 
         public virtual string GenerateDescription(bool richText = false)

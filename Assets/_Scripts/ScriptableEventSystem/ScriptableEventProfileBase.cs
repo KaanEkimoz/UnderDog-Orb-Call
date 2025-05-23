@@ -7,7 +7,7 @@ namespace com.game.scriptableeventsystem
     {
         [HideInInspector] public bool IsSubAsset = false;
 
-        public abstract Action<object[]> GenerateAction(ScriptableEventObject instance);
+        public abstract Action<ScriptableEventActionContext, object[]> GenerateAction(ScriptableEventObject instance);
         public abstract string GenerateDescription(bool richText = false, ScriptableEventObject instance = null);
         public abstract void OnInstantiation(ScriptableEventObject instance);
         public abstract void OnRuntimeEventSubscription(ScriptableEventObject instance);
