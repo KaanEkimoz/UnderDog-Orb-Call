@@ -1,3 +1,4 @@
+using com.game.itemsystem.gamedependent;
 using com.game.itemsystem.scriptables;
 using com.game.scriptableeventsystem;
 using com.game.subconditionsystem;
@@ -83,24 +84,10 @@ namespace com.game.itemsystem
                     return sb.ToString();
                 }
 
-                sb.Append(GenerateSpecificDescription(context.FirstSpecificCondition, context.FirstSpecificEvent, richText));
-                sb.Append(GenerateSpecificDescription(context.SecondSpecificCondition, context.SecondSpecificEvent, richText));
-
-                return sb.ToString();
-            }
-
-            private static string GenerateSpecificDescription(SubconditionObject subcondition, ScriptableEventObject evt, bool richText)
-            {
-                StringBuilder sb = new();
-
-                if (subcondition == null)
-                    return null;
-
-                sb.Append("when ");
-                sb.Append(subcondition.GenerateDescription(richText));
-                sb.Append("; ");
-                sb.Append(evt.GenerateDescription(richText));
-                sb.Append("\n");
+                foreach (ItemRuntimeSpecific specific in context.Specifics)
+                {
+                    sb.Append(specific.GenerateDescription(richText));
+                }
 
                 return sb.ToString();
             }

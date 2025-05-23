@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using com.game.scriptableeventsystem;
 using com.game.subconditionsystem;
+using com.game.itemsystem.gamedependent;
 
 namespace com.game.itemsystem
 {
@@ -22,10 +23,7 @@ namespace com.game.itemsystem
 
         public ItemProfileBase Profile { get; }
 
-        public SubconditionObject FirstSpecificCondition = null;
-        public ScriptableEventObject FirstSpecificEvent = null;
-        public SubconditionObject SecondSpecificCondition = null;
-        public ScriptableEventObject SecondSpecificEvent = null;
+        public List<ItemRuntimeSpecific> Specifics;
 
         public List<ItemBehaviour> Behaviours { get; protected set; }
         public Dictionary<string, object> CustomData = new();
@@ -34,45 +32,22 @@ namespace com.game.itemsystem
 
         public ItemObject(ItemProfileBase profile)
         {
+            Specifics = new();
             Profile = profile;
 
-            if (profile.FirstSpecificCondition != null)
-                FirstSpecificCondition = new SubconditionObject(profile.FirstSpecificCondition);
-
-            if (profile.FirstSpecificEvent != null)
-                FirstSpecificEvent = new ScriptableEventObject(profile.FirstSpecificEvent);
+            if (profile.FirstSpecificCondition != null && profile.FirstSpecificEvent != null)
+            {
+                Specifics.Add(new ItemRuntimeSpecific(new SubconditionObject(profile.FirstSpecificCondition), 
+                    new ScriptableEventObject(profile.FirstSpecificEvent)));
+            }
 
             if (profile.Rarity == gamedependent.ItemRarity.Legendary)
             {
-                if (profile.SecondSpecificCondition != null)
-                    SecondSpecificCondition = new SubconditionObject(profile.SecondSpecificCondition);
-
-                if (profile.SecondSpecificEvent != null)
-                    SecondSpecificEvent = new ScriptableEventObject(profile.SecondSpecificEvent);
-            }
-
-            if (FirstSpecificCondition != null)
-            {
-                FirstSpecificCondition.OnIgnite += (_) => FirstSpecificEvent.Invoke();
-                FirstSpecificCondition.OnResultChanged += (r) =>
+                if (profile.SecondSpecificCondition != null && profile.SecondSpecificEvent != null)
                 {
-                    if (r)
-                        FirstSpecificEvent.StartDurableEvent();
-                    else
-                        FirstSpecificEvent.StopDurableEvent();
-                };
-            }
-
-            if (SecondSpecificCondition != null)
-            {
-                SecondSpecificCondition.OnIgnite += (_) => SecondSpecificEvent.Invoke();
-                SecondSpecificCondition.OnResultChanged += (r) =>
-                {
-                    if (r)
-                        SecondSpecificEvent.StartDurableEvent();
-                    else
-                        SecondSpecificEvent.StopDurableEvent();
-                };
+                    Specifics.Add(new ItemRuntimeSpecific(new SubconditionObject(profile.SecondSpecificCondition),
+                        new ScriptableEventObject(profile.SecondSpecificEvent)));
+                }
             }
 
             Behaviours = new();
@@ -125,26 +100,14 @@ namespace com.game.itemsystem
             Profile = null;
             CustomData = null;
 
-            FirstSpecificCondition?.Dispose();
-            FirstSpecificEvent?.Dispose();
-            SecondSpecificCondition?.Dispose();
-            SecondSpecificEvent?.Dispose();
+            Specifics.ForEach(specific => specific.Dispose());
 
             InvokeOnDispose();
         }
 
         public override void Update()
         {
-            FirstSpecificCondition?.Update();
-            FirstSpecificEvent?.Update();
-            SecondSpecificCondition?.Update();
-            SecondSpecificEvent?.Update();
-
-            if (FirstSpecificCondition != null && FirstSpecificCondition.GetResult())
-                FirstSpecificEvent.Invoke();
-
-            if (SecondSpecificCondition != null && FirstSpecificCondition.GetResult())
-                SecondSpecificEvent.Invoke();
+            Specifics.ForEach(specific => specific.Update());
         }
     }
 }
