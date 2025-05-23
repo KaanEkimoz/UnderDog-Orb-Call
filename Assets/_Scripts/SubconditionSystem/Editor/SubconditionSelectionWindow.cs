@@ -3,6 +3,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
+using com.absence.utilities;
 
 namespace com.game.subconditionsystem.editor
 {
@@ -132,7 +133,7 @@ namespace com.game.subconditionsystem.editor
 
                 s_contents[i] = new GUIContent()
                 {
-                    text = type.Name,
+                    text = Helpers.SplitCamelCase(type.Name, " "),
                     tooltip = tooltip,
                     image = null,
                 };

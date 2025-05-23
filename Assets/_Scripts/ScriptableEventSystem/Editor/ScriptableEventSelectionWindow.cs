@@ -1,3 +1,4 @@
+using com.absence.utilities;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -132,7 +133,7 @@ namespace com.game.scriptableeventsystem.editor
 
                 s_contents[i] = new GUIContent()
                 {
-                    text = type.Name,
+                    text = Helpers.SplitCamelCase(type.Name, " "),
                     tooltip = tooltip,
                     image = null,
                 };
