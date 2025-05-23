@@ -29,7 +29,7 @@ namespace com.game.scriptables.subconditions
         public override string GenerateDescription(bool richText = false, SubconditionObject instance = null)
         {
             StringBuilder sb = new();
-            sb.Append("the Orb held by player is ");
+            sb.Append("the orb held by Player is ");
             sb.Append(Enum.GetName(typeof(OrbState), m_targetState).ToLower());
 
             return sb.ToString();
