@@ -26,6 +26,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool PreviousChooseButtonPressed => _previousChooseButtonPressedThisFrame;
     public bool SprintButtonHeld => _sprintButtonHeld;
     public bool ClosestRecallButtonPressed => _closestRecallButtonPressedThisFrame;
+    public bool InteractButtonPressed => _interactButtonPressed;
 
     public Vector2 MovementInput => _moveInput;
     public Vector2 MouseInput => _mouseInput;
@@ -58,6 +59,8 @@ public class PlayerInputHandler : MonoBehaviour
     // Closest Recall - F Button
     private bool _closestRecallButtonPressedThisFrame;
 
+    private bool _interactButtonPressed;
+
     // Choose - Q and E Keyboard Buttons
     private bool _nextChooseButtonPressedThisFrame;
     private bool _previousChooseButtonPressedThisFrame;
@@ -86,6 +89,7 @@ public class PlayerInputHandler : MonoBehaviour
         _parryButtonReleasedThisFrame = false;
         _recallButtonPerformedThisFrame = false;
         _closestRecallButtonPressedThisFrame = false;
+        _interactButtonPressed = false;
     }
 
     #region Mouse Cursor
@@ -198,6 +202,12 @@ public class PlayerInputHandler : MonoBehaviour
             _parryButtonPressedThisFrame = true;
         else if (context.phase == InputActionPhase.Canceled)
             _parryButtonReleasedThisFrame = true;
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            _interactButtonPressed = true;
     }
 
     #endregion
