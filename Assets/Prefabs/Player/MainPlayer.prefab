@@ -1194,6 +1194,73 @@ Transform:
   - {fileID: 6273971979954811132}
   m_Father: {fileID: 169134436065801131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2467961668760038921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 382332864424369558}
+  - component: {fileID: 3146927013463522311}
+  - component: {fileID: 2597725942114452561}
+  m_Layer: 2
+  m_Name: PlayerInteractor
+  m_TagString: IgnoreOrbThrow
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &382332864424369558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2467961668760038921}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5895881473504401873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3146927013463522311
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2467961668760038921}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.99
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2597725942114452561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2467961668760038921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e707e9c8c4c7989478960d8ee7f90add, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_inputHandler: {fileID: 1309948186291933912}
 --- !u!1 &2514039926956658373
 GameObject:
   m_ObjectHideFlags: 0
@@ -3217,6 +3284,7 @@ Transform:
   - {fileID: 6217975671610255821}
   - {fileID: 6087539927713434286}
   - {fileID: 3266443062295838621}
+  - {fileID: 382332864424369558}
   - {fileID: 1751406404384577358}
   - {fileID: 5732367152427562947}
   - {fileID: 6005703171603943554}
