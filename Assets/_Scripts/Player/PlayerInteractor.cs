@@ -50,13 +50,13 @@ namespace com.game.player
             if (m_pickedIndex == -1)
                 return;
 
-            GetAtOrNull(m_pickedIndex)?.OnPickedByPlayer(false);
+            GetAtOrNull(m_pickedIndex)?.CommitPickedByPlayer(false);
 
             m_pickedIndex = index;
 
             RefreshPickedIndex();
 
-            GetAtOrNull(m_pickedIndex)?.OnPickedByPlayer(true);
+            GetAtOrNull(m_pickedIndex)?.CommitPickedByPlayer(true);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -69,7 +69,7 @@ namespace com.game.player
 
             RefreshPickedIndex(false);
 
-            interactable.OnSeenByPlayer(true);
+            interactable.CommitSeenByPlayer(true);
         }
 
         private void OnTriggerExit(Collider other)
@@ -82,7 +82,7 @@ namespace com.game.player
 
             RefreshPickedIndex(false);
 
-            interactable.OnSeenByPlayer(false);
+            interactable.CommitSeenByPlayer(false);
         }
 
         void RefreshPickedIndex(bool wrap = true)

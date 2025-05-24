@@ -34,5 +34,10 @@ namespace com.game
         {
             public const string RELEASE_BUILD_ASSET_LABEL = "release";
         }
+
+        public static class Drops
+        {
+            public const int MAX_DROP_AMOUNT = 100;
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace com.game.player
         public bool GainExperience(int amount)
         {
             if (amount <= 0)
-                return false;
+                return LoseExperience(-amount);
 
             m_currentExperience += amount;
 
@@ -47,6 +47,18 @@ namespace com.game.player
             LevelUp(m_levelsGained);
 
             return m_levelsGained > 0;
+        }
+
+        public bool LoseExperience(int amount)
+        {
+            if (amount < 0)
+                return GainExperience(-amount);
+
+            if (amount > m_currentExperience)
+                return false;
+
+            m_currentExperience -= amount;
+            return true;
         }
 
         public void LevelUp(int amount)
