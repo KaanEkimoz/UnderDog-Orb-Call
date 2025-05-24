@@ -1,7 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic;
 using TMPro;
-using System;
+using com.game.generics.entities;
 
 public class AltarSystemController : MonoBehaviour
 {
@@ -18,7 +17,7 @@ public class AltarSystemController : MonoBehaviour
     private float timer;
 
     [Header("References")]
-    public GameObject safeZoneBoundaries;
+    public Door m_safeZoneWalls;
     public GameObject safeZoneArea;
     public EnemySpawner enemySpawner;
     public CheckSafeZone checkSafeZone;
@@ -33,7 +32,7 @@ public class AltarSystemController : MonoBehaviour
 
     private void Start()
     {
-        safeZoneBoundaries.SetActive(false);
+        m_safeZoneWalls.Open();
         ResetTimer();
 
     }
@@ -48,7 +47,7 @@ public class AltarSystemController : MonoBehaviour
         if (timer < safeZoneTimer) return;
 
         canEnterSafeZone = true;
-        safeZoneBoundaries.SetActive(false);
+        m_safeZoneWalls.Open();
 
         int difficultyLevel = (int)((timer - safeZoneTimer) / difficultyIncreaseTime);
 
@@ -110,7 +109,7 @@ public class AltarSystemController : MonoBehaviour
         if (!isTimerActive)
         {
             StartTimer();
-            safeZoneBoundaries.SetActive(true);
+            m_safeZoneWalls.Close();
             enemySpawner.StartSpawning();
         }
     }

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using com.absence.attributes;
 using com.game.player;
 using DG.Tweening;
 using UnityEngine;
-using Zenject;
 
 namespace com.game.orbsystem
 {
